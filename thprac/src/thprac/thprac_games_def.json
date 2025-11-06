@@ -176,7 +176,7 @@
         "Restart thprac for changes to take effect.",
         "変更を有効にするためにthpracを再起動してください。"
       ],
-	  
+
 	  "THPRAC_SETTING_HOTKEYS": [ "thprac - 重新绑定快捷键", "thprac - Rebind Hotkeys", "thprac - ホットキーを再割り当て" ],
       "THPRAC_REBIND_HOTKEYS": [ "重新绑定快捷键", "Rebind Hotkeys", "ホットキーを再割り当て" ],
 
@@ -194,7 +194,7 @@
       "THPRAC_HOTKEY_MODIFIER_WARNING": [ "这些按键可能会与某些游戏发生冲突。", "These keys may interfere with some games.", "これらのキーは一部のゲームと干渉する可能性があります。" ],
       "THPRAC_HOTKEY_RESET": [ "重置到默认快捷键", "Reset hotkeys to default", "ホットキーをデフォルトにリセット" ],
       "THPRAC_HOTKEY_SPECIAL_SETTINGS_TOOLTIP": [ "花映冢、兽王园、弹幕狂们的黑市", "TH09 (PoFV), TH19 (UDoALG), TH185 (100BM)", "東方花映塚，東方獣王園，バレットフィリア達の闇市場" ],
-	  
+
       "THPRAC_CHK_UPDATE_ON_STARTUP": [ "启动时检查更新", "Check for updates at startup", "起動時に更新を確認する" ],
       "THPRAC_CHECK_UPDATE_NOW": [ "检查更新", "Check for updates", "更新を確認する" ],
       "THPRAC_UPDATE_CHECKING": [ "检查中…", "Checking..", "検査中…" ],
@@ -219,8 +219,8 @@
         "Enable if the game behaves abnormally when launched by thprac but not when launched directly.\nThis will nullify any functionality that requires a direct game launch from thprac.",
         "thpracによって起動されたときにゲームが異常に動作するが、直接起動されたときは動作しない場合に有効にします。\nこれを有効にすると、thpracから直接ゲームを起動する必要がある機能が無効になります。"
       ],
-      "THPRAC_RESIZABLE_WINDOW": [ "窗口大小可调", "Resizable window", "ウィンドウサイズ自由に変更" ],
-      "THPRAC_RESIZABLE_WINDOW_DESC": [ "与specialK等补丁不兼容", "do not compatiable with patches like specialK", "ウィンドウサイズ自由に変更" ],
+      "THPRAC_RESIZABLE_WINDOW": [ "窗口大小可调", "Resizable window", "ウィンドウサイズを自由に変更" ],
+      "THPRAC_RESIZABLE_WINDOW_DESC": [ "与specialK等补丁不兼容", "do not compatiable with patches like specialK", "specialKのようなパッチとは互換性がありません。" ],
       "THPRAC_GAME_ADJUSTMENTS": [ "thprac - 游戏调整", "thprac - Game adjustments", "thprac - ゲームの調整" ],
       "THPRAC_CHECK_UPDATE_WHEN": [ "检查更新的时机:", "Check update when:", "更新を確認するタイミング:" ],
       "THPRAC_CHECK_UPDATE_WHEN_OPTION": [ "打开启动器时\\0执行thprac时\\0从不\\0\\0", "Opening launcher\\0Executing thprac\\0Never\\0\\0", "ランチャーを開くとき\\0thpracの実行するとき\\0なし\\0\\0" ],
@@ -237,76 +237,83 @@
       ],
       "THPRAC_UPDATE_DIALOG_CHECKING": [ "检查更新中", "Checking for update", "更新を確認しています" ],
       "THPRAC_UPDATE_DIALOG_UPDATING": [ "正在更新thprac", "Updating thprac", "thpracを更新しています" ],
-    
-    "THPRAC_RECORD_GAME_TIME":["记录飞行时间","record game time","record game time"],
+
+    "THPRAC_RECORD_GAME_TIME":["记录飞行时间","record game time","ゲームの時間を記録する"],
     "THPRAC_GAME_TIME_HINT":["飞行时间提示长度(小时)","game time hint(hour)","game time hint(hour)"],
     "THPRAC_GAME_TIME_HINT_SE":["飞行时间过长音效提示","game time too long SE","game time too long SE"],
     "THPRAC_GAME_TIME_HINT_SE_STOP":["音效重复间隔秒数","SE repeat interval(second)","SE repeat interval(second)"],
     "THPRAC_GAME_TIME_HINT_SE_TEST":["测试音效","SE test","SE test"],
     "THPRAC_GAME_TIME_HINT_SE_DESC":["将音效文件放在thprac同目录下, 名称为SE.wav","put SE file in thprac folder with name SE.wav","put SE file in thprac folder with name SE.wav"],
-    
-	"THPRAC_DISABLE_MAXIMIZE_BTN":["靳止最大化窗口按钮的全屏切换","disable maximizebox to toggle full screen","disable maximizebox to toggle full screen"],
-	"THPRAC_INIT_WINDOW_POS":["初始化窗口位置","init window pos","init window pos"],
-	"THPRAC_INIT_WINDOW_POS_DESC":["如果遇到游戏启动后没窗口可尝试开启此选项","try this option when game is invisible after opened","try this option when game is invisible after opened"],
-    "THPRAC_CHANGE_WINDOW_SZ_WHEN_OPEN":["修改启动时窗口的大小","change window size when open","change window size when open"],
-    "THPRAC_CHANGE_WINDOW_SZ_WHEN_OPEN_SIZE":["窗口大小","window size","window size"],
-	
+
+	"THPRAC_DISABLE_MAXIMIZE_BTN":["靳止最大化窗口按钮的全屏切换","disable maximizebox to toggle full screen","ウィンドウの最大化ボタンを無効化する"],
+	"THPRAC_INIT_WINDOW_POS":["初始化窗口位置","init window pos","ウィンドウ位置の初期化"],
+	"THPRAC_INIT_WINDOW_POS_DESC":["如果遇到游戏启动后没窗口可尝试开启此选项","try this option when game is invisible after opened","ゲームを開いた後にゲームウィンドウが見えなくなった場合はこのオプションを試してください。"],
+    "THPRAC_CHANGE_WINDOW_SZ_WHEN_OPEN":["修改启动时窗口的大小","change window size when open","ゲームを開いた時に自動的にウィンドウサイズを"],
+    "THPRAC_CHANGE_WINDOW_SZ_WHEN_OPEN_SIZE":["窗口大小","window size","へ変更"],
+
     "THPRAC_KEYBOARD_HOOK":["启用键盘HOOK","enable keyboard hook","enable keyboard hook"],
-    "THPRAC_KEYBOARD_HOOK_DESC":["影响按键禁用/SOCD/按键修改等功能","relate to key disable, SOCD, keybind change, etc","relate to key disable, SOCD, keybind change, etc"],
-    "THPRAC_KEYBOARD_SOCD":["SOCD设置","SOCD setting","SOCD setting"],
-    "THPRAC_KEYBOARD_SOCD_SETTINGS":["默认SOCD(zun's)\\0启用SOCD后覆盖功能\\0启用SOCD回中功能\\0\\0","default SOCD(zun's)\\0enable keyboard SOCD (last input priority)\\0enable keyboard SOCD (neutral)\\0\\0","default SOCD(zun's)\\0enable keyboard SOCD (last input priority)\\0enable keyboard SOCD (neutral)\\0\\0"],
-	
-    "THPRAC_KEYBOARD_SOCD_DESC":["当同时按下反向方向键时，修改按键逻辑。\n尽管在某些游戏里认为是作弊行为，但考虑到一些高端键盘本身具有该功能，因此此处提供此功能。","Opposite arrow key press logic is changed by this function.\nSince some high-end keyboard provides SOCD, here the program provides this function despite the fact that some online game consider SOCD as cheating.","Opposite arrow key press logic is changed by this function.\nSince some high-end keyboard provides SOCD, here the program provides this function despite the fact that some online game consider SOCD as cheating."],
-	
-	"THPRAC_KEYBOARD_API":["键盘API设置","keyboard API setting","keyboard API setting"],
-	"THPRAC_KEYBOARD_API_SETTINGS":["默认\\0强制Win32 API\\0强制 Dinput8\\0强制RawInput\\0\\0","default\\0force Win32 API\\0force Dinput8\\0force RawInput\\0\\0","default\\0force Win32 API\\0force Dinput8\\0force RawInput\\0\\0"],
-	"THPRAC_KEYBOARD_API_USE_GET_DEVICE_DATA":["使用GetDeviceData","Use GetDeviceData","Use GetDeviceData"],
+    "THPRAC_KEYBOARD_HOOK_DESC":["影响按键禁用/SOCD/按键修改等功能","relate to key disable, SOCD, keybind change, etc","キーの無効化、SOCD(Simultaneous Opposing Cardinal Directions)、キー割り当ての変更などに関連"],
+    "THPRAC_KEYBOARD_SOCD":["SOCD设置","SOCD setting","SOCD設定"],
+    "THPRAC_KEYBOARD_SOCD_SETTINGS":["默认SOCD(zun's)\\0启用SOCD后覆盖功能\\0启用SOCD回中功能\\0\\0","default SOCD(zun's)\\0enable keyboard SOCD (last input priority)\\0enable keyboard SOCD (neutral)\\0\\0","標準(zunの設定)\\0last input priority (後入力優先: 後から押されたキーの入力を優先)\\0neutral (中立処理: 同時に入力された反対方向のキーを両方ともキャンセル)\\0\\0"],
+
+    "THPRAC_KEYBOARD_SOCD_DESC":[
+      "当同时按下反向方向键时，修改按键逻辑。\n尽管在某些游戏里认为是作弊行为，但考虑到一些高端键盘本身具有该功能，因此此处提供此功能。",
+      "Opposite arrow key press logic is changed by this function.\nSince some high-end keyboard provides SOCD, here the program provides this function despite the fact that some online game consider SOCD as cheating.",
+      "この機能を有効化することで、反対方向を示す複数の入力が同時に行われた際のロジックが変更されます。(=SOCDクリーナー機能)\n例えば「後入力優先」の場合、右矢印キーを入力後に左矢印キーを入力して物理的には両方のキーが押された状態であっても、システム上は最新の入力のみが有効となるため、右矢印キーを物理的に離すことなく瞬時に左方向へ移動を行うことができます。\n一部のオンラインゲームではSOCDが不正行為とされていますが、一部のハイエンドキーボードはSOCDに対応しているため、このプログラムではSOCD機能を提供しています。"
+    ],
+
+	"THPRAC_KEYBOARD_API":["键盘API设置","keyboard API setting","キーボードAPI設定"],
+	"THPRAC_KEYBOARD_API_SETTINGS":["默认\\0强制Win32 API\\0强制 Dinput8\\0强制RawInput\\0\\0","default\\0force Win32 API\\0force Dinput8\\0force RawInput\\0\\0","標準\\0Win32 APIの使用を強制\\0Dinput8の使用を強制\\0RawInputの使用を強制\\0\\0"],
+  "THPRAC_KEYBOARD_API_USE_GET_DEVICE_DATA":["使用GetDeviceData","Use GetDeviceData","Use GetDeviceData"],
 	"THPRAC_KEYBOARD_API_USE_GET_DEVICE_DATA_DESC":["可能带来更好的单帧性能或延迟?","Might make delay less?","Might make delay less?"],
-	"THPRAC_KEYBOARD_API_SETTINGS_DESC":["默认情况下在地灵殿等游戏使用小键盘可能卡键, \n换用强制dinput8可修复(建议?), \n不建议强制win32模式","By default, using numpad will cause bugs in games like SA,\n which can be fixed by forcing to use dinput8(which is recommended?),\n force win32 API is not recommended","By default, using numpad will cause bugs in games like SA,\n which can be fixed by forcing to use dinput8(which is recommended?),\n force win32 API is not recommended"],
-    
-    "THPRAC_COMPATIBILITY_SETTINGS":["兼容性设置","Compatibility Settings","Compatibility Settings"],
-	
-	"THPRAC_MOF_UD_REP": [ "允许风神录replay记录多一页ud_xxxx.rpy", "add another page for ud_xxxx.rpy in MoF's replay", "add another page for ud_xxxx.rpy in MoF's replay" ],
-	
-	"THPRAC_MAKE_BGM_FASTER_WHEN_SPEEDUP": [ "游戏变速时加速bgm(测试中)", "make bgm faster when speed up(testing)", "make bgm faster when speed up(testing)" ],
-	
-    "THPRAC_DISABLE_F10_11_13":["在th11到th13靳用F10键","disable f10 for th11-13","disable f10 for th11-13"],
-	
-    "THPRAC_DISABLE_F10_11_13_DESC":["该按键用于切换全屏","which is used for toggle fullscreen","which is used for toggle fullscreen"],
-    "THPRAC_DISABLE_JOY":["禁用手柄","disable joystick","disable joystick"],
-    "THPRAC_DISABLE_JOY_DESC":["对部分作有效, 禁用有关手柄的部分函数以减少掉帧","works for some games, disables functions for joystick to avoid lags","works for some games, disables functions for joystick to avoid lags"],
-    
-    "THPRAC_PAUSE_BGM_TH06":["红魔乡在3036时暂停bgm(仅wav)","pause bgm when esc in EoSD(wav only)","pause bgm when esc in EoSD(wav only)"],
-    "THPRAC_AUTO_NAME_TH06":["红魔乡自动输入机签","auto input name for EoSD","auto input name for EoSD"],
-    "THPRAC_AUTO_NAME_TH06_DESC":["使用~代替红斜杠","use ~ replace red slash","use ~ replace red slash"],
-    "THPRAC_AUTO_NAME_NAME":["机签","name","name"],
-	
+	"THPRAC_KEYBOARD_API_SETTINGS_DESC":["默认情况下在地灵殿等游戏使用小键盘可能卡键, \n换用强制dinput8可修复(建议?), \n不建议强制win32模式","By default, using numpad will cause bugs in games like SA,\n which can be fixed by forcing to use dinput8(which is recommended?),\n force win32 API is not recommended","標準設定ではテンキーを使用すると地霊殿などのゲームでバグが発生しますが、「dinput8の使用を強制」を選択することで修正できます。\n「win32APIの使用の強制」は推奨されません。"],
+
+    "THPRAC_COMPATIBILITY_SETTINGS":["兼容性设置","Compatibility Settings","互換性設定"],
+
+	"THPRAC_MOF_UD_REP": [ "允许风神录replay记录多一页ud_xxxx.rpy", "add another page for ud_xxxx.rpy in MoF's replay", "風神録にud_xxxx.rpyを再生するページを追加する" ],
+
+  "THPRAC_MAKE_BGM_FASTER_WHEN_SPEEDUP": [ "游戏变速时加速bgm(测试中)", "make bgm faster when speed up(testing)", "make bgm faster when speed up(testing)" ],
+
+    "THPRAC_DISABLE_F10_11_13":["在th11到th13靳用F10键","disable f10 for th11-13","地霊殿～神霊廟でf10キーを無効化"],
+
+    "THPRAC_DISABLE_F10_11_13_DESC":["该按键用于切换全屏","which is used for toggle fullscreen","これらのゲームではf10キーにフルスクリーン有効化機能が割り当てられています。"],
+    "THPRAC_DISABLE_JOY":["禁用手柄","disable joystick","ジョイスティックの無効化"],
+    "THPRAC_DISABLE_JOY_DESC":["对部分作有效, 禁用有关手柄的部分函数以减少掉帧","works for some games, disables functions for joystick to avoid lags","一部のゲームでは動作しますが、遅延を避けるためにジョイスティック機能を無効にします"],
+
+    "THPRAC_PAUSE_BGM_TH06":["红魔乡在3036时暂停bgm(仅wav)","pause bgm when esc in EoSD(wav only)","紅魔郷でescキーを押した時にBGM再生を停止(wavのみ)"],
+    "THPRAC_AUTO_NAME_TH06":["红魔乡自动输入机签","auto input name for EoSD","紅魔郷で名前を自動入力"],
+    "THPRAC_AUTO_NAME_TH06_DESC":["使用~代替红斜杠","use ~ replace red slash","~は赤いスラッシュに置き換えられます。"],
+    "THPRAC_AUTO_NAME_NAME":["机签","name","名前"],
+
     "THPRAC_TH07_ALWAYS_SAVE_SCORE_SPELL_HIST":["妖妖梦始终保存存档","always save score/spell history in PCB","always save score/spell history in PCB"],
     "THPRAC_TH07_ALWAYS_SAVE_SCORE_SPELL_HIST_DESC":["例如练习模式re时","e.g. retry in practice","e.g. retry in practice"],
-	
+
     "THPRAC_DISABLE_LOCALE_CHANGE_HOTKEY":["禁用游戏内语言切换快捷键","disable in-game locale change hotkey","disable in-game locale change hotkey"],
     "THPRAC_DISABLE_LOCALE_CHANGE_HOTKEY_DESC":["快捷键:alt+1/2/3","hotkey: alt+1/2/3","hotkey: alt+1/2/3"],
-    
+
     "THPRAC_FORCE_ONLY_RENDER_TEXT_USED":["只渲染用到的字体","only render used font","only render used font"],
     "THPRAC_FORCE_ONLY_RENDER_TEXT_USED_DESC":["游戏启动时如果爆显存，导致字体显示全为白块或透明等错误，则需要设置此项","if the VRAM is overflow, the text might shown as a white rectangle(or transparent and so on), use this setting to avoid it","if the VRAM is overflow, the text might shown as a white rectangle(or transparent and so on), use this setting to avoid it"],
-	
+
+
 	 "THPRAC_HOOK_MSG_BOX_A2W":["将弹窗提示修改为宽字节","use MessageBoxW instead of MessageBoxA","use MessageBoxW instead of MessageBoxA"],
 	 "THPRAC_HOOK_MSG_BOX_A2W_DESC":["可以防止某些弹窗乱码, 仅在使用thprac启动游戏时生效","might prevents possible garbled characters from msg box, only works when launch game by thprac","might prevents possible garbled characters from msg box, only works when launch game by thprac"],
-    
+
     "THPRAC_RENDER_CORRECT_FONT":["渲染正确的日文字体","render correct ja fonts","render correct ja fonts"],
     "THPRAC_RENDER_CORRECT_FONT_DESC":["当游戏字体(对话/符卡)渲染错误时尝试开启本选项, 仅在使用thprac启动游戏时生效","use this option when game fonts are wrong(msg/spell), only works when launch game by thprac","use this option when game fonts are wrong(msg/spell), only works when launch game by thprac"],
 	"THPRAC_RENDER_CORRECT_FONT_DESC2":["原版游戏使用 MS Gothic 和 MS Mincho 字体, 若开启此选项后仍不能正确显示, 请确认两个字体已经安装","original game use font 'MS Gothic' and 'MS Mincho', if fonts are still wrong after toggling this option, please check the font installation","original game use font 'MS Gothic' and 'MS Mincho', if fonts are still wrong after toggling this option, please check the font installation"],
-    
+
     "THPRAC_CUSTOM_FONTS":["使用自定义游戏字体","use custom game fonts","use custom game fonts"],
     "THPRAC_CUSTOM_FONTS_DESC":["仅在使用thprac启动游戏时生效","only works when launch game by thprac","only works when launch game by thprac"],
-    "THPRAC_CUSTOM_FONT":["字体","font","font"],
-    
+    "THPRAC_CUSTOM_FONT":["字体","font","フォント"],
+
     "THPRAC_FORCE_RENDER_CURSOR":["强制渲染鼠标","force render cursor","force render cursor"],
-    "THPRAC_FORCE_RENDER_CURSOR_DESC":["全屏时无法看见鼠标则设置此项，将会导致窗口时出现两个重叠的鼠标","set this setting to true when cannot see cursor fullscreen, it will made 2 overlapped cursor in window mode","set this setting to true when cannot see cursor fullscreen, it will made 2 overlapped cursor in window mode"],
+    "THPRAC_FORCE_RENDER_CURSOR_DESC":["全屏时无法看见鼠标则设置此项，将会导致窗口时出现两个重叠的鼠标",
+      "set this setting to true when cannot see cursor fullscreen, it will made 2 overlapped cursor in window mode",
+      "set this setting to true when cannot see cursor fullscreen, it will made 2 overlapped cursor in window mode"],
     "THPRAC_WIN_KEY_STATE":["win键状态","win key state","win key state"],
-	"THPRAC_DISABLE_WIN_KEY_CHECKBOX":["thp启动后自动禁用win键","disable win key when thprac.exe launches","disable win key when thprac.exe launches"],
-	"THPRAC_DISABLE_WIN_KEY_DESC":["可能引入延迟, 因此不建议通过软件禁用win键","might cause delay, so it's not recommended to disable win key by software","might cause delay, so it's not recommended to disable win key by software"],
-    
+	"THPRAC_DISABLE_WIN_KEY_CHECKBOX":["thp启动后自动禁用win键","disable win key when thprac.exe launches","thprac.exeが動作している時にwinキーを無効化"],
+	"THPRAC_DISABLE_WIN_KEY_DESC":["可能引入延迟, 因此不建议通过软件禁用win键","might cause delay, so it's not recommended to disable win key by software","winキーを無効にすると遅延の原因となる可能性があるため、推奨されません。"],
+
     "THPRAC_KEYBIND":["修改按键映射","set keybind","set keybind"],
     "THPRAC_KEYBIND_MODAL":["修改按键映射##modal","set keybind##modal","set keybind##modal"],
     "THPRAC_KEYBIND_ADD":["增加","add","add"],
@@ -318,19 +325,20 @@
     "THPRAC_KEYBIND_TO_COMBO":["修改按键","new key","new key"],
     "THPRAC_KEYBIND_PRESS_A_KEY":["请按下一个按键","please press a key","please press a key"],
     "THPRAC_KEYBIND_ENTER":["按键名","key name","key name"],
-	
+
+
 	"THPRAC_DISABLE_WIN_KEY_DINPUT":["使用dinput禁用win键","use dinput to disable win key","use dinput to disable win key"],
 	"THPRAC_DISABLE_WIN_KEY_DINPUT_DESC":["似乎没用...都怪巨硬","seems useless, blame to Macrohard","seems useless, blame to Macrohard"],
-	
+
 	"THPRAC_ESC_WHEN_DEACTIVE":["窗口失焦时自动按esc","automatically press Esc when the window loses focus","automatically press Esc when the window loses focus"],
 	"THPRAC_ESC_WHEN_DEACTIVE_DESC":["测试功能","for testing","for testing"],
-	
+
 	"THPRAC_L2D_KEYBIND_TITLE":["Live2D的按键映射","l2d keybind","l2d keybind"],
 	"THPRAC_L2D_KEYBIND_TITLE2":["启用键盘HOOK并设置键盘API为强制dinput8以启用l2d按键/自动射击等功能","use keyboard hook and set keyboardAPI as dinput8 to enable l2d keys/auto shoot/...","use keyboard hook and set keyboardAPI as dinput8 to enable l2d keys/auto shoot/..."],
 	"THPRAC_L2D_ENABLE":["启用L2D按键","enable L2D keys","enable L2D keys"],
 	"THPRAC_L2D_KEYBIND":["修改用于Live2D的按键映射","set keybind for l2d","set keybind for l2d"],
 	"THPRAC_L2D_KEYBIND_DESC":["将会在特定时刻自动模拟按下对应键(使用win32 API),绑定时按ESC取消","it will simulate key input for some specific moment(using win32 API), press esc to cancel the key","it will simulate key input for some specific moment(using win32 API), press esc to cancel the key"],
-	
+
 	"THPRAC_AUTO_SHOOT":["自动射击","auto shoot","auto shoot"],
 	"THPRAC_AUTO_SHOOT_KEY":["自动射击按键","shoot key","shoot key"],
 	"THPRAC_AUTO_SHOOT_DESC":["按下按键后等于自动连续按Z, 按除方向键和低速键之外的键停止, 需要启用键盘HOOK并设置键盘API为强制dinput8或RawInput, 绑定为Z/X/C/D/ESC/R/Q则无效","automatically shoot(press z) after press this key, stop when keys except arrow/focus pressed, use keyboard hook and set keyboardAPI as dinput8 or RawInput to enable, cannot be bind to Z/X/C/D/ESC/R/Q","automatically shoot(press z) after press this key, stop when keys except arrow/focus pressed, use keyboard hook and set keyboardAPI as dinput8 or RawInput to enable, cannot be bind to Z/X/C/D/ESC/R/Q"],
@@ -343,19 +351,20 @@
 	"THPRAC_L2D_KEYBIND_BOMB":	["丢B动作","bomb motion","bomb motion"],
 	"THPRAC_L2D_HYPER":	["hyper动作","hyper motion","hyper motion"],
 	"THPRAC_L2D_KEYBIND_RESET":		["重置动作","reset motion","reset motion"],
-	
+
 	"THPRAC_L2D_KEYBIND_DYING":		["将死之人表情","dying expression","dying expression"],
 	"THPRAC_L2D_KEYBIND_DYING_DESC":	["残机为0触发, 为 expression(按一下切换, 第二下切回)","trigger when life=0, which is expression","trigger when life=0, which is expression"],
-	
+
 	"THPRAC_L2D_SHOW_TIME":	["动作时间(ms)","expression time(ms)","expression time(ms)"],
 	"THPRAC_L2D_SHOW_TIME_DESC":	["到时间自动切换为重置动作","auto trigger to reset motion after this time","auto trigger to reset motion after this time"],
-    
+
       "THPRAC_TOOLS": [ "工具", "Tools", "ツール" ],
-	  
+
+
       "THPRAC_KILL_ALL_GAME": [ "清理游戏程序", "clear game programs", "clear game programs" ],
       "THPRAC_KILL_ALL_GAME_ALERT": [ "请确保你现在不在游戏中", "please make sure you are not currently in the game", "please make sure you are not currently in the game" ],
       "THPRAC_KILL_ALL_GAME_DONE": [ "完成，共清除了 %d 个游戏程序", "done, cleared %d background game programs", "done, cleared %d background game programs" ],
-      
+
 	  "THPRAC_TOOLS_ROLLF_CSV": [ "读取CSV文件", "read csv file", "read csv file" ],
 	  "THPRAC_TOOLS_ROLLF_CSV_DESC": [ "需要为utf-8格式, 共两列, 分别为名称和权重", "need to be utf-8, has a name column and a weight column", "need to be utf-8, has a name column and a weight column" ],
 	  "THPRAC_TOOLS_ROLLF_FROM_FILE": [ "随机ROLL", "ROLL from file", "ROLL from file" ],
@@ -364,10 +373,12 @@
 	  "THPRAC_TOOLS_ROLLF_CLPS": [ "查看", "view", "view" ],
 	  "THPRAC_TOOLS_ROLLF_TIME": [ "转盘时间", "time", "time" ],
 	  "THPRAC_TOOLS_ROLLF_REMOVE_CUR": [ "删除roll到的", "remove rolled", "remove rolled" ],
+
+
 	  "THPRAC_TOOLS_DICE": [ "杰哥不要啊", "Xeno aaaaaa", "Xeno aaaaaa" ],
 	  "THPRAC_TOOLS_DICE_NUM": [ "丢几次", "dice num", "dice num" ],
 	  "THPRAC_TOOLS_DICE_DROP": [ "丢", "drop", "drop" ],
-	  
+
 	  "THPRAC_TOOLS_INPUT_TEST": [ "输入测试", "Input test", "Input test" ],
 	  "THPRAC_TOOLS_INPUT_TEST_DINPUT8_FAILED": [ "无法初始化dinput8", "Failed to init DirectInput8", "Failed to init DirectInput8" ],
 	  "THPRAC_TOOLS_INPUT_TEST_MOUSE": [ "鼠标", "Mouse", "Mouse" ],
@@ -394,8 +405,8 @@
 	  "THPRAC_TOOLS_INPUT_GAMEPAD_S1": [ "额外轴1", "Slider1", "Slider1" ],
 	  "THPRAC_TOOLS_INPUT_GAMEPAD_S2": [ "额外轴2", "Slider2", "Slider2" ],
 	  "THPRAC_TOOLS_INPUT_GAMEPAD_NO_GAMEPAD": [ "没有可用设备, 请先进行初始化", "No available device, please init first", "No available device, please init first" ],
-	  
-	  
+
+
       "THPRAC_TOOLS_APPLY_THPRAC": [ "应用thprac至正在运行的游戏", "Apply thprac to ongoing game", "実行中のゲームにthpracを適用します" ],
       "THPRAC_TOOLS_APPLY_THPRAC_DESC": [ "建议在选择分辨率/全屏的窗口上使用", "Suggest using this on the resolution/fullscreen selection window", "Suggest using this on the resolution/fullscreen selection window" ],
       "THPRAC_TOOLS_RND_GAME": [ "随机游戏", "Random game", "ランダムゲーム" ],
@@ -406,22 +417,22 @@
       "THPRAC_TOOLS_RND_PLAYER_GAME": [ "游戏", "Game", "ゲーム" ],
       "THPRAC_TOOLS_RND_TURNTO_PLAYER": [ "转至随机机体", "Turn to random shot type", "ランダム機体に移動" ],
       "THPRAC_TOOLS_RND_TURNTO_GAME": [ "转至游戏页面", "Turn to game page", "ゲームページに移動" ],
-      "THPRAC_TOOLS_REACTION_TEST":["反应力测试","reaction test","reaction test"],
-      "THPRAC_TOOLS_REACTION_TEST_DOWN":["按下反应测试(等待变色后按下方向键)","keydown test(wait for color changed then press arrow key)","keydown test(wait for color changed then press arrow key)"],
-      "THPRAC_TOOLS_REACTION_TEST_UP":["弹起反应测试(按下方向键后,等待变色时弹起)","keyup test(press arrow key until color changes)","keyup test(press arrow key until color changes)"],
-      "THPRAC_TOOLS_REACTION_TEST_TIME":["测试次数","times for test","times for test"],
-      "THPRAC_TOOLS_REACTION_TEST_BEGIN":["开始测试(快捷键z/shift)","start(hotkey z/shift)","start(hotkey z/shift)"],
-      "THPRAC_TOOLS_REACTION_TEST_WAIT":["等待红色变绿时弹起或放下方向键","wait for color changes then press or release key","wait for color changes then press or release key"],
-      "THPRAC_TOOLS_REACTION_TEST_RESULT":["结果","result","result"],
-      "THPRAC_TOOLS_REACTION_TEST_TOO_EARLY":["按太快了","too early","too early"],
-      "THPRAC_TOOLS_REACTION_TEST_NEXT_TEST":["再测一次(快捷键z/shift)","next test(hotkey z/shift)","next test(hotkey z/shift)"],
-      "THPRAC_TOOLS_REACTION_SHOW_PROC_BAR":["显示等待时间进度条","show wait time progress bar","show wait time progress bar"],
-      "THPRAC_TOOLS_REACTION_MODE_DOWN":["按下测试","press time test","press time test"],
-      "THPRAC_TOOLS_REACTION_MODE_UP":["弹起测试","release time test","release time test"],
-      "THPRAC_TOOLS_REACTION_MODE_NORMAL":["不显示进度条","no progress bar","no progress bar"],
-      "THPRAC_TOOLS_REACTION_MODE_PROGRESSBAR":["显示进度条","with progress bar","with progress bar"],
-      "THPRAC_TOOLS_REACTION_MODE":["模式","mode","mode"],
-      "THPRAC_TOOLS_REACTION_TEST_RESULT_AVG":["结果(平均值)","result(avg)","result(avg)"],
+      "THPRAC_TOOLS_REACTION_TEST":["反应力测试","reaction test","反射神経テスト"],
+      "THPRAC_TOOLS_REACTION_TEST_DOWN":["按下反应测试(等待变色后按下方向键)","keydown test(wait for color changed then press arrow key)","キーダウンテスト(色が変わったら矢印キーを押す)"],
+      "THPRAC_TOOLS_REACTION_TEST_UP":["弹起反应测试(按下方向键后,等待变色时弹起)","keyup test(press arrow key until color changes)","キーアップテスト(色が変わるまで矢印キーを押し続ける)"],
+      "THPRAC_TOOLS_REACTION_TEST_TIME":["测试次数","times for test","回テストする"],
+      "THPRAC_TOOLS_REACTION_TEST_BEGIN":["开始测试(快捷键z/shift)","start(hotkey z/shift)","開始(z/shiftを押して開始)"],
+      "THPRAC_TOOLS_REACTION_TEST_WAIT":["等待红色变绿时弹起或放下方向键","wait for color changes then press or release key","色が変わったらキーを押すor離す"],
+      "THPRAC_TOOLS_REACTION_TEST_RESULT":["结果","result","結果"],
+      "THPRAC_TOOLS_REACTION_TEST_TOO_EARLY":["按太快了","too early","キーの操作が早すぎます。"],
+      "THPRAC_TOOLS_REACTION_TEST_NEXT_TEST":["再测一次(快捷键z/shift)","next test(hotkey z/shift)","次(z/shiftを押して開始)"],
+      "THPRAC_TOOLS_REACTION_SHOW_PROC_BAR":["显示等待时间进度条","show wait time progress bar","待ち時間のプログレスバーを表示する"],
+      "THPRAC_TOOLS_REACTION_MODE_DOWN":["按下测试","press time test","キーダウン反射神経テスト"],
+      "THPRAC_TOOLS_REACTION_MODE_UP":["弹起测试","release time test","キーアップ反射神経テスト"],
+      "THPRAC_TOOLS_REACTION_MODE_NORMAL":["不显示进度条","no progress bar","プログレスバー無し"],
+      "THPRAC_TOOLS_REACTION_MODE_PROGRESSBAR":["显示进度条","with progress bar","プログレスバー有り"],
+      "THPRAC_TOOLS_REACTION_MODE":["模式","mode","モード"],
+      "THPRAC_TOOLS_REACTION_TEST_RESULT_AVG":["结果(平均值)","result(avg)","結果(平均)"],
 
       "THPRAC_LINKS": [ "链接", "Links", "リンク" ],
       "THPRAC_LINKS_RESET": [ "重置默认", "Reset default", "デフォルトにリセット" ],
@@ -565,15 +576,18 @@
         "既存のゲームが見つかりました: %s。\n「はい」をクリックしてゲームを起動します。\n「いいえ」をクリックしてランチャーを開きます。"
       ],
 
-      "THPRAC_BACKUP_SCORE_FILE": [ "备份存档文件", "backup score file", "backup score file" ],
-      "THPRAC_BACKUP_THP_FILE": [ "备份thp文件", "backup thp file", "backup thp file" ],
-      "THPRAC_AUTO_BACKUP_THP_FILE": [ "自动备份文件", "auto backup score files", "auto backup score files" ],
-      "THPRAC_BACKUP_IMMEDIATELY": [ "立即备份", "backup immediately", "backup immediately" ],
-      "THPRAC_BACKUP_DESC": [ "备份目录为%appdata%\\thprac", "backup path is %appdata%\\thprac", "backup path is %appdata%\\thprac" ],
-      "THPRAC_BACKUP_DESC2": [ "若想要修改thp关闭时的自动备份,进入设置-启动器-自动备份文件", "if you want to backup autoly after thp closed, use settings-launcher-auto backup score files", "if you want to backup autoly after thp closed, use settings-launcher-auto backup score files" ],
-      "THPRAC_BACKUP_FAILED_TITLE": [ "备份失败", "backup failed", "backup failed" ],
-      "THPRAC_BACKUP_FAILED": [ "失败了失败了失败了失败了失败了失败了", "backup failed", "backup failed" ],
-	  
+      "THPRAC_BACKUP_SCORE_FILE": [ "备份存档文件", "backup score file", "スコアファイルのバックアップ" ],
+      "THPRAC_BACKUP_THP_FILE": [ "备份thp文件", "backup thp file", "thpファイルのバックアップ" ],
+      "THPRAC_AUTO_BACKUP_THP_FILE": [ "自动备份文件", "auto backup score files", "スコアファイルの自動バックアップ" ],
+      "THPRAC_BACKUP_IMMEDIATELY": [ "立即备份", "backup immediately", "直ちにバックアップ" ],
+      "THPRAC_BACKUP_DESC": [ "备份目录为%appdata%\\thprac", "backup path is %appdata%\\thprac", "バックアップのパスは %appdata%\\thprac" ],
+      "THPRAC_BACKUP_DESC2": [ "若想要修改thp关闭时的自动备份,进入设置-启动器-自动备份文件",
+        "if you want to backup autoly after thp closed, use settings-launcher-auto backup score files",
+        "thp終了後に自動的にバックアップをしたい場合は、「設定→ランチャー→スコアファイルの自動バックアップ」を有効化してください。"
+      ],
+      "THPRAC_BACKUP_FAILED_TITLE": [ "备份失败", "backup failed", "バックアップ失敗" ],
+      "THPRAC_BACKUP_FAILED": [ "失败了失败了失败了失败了失败了失败了", "backup failed", "バックアップ失敗" ],
+
       "THPRAC_GAMES_DETAILS_PAGE": [ "详情页面", "Details page", "詳細ページ" ],
       "THPRAC_GAMES_SELECT_VER": [ "选择游戏：", "Select game:", "ゲームを選択：" ],
       "THPRAC_GAMES_RENAME": [ "重命名", "Rename", "名前を変更" ],
@@ -645,7 +659,7 @@
       "THPRAC_GAMEROLL_TH20": ["锦上京", "th20", "錦上京"],
 
       "THPRAC_GAMEROLL_EMPTY_SHOTTYPES": ["", "", ""],
-      "THPRAC_GAMEROLL_TH02_SHOTTYPES": ["灵梦A\\0灵梦B\\0灵梦C\\0\\0", "Reimu A\\0Reimu B\\0Reimu C\\0\\0", "靈梦A\\0靈梦B\\0靈梦C\\0\\0"],
+      "THPRAC_GAMEROLL_TH02_SHOTTYPES": ["灵梦A\\0灵梦B\\0灵梦C\\0\\0", "Reimu A\\0Reimu B\\0Reimu C\\0\\0", "靈夢A\\0靈夢B\\0靈夢C\\0\\0"],
       "THPRAC_GAMEROLL_TH03_SHOTTYPES": [
         "灵梦\\0魅魔\\0魔理沙\\0爱莲\\0小兔姬\\0卡娜\\0理香子\\0千百合\\0梦美\\0\\0",
         "Reimu\\0Mima\\0Marisa\\0Ellen\\0Kotohime\\0Kana\\0Rikako\\0Chiyuri\\0Yumemi\\0\\0",
@@ -711,12 +725,12 @@
       "THPRAC_GAMEROLL_TH13_SHOTTYPES": [
         "灵梦\\0魔理沙\\0早苗\\0妖梦\\0\\0",
         "Reimu\\0Marisa\\0Sanae\\0Youmu\\0\\0",
-        "霊梦\\0魔理沙\\0早苗\\0妖梦\\0\\0"
+        "霊夢\\0魔理沙\\0早苗\\0妖夢\\0\\0"
       ],
       "THPRAC_GAMEROLL_TH135_SHOTTYPES": [
         "灵梦\\0魔理沙\\0一轮\\0白莲\\0布都\\0神子\\0荷取\\0恋\\0猯藏\\0心\\0\\0",
         "Reimu\\0Marisa\\0Ichirin\\0Byakuren\\0Futo\\0Miko\\0Nitori\\0Koishi\\0Mamizou\\0Kokoro\\0\\0",
-        "霊梦\\0魔理沙\\0一輪\\0白蓮\\0布都\\0神子\\0にとり\\0こいし\\0マミゾウ\\0こころ\\0\\0"
+        "霊夢\\0魔理沙\\0一輪\\0白蓮\\0布都\\0神子\\0にとり\\0こいし\\0マミゾウ\\0こころ\\0\\0"
       ],
       "THPRAC_GAMEROLL_TH14_SHOTTYPES": [
         "灵梦A\\0灵梦B\\0魔理沙A\\0魔理沙B\\0咲夜A\\0咲夜B\\0\\0",
@@ -726,12 +740,12 @@
       "THPRAC_GAMEROLL_TH145_SHOTTYPES": [
         "灵梦\\0魔理沙\\0华扇\\0一轮\\0白莲\\0布都\\0神子\\0猯藏\\0妹红\\0针妙丸\\0荷取\\0恋\\0心\\0堇子\\0铃仙\\0\\0",
         "Reimu\\0Marisa\\0Kasen\\0Ichirin\\0Byakuren\\0Futo\\0Miko\\0Mamizou\\0Mokou\\0Shinmyoumaru\\0Nitori\\0Koishi\\0Kokoro\\0Sumireko\\0Reisen\\0\\0",
-        "霊梦\\0魔理沙\\0華扇\\0一輪\\0白蓮\\0布都\\0神子\\0マミゾウ\\0妹紅\\0針妙丸\\0にとり\\0こいし\\0こころ\\0菫子\\0鈴仙\\0\\0"
+        "霊夢\\0魔理沙\\0華扇\\0一輪\\0白蓮\\0布都\\0神子\\0マミゾウ\\0妹紅\\0針妙丸\\0にとり\\0こいし\\0こころ\\0菫子\\0鈴仙\\0\\0"
       ],
       "THPRAC_GAMEROLL_TH15_SHOTTYPES": [
         "灵梦\\0魔理沙\\0早苗\\0铃仙\\0\\0",
         "Reimu\\0Marisa\\0Sanae\\0Reisen\\0\\0",
-        "霊梦\\0魔理沙\\0早苗\\0鈴仙\\0\\0"
+        "霊夢\\0魔理沙\\0早苗\\0鈴仙\\0\\0"
       ],
       "THPRAC_GAMEROLL_TH155_SHOTTYPES": [
         "灵梦&华扇\\0魔理沙&恋\\0荷取&心\\0猯藏&妹红\\0神子&白莲\\0布都&一轮\\0铃仙&哆来咪\\0堇子&哆来咪\\0天子&针妙丸\\0紫&灵梦\\0女苑&紫苑\\0\\0",
@@ -751,22 +765,22 @@
       "THPRAC_GAMEROLL_TH175_SHOTTYPES": [
         "灵梦\\0魔理沙\\0神奈子\\0水蜜\\0女苑&紫苑\\0芙兰朵露\\0尤魔\\0\\0",
         "Reimu\\0Marisa\\0Kanako\\0Minamitsu\\0Joon&Shion\\0Flandre\\0Yuuma\\0\\0",
-        "霊梦\\0魔理沙\\0神奈子\\0水蜜\\0女苑&紫苑\\0フランドール\\0尤魔\\0\\0"
+        "霊夢\\0魔理沙\\0神奈子\\0水蜜\\0女苑&紫苑\\0フランドール\\0尤魔\\0\\0"
       ],
       "THPRAC_GAMEROLL_TH18_SHOTTYPES": [
         "灵梦\\0魔理沙\\0咲夜\\0早苗\\0\\0",
         "Reimu\\0Marisa\\0Sakuya\\0Sanae\\0\\0",
-        "霊梦\\0魔理沙\\0咲夜\\0早苗\\0\\0"
+        "霊夢\\0魔理沙\\0咲夜\\0早苗\\0\\0"
       ],
       "THPRAC_GAMEROLL_TH19_SHOTTYPES": [
         "灵梦\\0魔理沙\\0咲夜\\0蓝\\0阿吽\\0娜兹玲\\0清兰\\0燐\\0典\\0猯藏\\0八千慧\\0早鬼\\0尤魔\\0萃香\\0美天\\0慧之子\\0血枪\\0日狭美\\0残无\\0\\0",
         "Reimu\\0Marisa\\0Sanae\\0Ran\\0Aunn\\0Nazrin\\0Seiran\\0Orin\\0Tsukasa\\0Mamizou\\0Yachie\\0Saki\\0Yuuma\\0Suika\\0Biten\\0Enoko\\0Chiyari\\0Hisami\\0Zanmu\\0\\0",
-        "霊梦\\0魔理沙\\0咲夜\\0藍\\0阿吽\\0ナズーリン\\0清蘭\\0燐\\0典\\0マミゾウ\\0八千慧\\0早鬼\\0尤魔\\0萃香\\0美天\\0慧ノ子\\0ちやり\\0日狭美\\0残無\\0\\0"
+        "霊夢\\0魔理沙\\0咲夜\\0藍\\0阿吽\\0ナズーリン\\0清蘭\\0燐\\0典\\0マミゾウ\\0八千慧\\0早鬼\\0尤魔\\0萃香\\0美天\\0慧ノ子\\0ちやり\\0日狭美\\0残無\\0\\0"
       ],
       "THPRAC_GAMEROLL_TH19_EASTER_EGG_SHOTTYPES": [
         "灵梦\\0魔理沙\\0咲夜\\0蓝\\0阿吽\\0娜兹玲\\0清兰\\0燐\\0典\\0猯藏\\0八千慧\\0早鬼\\0尤魔\\0萃香\\0悟空\\0慧之子\\0血枪\\0日狭美\\0残无\\0\\0",
         "Reimu\\0Marisa\\0Sanae\\0Ran\\0Aunn\\0Nazrin\\0Seiran\\0Orin\\0Tsukasa\\0Mamizou\\0Yachie\\0Saki\\0Yuuma\\0Suika\\0Goku\\0Enoko\\0Chiyari\\0Hisami\\0Zanmu\\0\\0",
-        "霊梦\\0魔理沙\\0咲夜\\0藍\\0阿吽\\0ナズーリン\\0清蘭\\0燐\\0典\\0マミゾウ\\0八千慧\\0早鬼\\0尤魔\\0萃香\\0悟空\\0慧ノ子\\0ちやり\\0日狭美\\0残無\\0\\0"
+        "霊夢\\0魔理沙\\0咲夜\\0藍\\0阿吽\\0ナズーリン\\0清蘭\\0燐\\0典\\0マミゾウ\\0八千慧\\0早鬼\\0尤魔\\0萃香\\0悟空\\0慧ノ子\\0ちやり\\0日狭美\\0残無\\0\\0"
       ],
       "THPRAC_GAMEROLL_TH20_SHOTTYPES": [
         "灵梦+绯红恶魔\\0灵梦+生物赤红\\0灵梦+冰雪花簇\\0灵梦+蓝色季节\\0灵梦+黄色地心\\0灵梦+不朽明月\\0灵梦+兽之冷硬\\0灵梦+神道之风\\0魔理沙+绯红恶魔\\0魔理沙+生物赤红\\0魔理沙+冰雪花簇\\0魔理沙+蓝色季节\\0魔理沙+黄色地心\\0魔理沙+不朽明月\\0魔理沙+兽之冷硬\\0魔理沙+神道之风\\0\\0",
@@ -961,180 +975,180 @@
 
  "othersUI": {
       "glossary": {
-      "THPRAC_OTHERS": [ "其它", "others", "others" ],
-      "THPRAC_GAME_TIME_TOTAL": [ "总飞行时间", "total game time", "total game time" ],
-      "THPRAC_GAME_TIME_CURRENT": [ "本次飞行时间", "current game time", "current game time" ],
-      "THPRAC_GAME_TIME_RESET": [ "重置时间", "reset", "reset" ],
+      "THPRAC_OTHERS": [ "其它", "others", "その他" ],
+      "THPRAC_GAME_TIME_TOTAL": [ "总飞行时间", "total game time", "総プレイ時間" ],
+      "THPRAC_GAME_TIME_CURRENT": [ "本次飞行时间", "current game time", "現在のプレイ時間" ],
+      "THPRAC_GAME_TIME_RESET": [ "重置时间", "reset", "リセット" ],
       "THPRAC_GAME_TIME_LONG": [ "阿伟你又在玩电动哦，休息一下吧", "long game time", "long game time" ],
-      "THPRAC_ENABLE_GAMETIME_RECORD": [ "在设置界面设置「记录飞行时间」以查看(下一次启动生效)", "enable record game time in Settings to check(works when launch next time)", "enable record game time in Settings to check(works when launch next time)" ],
-      
-      "THPRAC_OTHER_NAME": [ "机签", "name", "name" ],
+      "THPRAC_ENABLE_GAMETIME_RECORD": [ "在设置界面设置「记录飞行时间」以查看(下一次启动生效)", "enable record game time in Settings to check(works when launch next time)", "設定でゲーム時間の記録を有効にして確認してください。（次回起動時に有効）" ],
+
+      "THPRAC_OTHER_NAME": [ "机签", "name", "名前" ],
       "THPRAC_OTHER_CLOCK_IN": [ "点击打卡", "Clock in", "Clock in" ],
-      "THPRAC_OTHER_DRAW_LUCK": [ "今日运势", "TODAY LUCK", "TODAY LUCK" ],
+      "THPRAC_OTHER_DRAW_LUCK": [ "今日运势", "TODAY LUCK", "今日の運勢" ],
       "THPRAC_OTHER_CONTINUE": [ "已经打卡了%d天", "%d days", "%d days" ],
       "THPRAC_OTHER_TODAY": [ "%d年%d月%d日", "%d-%d-%d", "%d-%d-%d" ],
-    
+
       "THPRAC_OTHER_LUCK_A": [ "§大吉§", "GOOD JI", "GOOD JI" ],
       "THPRAC_OTHER_LUCK_B": [ "§中吉§", "MID JI", "MID JI" ],
       "THPRAC_OTHER_LUCK_C": [ "§小吉§", "SMALL JI", "SMALL JI" ],
       "THPRAC_OTHER_LUCK_D": [ "§中平§", "MID", "MID" ],
       "THPRAC_OTHER_LUCK_E": [ "§凶§",   "CHEST", "CHEST" ],
       "THPRAC_OTHER_LUCK_F": [ "§大凶§", "BIG CUP", "BIG CUP" ],
-      
+
       "THPRAC_OTHER_LUCK_BETTER": [ "宜", "BETTER", "BETTER" ],
       "THPRAC_OTHER_LUCK_BETTER_NOT": [ "忌", "BETTER NOT", "BETTER NOT" ],
       "THPRAC_OTHER_LUCK_BETTER_ALL": [ "诸事皆宜", "ALL BETTER", "ALL BETTER" ],
       "THPRAC_OTHER_LUCK_BETTER_NOT_ALL": [ "诸事皆忌", "ALL BETTER NOT", "ALL BETTER NOT"],
-      
+
       "THPRAC_OTHER_LUCK_EOSD":  [ "打红魔乡", "Play EOSD", "Play EOSD"],
       "THPRAC_OTHER_LUCK_EOSDA": [ "红红火火", "Play EOSD", "Play EOSD"],
       "THPRAC_OTHER_LUCK_EOSDB": [ "九九六一", "Play EOSD", "Play EOSD"],
-     
+
       "THPRAC_OTHER_LUCK_PCB":    [ "打妖妖梦", "Play PCB",  "Play PCB"],
       "THPRAC_OTHER_LUCK_PCBA":   [ "早睡早起", "Play PCB",  "Play PCB"],
       "THPRAC_OTHER_LUCK_PCBB":   [ "自尽自尽", "Play PCB",  "Play PCB"],
-     
+
       "THPRAC_OTHER_LUCK_IN":     [ "打永夜抄",  "Play IN",    "Play IN"],
       "THPRAC_OTHER_LUCK_INA":    [ "永久触手",  "Play IN",    "Play IN"],
       "THPRAC_OTHER_LUCK_INB":    [ "永夜失眠",  "Play IN",    "Play IN"],
-     
+
       "THPRAC_OTHER_LUCK_MOF":   [ "打风神录",  "Play MOF",   "Play MOF"],
       "THPRAC_OTHER_LUCK_MOFA":  [ "秋高气爽",  "Play MOF",   "Play MOF"],
       "THPRAC_OTHER_LUCK_MOFB":  [ "*Player's score*",  "Play MOF",   "Play MOF"],
-      
+
       "THPRAC_OTHER_LUCK_SA":     [ "打地灵殿",  "Play SA",    "Play SA"],
       "THPRAC_OTHER_LUCK_SAA":    [ "永不下压",  "Play SA",    "Play SA"],
       "THPRAC_OTHER_LUCK_SAB":    [ "七星连珠",  "Play SA",    "Play SA"],
-      
+
       "THPRAC_OTHER_LUCK_UFO":    [ "打星莲船",  "Play UFO",   "Play UFO"],
       "THPRAC_OTHER_LUCK_UFOA":   [ "宝塔站收",  "Play UFO",   "Play UFO"],
       "THPRAC_OTHER_LUCK_UFOB":   [ "开碟红红蓝",  "Play UFO",   "Play UFO"],
-      
+
       "THPRAC_OTHER_LUCK_TD":    [ "打神灵庙",  "Play TD",    "Play TD"],
       "THPRAC_OTHER_LUCK_TDA":   [ "星辰降临",  "Play TD",    "Play TD"],
       "THPRAC_OTHER_LUCK_TDB":   [ "星辰陨落",  "Play TD",    "Play TD"],
-      
+
       "THPRAC_OTHER_LUCK_DDC":   [ "打辉针城",  "Play DDC",   "Play DDC"],
       "THPRAC_OTHER_LUCK_DDCA":  [ "随机弹随机收",  "Play DDC",   "Play DDC"],
       "THPRAC_OTHER_LUCK_DDCB":  [ "DDC永久SB",  "Play DDC",   "Play DDC"],
-      
-      
+
+
       "THPRAC_OTHER_LUCK_LOLK":  [ "打绀珠传",  "Play LOLK",  "Play LOLK"],
       "THPRAC_OTHER_LUCK_LOLKA": [ "神清气爽",  "Play LOLK",  "Play LOLK"],
       "THPRAC_OTHER_LUCK_LOLKB": [ "全一九九",  "Play LOLK",  "Play LOLK"],
-      
+
       "THPRAC_OTHER_LUCK_HSIFS":  [ "打天空璋",  "Play HSIFS", "Play HSIFS"],
       "THPRAC_OTHER_LUCK_HSIFSA": [ "四季如春",  "Play HSIFS", "Play HSIFS"],
       "THPRAC_OTHER_LUCK_HSIFSB": [ "瞎几把躲",  "Play HSIFS", "Play HSIFS"],
-      
+
       "THPRAC_OTHER_LUCK_WBABC":  [ "打鬼形兽",  "Play WBABC", "Play WBABC"],
       "THPRAC_OTHER_LUCK_WBABCA": [ "跳脱三界",  "Play WBABC", "Play WBABC"],
       "THPRAC_OTHER_LUCK_WBABCB": [ "狼狈逃窜",  "Play WBABC", "Play WBABC"],
-      
+
       "THPRAC_OTHER_LUCK_UM":     [ "打虹龙洞",  "Play UM",    "Play UM"],
       "THPRAC_OTHER_LUCK_UMA":    [ "零元购",  "Play UM",    "Play UM"],
       "THPRAC_OTHER_LUCK_UMB":    [ "P点全无",  "Play UM",    "Play UM"],
-	  
+
 	  "THPRAC_OTHER_LUCK_FW":     [ "打锦上京",  "Play FW",    "Play FW"],
       "THPRAC_OTHER_LUCK_FWA":    [ "喜欢赤石",  "Play FW",    "Play FW"],
       "THPRAC_OTHER_LUCK_FWB":    [ "构式游戏",  "Play FW",    "Play FW"],
-      
+
       "THPRAC_OTHER_LUCK_POFV":   [ "打花映冢", "Play POFV",    "Play POFV"],
       "THPRAC_OTHER_LUCK_POFVA":  [ "无限连击", "Play POFV",    "Play POFV"],
       "THPRAC_OTHER_LUCK_POFVB":  [ "花容失色", "Play POFV",    "Play POFV"],
-      
+
       "THPRAC_OTHER_LUCK_UDOALG": [ "打兽王园", "Play UDOALG",  "Play UDOALG"],
       "THPRAC_OTHER_LUCK_UDOALGA":[ "无限连击2.0", "Play UDOALG",  "Play UDOALG"],
       "THPRAC_OTHER_LUCK_UDOALGB":[ "打到失联", "Play UDOALG",  "Play UDOALG"],
-      
+
       "THPRAC_OTHER_LUCK_STB":    [ "打文花帖", "Play STB",     "Play STB"],
       "THPRAC_OTHER_LUCK_STBA":   [ "抓拍强者", "Play STB",     "Play STB"],
       "THPRAC_OTHER_LUCK_STBB":   [ "偷拍被抓", "Play STB",     "Play STB"],
-      
+
       "THPRAC_OTHER_LUCK_DS":    [ "打文花帖DS","Play DS",     "Play DS"],
       "THPRAC_OTHER_LUCK_DSA":   [ "抓拍强者2.0", "Play STB",     "Play STB"],
       "THPRAC_OTHER_LUCK_DSB":   [ "偷拍被抓2.0", "Play STB",     "Play STB"],
-      
+
       "THPRAC_OTHER_LUCK_GFW":    [ "打大战争",  "Play GFW",     "Play GFW"],
       "THPRAC_OTHER_LUCK_GFWA":   [ "俺最强",  "Play GFW",     "Play GFW"],
       "THPRAC_OTHER_LUCK_GFWB":   [ "俺最强?真假...",  "Play GFW",     "Play GFW"],
-      
+
       "THPRAC_OTHER_LUCK_ISC":    [ "打天邪鬼",  "Play ISC",     "Play ISC"],
       "THPRAC_OTHER_LUCK_ISCA":   [ "反则生命",  "Play ISC",     "Play ISC"],
       "THPRAC_OTHER_LUCK_ISCB":   [ "道具失控",  "Play ISC",     "Play ISC"],
-      
+
       "THPRAC_OTHER_LUCK_VD":     [ "打噩梦日记","Play VD",      "Play VD"],
       "THPRAC_OTHER_LUCK_VDA":    [ "做个好梦","Play VD",      "Play VD"],
       "THPRAC_OTHER_LUCK_VDB":    [ "小心做噩梦","Play VD",      "Play VD"],
-      
+
       "THPRAC_OTHER_LUCK_BM":     [ "打黑集市",   "Play BM",     "Play BM"],
       "THPRAC_OTHER_LUCK_BMA":    [ "零元购2.0",   "Play BM",     "Play BM"],
       "THPRAC_OTHER_LUCK_BMB":    [ "陵园购",   "Play BM",     "Play BM"],
-      
+
       "THPRAC_OTHER_LUCK_FTG":    [ "打FTG", "Play FTG~", "Play FTG~"],
       "THPRAC_OTHER_LUCK_FTGA":   [ "虐虐菜", "Play FTG~", "Play FTG~"],
       "THPRAC_OTHER_LUCK_FTGB":   [ "被虐菜", "Play FTG~", "Play FTG~"],
-      
-      
+
+
       "THPRAC_OTHER_LUCK_OLD":    [ "打旧作", "Play Some PC98 Games", "Play Some PC98 Games"],
       "THPRAC_OTHER_LUCK_OLDA":   [ "永远怀念", "Play Some PC98 Games", "Play Some PC98 Games"],
       "THPRAC_OTHER_LUCK_OLDB":   [ "裂开", "Play Some PC98 Games", "Play Some PC98 Games"],
-      
+
       "THPRAC_OTHER_LUCK_FAN":    [ "打二创STG", "Play Some Fan Game", "Play Some Fan Game"],
       "THPRAC_OTHER_LUCK_FANA":   [ "淘到宝藏", "Play Some Fan Game", "Play Some Fan Game"],
       "THPRAC_OTHER_LUCK_FANB":   [ "弹设一坨", "Play Some Fan Game", "Play Some Fan Game"]
       },
       "groups": {
       "LUCK_RANGE": [
-        "THPRAC_OTHER_LUCK_A",  
-        "THPRAC_OTHER_LUCK_B",   
-        "THPRAC_OTHER_LUCK_C",    
-        "THPRAC_OTHER_LUCK_D",   
-        "THPRAC_OTHER_LUCK_E",    
+        "THPRAC_OTHER_LUCK_A",
+        "THPRAC_OTHER_LUCK_B",
+        "THPRAC_OTHER_LUCK_C",
+        "THPRAC_OTHER_LUCK_D",
+        "THPRAC_OTHER_LUCK_E",
         "THPRAC_OTHER_LUCK_F"
       ],
       "LUCK_DESC_1": [
-        "THPRAC_OTHER_LUCK_EOSD",  
-        "THPRAC_OTHER_LUCK_PCB",   
-        "THPRAC_OTHER_LUCK_IN",    
-        "THPRAC_OTHER_LUCK_MOF",   
-        "THPRAC_OTHER_LUCK_SA",    
-        "THPRAC_OTHER_LUCK_UFO",   
-        "THPRAC_OTHER_LUCK_TD",    
-        "THPRAC_OTHER_LUCK_DDC",   
-        "THPRAC_OTHER_LUCK_LOLK",  
-        "THPRAC_OTHER_LUCK_HSIFS", 
-        "THPRAC_OTHER_LUCK_WBABC", 
+        "THPRAC_OTHER_LUCK_EOSD",
+        "THPRAC_OTHER_LUCK_PCB",
+        "THPRAC_OTHER_LUCK_IN",
+        "THPRAC_OTHER_LUCK_MOF",
+        "THPRAC_OTHER_LUCK_SA",
+        "THPRAC_OTHER_LUCK_UFO",
+        "THPRAC_OTHER_LUCK_TD",
+        "THPRAC_OTHER_LUCK_DDC",
+        "THPRAC_OTHER_LUCK_LOLK",
+        "THPRAC_OTHER_LUCK_HSIFS",
+        "THPRAC_OTHER_LUCK_WBABC",
         "THPRAC_OTHER_LUCK_UM",
         "THPRAC_OTHER_LUCK_FW"
       ],
       "LUCK_DESC_1A": [
-        "THPRAC_OTHER_LUCK_EOSDA",  
-        "THPRAC_OTHER_LUCK_PCBA",   
-        "THPRAC_OTHER_LUCK_INA",    
-        "THPRAC_OTHER_LUCK_MOFA",   
-        "THPRAC_OTHER_LUCK_SAA",    
-        "THPRAC_OTHER_LUCK_UFOA",   
-        "THPRAC_OTHER_LUCK_TDA",    
-        "THPRAC_OTHER_LUCK_DDCA",   
-        "THPRAC_OTHER_LUCK_LOLKA",  
-        "THPRAC_OTHER_LUCK_HSIFSA", 
-        "THPRAC_OTHER_LUCK_WBABCA", 
-        "THPRAC_OTHER_LUCK_UMA", 
-        "THPRAC_OTHER_LUCK_FWA" 
+        "THPRAC_OTHER_LUCK_EOSDA",
+        "THPRAC_OTHER_LUCK_PCBA",
+        "THPRAC_OTHER_LUCK_INA",
+        "THPRAC_OTHER_LUCK_MOFA",
+        "THPRAC_OTHER_LUCK_SAA",
+        "THPRAC_OTHER_LUCK_UFOA",
+        "THPRAC_OTHER_LUCK_TDA",
+        "THPRAC_OTHER_LUCK_DDCA",
+        "THPRAC_OTHER_LUCK_LOLKA",
+        "THPRAC_OTHER_LUCK_HSIFSA",
+        "THPRAC_OTHER_LUCK_WBABCA",
+        "THPRAC_OTHER_LUCK_UMA",
+        "THPRAC_OTHER_LUCK_FWA"
       ],
       "LUCK_DESC_1B": [
-        "THPRAC_OTHER_LUCK_EOSDB",  
-        "THPRAC_OTHER_LUCK_PCBB",   
-        "THPRAC_OTHER_LUCK_INB",    
-        "THPRAC_OTHER_LUCK_MOFB",   
-        "THPRAC_OTHER_LUCK_SAB",    
-        "THPRAC_OTHER_LUCK_UFOB",   
-        "THPRAC_OTHER_LUCK_TDB",    
-        "THPRAC_OTHER_LUCK_DDCB",   
-        "THPRAC_OTHER_LUCK_LOLKB",  
-        "THPRAC_OTHER_LUCK_HSIFSB", 
-        "THPRAC_OTHER_LUCK_WBABCB", 
+        "THPRAC_OTHER_LUCK_EOSDB",
+        "THPRAC_OTHER_LUCK_PCBB",
+        "THPRAC_OTHER_LUCK_INB",
+        "THPRAC_OTHER_LUCK_MOFB",
+        "THPRAC_OTHER_LUCK_SAB",
+        "THPRAC_OTHER_LUCK_UFOB",
+        "THPRAC_OTHER_LUCK_TDB",
+        "THPRAC_OTHER_LUCK_DDCB",
+        "THPRAC_OTHER_LUCK_LOLKB",
+        "THPRAC_OTHER_LUCK_HSIFSB",
+        "THPRAC_OTHER_LUCK_WBABCB",
         "THPRAC_OTHER_LUCK_UMB",
         "THPRAC_OTHER_LUCK_FWB"
       ],
@@ -1203,7 +1217,7 @@
        "THPRAC_KENG_DETAILS_CAL":["计算","calculate","calculate"],
        "THPRAC_KENG_DETAILS_CAL_EM":["基于期望最大化","based on exception maximization","based on exception maximization"],
        "THPRAC_KENG_DETAILS_CAL_EM_DESC":["打n次撞m次则计算为p(miss)=(m+1)/(n+2)","miss m times in n records, then p(miss)=(m+1)/(n+2)","miss m times in n records, then p(miss)=(m+1)/(n+2)"],
-       
+
 	   "THPRAC_KENG_DETAILS_POPUP":["详情##dtpp","details##dtpp","details##dtpp"],
        "THPRAC_KENG_DETAILS_DIFF_TABLE":["难点详情","diff details","diff details"],
        "THPRAC_KENG_DETAILS_DIFF_INDEX":["编号","index","index"],
@@ -1215,7 +1229,7 @@
        "THPRAC_KENG_DETAILS_PASS_PROB":["概率","prob","prob"],
        "THPRAC_KENG_DETAILS_PASS_EXCEPTION":["期望局数","exception num of games","exception num of games"],
        "THPRAC_KENG_DETAILS_PASS_EXCEPTION_INF":["近乎无限","almost inf","almost inf"],
-	   
+
        "THPRAC_KENG_NAME":["坑名:","name","name"],
        "THPRAC_KENG_DATE":["创建日期:","date","date"],
        "THPRAC_KENG_DESC":["描述:","description","description"],
@@ -1223,10 +1237,10 @@
        "THPRAC_KENG_PLAY_TABLE":["记录表##pltb","play table##pltb","play table##pltb"],
        "THPRAC_KENG_PLAY_CNT":["难点计数","difficulties count","difficulties count"],
        "THPRAC_KENG_PLAY_INDEX":["记录编号","play index","play index"],
-	   
+
        "THPRAC_KENG_PLAY_ADD":["增加记录","add play record","add play record"],
        "THPRAC_KENG_PLAY_ADD_POPUP":["增加记录##appp","add play record##appp","add play record##appp"],
-       
+
 	   "THPRAC_KENG_SAVE_CSV":["保存为csv","save as csv","save as csv"],
 
        "THPRAC_KENG_ADD_KENG":["开坑","add keng","add keng"],
@@ -1234,10 +1248,10 @@
        "THPRAC_KENG_READ_CSV":["从CSV导入","read from csv","read from csv"]
       }
   },
-  
+
    "inGameInfo": {
       "glossary": {
-	  
+
 	  "THPRAC_IGI_DIFF_E":["Easy","Easy","Easy"],
 	  "THPRAC_IGI_DIFF_N":["Normal","Normal","Normal"],
 	  "THPRAC_IGI_DIFF_H":["Hard","Hard","Hard"],
@@ -1246,7 +1260,7 @@
 	  "THPRAC_IGI_DIFF_PH":["Phantasm","Phantasm","Phantasm"],
 	  "THPRAC_IGI_DIFF_OD":["Overdrive","Overdrive","Overdrive"],
 	  "THPRAC_IGI_DIFF_LW":["Lastword","Lastword","Lastword"],
-	  
+
 	  "THPRAC_IGI_PL_ReimuA":["梦 A","Reimu A","Reimu A"],
 	  "THPRAC_IGI_PL_ReimuB":["梦 B","Reimu B","Reimu B"],
 	  "THPRAC_IGI_PL_ReimuC":["梦 C","Reimu C","Reimu C"],
@@ -1257,7 +1271,7 @@
 	  "THPRAC_IGI_PL_SakuyaB":["咲 B","Sakuya B","Sakuya B"],
 	  "THPRAC_IGI_PL_SanaeA":["苗 A","Sanae A","Sanae A"],
 	  "THPRAC_IGI_PL_SanaeB":["苗 B","Sanae B","Sanae B"],
-	  
+
 	  "THPRAC_IGI_PL_Reimu17A":["梦狼","Reimu W","Reimu W"],
 	  "THPRAC_IGI_PL_Reimu17B":["梦獭","Reimu O","Reimu O"],
 	  "THPRAC_IGI_PL_Reimu17C":["梦鹰","Reimu E","Reimu E"],
@@ -1267,7 +1281,7 @@
 	  "THPRAC_IGI_PL_Youmu17A"  : ["妖狼","Youmu W","Youmu W"],
 	  "THPRAC_IGI_PL_Youmu17B"  : ["妖獭","Youmu O","Youmu O"],
 	  "THPRAC_IGI_PL_Youmu17C"  : ["妖鹰","Youmu E","Youmu E"],
-	  
+
 	  "THPRAC_IGI_PL_Reimu"  : ["灵梦","Reimu","Reimu"],
 	  "THPRAC_IGI_PL_Yukari" : ["紫","Yukari","Yukari"],
 	  "THPRAC_IGI_PL_Marisa" : ["魔理沙","Marisa","Marisa"],
@@ -1280,19 +1294,19 @@
 	  "THPRAC_IGI_PL_Reisen" : ["铃仙","Reisen","Reisen"],
 	  "THPRAC_IGI_PL_Aya"    : ["文","Aya","Aya"],
 	  "THPRAC_IGI_PL_Cirno"  : ["琪露诺","Cirno","Cirno"],
-	  
+
 	  "THPRAC_IGI_PL_16A"  : ["春","Sp.","Sp."],
 	  "THPRAC_IGI_PL_16B"  : ["夏","Su.","Su."],
 	  "THPRAC_IGI_PL_16C"  : ["秋","Fa.","Fa."],
 	  "THPRAC_IGI_PL_16D"  : ["冬","Wi.","Wi."],
 	  "THPRAC_IGI_PL_16E"  : ["土","DD.","DD."],
-	  
+
 	  "THPRAC_IGI_PL_8A":["结界","R&Y","R&Y"],
 	  "THPRAC_IGI_PL_8B":["咏唱","M&A","M&A"],
 	  "THPRAC_IGI_PL_8C":["红魔","S&R","S&R"],
 	  "THPRAC_IGI_PL_8D":["幽冥","Y&Y","Y&Y"],
-	  
-	  
+
+
 	  "THPRAC_IGI_PL_20A":["红1","R1","R1"],
 	  "THPRAC_IGI_PL_20B":["红2","R2","R2"],
 	  "THPRAC_IGI_PL_20C":["蓝1","B1","B1"],
@@ -1302,17 +1316,17 @@
 	  "THPRAC_IGI_PL_20G":["绿1","G1","G1"],
 	  "THPRAC_IGI_PL_20H":["绿2","G2","G2"],
 	  "THPRAC_IGI_PL_20I":["无", "N","N"],
-	  
+
 	  "THPRAC_CHG_STONE":["大变石","change stone","change stone"],
 	  "THPRAC_CHG_STONE_DESC":["同时按z和左右键切换携带的高速/低速石","press z and left/right at the same time to switch between stones","press z and left/right at the same time to switch between stones"],
-	  
+
 	  "THPRAC_BLIND":["夜雀视野","blind view","blind view"],
 	  "THPRAC_BLIND_DESC":["娱乐用, 使用blind.png重载","for fun(use blind.png to reload)","for fun(use blind.png to reload)"],
 	  "THPRAC_BLIND_SZ":["视野大小","view sz","view sz"],
-	  
-	  
+
+
 	  "THPRAC_SHOW_BULLET_HITBOX":["显示弹幕判定(仅练习/rep)","show bullet hitbox(only prac/rep)","show bullet hitbox(only prac/rep)"],
-	  
+
 	  "THPRAC_KB":["按键显示设置","key monitor setting","key monitor setting"],
 	  "THPRAC_KB_SHOW":["按键显示效果","show key monitor","show key monitor"],
 	  "THPRAC_KB_AUTO":["自动打开按键显示","open key monitor automatically","open key monitor automatically"],
@@ -1331,12 +1345,12 @@
 	  "THPRAC_KB_RECORD_START": [ "开始记录APS", "start to record APS", "start to record APS"],
 	  "THPRAC_KB_RECORD_STOP": [ "停止记录APS", "stop recording", "stop recording"],
 	  "THPRAC_KB_OUTPUT": [ "导出到游戏文件夹", "output to game folder", "output to game folder"],
-      
-	  
+
+
 	  "THPRAC_INGAMEINFO_ADV2":["自动开启高级功能","automatically use advanced opts","automatically use advanced opts"],
 	  "THPRAC_TH06_SHOW_REP_MARKER":["红魔乡显示是否为rep","show rep marker in EoSD","show rep marker in EoSD"],
 	  "THPRAC_TH08_FORCE_LS":["永夜抄强制总是开启LSC","force LS in IN","force LS in IN"],
-	   
+
 	  "THPRAC_TH18_FORCE_CARD": [ "虹龙洞强制卡牌", "UM force card", "UM force card" ],
 	  "THPRAC_TH18_FORCE_CARD_DESC": [ "强制让商店内第一张卡牌为想要的卡牌", "force the first card in market", "force the first card in market" ],
 	  "THPRAC_TH18_FORCE_CARD_DESC2": [ "作者认为作为一个游戏就不应该用一个纯随机要素限制打分玩家, 如果你觉得是作弊, 那你说得对.jpg", "the author believes that as a game, it shouldn't rely on a purely random element to restrict players' ability to rate the game. If you think that's cheating, then you're right.jpg", "the author believes that as a game, it shouldn't rely on a purely random element to restrict players' ability to rate the game. If you think that's cheating, then you're right.jpg" ],
@@ -1347,7 +1361,7 @@
 	  "THPRAC_TH18_CARD_4": [ "stage4 卡牌", "card for stage 4", "card for stage 4" ],
 	  "THPRAC_TH18_CARD_5": [ "stage5 卡牌", "card for stage 5", "card for stage 5" ],
 	  "THPRAC_TH18_CARD_7": [ "stageEX 卡牌", "card for stage EX", "card for stage EX" ],
-	  
+
 	  "THPRAC_TH20_PIV_OVERFLOW_FIX": [ "锦上京PIV溢出修复", "FW PIV overflow fix", "FW PIVオーバーフロー修正" ],
       "THPRAC_TH20_UNCAP_PIV": [ "锦上京移除PIV限制", "FW PIV uncap", "FW PIVキャップ解放" ],
       "THPRAC_TH20_UNCAP_SCORE": [ "锦上京移除分数限制", "FW Score uncap", "FW スコアキャップ解放" ],
@@ -1356,18 +1370,20 @@
 	  "THPRAC_TH20_FIX_BULLETHITBOX": [ "锦上京修复弹幕判定","FW fix bullet hitbox","FW 弾幕判定を修復します"],
 	  "THPRAC_TH20_FIX_BULLETHITBOX_DESC": [ "锦上京游戏", "FW Game", "FW Game" ],
 	  "THPRAC_TH20_DECREASE_EFF": [ "锦上京减少擦弹特效","FW decrease graze effect","FW decrease graze effect"],
-	  
+
+
+
 	  "THPRAC_FAST_RETRY": [ "练习模式快速re", "fast retry for prac mode", "fast retry for prac mode" ],
 	  "THPRAC_FAST_RETRY_DESC": [ "需要启用键盘Hook与强制dinput8/RawInput输入", "need enable keyboard hook & force dinput8/RawInput", "need enable keyboard hook & force dinput8/RawInput" ],
 	  "THPRAC_FAST_RETRY_DESC2": [ "快捷键: shift+F", "hotkey shift+F", "hotkey shift+F" ],
-	  
+
 	  "THPRAC_TH06_BACKGROUND_FIX": [ "红魔乡背景修复", "EoSD background fix", "EoSD background fix" ],
 	  "THPRAC_TH06_BACKGROUND_FIX_DESC": [ "当关闭弹幕虚影时不让蕾咪变蓝狗\n有可能让背景或UI变奇怪", "let Remilia not be blue when disables bullet shadow\nMight make bg or UI strange", "let Remilia not be blue when disables bullet shadow\nMight make bg or UI strange" ],
-	  
+
 	  "THPRAC_TH06_FIX_RAND_SEED": [ "红魔乡固定初始种子", "fix EoSD rand seed when begin", "fix EoSD rand seed when begin" ],
 	  "THPRAC_TH06_RAND_SEED": [ "初始种子", "rand seed", "rand seed" ],
 	  "THPRAC_TH06_REP_RAND_SEED": [ "当前打开rep的初始种子", "rand seed for current rep", "rand seed for current rep" ],
-	  
+
 	  "THPRAC_TH06_RANKLOCK_DOWN": [ "红魔乡自动miss/bomb后不掉rank", "EoSD no rank drop after miss/bomb", "EoSD no rank drop after miss/bomb" ],
 	  "THPRAC_INFLIVES_MAP": [ "将锁残修改为不疮", "map inf.lives to no continue", "map inf.lives to no continue" ],
       "THPRAC_DISABLE_MASTER_AUTO": [ "自动禁用MASTER", "automatically disable master", "automatically disable master" ],
@@ -1375,7 +1391,7 @@
 	  "THPRAC_INGAMEINFO_ADV":["高级IGI功能","advanced igi","advanced igi"],
 	  "THPRAC_INGAMEINFO_ADV_DESC1":["部分功能需要打开更多游戏信息(backspace菜单)中的选项开启","need to enable ingameinfo(in backspace menu) to show","need to enable ingameinfo(in backspace menu) to show"],
 	  "THPRAC_INGAMEINFO_ADV_DESC2":["免责声明: 部分功能可能会被认为是作弊","disclaimer: might be considered as cheating","disclaimer: might be considered as cheating"],
-	  
+
 	  "THPRAC_INGAMEINFO_TH06_SHOW_RANK":["显示rank","show rank","show rank"],
 	  "THPRAC_INGAMEINFO_TH06_SHOW_RANK2":["红魔乡显示rank","EoSD show rank","EoSD show rank"],
 	  "THPRAC_INGAMEINFO_TH06_SHOW_HITBOX":["显示低速判定","show hitbox when focused","show hitbox when focused"],
@@ -1383,16 +1399,16 @@
 	  "THPRAC_INGAMEINFO_TH06_SHOW_HITBOX_DESC":["自定义判定: 将判定点图片hitbox.png放入红魔乡游戏所在文件夹","custom hitbox: put hitbox.png file in EoSD .exe folder","custom hitbox: put hitbox.png file in EoSD .exe folder"],
 	  "THPRAC_INGAMEINFO_TH06_SHOW_HITBOX_RELOAD":["重载","reload","reload"],
 	  "THPRAC_INGAMEINFO_TH06_RANK":["rank","rank","rank"],
-	  
+
 	  "THPRAC_INGAMEINFO_TH11_SHOW_HINT":["显示hint","show hint","show hint"],
 	  "THPRAC_INGAMEINFO_TH11_SHOW_HINT2":["地灵殿显示hint","SA show hint","SA show hint"],
-	  
+
 	  "THPRAC_INGAMEINFO_TH13_SHOW_HITS":["显示连击","show hits","show hits"],
 	  "THPRAC_INGAMEINFO_TH13_SHOW_HITS2":["神灵庙显示连击","TD show hits","TD show hits"],
 	  "THPRAC_INGAMEINFO_TH13_SHOW_HIT_BAR":["显示连击条","show hit bar","show hit bar"],
 	  "THPRAC_INGAMEINFO_TH13_SHOW_HIT_BAR2":["神灵庙显示连击条","TD show hit bar","TD show hit bar"],
 	  "THPRAC_INGAMEINFO_TH13_HITS":["连击","hits","hits"],
-	  
+
 	  "THPRAC_INGAMEINFO_TH14_MARISA_LASER_REP":["辉针城魔理沙自动开启激光修复的rep预防功能 (独占全屏不建议)","DDC Marisa laser bug rep repair on (not recommended in fullscreen)","DDC Marisa laser bug rep repair on (not recommended in fullscreen)"],
 	  "THPRAC_INGAMEINFO_TH14_SHOW_BONUS":["显示bonus数","show bonuses","show bonuses"],
 	  "THPRAC_INGAMEINFO_TH14_SHOW_BONUS2":["辉针城显示bouns数","DDC show bonuses","DDC show bonuses"],
@@ -1400,8 +1416,8 @@
 	  "THPRAC_INGAMEINFO_TH14_SHOW_ITEMS2":["辉针城显示道具量","DDC show items","DDC show items"],
 	  "THPRAC_INGAMEINFO_TH14_SHOW_DROP_BAR":["显示掉落收集条","show drop bar","show drop bar"],
 	  "THPRAC_INGAMEINFO_TH14_SHOW_DROP_BAR2":["辉针城显示掉落收集条","DDC show drop bar","DDC show drop bar"],
-	  
-	  
+
+
 	  "THPRAC_INGAMEINFO_TH14_BONUS_NORMAL":["普通收点","normal bonus","normal bonus"],
 	  "THPRAC_INGAMEINFO_TH14_BONUS_20":["2.0收点","2.0 bonus","2.0 bonus"],
 	  "THPRAC_INGAMEINFO_TH14_BONUS_TOTAL":["总奖励","total bonus","total bonus"],
@@ -1409,24 +1425,24 @@
 	  "THPRAC_INGAMEINFO_TH14_BONUS_LIFE":["残","L","L"],
 	  "THPRAC_INGAMEINFO_TH14_BONUS_BOMB":["雷","B","B"],
 	  "THPRAC_INGAMEINFO_TH14_ITEMS_CNT":["道具量","items","items"],
-	  
+
 	  "THPRAC_INGAMEINFO_TH15_SHOW_SHOOTING_DOWN_RATE":["显示击破数","show shooting down","show shooting down"],
 	  "THPRAC_INGAMEINFO_TH15_SHOW_SHOOTING_DOWN_RATE2":["绀珠传显示击破数","LoLK show shooting down","LoLK show shooting down"],
 	  "THPRAC_INGAMEINFO_TH15_SHOOTING_DOWN_RATE":["击破数","shoot down","shoot down"],
 	  "THPRAC_INGAMEINFO_TH15_PRODUCT":["乘积","product","product"],
-	  
-	  
+
+
        "THPRAC_INGAMEINFO":["更多游戏信息","in game info","in game info"],
        "THPRAC_INGAMEINFO_MISS_COUNT":["miss:","miss:","miss:"],
        "THPRAC_INGAMEINFO_BOMB_COUNT":["bomb:","bomb:","bomb:"],
        "THPRAC_INGAMEINFO_13_TRANCE_COUNT":["灵界:","trance:","trance:"],
-       
+
        "THPRAC_INGAMEINFO_12_UFO_COUNT1":["开碟:","UFO spawn","UFO spawn"],
 	   "THPRAC_INGAMEINFO_12_UFO_COUNT2":["吃碟:","UFO item","UFO item"],
 	   "THPRAC_INGAMEINFO_12_UFO_COUNT3":["掉碟:","UFO drop","UFO drop"],
-	   
+
 	   "THPRAC_INGAMEINFO_12_UFO_SUPER_ULTRA_CHROMATIC_INFO_PRO":["炫彩UFO信息","chromatic UFO info","chromatic UFO info"],
-	   
+
        "THPRAC_INGAMEINFO_07_BORDER_COUNT":["撞结界:","border:","border:"],
        "THPRAC_INGAMEINFO_07_CHERRY":["Cherry:","Cherry:","Cherry:"],
        "THPRAC_INGAMEINFO_07_CHERRY_PLUS":["CherryP:","CherryP:","CherryP:"],
@@ -1442,17 +1458,17 @@
        "THPRAC_INGAMEINFO_16_RELEASE_COUNT":["季节解放:","release:","release:"],
        "THPRAC_INGAMEINFO_15_RE_TIMES_STAGE":["第%d面Re数:","stage %d Re:","stage %d Re:"],
        "THPRAC_INGAMEINFO_15_RE_TIMES":["Re数:","Retry:","Retry:"],
-	   
+
        "THPRAC_INGAMEINFO_20_HYPER_COUNT":["hyper:","hyper:","hyper:"],
        "THPRAC_INGAMEINFO_20_HYPER_BREAK_COUNT":["撞hyper:","hyper break:","hyper break:"],
        "THPRAC_INGAMEINFO_20_PYRAMID_COUNT":["Δ击破:","Δ killed:","Δ killed:"],
        "THPRAC_INGAMEINFO_20_PYRAMID_SUMMONED_COUNT":["Δ生成:","Δ summoned:","Δ summoned:"],
        "THPRAC_INGAMEINFO_20_PYRAMID_LV":["LV:","lv:","lv:"],
-	   
+
        "THPRAC_INGAMEINFO_06_SHOWDETAIL_HOTKEY":["详情","Details","Details"],
 	   "THPRAC_INGAMEINFO_06_SHOWDETAIL_PAGE":["游戏详情","Details","Details"],
 	   "THPRAC_INGAMEINFO_06_SHOWDETAIL_COLLAPSE":["游戏详情","Details","Details"],
-	   
+
        "THPRAC_INGAMEINFO_06_GAMTIME_TOT":["总游戏时间","game time(total)","game time(total)"],
        "THPRAC_INGAMEINFO_06_GAMTIME_CUR":["本次游戏时间","game time(current)","game time(current)"],
 	   "THPRAC_INGAMEINFO_06_GAMTIME_CHARACTER_TOT":["本机体总时间","character game time(total)","character game time(total)"],
@@ -1467,7 +1483,7 @@
 	   "THPRAC_INGAMEINFO_06_GAMTIME_MILLISECOND":["毫秒","ms","ms"],
 	   "THPRAC_INGAMEINFO_06_GAMTIME_MICROSECOND":["微秒","us","us"],
 	   "THPRAC_INGAMEINFO_06_GAMTIME_NANOSECOND":["纳秒","ns","ns"],
-	   
+
        "THPRAC_INGAMEINFO_06_SPELL_NAME":["符卡","spell name","spell name"],
        "THPRAC_INGAMEINFO_06_CAPTURE_TOT":["收率(总)","capture(total)","capture(total)"],
        "THPRAC_INGAMEINFO_06_CAPTURE_CUR":["收率(本次)","capture(current)","capture(current)"],
@@ -1604,7 +1620,7 @@
       ]
     }
   },
-  
+
   "common": {
     "glossary": {
       "TH_MENU": [ "练习选项", "Option", "オプション" ],
@@ -1686,7 +1702,7 @@
       "TH_DISABLE_MASTER": [ "符卡收率完整显示", "show complete spellcard capture rate", "show complete spellcard capture rate" ],
       "TH_DISABLE_MASTER_DESC": [ "不显示master 0/99+等", "no master, 0/99+, etc", "no master, 0/99+, etc" ],
       "TH_ENABLE_LOCK_TIMER": [ "启用锁时计时", "enable lock timer", "enable lock timer" ],
-	  
+
 	  "TH_ERROR": [ "错误", "Error", "エラー" ],
 	  "TH_REPLAY_FIX": [ "Replay修复", "Replay Fixing", "リプレイ修復" ],
       "TH_REPFIX_SELECTED": [ "已选择重放：%ls", "Replay selected: %ls", "選択したリプレイ: %ls" ],
@@ -1709,9 +1725,9 @@
       "TH_REPFIX_SAVE_ERROR_DEST": [ "未能写入目标文件。", "Failed to write to destination file.", "ターゲットファイルに書き込めませんでした。" ],
       "TH_REPFIX_SAVE_ERROR_CLEAR_PARAMS": [ "重置文件的 thprac 数据失败。", "Failed to reset file's thprac data.", "ファイルの thprac データのリセットに失敗しました。" ],
       "TH_REPFIX_SAVE_ERROR_PARAMS": [ "无法将 thprac 数据写入重放文件。", "Failed to add thprac data to replay file.", "thprac のデータをリプレイファイルに書き込めませんでした。" ],
-	  
-      
-      
+
+
+
       "TH_ON": [ "开启", "On", "有効" ],
       "TH_OFF": [ "关闭", "Off", "無効" ],
       "TH_NORMAL": [ "正常", "Normal", "普通" ],
@@ -1930,8 +1946,8 @@
     },
 
     "groups": {
-	
-	
+
+
 	"TH_TIMEOUT_SETTING": [
         "TH_TIMEOUT_SPELLCARD1",
         "TH_TIMEOUT_SPELLCARD2"
@@ -2053,13 +2069,13 @@
 	  "TH06_FINAL_SPELL_W4": [ "红色的半墙乡", "Scarlet Half-Wallsokyo", "Scarlet Half-Wallsokyo" ],
       "TH06_FINAL_SPELL_W5": [ "混全56way(3)", "56 way, wave 3", "56 way, wave 3" ],
       "TH06_FINAL_SPELL_W6": [ "混全56way(2,3)", "56 way, wave 2,3", "56 way, wave 2,3" ],
-	  
+
       "TH06_ST6_WALL_PRAC": [ "砌墙练习器", "wall prac", "wall prac" ],
       "TH06_ST6_WALL_PRAC_SNIPE_N": [ "近场狙度", "snipe ratio near", "snipe ratio near" ],
       "TH06_ST6_WALL_PRAC_SNIPE_F": [ "远场狙度", "snipe ratio far", "snipe ratio far" ],
-	  
+
       "TH06_ST6_WALL_PRAC_DESC": ["红幻/吸幻使用", "for Scarlet Gensokyo/Vampire Illusion", "for Scarlet Gensokyo/Vampire Illusion" ],
-	  
+
       "TH06_FS": [ "伪装", "Fake Shot", "機体偽装" ],
       "TH06_NONE": [ "无", "None", "なし" ],
       "TH06_REIMU_A": [ "灵A", "Reimu A", "霊符" ],
@@ -4383,13 +4399,13 @@
       "TH10_FAITH_BAR": [ "信仰条", "Faith Bar", "カウンター" ],
       "TH10_NO_FAITH_LOSS": [ "不掉信仰", "No faith loss", "信仰点を減少させない" ],
       "TH10_HINT_EDIT": [ "hint编辑", "hint edit", "hint edit" ],
-	  
+
       "TH10_HINT_EDIT_COLOR": [ "颜色", "color", "color" ],
       "TH10_HINT_EDIT_POS": [ "位置", "position", "position" ],
       "TH10_HINT_EDIT_SCALE": [ "大小", "scale", "scale" ],
       "TH10_HINT_EDIT_COPY": [ "复制", "copy", "copy" ],
       "TH10_HINT_EDIT_DRAG": [ "鼠标拖动", "enable mouse drag", "enable mouse drag" ]
-	  
+
     },
 
     "sections": {
@@ -4993,7 +5009,7 @@
     "glossary": {
       "TH11_SIGNAL": [ "信号强度", "C. Gauge", "交信強度" ],
 	  "TH11_MARISAB_FORMATION_LABEL": [ "配置", "Formation", "配置" ],
-	  
+
 	  "TH11_MARISAB_LOCK": [ "锁定魔B配置", "Lock Marisa B Formation", "Lock Marisa B Formation" ],
 	  "TH11_MARISAB_LOCK_DESC": [ "如果游戏中使用了，则播放rep时也需要打开", "Need to toggle on when playing rep if used", "Need to toggle on when playing rep if used" ],
       "TH11_MARISAB_FIRE":  [ "火符", "Fire",  "火符" ],
@@ -5001,13 +5017,13 @@
       "TH11_MARISAB_WOOD":  [ "木符", "Wood",  "木符" ],
       "TH11_MARISAB_METAL": [ "金符", "Metal", "金符" ],
       "TH11_MARISAB_EARTH": [ "土符", "Earth", "土符" ],
-	  
+
 	  "TH_11_DEFAULT_START": [ "默认", "default start", "default start" ],
 	  "TH_11_INIT_POS_CHANGE": [ "修改初始位置", "init pos change", "init pos change" ],
 	  "TH_11_WAVE2_START": [ "初始第二波", "wave 2 start", "wave 2 start" ],
 	  "TH_11_DEFAULT_START_FAST": [ "初始第一波(光速)", "wave 1 start(fast)", "wave 1 start(fast)" ],
 	  "TH_11_WAVE2_START_FAST": [ "初始第二波(光速)", "wave 2 start(fast)", "wave 2 start(fast)" ],
-	  
+
       "TH_11_SS_RAGE4": [ "P4狂暴", "Rage(P4)", "Rage(P4)" ],
       "TH_11_SS_RAGE3": [ "P3狂暴", "Rage(P3)", "Rage(P3)" ],
       "TH_11_SS_RAGE2": [ "P2狂暴", "Rage(P2)", "Rage(P2)" ],
@@ -7618,7 +7634,7 @@
       "TH14_FAKE_TYPE_NONE": [ "不伪装", "default", "default" ],
       "TH14_FAKE_TYPE_A": [ "A线", "route A", "route A" ],
       "TH14_FAKE_TYPE_B": [ "B线", "route B", "route B" ],
-	  
+
 
       "TH14_CYCLE": [ "循环", "Cycle", "サイクル" ],
       "TH14_CYCLE_1": [ "1 (Bomb碎片)", "1 (Bomb Fragment)", "1 (ボムの欠片)" ],
@@ -8294,17 +8310,17 @@
       "TH15_AB_TEST_RES_RANK_8": [ "乘法 级", "LV MULTIPLICATION", "LV MULTIPLICATION" ],
       "TH15_AB_TEST_RES_RANK_9": [ "加法 级", "LV ADDITION", "LV ADDITION" ],
       "TH15_AB_TEST_RES_RANK_10": [ "后继 级", "LV SUCCESSOR", "LV SUCCESSOR" ],
-	  
-	  
+
+
       "TH15_AB_TEST_RES_DESC": [ "仅供娱乐", "only for amusement", "only for amusement" ],
-	  
+
       "TH15_AB_TEST_REACTION": [ "反应", "re", "re" ],
       "TH15_AB_TEST_MOV": [ "走位", "mv", "mv" ],
       "TH15_AB_TEST_RET": [ "折返", "rt", "rt" ],
       "TH15_AB_TEST_HORIZON": [ "视野", "ho", "ho" ],
       "TH15_AB_TEST_PREC": [ "精度", "pr", "pr" ],
       "TH15_AB_TEST_LUCK": [ "狗运", "lc", "lc" ],
-	  
+
       "TH15_ILT_0": [ "克劳恩皮丝", "Clownpiece", "クラウンピース" ],
       "TH15_ILT_1": [ "章节四", "Chapter 4", "チャプター 4" ],
       "TH15_ILT_2": [ "章节五", "Chapter 5", "チャプター 5" ],
@@ -10636,7 +10652,7 @@
           "TH185_SPELL_27_1": [ "弹币「Bullet Money Glut」(弹币过剩)", "Bullet Money \"Bullet Money Glut\"" , "弾貨「バレットマネーグラット」" ],
           "TH185_SPELL_27_2": [ "叶技「Super Green Spiral」(超绿色螺旋)", "Leaf Skill \"Super Green Spiral\"" , "葉技「スーパーグリーンスパイラル」" ],
           "TH185_SPELL_27_3": [ "「黑市的万华镜」", "\"Black Market Kaleidoscope\"" , "「ブラックマーケットの万華鏡」" ],
-		  
+
           "TH185_GOUTOKUZI_MIKE": ["豪德寺三花", "Goutokuzi Mike", "豪徳寺　ミケ"],
           "TH185_AKI_MINORIKO": ["秋穰子", "Aki Minoriko", "秋　穣子"],
           "TH185_ETERNITY_LARVA": ["爱塔妮缇拉尔瓦", "Eternity Larva", "エタニティラルバ"],
@@ -10769,8 +10785,8 @@
           "TH19_SHOW_ENEMY_HP": [ "显示敌人HP", "Show Enemy HP", "敵のHPを表示する" ]
       }
   },
-  
-  
+
+
   "th20": {
     "namespace": "TH20",
 
@@ -10779,7 +10795,7 @@
       "TH20_CYCLE_1": [ "1 (Bomb碎片)", "1 (Bomb Fragment)", "1 (ボムの欠片)" ],
       "TH20_CYCLE_2": [ "2 (Bomb碎片)", "2 (Bomb Fragment)", "2 (ボムの欠片)" ],
       "TH20_CYCLE_3": [ "3 (残机碎片)", "3 (Life Fragment)", "3 (残機の欠片)" ],
-	  
+
       "TH20_HYPER": [ "异变攻击", "Hyper", "異変攻撃" ],
       "TH20_STONE_GAUGE": [ "异变敌", "Summon", "異変石" ],
       "TH20_STONE_GAUGE_INITIAL": [ "异变敌槽长度", "Wonder Stone Gauge Length", "異変石計長" ],
