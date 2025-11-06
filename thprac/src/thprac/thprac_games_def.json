@@ -1320,17 +1320,17 @@
 	  "THPRAC_CHG_STONE":["大变石","change stone","change stone"],
 	  "THPRAC_CHG_STONE_DESC":["同时按z和左右键切换携带的高速/低速石","press z and left/right at the same time to switch between stones","press z and left/right at the same time to switch between stones"],
 
-	  "THPRAC_BLIND":["夜雀视野","blind view","blind view"],
-	  "THPRAC_BLIND_DESC":["娱乐用, 使用blind.png重载","for fun(use blind.png to reload)","for fun(use blind.png to reload)"],
-	  "THPRAC_BLIND_SZ":["视野大小","view sz","view sz"],
+	  "THPRAC_BLIND":["夜雀视野","blind view","視界を暗転"],
+	  "THPRAC_BLIND_DESC":["娱乐用, 使用blind.png重载","for fun(use blind.png to reload)","ネタ用(use blind.png to reload)"],
+	  "THPRAC_BLIND_SZ":["视野大小","view sz","視野範囲"],
 
 
-	  "THPRAC_SHOW_BULLET_HITBOX":["显示弹幕判定(仅练习/rep)","show bullet hitbox(only prac/rep)","show bullet hitbox(only prac/rep)"],
+	  "THPRAC_SHOW_BULLET_HITBOX":["显示弹幕判定(仅练习/rep)","show bullet hitbox(only prac/rep)","弾幕のヒットボックスを表示 (practice/replayのみ有効)"],
 
-	  "THPRAC_KB":["按键显示设置","key monitor setting","key monitor setting"],
-	  "THPRAC_KB_SHOW":["按键显示效果","show key monitor","show key monitor"],
-	  "THPRAC_KB_AUTO":["自动打开按键显示","open key monitor automatically","open key monitor automatically"],
-	  "THPRAC_KB_OPEN":["打开按键显示","open key monitor","open key monitor"],
+	  "THPRAC_KB":["按键显示设置","key monitor setting","キー入力の設定"],
+	  "THPRAC_KB_SHOW":["按键显示效果","show key monitor","キー入力を表示"],
+	  "THPRAC_KB_AUTO":["自动打开按键显示","open key monitor automatically","キー入力表示を自動で起動"],
+	  "THPRAC_KB_OPEN":["打开按键显示","open key monitor","キー入力を表示"],
 	  "THPRAC_KB_COL_BORDER_PRESSED":["描边颜色(按下)","border color(pressed)","border color(pressed)"],
 	  "THPRAC_KB_COL_BORDER_RELEASED":["描边颜色(抬起)","border color(released)","border color(released)"],
 	  "THPRAC_KB_COL_FILL_PRESSED":["填充颜色(按下)","fill color(pressed)","fill color(pressed)"],
@@ -1341,14 +1341,14 @@
 	  "THPRAC_KB_SEPARATER":["分体键盘","separated keys","separated keys"],
 	  "THPRAC_KB_APS":["显示APS(每秒按键数)","show APS(Action Per Second)","show APS(Action Per Second)"],
 	  "THPRAC_KB_TYPE":["样式","style","style"],
-	  "THPRAC_KB_TYPE_COMBO": [ "矩形\\0圆角矩形\\0切角矩形\\0心形\\0\\0", "rect\\0rounded rect\\0chamfered rect\\0heart\\0\\0", "rect\\0rounded rect\\0chamfered rect\\0heart\\0\\0" ],
+	  "THPRAC_KB_TYPE_COMBO": [ "矩形\\0圆角矩形\\0切角矩形\\0心形\\0\\0", "rect\\0rounded rect\\0chamfered rect\\0heart\\0\\0", "長方形\\0角丸長方形\\0面取り長方形\\0ハート\\0\\0" ],
 	  "THPRAC_KB_RECORD_START": [ "开始记录APS", "start to record APS", "start to record APS"],
 	  "THPRAC_KB_RECORD_STOP": [ "停止记录APS", "stop recording", "stop recording"],
-	  "THPRAC_KB_OUTPUT": [ "导出到游戏文件夹", "output to game folder", "output to game folder"],
+	  "THPRAC_KB_OUTPUT": [ "导出到游戏文件夹", "output to game folder", "ゲームフォルダに出力"],
 
 
 	  "THPRAC_INGAMEINFO_ADV2":["自动开启高级功能","automatically use advanced opts","automatically use advanced opts"],
-	  "THPRAC_TH06_SHOW_REP_MARKER":["红魔乡显示是否为rep","show rep marker in EoSD","show rep marker in EoSD"],
+	  "THPRAC_TH06_SHOW_REP_MARKER":["红魔乡显示是否为rep","show rep marker in EoSD","紅魔郷でrepマーカーを表示"],
 	  "THPRAC_TH08_FORCE_LS":["永夜抄强制总是开启LSC","force LS in IN","force LS in IN"],
 
 	  "THPRAC_TH18_FORCE_CARD": [ "虹龙洞强制卡牌", "UM force card", "UM force card" ],
