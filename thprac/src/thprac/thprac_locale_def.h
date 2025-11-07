@@ -3496,6 +3496,6 @@ extern const wchar_t __thprac_loc_range_zh[3561];
 
 extern const wchar_t __thprac_loc_range_en[57];
 
-extern const wchar_t __thprac_loc_range_ja[2311];
+extern const wchar_t __thprac_loc_range_ja[2325];
 
 }
