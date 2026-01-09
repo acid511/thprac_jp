@@ -238,12 +238,12 @@
       "THPRAC_UPDATE_DIALOG_CHECKING": [ "检查更新中", "Checking for update", "更新を確認しています" ],
       "THPRAC_UPDATE_DIALOG_UPDATING": [ "正在更新thprac", "Updating thprac", "thpracを更新しています" ],
 
-    "THPRAC_RECORD_GAME_TIME":["记录飞行时间","record game time","ゲームの時間を記録する"],
-    "THPRAC_GAME_TIME_HINT":["飞行时间提示长度(小时)","game time hint(hour)","game time hint(hour)"],
-    "THPRAC_GAME_TIME_HINT_SE":["飞行时间过长音效提示","game time too long SE","game time too long SE"],
-    "THPRAC_GAME_TIME_HINT_SE_STOP":["音效重复间隔秒数","SE repeat interval(second)","SE repeat interval(second)"],
-    "THPRAC_GAME_TIME_HINT_SE_TEST":["测试音效","SE test","SE test"],
-    "THPRAC_GAME_TIME_HINT_SE_DESC":["将音效文件放在thprac同目录下, 名称为SE.wav","put SE file in thprac folder with name SE.wav","put SE file in thprac folder with name SE.wav"],
+    "THPRAC_RECORD_GAME_TIME":["记录飞行时间","record game time","ゲームの起動時間を記録"],
+    "THPRAC_GAME_TIME_HINT":["飞行时间提示长度(小时)","game time hint(hour)","起動時間の目安(時間)"],
+    "THPRAC_GAME_TIME_HINT_SE":["飞行时间过长音效提示","game time too long SE","起動時間の目安を超えたら効果音を鳴らす"],
+    "THPRAC_GAME_TIME_HINT_SE_STOP":["音效重复间隔秒数","SE repeat interval(second)","効果音の繰り返し間隔(秒)"],
+    "THPRAC_GAME_TIME_HINT_SE_TEST":["测试音效","SE test","効果音テスト"],
+    "THPRAC_GAME_TIME_HINT_SE_DESC":["将音效文件放在thprac同目录下, 名称为SE.wav","put SE file in thprac folder with name SE.wav","thpracフォルダにSE.wavという名前で効果音ファイルを配置"],
 
 	"THPRAC_DISABLE_MAXIMIZE_BTN":["靳止最大化窗口按钮的全屏切换","disable maximizebox to toggle full screen","ウィンドウの最大化ボタンを無効化する"],
 	"THPRAC_INIT_WINDOW_POS":["初始化窗口位置","init window pos","ウィンドウ位置の初期化"],
@@ -251,8 +251,8 @@
     "THPRAC_CHANGE_WINDOW_SZ_WHEN_OPEN":["修改启动时窗口的大小","change window size when open","ゲームを開いた時に自動的にウィンドウサイズを"],
     "THPRAC_CHANGE_WINDOW_SZ_WHEN_OPEN_SIZE":["窗口大小","window size","へ変更"],
 
-    "THPRAC_KEYBOARD_HOOK":["启用键盘HOOK","enable keyboard hook","enable keyboard hook"],
-    "THPRAC_KEYBOARD_HOOK_DESC":["影响按键禁用/SOCD/按键修改等功能","relate to key disable, SOCD, keybind change, etc","キーの無効化、SOCD(Simultaneous Opposing Cardinal Directions)、キー割り当ての変更などに関連"],
+    "THPRAC_KEYBOARD_HOOK":["启用键盘HOOK","enable keyboard hook","入力制御機能の有効化"],
+    "THPRAC_KEYBOARD_HOOK_DESC":["影响按键禁用/SOCD/按键修改等功能","relate to key disable, SOCD, keybind change, etc","キーの無効化、SOCD(Simultaneous Opposing Cardinal Directions)、キー割り当ての変更などに関係します"],
     "THPRAC_KEYBOARD_SOCD":["SOCD设置","SOCD setting","SOCD設定"],
     "THPRAC_KEYBOARD_SOCD_SETTINGS":["默认SOCD(zun's)\\0启用SOCD后覆盖功能\\0启用SOCD回中功能\\0\\0","default SOCD(zun's)\\0enable keyboard SOCD (last input priority)\\0enable keyboard SOCD (neutral)\\0\\0","標準(zunの設定)\\0last input priority (後入力優先: 後から押されたキーの入力を優先)\\0neutral (中立処理: 同時に入力された反対方向のキーを両方ともキャンセル)\\0\\0"],
 
@@ -270,46 +270,56 @@
 
     "THPRAC_COMPATIBILITY_SETTINGS":["兼容性设置","Compatibility Settings","互換性設定"],
 
-	"THPRAC_MOF_UD_REP": [ "允许风神录replay记录多一页ud_xxxx.rpy", "add another page for ud_xxxx.rpy in MoF's replay", "風神録にud_xxxx.rpyを再生するページを追加する" ],
+	"THPRAC_MOF_UD_REP": [ "允许风神录replay记录多一页ud_xxxx.rpy", "add another page for ud_xxxx.rpy in MoF's replay", "風神録: ud_xxxx.rpyを再生するページを追加する" ],
 
-  "THPRAC_MAKE_BGM_FASTER_WHEN_SPEEDUP": [ "游戏变速时加速bgm(测试中)", "make bgm faster when speed up(testing)", "make bgm faster when speed up(testing)" ],
+  "THPRAC_MAKE_BGM_FASTER_WHEN_SPEEDUP": [ "游戏变速时加速bgm(测试中)", "make bgm faster when speed up(testing)", "ゲーム速度を上げた時にBGMを速くする(テスト中)" ],
 
-    "THPRAC_DISABLE_F10_11_13":["在th11到th13靳用F10键","disable f10 for th11-13","地霊殿～神霊廟でf10キーを無効化"],
+    "THPRAC_DISABLE_F10_11_13":["在th11到th13靳用F10键","disable f10 for th11-13","地霊殿～神霊廟: f10キーを無効化"],
 
     "THPRAC_DISABLE_F10_11_13_DESC":["该按键用于切换全屏","which is used for toggle fullscreen","これらのゲームではf10キーにフルスクリーン有効化機能が割り当てられています。"],
     "THPRAC_DISABLE_JOY":["禁用手柄","disable joystick","ジョイスティックの無効化"],
     "THPRAC_DISABLE_JOY_DESC":["对部分作有效, 禁用有关手柄的部分函数以减少掉帧","works for some games, disables functions for joystick to avoid lags","一部のゲームでは動作しますが、遅延を避けるためにジョイスティック機能を無効にします"],
 
-    "THPRAC_PAUSE_BGM_TH06":["红魔乡在3036时暂停bgm(仅wav)","pause bgm when esc in EoSD(wav only)","紅魔郷でescキーを押した時にBGM再生を停止(wavのみ)"],
-    "THPRAC_AUTO_NAME_TH06":["红魔乡自动输入机签","auto input name for EoSD","紅魔郷で名前を自動入力"],
+    "THPRAC_PAUSE_BGM_TH06":["红魔乡在3036时暂停bgm(仅wav)","pause bgm when esc in EoSD(wav only)","紅魔郷: escキーを押した時にBGM再生を停止(wavのみ)"],
+    "THPRAC_AUTO_NAME_TH06":["红魔乡自动输入机签","auto input name for EoSD","紅魔郷: 名前を自動入力"],
     "THPRAC_AUTO_NAME_TH06_DESC":["使用~代替红斜杠","use ~ replace red slash","~は赤いスラッシュに置き換えられます。"],
     "THPRAC_AUTO_NAME_NAME":["机签","name","名前"],
 
-    "THPRAC_TH07_ALWAYS_SAVE_SCORE_SPELL_HIST":["妖妖梦始终保存存档","always save score/spell history in PCB","always save score/spell history in PCB"],
-    "THPRAC_TH07_ALWAYS_SAVE_SCORE_SPELL_HIST_DESC":["例如练习模式re时","e.g. retry in practice","e.g. retry in practice"],
+    "THPRAC_TH07_ALWAYS_SAVE_SCORE_SPELL_HIST":["妖妖梦始终保存存档","always save score/spell history in PCB","妖々夢: スコア/スペル履歴を常に保存"],
+    "THPRAC_TH07_ALWAYS_SAVE_SCORE_SPELL_HIST_DESC":["例如练习模式re时","e.g. retry in practice","例: Practiceモードでリトライした時など"],
 
-    "THPRAC_DISABLE_LOCALE_CHANGE_HOTKEY":["禁用游戏内语言切换快捷键","disable in-game locale change hotkey","disable in-game locale change hotkey"],
+    "THPRAC_DISABLE_LOCALE_CHANGE_HOTKEY":["禁用游戏内语言切换快捷键","disable in-game locale change hotkey","ゲーム内の言語切替ホットキーを無効化"],
     "THPRAC_DISABLE_LOCALE_CHANGE_HOTKEY_DESC":["快捷键:alt+1/2/3","hotkey: alt+1/2/3","hotkey: alt+1/2/3"],
 
-    "THPRAC_FORCE_ONLY_RENDER_TEXT_USED":["只渲染用到的字体","only render used font","only render used font"],
-    "THPRAC_FORCE_ONLY_RENDER_TEXT_USED_DESC":["游戏启动时如果爆显存，导致字体显示全为白块或透明等错误，则需要设置此项","if the VRAM is overflow, the text might shown as a white rectangle(or transparent and so on), use this setting to avoid it","if the VRAM is overflow, the text might shown as a white rectangle(or transparent and so on), use this setting to avoid it"],
+    "THPRAC_FORCE_ONLY_RENDER_TEXT_USED":["只渲染用到的字体","only render used font","使用されているフォントのみをレンダリング"],
+    "THPRAC_FORCE_ONLY_RENDER_TEXT_USED_DESC":[
+      "游戏启动时如果爆显存，导致字体显示全为白块或透明等错误，则需要设置此项",
+      "if the VRAM is overflow, the text might shown as a white rectangle(or transparent and so on), use this setting to avoid it",
+      "VRAMがオーバーフローすると、テキストが白い四角形(または透明など)として表示されることがあります。この設定を使用することでこの症状を回避できます。"
+    ],
 
-	 "THPRAC_HOOK_MSG_BOX_A2W":["将弹窗提示修改为宽字节","use MessageBoxW instead of MessageBoxA","use MessageBoxW instead of MessageBoxA"],
-	 "THPRAC_HOOK_MSG_BOX_A2W_DESC":["可以防止某些弹窗乱码, 仅在使用thprac启动游戏时生效","might prevents possible garbled characters from msg box, only works when launch game by thprac","might prevents possible garbled characters from msg box, only works when launch game by thprac"],
+	 "THPRAC_HOOK_MSG_BOX_A2W":["将弹窗提示修改为宽字节","use MessageBoxW instead of MessageBoxA","MessageBoxAの代わりにMessageBoxWを使用"],
+	 "THPRAC_HOOK_MSG_BOX_A2W_DESC":["可以防止某些弹窗乱码, 仅在使用thprac启动游戏时生效","might prevents possible garbled characters from msg box, only works when launch game by thprac","メッセージボックスの文字化けを防ぐことができます。thpracでゲームを起動した場合のみ動作します。"],
 
-    "THPRAC_RENDER_CORRECT_FONT":["渲染正确的日文字体","render correct ja fonts","render correct ja fonts"],
-    "THPRAC_RENDER_CORRECT_FONT_DESC":["当游戏字体(对话/符卡)渲染错误时尝试开启本选项, 仅在使用thprac启动游戏时生效","use this option when game fonts are wrong(msg/spell), only works when launch game by thprac","use this option when game fonts are wrong(msg/spell), only works when launch game by thprac"],
-	"THPRAC_RENDER_CORRECT_FONT_DESC2":["原版游戏使用 MS Gothic 和 MS Mincho 字体, 若开启此选项后仍不能正确显示, 请确认两个字体已经安装","original game use font 'MS Gothic' and 'MS Mincho', if fonts are still wrong after toggling this option, please check the font installation","original game use font 'MS Gothic' and 'MS Mincho', if fonts are still wrong after toggling this option, please check the font installation"],
+    "THPRAC_RENDER_CORRECT_FONT":["渲染正确的日文字体","render correct ja fonts","正しい日本語フォントをレンダリング"],
+    "THPRAC_RENDER_CORRECT_FONT_DESC":["当游戏字体(对话/符卡)渲染错误时尝试开启本选项, 仅在使用thprac启动游戏时生效","use this option when game fonts are wrong(msg/spell), only works when launch game by thprac","ゲームのフォント(メッセージ/スペルカード)が正しく表示されない場合に使用してください。thpracでゲームを起動した場合のみ動作します。"],
+	"THPRAC_RENDER_CORRECT_FONT_DESC2":[
+    "原版游戏使用 MS Gothic 和 MS Mincho 字体, 若开启此选项后仍不能正确显示, 请确认两个字体已经安装",
+    "original game use font 'MS Gothic' and 'MS Mincho', if fonts are still wrong after toggling this option, please check the font installation",
+    "元のゲームでは「MS Gothic」と「MS Mincho」フォントを使用しています。このオプションを切り替えてもフォントが正しく表示されない場合は、フォントが正しくインストールされているか確認してください。"
+  ],
 
-    "THPRAC_CUSTOM_FONTS":["使用自定义游戏字体","use custom game fonts","use custom game fonts"],
-    "THPRAC_CUSTOM_FONTS_DESC":["仅在使用thprac启动游戏时生效","only works when launch game by thprac","only works when launch game by thprac"],
+    "THPRAC_CUSTOM_FONTS":["使用自定义游戏字体","use custom game fonts","ゲーム内で指定したフォントを使用"],
+    "THPRAC_CUSTOM_FONTS_DESC":["仅在使用thprac启动游戏时生效","only works when launch game by thprac","thpracでゲームを起動した場合のみ動作します。"],
     "THPRAC_CUSTOM_FONT":["字体","font","フォント"],
 
-    "THPRAC_FORCE_RENDER_CURSOR":["强制渲染鼠标","force render cursor","force render cursor"],
-    "THPRAC_FORCE_RENDER_CURSOR_DESC":["全屏时无法看见鼠标则设置此项，将会导致窗口时出现两个重叠的鼠标",
+    "THPRAC_FORCE_RENDER_CURSOR":["强制渲染鼠标","force render cursor","マウスカーソルを強制的にレンダリング"],
+    "THPRAC_FORCE_RENDER_CURSOR_DESC":[
+      "全屏时无法看见鼠标则设置此项，将会导致窗口时出现两个重叠的鼠标",
       "set this setting to true when cannot see cursor fullscreen, it will made 2 overlapped cursor in window mode",
-      "set this setting to true when cannot see cursor fullscreen, it will made 2 overlapped cursor in window mode"],
-    "THPRAC_WIN_KEY_STATE":["win键状态","win key state","win key state"],
+      "フルスクリーン表示でカーソルが見えない場合にこの設定を有効にしてください。ウィンドウモードではカーソルが2つ重なって表示されます。"
+    ],
+    "THPRAC_WIN_KEY_STATE":["win键状态","win key state","winキーの状態"],
 	"THPRAC_DISABLE_WIN_KEY_CHECKBOX":["thp启动后自动禁用win键","disable win key when thprac.exe launches","thprac.exeが動作している時にwinキーを無効化"],
 	"THPRAC_DISABLE_WIN_KEY_DESC":["可能引入延迟, 因此不建议通过软件禁用win键","might cause delay, so it's not recommended to disable win key by software","winキーを無効にすると遅延の原因となる可能性があるため、推奨されません。"],
 
