@@ -294,6 +294,9 @@
     "THPRAC_FORCE_ONLY_RENDER_TEXT_USED":["只渲染用到的字体","only render used font","only render used font"],
     "THPRAC_FORCE_ONLY_RENDER_TEXT_USED_DESC":["游戏启动时如果爆显存，导致字体显示全为白块或透明等错误，则需要设置此项","if the VRAM is overflow, the text might shown as a white rectangle(or transparent and so on), use this setting to avoid it","if the VRAM is overflow, the text might shown as a white rectangle(or transparent and so on), use this setting to avoid it"],
 
+	 "THPRAC_HOOK_MSG_BOX_A2W":["将弹窗提示修改为宽字节","use MessageBoxW instead of MessageBoxA","use MessageBoxW instead of MessageBoxA"],
+	 "THPRAC_HOOK_MSG_BOX_A2W_DESC":["可以防止某些弹窗乱码, 仅在使用thprac启动游戏时生效","might prevents possible garbled characters from msg box, only works when launch game by thprac","might prevents possible garbled characters from msg box, only works when launch game by thprac"],
+
     "THPRAC_RENDER_CORRECT_FONT":["渲染正确的日文字体","render correct ja fonts","render correct ja fonts"],
     "THPRAC_RENDER_CORRECT_FONT_DESC":["当游戏字体(对话/符卡)渲染错误时尝试开启本选项, 仅在使用thprac启动游戏时生效","use this option when game fonts are wrong(msg/spell), only works when launch game by thprac","use this option when game fonts are wrong(msg/spell), only works when launch game by thprac"],
 	"THPRAC_RENDER_CORRECT_FONT_DESC2":["原版游戏使用 MS Gothic 和 MS Mincho 字体, 若开启此选项后仍不能正确显示, 请确认两个字体已经安装","original game use font 'MS Gothic' and 'MS Mincho', if fonts are still wrong after toggling this option, please check the font installation","original game use font 'MS Gothic' and 'MS Mincho', if fonts are still wrong after toggling this option, please check the font installation"],
@@ -367,7 +370,6 @@
 	  "THPRAC_TOOLS_ROLLF_CLPS": [ "查看", "view", "view" ],
 	  "THPRAC_TOOLS_ROLLF_TIME": [ "转盘时间", "time", "time" ],
 	  "THPRAC_TOOLS_ROLLF_REMOVE_CUR": [ "删除roll到的", "remove rolled", "remove rolled" ],
-
     "THPRAC_TOOLS_DICE": [ "杰哥不要啊", "Xeno aaaaaa", "Xeno aaaaaa" ],
 	  "THPRAC_TOOLS_DICE_NUM": [ "丢几次", "dice num", "dice num" ],
 	  "THPRAC_TOOLS_DICE_DROP": [ "丢", "drop", "drop" ],
@@ -398,6 +400,7 @@
 	  "THPRAC_TOOLS_INPUT_GAMEPAD_S1": [ "额外轴1", "Slider1", "Slider1" ],
 	  "THPRAC_TOOLS_INPUT_GAMEPAD_S2": [ "额外轴2", "Slider2", "Slider2" ],
 	  "THPRAC_TOOLS_INPUT_GAMEPAD_NO_GAMEPAD": [ "没有可用设备, 请先进行初始化", "No available device, please init first", "No available device, please init first" ],
+
 
       "THPRAC_TOOLS_APPLY_THPRAC": [ "应用thprac至正在运行的游戏", "Apply thprac to ongoing game", "実行中のゲームにthpracを適用します" ],
       "THPRAC_TOOLS_APPLY_THPRAC_DESC": [ "建议在选择分辨率/全屏的窗口上使用", "Suggest using this on the resolution/fullscreen selection window", "Suggest using this on the resolution/fullscreen selection window" ],
@@ -1366,6 +1369,9 @@
 	  "THPRAC_TH20_FIX_BULLETHITBOX_DESC": [ "锦上京游戏", "FW Game", "@FW Game" ],
 	  "THPRAC_TH20_DECREASE_EFF": [ "锦上京减少擦弹特效","FW decrease graze effect","FW: グレイズのエフェクトを減らす"],
 
+    "THPRAC_FAST_RETRY": [ "练习模式快速re", "fast retry for prac mode", "fast retry for prac mode" ],
+	  "THPRAC_FAST_RETRY_DESC": [ "需要启用键盘Hook与强制dinput8/RawInput输入", "need enable keyboard hook & force dinput8/RawInput", "need enable keyboard hook & force dinput8/RawInput" ],
+	  "THPRAC_FAST_RETRY_DESC2": [ "快捷键: shift+F", "hotkey shift+F", "hotkey shift+F" ],
 
 	  "THPRAC_TH06_BACKGROUND_FIX": [ "红魔乡背景修复", "EoSD background fix", "紅魔郷: 背景を修正" ],
 	  "THPRAC_TH06_BACKGROUND_FIX_DESC": [ "当关闭弹幕虚影时不让蕾咪变蓝狗\n有可能让背景或UI变奇怪", "let Remilia not be blue when disables bullet shadow\nMight make bg or UI strange", "弾丸の影を無効化した際、レミリアが青くならないようにします。\n背景やUIに不具合が生じる場合があります。" ],
@@ -7641,13 +7647,13 @@
       "TH14_MODE_NORMAL_DESC": [
         "在此模式下正常游玩游戏。保存游戏录像时，将会提示保存一份包含额外修复数据的录像副本。",
         "Play normally in this mode. When saving replay, you will be prompted to save a copy of the replay that contains extra repair data.",
-        "このモードでは通常通りプレイします。リプレイを保存する際、追加の修復データを含むリプレイのコピーを保存するように求められます。"
+        "このモードで通常どおりプレイします。リプレイを保存すると、追加の修復データを含むリプレイのコピーの保存を聞かれます。"
       ],
       "TH14_MODE_PLAYBACK": [ "Replay播放", "Replay playback", "リプレイ再生" ],
       "TH14_MODE_PLAYBACK_DESC": [
         "在此模式下，你可以正常播放包含修复数据的Replay。选择Replay后，修复数据相关的信息将会显示在下方。",
         "In this mode, you can play any replay that contains repair data without desync. Information about the repair data will be shown below after selecting a replay.",
-        "このモードでは、修復データを含むリプレイを同期なしで再生できます。修復データの情報は、リプレイを選択すると下に表示されます。"
+        "このモードでは、修復データを含むリプレイを再生できます。リプレイを選択すると、修復データに関する情報が以下に表示されます。"
       ],
       "TH14_MODE_RECOVER": [ "Replay修复", "Replay recover", "リプレイ修正" ],
       "TH14_MODE_RECOVER_DESC": [

@@ -7,12 +7,8 @@
 
 namespace THPrac {
 
-<<<<<<< HEAD
-const char* th_glossary_str[3][1748] {
-=======
-const char* th_glossary_str[3][1678]
+const char* th_glossary_str[3][1748]
 {
->>>>>>> 8f545e8b5b7884dbd46f35f9828984f0301dc497
     {
         "",
         "啤酒",
@@ -1038,7 +1034,7 @@ const char* th_glossary_str[3][1678]
         "普通收点",
         "总奖励",
         "道具量",
-        "辉针城魔理沙自动开启激光修复的rep预防功能 (独占全屏不建议)",
+        "辉针城魔理沙自动开启激光修复的rep预防功能",
         "显示bonus数",
         "辉针城显示bouns数",
         "显示掉落收集条",
@@ -2788,7 +2784,7 @@ const char* th_glossary_str[3][1678]
         "normal bonus",
         "total bonus",
         "items",
-        "DDC Marisa laser bug rep repair on (not recommended in fullscreen)",
+        "DDC Marisa laser bug rep repair on",
         "show bonuses",
         "DDC show bonuses",
         "show drop bar",
@@ -3733,9 +3729,9 @@ const char* th_glossary_str[3][1678]
         "処理モード",
         "すべての関連機能が無効になりました。",
         "通常プレイ",
-        "このモードでは通常通りプレイします。リプレイを保存する際、追加の修復データを含むリプレイのコピーを保存するように求められます。",
+        "このモードで通常どおりプレイします。リプレイを保存すると、追加の修復データを含むリプレイのコピーの保存を聞かれます。",
         "リプレイ再生",
-        "このモードでは、修復データを含むリプレイを同期なしで再生できます。修復データの情報は、リプレイを選択すると下に表示されます。",
+        "このモードでは、修復データを含むリプレイを再生できます。リプレイを選択すると、修復データに関する情報が以下に表示されます。",
         "リプレイ修正",
         "このモードでは、リプレイの修復データを手動で作成できます。",
         "記録なし。",
@@ -4202,18 +4198,12 @@ const char* th_glossary_str[3][1678]
         "スコアファイルの自動バックアップ",
         "デフォルトの起動ゲームを自動的に設定します",
         "有効にすると、ゲームリストの最初のゲームがデフォルトの開始ゲームとして自動的に使用されます。\nデフォルトの起動ゲームを手動で設定すると、このオプションが上書きされます。",
-<<<<<<< HEAD
-        "name",
-        "auto input name for EoSD",
-        "use ~ replace red slash",
-        "auto shoot",
-        "automatically shoot(press z) after press this key, stop when keys except arrow/focus pressed, use keyboard hook and set keyboardAPI as dinput8 or RawInput to enable, cannot be bind to Z/X/C/D/ESC/R/Q",
-        "shoot key",
-=======
         "名前",
         "紅魔郷で名前を自動入力",
         "~は赤いスラッシュに置き換えられます。",
->>>>>>> 8f545e8b5b7884dbd46f35f9828984f0301dc497
+        "auto shoot",
+        "automatically shoot(press z) after press this key, stop when keys except arrow/focus pressed, use keyboard hook and set keyboardAPI as dinput8 or RawInput to enable, cannot be bind to Z/X/C/D/ESC/R/Q",
+        "shoot key",
         "戻る",
         "バックアップのパスは %appdata%\\thprac",
         "thp終了後に自動的にバックアップをしたい場合は、「設定→ランチャー→スコアファイルの自動バックアップ」を有効化してください。",
@@ -4257,27 +4247,17 @@ const char* th_glossary_str[3][1678]
         "一部のゲームでは動作しますが、遅延を避けるためにジョイスティック機能を無効にします",
         "disable in-game locale change hotkey",
         "hotkey: alt+1/2/3",
-<<<<<<< HEAD
-        "automatically disable master",
-        "disable maximizebox to toggle full screen",
-        "disable win key when thprac.exe launches",
-        "might cause delay, so it's not recommended to disable win key by software",
-        "use dinput to disable win key",
-        "seems useless, blame to Macrohard",
-        "thpracを起動するときに進行中のゲームを検索しない",
-        "設定でゲーム時間の記録を有効にして確認してください。（次回起動時に有効）",
-        "automatically enable lock timer",
-        "automatically press Esc when the window loses focus",
-        "for testing",
-=======
         "masterを自動的に無効化",
         "ウィンドウの最大化ボタンを無効化する",
         "thprac.exeが動作している時にwinキーを無効化",
         "winキーを無効にすると遅延の原因となる可能性があるため、推奨されません。",
+        "use dinput to disable win key",
+        "seems useless, blame to Macrohard",
         "thpracを起動するときに進行中のゲームを検索しない",
         "設定でゲーム時間の記録を有効にして確認してください。（次回起動時に有効）",
         "タイマーロックを自動的に有効化",
->>>>>>> 8f545e8b5b7884dbd46f35f9828984f0301dc497
+        "automatically press Esc when the window loses focus",
+        "for testing",
         "thpracを起動するときに、ゲームが同じディレクトリに存在する場合:",
         "ゲームを起動します\0ランチャーを開く\0常に尋ねる\0\0",
         "既存のゲームが見つかりました: %s。\n「はい」をクリックしてゲームを起動します。\n「いいえ」をクリックしてランチャーを開きます。",
@@ -4550,23 +4530,6 @@ const char* th_glossary_str[3][1678]
         "2.0ボーナス:",
         "B",
         "L",
-<<<<<<< HEAD
-        "next bonus",
-        "normal bonus",
-        "total bonus",
-        "items",
-        "DDC Marisa laser bug rep repair on (not recommended in fullscreen)",
-        "show bonuses",
-        "DDC show bonuses",
-        "show drop bar",
-        "DDC show drop bar",
-        "show items",
-        "DDC show items",
-        "product",
-        "shoot down",
-        "show shooting down",
-        "LoLK show shooting down",
-=======
         "次のボーナス:",
         "通常ボーナス:",
         "累計ボーナス:",
@@ -4582,7 +4545,6 @@ const char* th_glossary_str[3][1678]
         "敵撃破率:",
         "敵撃破率を表示",
         "紺珠伝: 敵撃破率を表示",
->>>>>>> 8f545e8b5b7884dbd46f35f9828984f0301dc497
         "ウィンドウ位置の初期化",
         "ゲームを開いた後にゲームウィンドウが見えなくなった場合はこのオプションを試してください。",
         "キー入力の設定",
@@ -4659,17 +4621,16 @@ const char* th_glossary_str[3][1678]
         "remove",
         "new key",
         "new key",
-<<<<<<< HEAD
-        "keyboard API setting",
-        "default\0force Win32 API\0force Dinput8\0force RawInput\0\0",
-        "By default, using numpad will cause bugs in games like SA,\n which can be fixed by forcing to use dinput8(which is recommended?),\n force win32 API is not recommended",
+        "キーボードAPI設定",
+        "標準\0Win32 APIの使用を強制\0Dinput8の使用を強制\0RawInputの使用を強制\0\0",
+        "標準設定ではテンキーを使用すると地霊殿などのゲームでバグが発生しますが、「dinput8の使用を強制」を選択することで修正できます。\n「win32APIの使用の強制」は推奨されません。",
         "Use GetDeviceData",
         "Might make delay less?",
         "enable keyboard hook",
-        "relate to key disable, SOCD, keybind change, etc",
-        "SOCD setting",
-        "Opposite arrow key press logic is changed by this function.\nSince some high-end keyboard provides SOCD, here the program provides this function despite the fact that some online game consider SOCD as cheating.",
-        "default SOCD(zun's)\0enable keyboard SOCD (last input priority)\0enable keyboard SOCD (neutral)\0\0",
+        "キーの無効化、SOCD(Simultaneous Opposing Cardinal Directions)、キー割り当ての変更などに関連",
+        "SOCD設定",
+        "この機能を有効化することで、反対方向を示す複数の入力が同時に行われた際のロジックが変更されます。(=SOCDクリーナー機能)\n例えば「後入力優先」の場合、右矢印キーを入力後に左矢印キーを入力して物理的には両方のキーが押された状態であっても、システム上は最新の入力のみが有効となるため、右矢印キーを物理的に離すことなく瞬時に左方向へ移動を行うことができます。\n一部のオンラインゲームではSOCDが不正行為とされていますが、一部のハイエンドキーボードはSOCDに対応しているため、このプログラムではSOCD機能を提供しています。",
+        "標準(zunの設定)\0last input priority (後入力優先: 後から押されたキーの入力を優先)\0neutral (中立処理: 同時に入力された反対方向のキーを両方ともキャンセル)\0\0",
         "clear game programs",
         "please make sure you are not currently in the game",
         "done, cleared %d background game programs",
@@ -4690,16 +4651,6 @@ const char* th_glossary_str[3][1678]
         "use keyboard hook and set keyboardAPI as dinput8 to enable l2d keys/auto shoot/...",
         "expression time(ms)",
         "auto trigger to reset motion after this time",
-=======
-        "キーボードAPI設定",
-        "標準\0Win32APIの使用を強制\0Dinput8の使用を強制\0\0",
-        "標準設定ではテンキーを使用すると地霊殿などのゲームでバグが発生しますが、「dinput8の使用を強制」を選択することで修正できます。\n「win32APIの使用の強制」は推奨されません。",
-        "enable keyboard hook",
-        "キーの無効化、SOCD(Simultaneous Opposing Cardinal Directions)、キー割り当ての変更などに関連",
-        "SOCD設定",
-        "この機能を有効化することで、反対方向を示す複数の入力が同時に行われた際のロジックが変更されます。(=SOCDクリーナー機能)\n例えば「後入力優先」の場合、右矢印キーを入力後に左矢印キーを入力して物理的には両方のキーが押された状態であっても、システム上は最新の入力のみが有効となるため、右矢印キーを物理的に離すことなく瞬時に左方向へ移動を行うことができます。\n一部のオンラインゲームではSOCDが不正行為とされていますが、一部のハイエンドキーボードはSOCDに対応しているため、このプログラムではSOCD機能を提供しています。",
-        "標準(zunの設定)\0last input priority (後入力優先: 後から押されたキーの入力を優先)\0neutral (中立処理: 同時に入力された反対方向のキーを両方ともキャンセル)\0\0",
->>>>>>> 8f545e8b5b7884dbd46f35f9828984f0301dc497
         "言語/Language/语言",
         "変更を有効にするためにthpracを再起動してください。",
         "thprac - 東方ゲームランチャー",
@@ -4733,12 +4684,8 @@ const char* th_glossary_str[3][1678]
         "このフィルタを削除しますか？\nこの中のすべてのリンクは失われます！",
         "フィルタを削除##modal",
         "デフォルトにリセット",
-<<<<<<< HEAD
         "make bgm faster when speed up(testing)",
-        "add another page for ud_xxxx.rpy in MoF's replay",
-=======
         "風神録にud_xxxx.rpyを再生するページを追加する",
->>>>>>> 8f545e8b5b7884dbd46f35f9828984f0301dc497
         "グローバルディレクトリに移動",
         "ローカルディレクトリに移動",
         "次へ",
@@ -4898,19 +4845,6 @@ const char* th_glossary_str[3][1678]
         "thpracに追加したいゲームにチェックを入れ、「適用する」をクリックします。",
         "Steamゲーム - 手動選択",
         "または",
-<<<<<<< HEAD
-        "EoSD background fix",
-        "let Remilia not be blue when disables bullet shadow\nMight make bg or UI strange",
-        "fix EoSD rand seed when begin",
-        "rand seed",
-        "EoSD no rank drop after miss/bomb",
-        "rand seed for current rep",
-        "show rep marker in EoSD",
-        "always save score/spell history in PCB",
-        "e.g. retry in practice",
-        "force LS in IN",
-        "cards you want",
-=======
         "紅魔郷: 背景を修正",
         "弾丸の影を無効化した際、レミリアが青くならないようにします。\n背景やUIに不具合が生じる場合があります。",
         "紅魔郷: 開始時にシード値を固定",
@@ -4918,9 +4852,10 @@ const char* th_glossary_str[3][1678]
         "紅魔郷: ミス/ボム時のランク低下を無くす",
         "現在のリプレイのシード値",
         "紅魔郷: repマーカーを表示",
+        "always save score/spell history in PCB",
+        "e.g. retry in practice",
         "永夜抄: ラストスペルを強制的に発動",
         "@cards you want",
->>>>>>> 8f545e8b5b7884dbd46f35f9828984f0301dc497
         "card for stage 1",
         "card for stage 2",
         "card for stage 3",
@@ -4961,7 +4896,6 @@ const char* th_glossary_str[3][1678]
         "ダーク\0ライト\0クラシック\0カスタム\0\0",
         "ツール",
         "実行中のゲームにthpracを適用します",
-<<<<<<< HEAD
         "Suggest using this on the resolution/fullscreen selection window",
         "Xeno aaaaaa",
         "drop",
@@ -4992,23 +4926,6 @@ const char* th_glossary_str[3][1678]
         "Mouse",
         "Mouse Delta",
         "Status: OK",
-        "mode",
-        "press time test",
-        "no progress bar",
-        "with progress bar",
-        "release time test",
-        "show wait time progress bar",
-        "reaction test",
-        "start(hotkey z/shift)",
-        "keydown test(wait for color changed then press arrow key)",
-        "next test(hotkey z/shift)",
-        "result",
-        "result(avg)",
-        "times for test",
-        "too early",
-        "keyup test(press arrow key until color changes)",
-        "wait for color changes then press or release key",
-=======
         "モード",
         "キーダウン反射神経テスト",
         "プログレスバー無し",
@@ -5025,7 +4942,6 @@ const char* th_glossary_str[3][1678]
         "キーの操作が早すぎます。",
         "キーアップテスト(色が変わるまで矢印キーを押し続ける)",
         "色が変わったらキーを押すor離す",
->>>>>>> 8f545e8b5b7884dbd46f35f9828984f0301dc497
         "ランダムゲーム",
         "PC98",
         "ランダム機体",
@@ -24563,11 +24479,7 @@ const th_glossary_t TH20_EXPIRED_PYRAMID_FIX_OPT[6]
 
 }
 
-<<<<<<< HEAD
-const wchar_t __thprac_loc_range_zh[3561] {
-=======
-const wchar_t __thprac_loc_range_zh[2915] {
->>>>>>> 8f545e8b5b7884dbd46f35f9828984f0301dc497
+const wchar_t __thprac_loc_range_zh[2927] {
     0x0020, 0x00FF,
     0x394, 0x394,
     0x2014, 0x2014,
@@ -24760,7 +24672,6 @@ const wchar_t __thprac_loc_range_zh[2915] {
     0x534e, 0x534f,
     0x5355, 0x5355,
     0x535a, 0x535a,
-    0x5360, 0x5360,
     0x5361, 0x5361,
     0x5366, 0x5366,
     0x536b, 0x536b,
@@ -25119,16 +25030,9 @@ const wchar_t __thprac_loc_range_zh[2915] {
     0x62cd, 0x62cd,
     0x62d2, 0x62d2,
     0x62d6, 0x62d6,
-<<<<<<< HEAD
-    0x62db, 0x62db,
-    0x62dc, 0x62dc,
-    0x62df, 0x62df,
-    0x62e8, 0x62e8,
-    0x62e9, 0x62e9,
-=======
     0x62db, 0x62dc,
+    0x62df, 0x62df,
     0x62e8, 0x62e9,
->>>>>>> 8f545e8b5b7884dbd46f35f9828984f0301dc497
     0x62ec, 0x62ec,
     0x62f3, 0x62f3,
     0x6301, 0x6301,
@@ -25157,8 +25061,7 @@ const wchar_t __thprac_loc_range_zh[2915] {
     0x6426, 0x6426,
     0x643a, 0x643a,
     0x6444, 0x6444,
-    0x6446, 0x6446,
-    0x6447, 0x6447,
+    0x6446, 0x6447,
     0x6469, 0x6469,
     0x6495, 0x6495,
     0x649e, 0x649e,
@@ -25232,13 +25135,8 @@ const wchar_t __thprac_loc_range_zh[2915] {
     0x673a, 0x673a,
     0x673d, 0x673d,
     0x6740, 0x6740,
-<<<<<<< HEAD
-    0x6742, 0x6742,
-    0x6743, 0x6743,
-    0x6746, 0x6746,
-=======
     0x6742, 0x6743,
->>>>>>> 8f545e8b5b7884dbd46f35f9828984f0301dc497
+    0x6746, 0x6746,
     0x6749, 0x6749,
     0x6750, 0x6750,
     0x675c, 0x675c,
@@ -25886,14 +25784,7 @@ const wchar_t __thprac_loc_range_zh[2915] {
     0x8ff7, 0x8ff7,
     0x8ff9, 0x8ff9,
     0x8ffd, 0x8ffd,
-<<<<<<< HEAD
-    0x9000, 0x9000,
-    0x9001, 0x9001,
-    0x9002, 0x9002,
-=======
-    0x9000, 0x9001,
->>>>>>> 8f545e8b5b7884dbd46f35f9828984f0301dc497
-    0x9003, 0x9003,
+    0x9000, 0x9003,
     0x9006, 0x9006,
     0x9009, 0x9009,
     0x900f, 0x900f,
@@ -26087,7 +25978,7 @@ const wchar_t __thprac_loc_range_en[57] {
     0
 };
 
-const wchar_t __thprac_loc_range_ja[2345] {
+const wchar_t __thprac_loc_range_ja[2343] {
     0x0020, 0x00FF,
     0x394, 0x394,
     0x2026, 0x2026,
@@ -26659,7 +26550,6 @@ const wchar_t __thprac_loc_range_ja[2345] {
     0x6c17, 0x6c17,
     0x6c34, 0x6c34,
     0x6c37, 0x6c38,
-    0x6c42, 0x6c42,
     0x6c5f, 0x6c5f,
     0x6c70, 0x6c70,
     0x6c88, 0x6c88,
