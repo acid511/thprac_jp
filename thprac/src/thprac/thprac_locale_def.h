@@ -3492,7 +3492,11 @@ extern const th_glossary_t TH20_EXPIRED_PYRAMID_FIX_OPT[6];
 
 }
 
+<<<<<<< HEAD
 extern const wchar_t __thprac_loc_range_zh[3561];
+=======
+extern const wchar_t __thprac_loc_range_zh[2915];
+>>>>>>> 8f545e8b5b7884dbd46f35f9828984f0301dc497
 
 extern const wchar_t __thprac_loc_range_en[57];
 

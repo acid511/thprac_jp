@@ -294,10 +294,6 @@
     "THPRAC_FORCE_ONLY_RENDER_TEXT_USED":["只渲染用到的字体","only render used font","only render used font"],
     "THPRAC_FORCE_ONLY_RENDER_TEXT_USED_DESC":["游戏启动时如果爆显存，导致字体显示全为白块或透明等错误，则需要设置此项","if the VRAM is overflow, the text might shown as a white rectangle(or transparent and so on), use this setting to avoid it","if the VRAM is overflow, the text might shown as a white rectangle(or transparent and so on), use this setting to avoid it"],
 
-
-	 "THPRAC_HOOK_MSG_BOX_A2W":["将弹窗提示修改为宽字节","use MessageBoxW instead of MessageBoxA","use MessageBoxW instead of MessageBoxA"],
-	 "THPRAC_HOOK_MSG_BOX_A2W_DESC":["可以防止某些弹窗乱码, 仅在使用thprac启动游戏时生效","might prevents possible garbled characters from msg box, only works when launch game by thprac","might prevents possible garbled characters from msg box, only works when launch game by thprac"],
-
     "THPRAC_RENDER_CORRECT_FONT":["渲染正确的日文字体","render correct ja fonts","render correct ja fonts"],
     "THPRAC_RENDER_CORRECT_FONT_DESC":["当游戏字体(对话/符卡)渲染错误时尝试开启本选项, 仅在使用thprac启动游戏时生效","use this option when game fonts are wrong(msg/spell), only works when launch game by thprac","use this option when game fonts are wrong(msg/spell), only works when launch game by thprac"],
 	"THPRAC_RENDER_CORRECT_FONT_DESC2":["原版游戏使用 MS Gothic 和 MS Mincho 字体, 若开启此选项后仍不能正确显示, 请确认两个字体已经安装","original game use font 'MS Gothic' and 'MS Mincho', if fonts are still wrong after toggling this option, please check the font installation","original game use font 'MS Gothic' and 'MS Mincho', if fonts are still wrong after toggling this option, please check the font installation"],
@@ -325,7 +321,6 @@
     "THPRAC_KEYBIND_TO_COMBO":["修改按键","new key","new key"],
     "THPRAC_KEYBIND_PRESS_A_KEY":["请按下一个按键","please press a key","please press a key"],
     "THPRAC_KEYBIND_ENTER":["按键名","key name","key name"],
-
 
 	"THPRAC_DISABLE_WIN_KEY_DINPUT":["使用dinput禁用win键","use dinput to disable win key","use dinput to disable win key"],
 	"THPRAC_DISABLE_WIN_KEY_DINPUT_DESC":["似乎没用...都怪巨硬","seems useless, blame to Macrohard","seems useless, blame to Macrohard"],
@@ -360,7 +355,6 @@
 
       "THPRAC_TOOLS": [ "工具", "Tools", "ツール" ],
 
-
       "THPRAC_KILL_ALL_GAME": [ "清理游戏程序", "clear game programs", "clear game programs" ],
       "THPRAC_KILL_ALL_GAME_ALERT": [ "请确保你现在不在游戏中", "please make sure you are not currently in the game", "please make sure you are not currently in the game" ],
       "THPRAC_KILL_ALL_GAME_DONE": [ "完成，共清除了 %d 个游戏程序", "done, cleared %d background game programs", "done, cleared %d background game programs" ],
@@ -374,8 +368,7 @@
 	  "THPRAC_TOOLS_ROLLF_TIME": [ "转盘时间", "time", "time" ],
 	  "THPRAC_TOOLS_ROLLF_REMOVE_CUR": [ "删除roll到的", "remove rolled", "remove rolled" ],
 
-
-	  "THPRAC_TOOLS_DICE": [ "杰哥不要啊", "Xeno aaaaaa", "Xeno aaaaaa" ],
+    "THPRAC_TOOLS_DICE": [ "杰哥不要啊", "Xeno aaaaaa", "Xeno aaaaaa" ],
 	  "THPRAC_TOOLS_DICE_NUM": [ "丢几次", "dice num", "dice num" ],
 	  "THPRAC_TOOLS_DICE_DROP": [ "丢", "drop", "drop" ],
 
@@ -405,7 +398,6 @@
 	  "THPRAC_TOOLS_INPUT_GAMEPAD_S1": [ "额外轴1", "Slider1", "Slider1" ],
 	  "THPRAC_TOOLS_INPUT_GAMEPAD_S2": [ "额外轴2", "Slider2", "Slider2" ],
 	  "THPRAC_TOOLS_INPUT_GAMEPAD_NO_GAMEPAD": [ "没有可用设备, 请先进行初始化", "No available device, please init first", "No available device, please init first" ],
-
 
       "THPRAC_TOOLS_APPLY_THPRAC": [ "应用thprac至正在运行的游戏", "Apply thprac to ongoing game", "実行中のゲームにthpracを適用します" ],
       "THPRAC_TOOLS_APPLY_THPRAC_DESC": [ "建议在选择分辨率/全屏的窗口上使用", "Suggest using this on the resolution/fullscreen selection window", "Suggest using this on the resolution/fullscreen selection window" ],
@@ -1365,54 +1357,49 @@
 	  "THPRAC_TH18_CARD_5": [ "stage5 卡牌", "card for stage 5", "card for stage 5" ],
 	  "THPRAC_TH18_CARD_7": [ "stageEX 卡牌", "card for stage EX", "card for stage EX" ],
 
-	  "THPRAC_TH20_PIV_OVERFLOW_FIX": [ "锦上京PIV溢出修复", "FW PIV overflow fix", "FW: PIVオーバーフロー修正" ],
-      "THPRAC_TH20_UNCAP_PIV": [ "锦上京移除PIV限制", "FW PIV uncap", "FW: PIV上限解放" ],
-      "THPRAC_TH20_UNCAP_SCORE": [ "锦上京移除分数限制", "FW Score uncap", "FW: スコア上限解放" ],
-      "THPRAC_TH20_FAKE_UNLOCK_STONES": [ "锦上京解锁未获得的石", "FW Fake unlock stones", "FW: 未解放の異変石の使用" ],
-      "THPRAC_TH20_UNLOCK_STONES_DESC": ["锦上京侧槽可选未解锁宝石。", "Allows you to select stones you haven't actually unlocked in the side slots.", "未解放の異変石をサブスロットに設定できるようになります。" ],
-	  "THPRAC_TH20_FIX_BULLETHITBOX": [ "锦上京修复弹幕判定","FW fix bullet hitbox","FW: 弾幕判定を修正"],
-	  "THPRAC_TH20_FIX_BULLETHITBOX_DESC": [ "锦上京游戏", "FW Game", "@FW Game" ],
-	  "THPRAC_TH20_DECREASE_EFF": [ "锦上京减少擦弹特效","FW decrease graze effect","FW: グレイズのエフェクトを減らす"],
+	  "THPRAC_TH20_PIV_OVERFLOW_FIX": [ "锦上京PIV溢出修复", "FW PIV overflow fix", "FW PIVオーバーフロー修正" ],
+      "THPRAC_TH20_UNCAP_PIV": [ "锦上京移除PIV限制", "FW PIV uncap", "FW PIVキャップ解放" ],
+      "THPRAC_TH20_UNCAP_SCORE": [ "锦上京移除分数限制", "FW Score uncap", "FW スコアキャップ解放" ],
+      "THPRAC_TH20_FAKE_UNLOCK_STONES": [ "锦上京解锁未获得的石", "FW Fake unlock stones", "FW 未解放ストーン使用" ],
+      "THPRAC_TH20_UNLOCK_STONES_DESC": ["锦上京侧槽可选未解锁宝石。", "Allows you to select stones you haven't actually unlocked in the side slots.", "未解放ストーンをサイドスロットに設定可能。" ],
+	  "THPRAC_TH20_FIX_BULLETHITBOX": [ "锦上京修复弹幕判定","FW fix bullet hitbox","FW 弾幕判定を修復します"],
+	  "THPRAC_TH20_FIX_BULLETHITBOX_DESC": [ "锦上京游戏", "FW Game", "FW Game" ],
+	  "THPRAC_TH20_DECREASE_EFF": [ "锦上京减少擦弹特效","FW decrease graze effect","FW decrease graze effect"],
 
 
+	  "THPRAC_TH06_BACKGROUND_FIX": [ "红魔乡背景修复", "EoSD background fix", "EoSD background fix" ],
+	  "THPRAC_TH06_BACKGROUND_FIX_DESC": [ "当关闭弹幕虚影时不让蕾咪变蓝狗\n有可能让背景或UI变奇怪", "let Remilia not be blue when disables bullet shadow\nMight make bg or UI strange", "let Remilia not be blue when disables bullet shadow\nMight make bg or UI strange" ],
 
-	  "THPRAC_FAST_RETRY": [ "练习模式快速re", "fast retry for prac mode", "fast retry for prac mode" ],
-	  "THPRAC_FAST_RETRY_DESC": [ "需要启用键盘Hook与强制dinput8/RawInput输入", "need enable keyboard hook & force dinput8/RawInput", "need enable keyboard hook & force dinput8/RawInput" ],
-	  "THPRAC_FAST_RETRY_DESC2": [ "快捷键: shift+F", "hotkey shift+F", "hotkey shift+F" ],
+	  "THPRAC_TH06_FIX_RAND_SEED": [ "红魔乡固定初始种子", "fix EoSD rand seed when begin", "fix EoSD rand seed when begin" ],
+	  "THPRAC_TH06_RAND_SEED": [ "初始种子", "rand seed", "rand seed" ],
+	  "THPRAC_TH06_REP_RAND_SEED": [ "当前打开rep的初始种子", "rand seed for current rep", "rand seed for current rep" ],
 
-	  "THPRAC_TH06_BACKGROUND_FIX": [ "红魔乡背景修复", "EoSD background fix", "紅魔郷: 背景を修正" ],
-	  "THPRAC_TH06_BACKGROUND_FIX_DESC": [ "当关闭弹幕虚影时不让蕾咪变蓝狗\n有可能让背景或UI变奇怪", "let Remilia not be blue when disables bullet shadow\nMight make bg or UI strange", "弾丸の影を無効化した際、レミリアが青くならないようにします。\n背景やUIに不具合が生じる場合があります。" ],
+	  "THPRAC_TH06_RANKLOCK_DOWN": [ "红魔乡自动miss/bomb后不掉rank", "EoSD no rank drop after miss/bomb", "EoSD no rank drop after miss/bomb" ],
+	  "THPRAC_INFLIVES_MAP": [ "将锁残修改为不疮", "map inf.lives to no continue", "map inf.lives to no continue" ],
+      "THPRAC_DISABLE_MASTER_AUTO": [ "自动禁用MASTER", "automatically disable master", "automatically disable master" ],
+      "THPRAC_ENABLE_LOCK_TIMER_AUTO": [ "自动启用锁时计时", "automatically enable lock timer", "automatically enable lock timer" ],
+	  "THPRAC_INGAMEINFO_ADV":["高级IGI功能","advanced igi","advanced igi"],
+	  "THPRAC_INGAMEINFO_ADV_DESC1":["部分功能需要打开更多游戏信息(backspace菜单)中的选项开启","need to enable ingameinfo(in backspace menu) to show","need to enable ingameinfo(in backspace menu) to show"],
+	  "THPRAC_INGAMEINFO_ADV_DESC2":["免责声明: 部分功能可能会被认为是作弊","disclaimer: might be considered as cheating","disclaimer: might be considered as cheating"],
 
-	  "THPRAC_TH06_FIX_RAND_SEED": [ "红魔乡固定初始种子", "fix EoSD rand seed when begin", "紅魔郷: 開始時にシード値を固定" ],
-	  "THPRAC_TH06_RAND_SEED": [ "初始种子", "rand seed", "シード値" ],
-	  "THPRAC_TH06_REP_RAND_SEED": [ "当前打开rep的初始种子", "rand seed for current rep", "現在のリプレイのシード値" ],
+	  "THPRAC_INGAMEINFO_TH06_SHOW_RANK":["显示rank","show rank","show rank"],
+	  "THPRAC_INGAMEINFO_TH06_SHOW_RANK2":["红魔乡显示rank","EoSD show rank","EoSD show rank"],
+	  "THPRAC_INGAMEINFO_TH06_SHOW_HITBOX":["显示低速判定","show hitbox when focused","show hitbox when focused"],
+	  "THPRAC_INGAMEINFO_TH06_SHOW_HITBOX2":["红魔乡显示低速判定","EoSD show hitbox when focused","EoSD show hitbox when focused"],
+	  "THPRAC_INGAMEINFO_TH06_SHOW_HITBOX_DESC":["自定义判定: 将判定点图片hitbox.png放入红魔乡游戏所在文件夹","custom hitbox: put hitbox.png file in EoSD .exe folder","custom hitbox: put hitbox.png file in EoSD .exe folder"],
+	  "THPRAC_INGAMEINFO_TH06_SHOW_HITBOX_RELOAD":["重载","reload","reload"],
+	  "THPRAC_INGAMEINFO_TH06_RANK":["rank","rank","rank"],
 
-	  "THPRAC_TH06_RANKLOCK_DOWN": [ "红魔乡自动miss/bomb后不掉rank", "EoSD no rank drop after miss/bomb", "紅魔郷: ミス/ボム時のランク低下を無くす" ],
-	  "THPRAC_INFLIVES_MAP": [ "将锁残修改为不疮", "map inf.lives to no continue", "@map inf.lives to no continue" ],
-      "THPRAC_DISABLE_MASTER_AUTO": [ "自动禁用MASTER", "automatically disable master", "masterを自動的に無効化" ],
-      "THPRAC_ENABLE_LOCK_TIMER_AUTO": [ "自动启用锁时计时", "automatically enable lock timer", "タイマーロックを自動的に有効化" ],
-	  "THPRAC_INGAMEINFO_ADV":["高级IGI功能","advanced igi","拡張igi"],
-	  "THPRAC_INGAMEINFO_ADV_DESC1":["部分功能需要打开更多游戏信息(backspace菜单)中的选项开启","need to enable ingameinfo(in backspace menu) to show","表示するには、ゲーム内情報（BackSpaceメニュー内）を有効にする必要があります。"],
-	  "THPRAC_INGAMEINFO_ADV_DESC2":["免责声明: 部分功能可能会被认为是作弊","disclaimer: might be considered as cheating","【免責事項】不正行為とみなされる可能性があります。"],
+	  "THPRAC_INGAMEINFO_TH11_SHOW_HINT":["显示hint","show hint","show hint"],
+	  "THPRAC_INGAMEINFO_TH11_SHOW_HINT2":["地灵殿显示hint","SA show hint","SA show hint"],
 
-	  "THPRAC_INGAMEINFO_TH06_SHOW_RANK":["显示rank","show rank","ランクを表示"],
-	  "THPRAC_INGAMEINFO_TH06_SHOW_RANK2":["红魔乡显示rank","EoSD show rank","紅魔郷: ランクを表示"],
-	  "THPRAC_INGAMEINFO_TH06_SHOW_HITBOX":["显示低速判定","show hitbox when focused","低速移動時に当たり判定を表示"],
-	  "THPRAC_INGAMEINFO_TH06_SHOW_HITBOX2":["红魔乡显示低速判定","EoSD show hitbox when focused","紅魔郷: 低速移動時に当たり判定を表示"],
-	  "THPRAC_INGAMEINFO_TH06_SHOW_HITBOX_DESC":["自定义判定: 将判定点图片hitbox.png放入红魔乡游戏所在文件夹","custom hitbox: put hitbox.png file in EoSD .exe folder","カスタムヒットボックス: hitbox.pngを東方紅魔郷.exeが存在するフォルダに配置"],
-	  "THPRAC_INGAMEINFO_TH06_SHOW_HITBOX_RELOAD":["重载","reload","再読み込み"],
-	  "THPRAC_INGAMEINFO_TH06_RANK":["rank","rank","ランク:"],
+	  "THPRAC_INGAMEINFO_TH13_SHOW_HITS":["显示连击","show hits","show hits"],
+	  "THPRAC_INGAMEINFO_TH13_SHOW_HITS2":["神灵庙显示连击","TD show hits","TD show hits"],
+	  "THPRAC_INGAMEINFO_TH13_SHOW_HIT_BAR":["显示连击条","show hit bar","show hit bar"],
+	  "THPRAC_INGAMEINFO_TH13_SHOW_HIT_BAR2":["神灵庙显示连击条","TD show hit bar","TD show hit bar"],
+	  "THPRAC_INGAMEINFO_TH13_HITS":["连击","hits","hits"],
 
-	  "THPRAC_INGAMEINFO_TH11_SHOW_HINT":["显示hint","show hint","ヒントを表示"],
-	  "THPRAC_INGAMEINFO_TH11_SHOW_HINT2":["地灵殿显示hint","SA show hint","地霊殿: ヒントを表示"],
-
-	  "THPRAC_INGAMEINFO_TH13_SHOW_HITS":["显示连击","show hits","ヒット数を表示"],
-	  "THPRAC_INGAMEINFO_TH13_SHOW_HITS2":["神灵庙显示连击","TD show hits","神霊廟: ヒット数を表示"],
-	  "THPRAC_INGAMEINFO_TH13_SHOW_HIT_BAR":["显示连击条","show hit bar","ヒットバーを表示"],
-	  "THPRAC_INGAMEINFO_TH13_SHOW_HIT_BAR2":["神灵庙显示连击条","TD show hit bar","神霊廟: ヒットバーを表示"],
-	  "THPRAC_INGAMEINFO_TH13_HITS":["连击","hits","ヒット数:"],
-
-	  "THPRAC_INGAMEINFO_TH14_MARISA_LASER_REP":["辉针城魔理沙自动开启激光修复的rep预防功能 (独占全屏不建议)","DDC Marisa laser bug rep repair on (not recommended in fullscreen)","DDC Marisa laser bug rep repair on (not recommended in fullscreen)"],
+	  "THPRAC_INGAMEINFO_TH14_MARISA_LASER_REP":["辉针城魔理沙自动开启激光修复的rep预防功能","DDC Marisa laser bug rep repair on","DDC Marisa laser bug rep repair on"],
 	  "THPRAC_INGAMEINFO_TH14_SHOW_BONUS":["显示bonus数","show bonuses","show bonuses"],
 	  "THPRAC_INGAMEINFO_TH14_SHOW_BONUS2":["辉针城显示bouns数","DDC show bonuses","DDC show bonuses"],
 	  "THPRAC_INGAMEINFO_TH14_SHOW_ITEMS":["显示道具量","show items","show items"],
@@ -1421,10 +1408,10 @@
 	  "THPRAC_INGAMEINFO_TH14_SHOW_DROP_BAR2":["辉针城显示掉落收集条","DDC show drop bar","DDC show drop bar"],
 
 
-	  "THPRAC_INGAMEINFO_TH14_BONUS_NORMAL":["普通收点","normal bonus","通常ボーナス:"],
-	  "THPRAC_INGAMEINFO_TH14_BONUS_20":["2.0收点","2.0 bonus","2.0ボーナス:"],
-	  "THPRAC_INGAMEINFO_TH14_BONUS_TOTAL":["总奖励","total bonus","累計ボーナス:"],
-	  "THPRAC_INGAMEINFO_TH14_BONUS_NEXT":["下一奖励","next bonus","次のボーナス:"],
+	  "THPRAC_INGAMEINFO_TH14_BONUS_NORMAL":["普通收点","normal bonus","normal bonus"],
+	  "THPRAC_INGAMEINFO_TH14_BONUS_20":["2.0收点","2.0 bonus","2.0 bonus"],
+	  "THPRAC_INGAMEINFO_TH14_BONUS_TOTAL":["总奖励","total bonus","total bonus"],
+	  "THPRAC_INGAMEINFO_TH14_BONUS_NEXT":["下一奖励","next bonus","next bonus"],
 	  "THPRAC_INGAMEINFO_TH14_BONUS_LIFE":["残","L","L"],
 	  "THPRAC_INGAMEINFO_TH14_BONUS_BOMB":["雷","B","B"],
 	  "THPRAC_INGAMEINFO_TH14_ITEMS_CNT":["道具量","items","アイテム:"],
