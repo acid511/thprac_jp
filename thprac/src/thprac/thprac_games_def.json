@@ -310,7 +310,7 @@
 	"THPRAC_RENDER_CORRECT_FONT_DESC2":[
     "原版游戏使用 MS Gothic 和 MS Mincho 字体, 若开启此选项后仍不能正确显示, 请确认两个字体已经安装",
     "original game use font 'MS Gothic' and 'MS Mincho', if fonts are still wrong after toggling this option, please check the font installation",
-    "元のゲームでは「MS Gothic」と「MS Mincho」フォントを使用しています。このオプションを切り替えてもフォントが正しく表示されない場合は、フォントが正しくインストールされているか確認してください。"
+    "元のゲームでは「MS ゴシック」と「MS 明朝」フォントを使用しています。このオプションを切り替えてもフォントが正しく表示されない場合は、フォントが正しくインストールされているか確認してください。"
   ],
 
     "THPRAC_CUSTOM_FONTS":["使用自定义游戏字体","use custom game fonts","ゲーム内で指定したフォントを使用"],
@@ -1658,10 +1658,10 @@
 
       "TH_BOSSX": [ "BossX", "BossX", "BossX" ],
       "TH_BOSSY": [ "BossY", "BossY", "BossY" ],
-      "TH_BT_PHASE": [ "发弹相位", "bullet phase", "bullet phase" ],
-      "TH_TIMEOUT_SPELLCARD1": [ "一般收取", "normal mode", "normal mode" ],
-      "TH_TIMEOUT_SPELLCARD2": [ "允许全避收取", "allow timeout", "allow timeout" ],
-      "TH_ENHANCEMENT_VALUE": [ "增强程度", "enhancement degree", "enhancement degree" ],
+      "TH_BT_PHASE": [ "发弹相位", "bullet phase", "段階" ],
+      "TH_TIMEOUT_SPELLCARD1": [ "一般收取", "normal mode", "通常モード" ],
+      "TH_TIMEOUT_SPELLCARD2": [ "允许全避收取", "allow timeout", "@全避けモード" ],
+      "TH_ENHANCEMENT_VALUE": [ "增强程度", "enhancement degree", "強化度合い" ],
 
       "TH_BULLET_RANK": [ "Rank", "Rank", "ランク" ],
       "TH_BULLET_RANKLOCK": [ "锁Rank", "Rank Lock", "ランクをロックする" ],
@@ -1677,13 +1677,13 @@
       "TH_ATTACK": [ "攻击", "Attack", "弾幕" ],
       "TH_PROGRESS": [ "进度", "Progress", "進行度" ],
       "TH_BOTH_NORMAL": [ "都正常", "Both Normal", "両方とも正常" ],
-      "TH_HECATIA_RAGE": [ "赫卡提亚狂暴", "Hecatia Rage", "ヘカティアの怒り" ],
-      "TH_JUNKO_RAGE": [ "纯狐狂暴", "Junko Rage", "純子怒り" ],
-      "TH_BOTH_RAGE": [ "夫妻双打", "Both Rage", "両方の怒り" ],
-      "TH15_ST3_NORMAL1_TYPE_NORMAL": [ "正常", "normal", "normal" ],
-      "TH15_ST3_NORMAL1_TYPE_FORCE_WAVE_2": [ "强制第二波", "force wave2", "force wave2" ],
-      "TH15_ST3_NORMAL1_TYPE_NORMAL_PHASE": [ "正常(强制相位)", "normal(force phase)", "normal(force phase)" ],
-      "TH15_ST3_NORMAL1_TYPE_FORCE_WAVE_2_PHASE": [ "强制第二波(强制相位)", "force wave2(force phase)", "force wave2(force phase)" ],
+      "TH_HECATIA_RAGE": [ "赫卡提亚狂暴", "Hecatia Rage", "ヘカーティア暴走" ],
+      "TH_JUNKO_RAGE": [ "纯狐狂暴", "Junko Rage", "純子暴走" ],
+      "TH_BOTH_RAGE": [ "夫妻双打", "Both Rage", "両方暴走" ],
+      "TH15_ST3_NORMAL1_TYPE_NORMAL": [ "正常", "normal", "標準" ],
+      "TH15_ST3_NORMAL1_TYPE_FORCE_WAVE_2": [ "强制第二波", "force wave2", "第2波を強制" ],
+      "TH15_ST3_NORMAL1_TYPE_NORMAL_PHASE": [ "正常(强制相位)", "normal(force phase)", "標準(強制フェーズ)" ],
+      "TH15_ST3_NORMAL1_TYPE_FORCE_WAVE_2_PHASE": [ "强制第二波(强制相位)", "force wave2(force phase)", "第2波を強制(強制フェーズ)" ],
 
       "TH_NONE": [ "无", "None", "なし" ],
       "TH_NONSPELL": [ "非符", "Non Spell", "通常" ],
@@ -1697,13 +1697,13 @@
       "TH_TUTORIAL": [ "教程", "Tutorial", "チュートリアル" ],
       "TH_RESUME": [ "继续游戏", "Resume", "再開" ],
       "TH_EXIT": [ "退出游戏", "Exit", "終了" ],
-      "TH_EXIT2": [ "不存rep退出游戏", "Exit(no rep)", "終了(no rep)" ],
+      "TH_EXIT2": [ "不存rep退出游戏", "Exit(no rep)", "終了(リプレイ無し)" ],
       "TH_RESTART": [ "重新开始", "Restart", "リトライ" ],
       "TH_TWEAK": [ "调整选项", "Settings", "設定変更" ],
       "TH_NA": [ "N/A", "N/A", "N/A" ],
       "TH_TIMELOCK": [ "锁时", "Time Lock", "残り時間減らない" ],
       "TH_MUTEKI": [ "无敌", "Invincible", "無敵" ],
-      "TH_INFSUBP": [ "无限季节槽", "inf subP", "inf subP" ],
+      "TH_INFSUBP": [ "无限季节槽", "inf subP", "無限の季節ゲージ" ],
       "TH_INFLIVES": [ "锁残", "Inf. Lives", "残機減らない" ],
       "TH_INFLIVES2": [ "锁残/不疮", "Inf. Lives/No Continue", "残機減らない/No Continue" ],
 
@@ -1717,9 +1717,9 @@
       "TH_COERCIVE": [ "暴力取材", "Coercive Reporting", "圧迫取材" ],
       "TH_INFITEMS": [ "无限道具", "Inf. Items", "アイテム減らない" ],
       "TH_EL_BGM": [ "永续BGM", "Everlasting BGM", "永遠に続くBGM" ],
-      "TH_DISABLE_MASTER": [ "符卡收率完整显示", "show complete spellcard capture rate", "show complete spellcard capture rate" ],
-      "TH_DISABLE_MASTER_DESC": [ "不显示master 0/99+等", "no master, 0/99+, etc", "no master, 0/99+, etc" ],
-      "TH_ENABLE_LOCK_TIMER": [ "启用锁时计时", "enable lock timer", "enable lock timer" ],
+      "TH_DISABLE_MASTER": [ "符卡收率完整显示", "show complete spellcard capture rate", "スペルカード取得率を完全に表示" ],
+      "TH_DISABLE_MASTER_DESC": [ "不显示master 0/99+等", "no master, 0/99+, etc", "マスター0/99+などを表示しない" ],
+      "TH_ENABLE_LOCK_TIMER": [ "启用锁时计时", "enable lock timer", "@タイマーロックを有効化" ],
 
 	  "TH_ERROR": [ "错误", "Error", "エラー" ],
 	  "TH_REPLAY_FIX": [ "Replay修复", "Replay Fixing", "リプレイ修復" ],
@@ -1748,46 +1748,46 @@
 
       "TH_ON": [ "开启", "On", "有効" ],
       "TH_OFF": [ "关闭", "Off", "無効" ],
-      "TH_NORMAL": [ "正常", "Normal", "普通" ],
+      "TH_NORMAL": [ "正常", "Normal", "標準" ],
       "TH_SKIP_HALF": [ "跳过前半部分", "skip half", "skip half" ],
       "TH_MODE_ENHANCED": [ "增强", "enhanced", "enhanced" ],
-      "TH_SPELL_TIME_NORMAL": [ "正常", "Normal", "普通" ],
-      "TH_SPELL_TIME_INF": [ "无限时间", "Inf time", "Inf time" ],
-      "TH_SPELL_TIME_INF_MODE": [ "无尽模式", "Inf mode", "Inf mode" ],
-      "TH_SPELL_TIME_NORMAL_G": [ "正常(绿)", "Normal(G)", "Normal(G)" ],
-      "TH_SPELL_TIME_INF_MODE_Y": [ "无尽模式(黄)", "Inf mode(Y)", "Inf mode(G)" ],
-      "TH_SPELL_TIME_INF_MODE_G": [ "无尽模式(绿)", "Inf mode(G)", "Inf mode(Y)" ],
-      "TH_SPELL_TIME_INF_BOOK6": [ "无限时间(6本)", "Inf time(6 book)", "Inf time(6 book)" ],
-      "TH_SPELL_TIME_INF_BOOK5": [ "无限时间(5本)", "Inf time(5 book)", "Inf time(5 book)" ],
-      "TH_SPELL_TIME_INF_BOOK5_2": [ "无限时间(13456)", "Inf time(13456)", "Inf time(13456)" ],
-      "TH_SPELL_TIME_INF_BOOK_CUSTOM": [ "无限时间(自定义)", "Inf time(custom)", "Inf time(custom)" ],
+      "TH_SPELL_TIME_NORMAL": [ "正常", "Normal", "標準" ],
+      "TH_SPELL_TIME_INF": [ "无限时间", "Inf time", "無限時間" ],
+      "TH_SPELL_TIME_INF_MODE": [ "无尽模式", "Inf mode", "無限モード" ],
+      "TH_SPELL_TIME_NORMAL_G": [ "正常(绿)", "Normal(G)", "標準(緑)" ],
+      "TH_SPELL_TIME_INF_MODE_Y": [ "无尽模式(黄)", "Inf mode(Y)", "無限モード(黄)" ],
+      "TH_SPELL_TIME_INF_MODE_G": [ "无尽模式(绿)", "Inf mode(G)", "無限モード(緑)" ],
+      "TH_SPELL_TIME_INF_BOOK6": [ "无限时间(6本)", "Inf time(6 book)", "無限モード(6体)" ],
+      "TH_SPELL_TIME_INF_BOOK5": [ "无限时间(5本)", "Inf time(5 book)", "無限モード(5体)" ],
+      "TH_SPELL_TIME_INF_BOOK5_2": [ "无限时间(13456)", "Inf time(13456)", "無限モード(13456)" ],
+      "TH_SPELL_TIME_INF_BOOK_CUSTOM": [ "无限时间(自定义)", "Inf time(custom)", "無限モード(カスタム)" ],
 
       "TH_BOOK_X1": [ "x1", "x1", "x1" ],
       "TH_BOOK_Y1": [ "y1", "y1", "y1" ],
-      "TH_BOOK_C1": [ "固定1", "fix1", "fix1" ],
+      "TH_BOOK_C1": [ "固定1", "fix1", "固定1" ],
       "TH_BOOK_X2": [ "x2", "x2", "x2" ],
       "TH_BOOK_Y2": [ "y2", "y2", "y2" ],
-      "TH_BOOK_C2": [ "固定2", "fix2", "fix2" ],
+      "TH_BOOK_C2": [ "固定2", "fix2", "固定2" ],
       "TH_BOOK_X3": [ "x3", "x3", "x3" ],
       "TH_BOOK_Y3": [ "y3", "y3", "y3" ],
-      "TH_BOOK_C3": [ "固定3", "fix3", "fix3" ],
+      "TH_BOOK_C3": [ "固定3", "fix3", "固定3" ],
       "TH_BOOK_X4": [ "x4", "x4", "x4" ],
       "TH_BOOK_Y4": [ "y4", "y4", "y4" ],
-      "TH_BOOK_C4": [ "固定4", "fix4", "fix4" ],
+      "TH_BOOK_C4": [ "固定4", "fix4", "固定4" ],
       "TH_BOOK_X5": [ "x5", "x5", "x5" ],
       "TH_BOOK_Y5": [ "y5", "y5", "y5" ],
-      "TH_BOOK_C5": [ "固定5", "fix5", "fix5" ],
+      "TH_BOOK_C5": [ "固定5", "fix5", "固定5" ],
       "TH_BOOK_X6": [ "x6", "x6", "x6" ],
       "TH_BOOK_Y6": [ "y6", "y6", "y6" ],
-      "TH_BOOK_C6": [ "固定6", "fix6", "fix6" ],
-      "TH_BOOK_MIRROR": [ "对称后三本", "mirror 3 books", "mirror 3 books" ],
-      "TH_BOOK_MIRROR2": [ "对称", "mirror", "mirror" ],
+      "TH_BOOK_C6": [ "固定6", "fix6", "固定6" ],
+      "TH_BOOK_MIRROR": [ "对称后三本", "mirror 3 books", "3体を左右対象に配置" ],
+      "TH_BOOK_MIRROR2": [ "对称", "mirror", "左右入れ替え" ],
       "TH_BOOK_ROLL": [ "轮换", "roll", "roll" ],
-      "TH_BOOK_RANDX": [ "随机X", "随机X", "随机X" ],
-      "TH_BOOK_RESETY": [ "重置Y", "reset y", "reset y" ],
-      "TH_BOOK_COPY_SETTING": [ "复制配置到剪贴板", "copy setting to clipboard", "copy setting to clipboard" ],
-      "TH_BOOK_PASTE_SETTING": [ "粘贴剪贴板配置", "paste setting from clipboard", "paste setting from clipboard" ],
-      "TH_BOOK_LAST": [ "上一次魔法书坐标", "last books' pos", "last books' pos" ],
+      "TH_BOOK_RANDX": [ "随机X", "随机X", "X座標(ランダム)" ],
+      "TH_BOOK_RESETY": [ "重置Y", "reset y", "y座標をリセット" ],
+      "TH_BOOK_COPY_SETTING": [ "复制配置到剪贴板", "copy setting to clipboard", "設定をクリップボードにコピー" ],
+      "TH_BOOK_PASTE_SETTING": [ "粘贴剪贴板配置", "paste setting from clipboard", "クリップボードから設定を貼り付け" ],
+      "TH_BOOK_LAST": [ "上一次魔法书坐标", "last books' pos", "直近の魔導書の位置" ],
 
 
       "TH_RAGE": [ "发狂", "Rage", "発狂" ],
@@ -1869,26 +1869,26 @@
       "TH_ADV_OPT": [ "高级选项", "Advanced Options", "拡張オプション" ],
       "TH_ADV_OPT_APPLY": [ "应用", "Apply", "変更を適用" ],
 
-      "TH_ONE_KEY_DIE": [ "一键疮痍", "one key DIE", "one key DIE" ],
-      "TH_ONE_KEY_DIE_DESC": [ "为了在某些作品的练习模式中快速存rep", "for rep storage in practice mode", "for rep storage in practice mode" ],
+      "TH_ONE_KEY_DIE": [ "一键疮痍", "one key DIE", "ゲームオーバー" ],
+      "TH_ONE_KEY_DIE_DESC": [ "为了在某些作品的练习模式中快速存rep", "for rep storage in practice mode", "特定の作品のプラクティスモードでリプレイを素早く保存する用のボタン" ],
       "TH_ADV_DISABLE_X_KEY": [ "禁用X键", "disable X key", "Xキーを無効化" ],
-      "TH_ADV_DISABLE_C_KEY_SAMETIME": [ "禁用X同时禁用C键", "disable C key at the same time when disable X", "Xキーを無効化すると同時にCキーも無効化" ],
+      "TH_ADV_DISABLE_C_KEY_SAMETIME": [ "禁用X同时禁用C键", "disable C key at the same time when disable X", "Xキーと一緒にCキーも無効化" ],
       "TH_ADV_DISABLE_Z_KEY": [ "禁用Z键", "disable Z key", "Zキーを無効化" ],
       "TH_ADV_DISABLE_SHIFT_KEY": [ "禁用Shift键", "disable shift key", "Shiftキーを無効化" ],
 
-      "TH_ADV_DISABLE_X_KEY_DESC": [ "给打nb的人准备(快捷键 shift+D)", "for who want to play nb neta(hotkey shift+D)", "for who want to play nb neta(hotkey shift+D)" ],
-      "TH_ADV_DISABLE_Z_KEY_DESC": [ "真假...(快捷键 shift+S)", "really?(hotkey shift+S)", "really?(hotkey shift+S)" ],
-      "TH_ADV_DISABLE_SHIFT_KEY_DESC": [ "喜欢低封?(快捷键 shift+A)", "like NO FOCUS?(hotkey shift+A)", "like NO FOCUS?(hotkey shift+A)" ],
+      "TH_ADV_DISABLE_X_KEY_DESC": [ "给打nb的人准备(快捷键 shift+D)", "for who want to play nb neta(hotkey shift+D)", "ノーボム用 (shift+Dで切り替え)" ],
+      "TH_ADV_DISABLE_Z_KEY_DESC": [ "真假...(快捷键 shift+S)", "really?(hotkey shift+S)", "正気か？ (shift+Sで切り替え)" ],
+      "TH_ADV_DISABLE_SHIFT_KEY_DESC": [ "喜欢低封?(快捷键 shift+A)", "like NO FOCUS?(hotkey shift+A)", "低速封印はお好き？ (shift+Aで切り替え)" ],
 
-      "TH_BOSS_FORCE_MOVE_DOWN": [ "完全下压", "force boss region to move down", "ボスを完全に下に移動させる" ],
+      "TH_BOSS_FORCE_MOVE_DOWN": [ "完全下压", "force boss region to move down", "ボスを強制的に下移動させる" ],
 
-      "TH_BOSS_HORIZONTAL": [ "水平移动方式", "boss horizontal movement", "boss horizontal movement" ],
-      "TH_BOSS_MOVE_DEFAULT": [ "正常移动", "move normally", "move normally" ],
-      "TH_BOSS_FORCE_MOVE_OPPOSITE_DIR": [ "必定反走", "force boss move opposite", "force boss move opposite" ],
-      "TH_BOSS_FORCE_MOVE_SAME_DIR": [ "必定正走", "force boss move same dir with player", "force boss move same dir with player" ],
+      "TH_BOSS_HORIZONTAL": [ "水平移动方式", "boss horizontal movement", "水平方向の動き" ],
+      "TH_BOSS_MOVE_DEFAULT": [ "正常移动", "move normally", "通常の移動" ],
+      "TH_BOSS_FORCE_MOVE_OPPOSITE_DIR": [ "必定反走", "force boss move opposite", "必ず逆方向に移動" ],
+      "TH_BOSS_FORCE_MOVE_SAME_DIR": [ "必定正走", "force boss move same dir with player", "必ずプレイヤーと同じ方向に移動" ],
 
-      "TH_BOSS_FORCE_MOVE_DOWN_RANGE": [ "下压幅度", "range", "range" ],
-      "TH_BOSS_FORCE_MOVE_DOWN_DESC": [ "只给练习用，会对rep造成影响注意，基于原理对部分boss有bug", "for practice, it will affect the rep, buggy for some bosses", "for practice, it will affect the rep, buggy for some bosses" ],
+      "TH_BOSS_FORCE_MOVE_DOWN_RANGE": [ "下压幅度", "range", "下移動の幅" ],
+      "TH_BOSS_FORCE_MOVE_DOWN_DESC": [ "只给练习用，会对rep造成影响注意，基于原理对部分boss有bug", "for practice, it will affect the rep, buggy for some bosses", "練習用 (リプレイや一部のボスでバグが発生する可能性あり)" ],
 
       "TH_GAME_SPEED": [ "游戏速度", "Game Speed", "ゲームの速度" ],
       "TH_DELAY": [ "延迟", "Delay", "ディレイ" ],
@@ -1903,7 +1903,7 @@
         "Unsupported VsyncPatch version.",
         "このバージョンのVsyncPatchはサポートされていません。"
       ],
-      "TH_GAME_SPEED_PLSPD_KEEP": [ "保持自机速度不变", "keep player speed", "keep player speed" ],
+      "TH_GAME_SPEED_PLSPD_KEEP": [ "保持自机速度不变", "keep player speed", "自機の移動速度を保つ" ],
 
       "TH_FPS_LOWERING": [
         "使用VsyncPatch时降低FPS可能会导致游戏冻结一小段时间，请耐心等待。",
@@ -1954,10 +1954,10 @@
 
 
 
-      "TH_EOSD_SAKUYA_DOLLS_MORE_BLUE_TO_GREEN": [ "更多蓝弹变绿", "more blue turn green", "more blue turn green" ],
-      "TH_EOSD_SAKUYA_DOLLS_MORE_RED_TO_GREEN": [ "更多红弹变绿", "more red turn green", "more red turn green" ],
-      "TH_EOSD_SAKUYA_DOLLS_HALF_HALF": [ "五五开", "half half", "half half" ],
-      "TH_EOSD_SAKUYA_DOLLS_RANDOM": [ "随机", "randomly", "randomly" ],
+      "TH_EOSD_SAKUYA_DOLLS_MORE_BLUE_TO_GREEN": [ "更多蓝弹变绿", "more blue turn green", "より多くの青弾を緑弾へ" ],
+      "TH_EOSD_SAKUYA_DOLLS_MORE_RED_TO_GREEN": [ "更多红弹变绿", "more red turn green", "より多くの赤弾を緑弾へ" ],
+      "TH_EOSD_SAKUYA_DOLLS_HALF_HALF": [ "五五开", "half half", "半々" ],
+      "TH_EOSD_SAKUYA_DOLLS_RANDOM": [ "随机", "randomly", "ランダム" ],
 
       "TH_BULLETS": [ "子弹", "Bullets", "弾" ],
       "TH_PERFORMANCE": [ "速度", "Performance", "タースピード" ]
@@ -2081,18 +2081,18 @@
     "namespace": "TH06",
 
     "glossary": {
-      "TH06_FINAL_SPELL_W1": [ "默认", "default", "default" ],
-      "TH06_FINAL_SPELL_W2": [ "纯全56way", "all 56 way", "all 56 way" ],
-	  "TH06_FINAL_SPELL_W3": [ "红色的砌墙乡", "Scarlet Wallsokyo", "Scarlet Wallsokyo" ],
-	  "TH06_FINAL_SPELL_W4": [ "红色的半墙乡", "Scarlet Half-Wallsokyo", "Scarlet Half-Wallsokyo" ],
-      "TH06_FINAL_SPELL_W5": [ "混全56way(3)", "56 way, wave 3", "56 way, wave 3" ],
-      "TH06_FINAL_SPELL_W6": [ "混全56way(2,3)", "56 way, wave 2,3", "56 way, wave 2,3" ],
+      "TH06_FINAL_SPELL_W1": [ "默认", "default", "標準" ],
+      "TH06_FINAL_SPELL_W2": [ "纯全56way", "all 56 way", "56way弾(毎回)" ],
+	  "TH06_FINAL_SPELL_W3": [ "红色的砌墙乡", "Scarlet Wallsokyo", "紅色の壁想郷" ],
+	  "TH06_FINAL_SPELL_W4": [ "红色的半墙乡", "Scarlet Half-Wallsokyo", "紅色の半壁想郷" ],
+      "TH06_FINAL_SPELL_W5": [ "混全56way(3)", "56 way, wave 3", "56way弾(2回に1回)" ],
+      "TH06_FINAL_SPELL_W6": [ "混全56way(2,3)", "56 way, wave 2,3", "56way弾(3回に1回)" ],
 
-      "TH06_ST6_WALL_PRAC": [ "砌墙练习器", "wall prac", "wall prac" ],
-      "TH06_ST6_WALL_PRAC_SNIPE_N": [ "近场狙度", "snipe ratio near", "snipe ratio near" ],
-      "TH06_ST6_WALL_PRAC_SNIPE_F": [ "远场狙度", "snipe ratio far", "snipe ratio far" ],
+      "TH06_ST6_WALL_PRAC": [ "砌墙练习器", "wall prac", "壁練習" ],
+      "TH06_ST6_WALL_PRAC_SNIPE_N": [ "近场狙度", "snipe ratio near", "近距離狙撃" ],
+      "TH06_ST6_WALL_PRAC_SNIPE_F": [ "远场狙度", "snipe ratio far", "遠距離狙撃" ],
 
-      "TH06_ST6_WALL_PRAC_DESC": ["红幻/吸幻使用", "for Scarlet Gensokyo/Vampire Illusion", "for Scarlet Gensokyo/Vampire Illusion" ],
+      "TH06_ST6_WALL_PRAC_DESC": ["红幻/吸幻使用", "for Scarlet Gensokyo/Vampire Illusion", "「紅色の幻想郷」/ 神術「吸血鬼幻想」用" ],
 
       "TH06_FS": [ "伪装", "Fake Shot", "機体偽装" ],
       "TH06_NONE": [ "无", "None", "なし" ],
@@ -2102,8 +2102,8 @@
       "TH06_MARISA_B": [ "魔B", "Marisa B", "恋符" ],
       "TH06_RANK": [ "Rank", "Rank", "ランク" ],
       "TH06_RANKLOCK": [ "锁Rank", "Rank Lock", "ランクをロックする" ],
-      "TH06_RANKLOCK_DOWN": [ "miss/bomb后不掉rank", "no rank drop after miss/bomb", "no rank drop after miss/bomb" ],
-	  "TH06_RANKLOCK_DOWN_DESC": [ "快捷键 shift+C", "hotkey shift+C", "hotkey shift+C" ],
+      "TH06_RANKLOCK_DOWN": [ "miss/bomb后不掉rank", "no rank drop after miss/bomb", "ミス/ボム後にランクを下げないようにする" ],
+	  "TH06_RANKLOCK_DOWN_DESC": [ "快捷键 shift+C", "hotkey shift+C", "shift+Cで切り替え" ],
       "TH06_BOOKS": [ "魔法阵", "Books", "魔導書" ],
 
       "TH06_ST4_FIRE1": [ "火符「火神之光」", "Fire Sign \"Agni Shine\"", "火符「アグニシャイン」" ],
@@ -3549,7 +3549,7 @@
       "TH08_STAGE_6A": [ "6A", "6A", "6A" ],
       "TH08_STAGE_6B": [ "6B", "6B", "6B" ],
       "TH08_STAGE_LW": [ "LW", "LW", "LW" ],
-      "TH08_ST2N2_POINTS": [ "掉毒额的点", "Drop Points from Poisonous Moth", "Drop Points from Poisonous Moth" ],
+      "TH08_ST2N2_POINTS": [ "掉毒额的点", "Drop Points from Poisonous Moth", "@毒蛾からのドロップポイント" ],
       "TH08_DOSWNC": [ "符卡名不一致时不重置符卡历史", "Don't overwrite scores when spell name changes", "言語切替時にスペルカード履歴を上書きしない" ]
     },
 
@@ -4416,13 +4416,13 @@
     "glossary": {
       "TH10_FAITH_BAR": [ "信仰条", "Faith Bar", "カウンター" ],
       "TH10_NO_FAITH_LOSS": [ "不掉信仰", "No faith loss", "信仰点を減少させない" ],
-      "TH10_HINT_EDIT": [ "hint编辑", "hint edit", "hint edit" ],
+      "TH10_HINT_EDIT": [ "hint编辑", "hint edit", "ヒント編集" ],
 
-      "TH10_HINT_EDIT_COLOR": [ "颜色", "color", "color" ],
-      "TH10_HINT_EDIT_POS": [ "位置", "position", "position" ],
-      "TH10_HINT_EDIT_SCALE": [ "大小", "scale", "scale" ],
-      "TH10_HINT_EDIT_COPY": [ "复制", "copy", "copy" ],
-      "TH10_HINT_EDIT_DRAG": [ "鼠标拖动", "enable mouse drag", "enable mouse drag" ]
+      "TH10_HINT_EDIT_COLOR": [ "颜色", "color", "ID" ],
+      "TH10_HINT_EDIT_POS": [ "位置", "position", "位置" ],
+      "TH10_HINT_EDIT_SCALE": [ "大小", "scale", "大きさ" ],
+      "TH10_HINT_EDIT_COPY": [ "复制", "copy", "コピー" ],
+      "TH10_HINT_EDIT_DRAG": [ "鼠标拖动", "enable mouse drag", "マウスドラッグを有効化" ]
 
     },
 
@@ -5028,24 +5028,24 @@
       "TH11_SIGNAL": [ "信号强度", "C. Gauge", "交信強度" ],
 	  "TH11_MARISAB_FORMATION_LABEL": [ "配置", "Formation", "配置" ],
 
-	  "TH11_MARISAB_LOCK": [ "锁定魔B配置", "Lock Marisa B Formation", "Lock Marisa B Formation" ],
-	  "TH11_MARISAB_LOCK_DESC": [ "如果游戏中使用了，则播放rep时也需要打开", "Need to toggle on when playing rep if used", "Need to toggle on when playing rep if used" ],
+	  "TH11_MARISAB_LOCK": [ "锁定魔B配置", "Lock Marisa B Formation", "魔理沙Bの配置を固定" ],
+	  "TH11_MARISAB_LOCK_DESC": [ "如果游戏中使用了，则播放rep时也需要打开", "Need to toggle on when playing rep if used", "リプレイ再生時にも有効化する必要があります。" ],
       "TH11_MARISAB_FIRE":  [ "火符", "Fire",  "火符" ],
       "TH11_MARISAB_WATER": [ "水符", "Water", "水符" ],
       "TH11_MARISAB_WOOD":  [ "木符", "Wood",  "木符" ],
       "TH11_MARISAB_METAL": [ "金符", "Metal", "金符" ],
       "TH11_MARISAB_EARTH": [ "土符", "Earth", "土符" ],
 
-	  "TH_11_DEFAULT_START": [ "默认", "default start", "default start" ],
-	  "TH_11_INIT_POS_CHANGE": [ "修改初始位置", "init pos change", "init pos change" ],
-	  "TH_11_WAVE2_START": [ "初始第二波", "wave 2 start", "wave 2 start" ],
-	  "TH_11_DEFAULT_START_FAST": [ "初始第一波(光速)", "wave 1 start(fast)", "wave 1 start(fast)" ],
-	  "TH_11_WAVE2_START_FAST": [ "初始第二波(光速)", "wave 2 start(fast)", "wave 2 start(fast)" ],
+	  "TH_11_DEFAULT_START": [ "默认", "default start", "標準スタート" ],
+	  "TH_11_INIT_POS_CHANGE": [ "修改初始位置", "init pos change", "初期位置変更" ],
+	  "TH_11_WAVE2_START": [ "初始第二波", "wave 2 start", "第2波スタート" ],
+	  "TH_11_DEFAULT_START_FAST": [ "初始第一波(光速)", "wave 1 start(fast)", "第1波スタート(高速)" ],
+	  "TH_11_WAVE2_START_FAST": [ "初始第二波(光速)", "wave 2 start(fast)", "第2波スタート(高速)" ],
 
-      "TH_11_SS_RAGE4": [ "P4狂暴", "Rage(P4)", "Rage(P4)" ],
-      "TH_11_SS_RAGE3": [ "P3狂暴", "Rage(P3)", "Rage(P3)" ],
-      "TH_11_SS_RAGE2": [ "P2狂暴", "Rage(P2)", "Rage(P2)" ],
-      "TH_11_SS_RAGE1": [ "P1狂暴", "Rage(P1)", "Rage(P1)" ]
+      "TH_11_SS_RAGE4": [ "P4狂暴", "Rage(P4)", "暴走(P4)" ],
+      "TH_11_SS_RAGE3": [ "P3狂暴", "Rage(P3)", "暴走(P3)" ],
+      "TH_11_SS_RAGE2": [ "P2狂暴", "Rage(P2)", "暴走(P2)" ],
+      "TH_11_SS_RAGE1": [ "P1狂暴", "Rage(P1)", "暴走(P1)" ]
     },
 
     "sections": {
@@ -5644,7 +5644,7 @@
     "namespace": "TH12",
 
     "glossary": {
-      "TH_P5_LOCK": [ "锁P5", "P5 lock", "P5 lock" ],
+      "TH_P5_LOCK": [ "锁P5", "P5 lock", "P5で固定" ],
       "TH12_UFO_SIDE": [ "碎片方向", "UFO Side", "ベントラー方向" ],
       "TH12_VENTRA_1": [ "飞碟1", "Ventra 1", "ベントラー1" ],
       "TH12_VENTRA_2": [ "飞碟2", "Ventra 2", "ベントラー2" ],
