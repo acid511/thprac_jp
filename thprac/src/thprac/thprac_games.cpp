@@ -3208,7 +3208,7 @@ void RenderBlindView(int dx_ver, DWORD device, ImVec2 plpos, ImVec2 plpos_ofs, I
 
 void SSS_UI(int version)
 {
-    if (ImGui::CollapsingHeader("Super Secret Settings")) {
+    if (ImGui::CollapsingHeader("秘密の設定")) {
         if (version == 20) {
             ImGui::Checkbox(S(THPRAC_CHG_STONE), &g_change_stone);
             ImGui::SameLine();

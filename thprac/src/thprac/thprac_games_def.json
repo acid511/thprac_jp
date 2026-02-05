@@ -1212,14 +1212,14 @@
   },
   "keng": {
       "glossary": {
-       "THPRAC_KENG":["填坑器","keng tools","kengツール"],
-       "THPRAC_KENG_ADD_DIFF_POPUP":["增加难点##adpp","add difficulty##adpp","難所を追加##adpp"],
-       "THPRAC_KENG_DIFF_NAME":["难点名","difficulty name","難所名"],
-       "THPRAC_KENG_PLAY_NAME":["记录名:","play name","記録名:"],
-       "THPRAC_KENG_PLAY_CMT":["注释:","play comment","コメント:"],
-       "THPRAC_KENG_PLAY_DATE":["记录日期:","play date","日付:"],
-       "THPRAC_KENG_DIFF_TABLE_CK":["难点选择","diff check","難所選択"],
-       "THPRAC_KENG_DIFF_TABLE_NAME":["难点名","difficulty name","難所名"],
+       "THPRAC_KENG":["填坑器","keng tools","打開支援ツール"],
+       "THPRAC_KENG_ADD_DIFF_POPUP":["增加难点##adpp","add difficulty##adpp","被弾箇所を追加##adpp"],
+       "THPRAC_KENG_DIFF_NAME":["难点名","difficulty name","被弾箇所名"],
+       "THPRAC_KENG_PLAY_NAME":["记录名:","play name","記録名"],
+       "THPRAC_KENG_PLAY_CMT":["注释:","play comment","コメント"],
+       "THPRAC_KENG_PLAY_DATE":["记录日期:","play date","日付"],
+       "THPRAC_KENG_DIFF_TABLE_CK":["难点选择","diff check","被弾箇所選択"],
+       "THPRAC_KENG_DIFF_TABLE_NAME":["难点名","difficulty name","被弾箇所名"],
        "THPRAC_KENG_DIFF_TABLE_ADD":["[+]","[+]","[+]"],
        "THPRAC_KENG_DIFF_TABLE_REM":["[-]","[-]","[-]"],
        "THPRAC_KENG_DIFF_TABLE_U":["[↑]","[↑]","[↑]"],
@@ -1252,15 +1252,15 @@
        "THPRAC_KENG_DESC":["描述:","description","説明"],
        "THPRAC_KENG_PRESET":["预设:","preset","プリセット"],
        "THPRAC_KENG_PLAY_TABLE":["记录表##pltb","play table##pltb","記録表##pltb"],
-       "THPRAC_KENG_PLAY_CNT":["难点计数","difficulties count","難所数"],
-       "THPRAC_KENG_PLAY_INDEX":["记录编号","play index","記録索引"],
+       "THPRAC_KENG_PLAY_CNT":["难点计数","difficulties count","被弾数"],
+       "THPRAC_KENG_PLAY_INDEX":["记录编号","play index","索引"],
 
        "THPRAC_KENG_PLAY_ADD":["增加记录","add play record","記録を追加"],
        "THPRAC_KENG_PLAY_ADD_POPUP":["增加记录##appp","add play record##appp","記録を追加##appp"],
 	   "THPRAC_KENG_SAVE_CSV":["保存为csv","save as csv","csv形式で保存"],
 
-       "THPRAC_KENG_ADD_KENG":["开坑","add keng","坑を追加"],
-       "THPRAC_KENG_ADD_KENG_POPUP":["开坑##akpp","add keng##akpp","坑を追加##akpp"],
+       "THPRAC_KENG_ADD_KENG":["开坑","add keng","課題を追加"],
+       "THPRAC_KENG_ADD_KENG_POPUP":["开坑##akpp","add keng##akpp","課題を追加##akpp"],
        "THPRAC_KENG_READ_CSV":["从CSV导入","read from csv","csvから読み込む"]
       }
   },
@@ -8329,11 +8329,11 @@
       "TH15_AB_TEST_RES_RANK_10": [ "后继 级", "LV SUCCESSOR", "世界級 (LV 10)" ],
 
 
-      "TH15_AB_TEST_RES_DESC": [ "仅供娱乐", "only for amusement", "※娯楽用のモードです" ],
+      "TH15_AB_TEST_RES_DESC": [ "仅供娱乐", "only for amusement", "娯楽用のモードです" ],
 
       "TH15_AB_TEST_REACTION": [ "反应", "re", "反応" ],
       "TH15_AB_TEST_MOV": [ "走位", "mv", "移動" ],
-      "TH15_AB_TEST_RET": [ "折返", "rt", "折り返し" ],
+      "TH15_AB_TEST_RET": [ "折返", "rt", "切り返し" ],
       "TH15_AB_TEST_HORIZON": [ "视野", "ho", "視野" ],
       "TH15_AB_TEST_PREC": [ "精度", "pr", "精度" ],
       "TH15_AB_TEST_LUCK": [ "狗运", "lc", "運" ],
@@ -8816,7 +8816,7 @@
         "bgm": 1,
         "spell": 0,
         "appearance": [ 3, 2, 8 ],
-        "!ENHL": [ "底力测试", "ab test", "ab test" ]
+        "!ENHL": [ "底力测试", "ab test", "地力測定" ]
       }
     },
 
