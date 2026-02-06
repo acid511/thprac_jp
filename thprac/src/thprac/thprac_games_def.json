@@ -1230,7 +1230,7 @@
        "THPRAC_KENG_DEL_YES_OR_NO":["确定删除?","sure to delete?","本当に削除しますか？"],
 
        "THPRAC_KENG_DETAILS":["详情","details","詳細"],
-       "THPRAC_KENG_DETAILS_AFTER":["只计算在此之后的记录:","only calculate records after:","これ以降のレコードのみをカウント:"],
+       "THPRAC_KENG_DETAILS_AFTER":["只计算在此之后的记录:","only calculate records after:","この日付以降の記録のみを集計:"],
        "THPRAC_KENG_DETAILS_CAL":["计算","calculate","計算"],
        "THPRAC_KENG_DETAILS_CAL_EM":["基于期望最大化","based on exception maximization","期待値最大化法に基づく"],
        "THPRAC_KENG_DETAILS_CAL_EM_DESC":["打n次撞m次则计算为p(miss)=(m+1)/(n+2)","miss m times in n records, then p(miss)=(m+1)/(n+2)","n 個のレコードのうち m 回ミスがあった場合、p(ミス)=(m+1)/(n+2) となります。"],
@@ -1239,12 +1239,12 @@
        "THPRAC_KENG_DETAILS_DIFF_TABLE":["难点详情","diff details","差分の詳細"],
        "THPRAC_KENG_DETAILS_DIFF_INDEX":["编号","index","索引"],
        "THPRAC_KENG_DETAILS_DIFF_NAME":["难点名","name","名前"],
-       "THPRAC_KENG_DETAILS_DIFF_CNT":["计数","count","回数"],
+       "THPRAC_KENG_DETAILS_DIFF_CNT":["计数","count","累計ミス数"],
        "THPRAC_KENG_DETAILS_DIFF_PASSRATE":["通过率","pass rate","突破率"],
        "THPRAC_KENG_DETAILS_PASS_TABLE":["通过率详情","pass details","突破率詳細"],
        "THPRAC_KENG_DETAILS_PASS_MISS":["miss数","miss count","ミス数"],
-       "THPRAC_KENG_DETAILS_PASS_PROB":["概率","prob","突破確率"],
-       "THPRAC_KENG_DETAILS_PASS_EXCEPTION":["期望局数","exception num of games","突破に必要な試行回数"],
+       "THPRAC_KENG_DETAILS_PASS_PROB":["概率","prob","達成確率"],
+       "THPRAC_KENG_DETAILS_PASS_EXCEPTION":["期望局数","exception num of games","達成に必要な試行回数"],
        "THPRAC_KENG_DETAILS_PASS_EXCEPTION_INF":["近乎无限","almost inf","ほぼ無限"],
 
        "THPRAC_KENG_NAME":["坑名:","name","名前"],
@@ -1252,7 +1252,7 @@
        "THPRAC_KENG_DESC":["描述:","description","説明"],
        "THPRAC_KENG_PRESET":["预设:","preset","プリセット"],
        "THPRAC_KENG_PLAY_TABLE":["记录表##pltb","play table##pltb","記録表##pltb"],
-       "THPRAC_KENG_PLAY_CNT":["难点计数","difficulties count","被弾数"],
+       "THPRAC_KENG_PLAY_CNT":["难点计数","difficulties count","ミス数"],
        "THPRAC_KENG_PLAY_INDEX":["记录编号","play index","索引"],
 
        "THPRAC_KENG_PLAY_ADD":["增加记录","add play record","記録を追加"],
@@ -2103,7 +2103,7 @@
       "TH06_RANKLOCK": [ "锁Rank", "Rank Lock", "ランクをロックする" ],
       "TH06_RANKLOCK_DOWN": [ "miss/bomb后不掉rank", "no rank drop after miss/bomb", "ミス/ボム後にランクを下げないようにする" ],
 	  "TH06_RANKLOCK_DOWN_DESC": [ "快捷键 shift+C", "hotkey shift+C", "shift+Cで切り替え" ],
-      "TH06_BOOKS": [ "魔法阵", "Books", "魔導書" ],
+      "TH06_BOOKS": [ "魔法阵", "Books", "本地帯" ],
 
       "TH06_ST4_FIRE1": [ "火符「火神之光」", "Fire Sign \"Agni Shine\"", "火符「アグニシャイン」" ],
       "TH06_ST4_FIRE2": [ "火符「火神之光 上级」", "Fire Sign \"Agni Shine High Level\"", "火符「アグニシャイン上級」" ],
