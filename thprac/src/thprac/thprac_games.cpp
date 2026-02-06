@@ -2179,16 +2179,16 @@ bool GameFPSOpt(adv_opt_ctx& ctx, bool replay)
     if (replay) {
         ImGui::PushItemWidth(GetRelWidth(0.23f));
         if (fpsFastStatic > 20) {
-            sprintf(tmpStr, "infinite");
+            sprintf(tmpStr, "無限");
         } else {
             sprintf(tmpStr, "x%d.0 (%dfps)", fpsFastStatic, fpsFastStatic * 60);
         }
 
-        ImGui::SliderInt("Replay slow FPS", &fpsSlowStatic, 1, 60);
-        ImGui::SliderInt("Replay fast FPS", &fpsFastStatic, 1, 21, tmpStr);
+        ImGui::SliderInt("リプレイ(低速)FPS", &fpsSlowStatic, 1, 60);
+        ImGui::SliderInt("リプレイ(高速)FPS", &fpsFastStatic, 1, 21, tmpStr);
         ImGui::PopItemWidth();
     }
-    ImGui::Checkbox("Debug acc.", (bool*)&fpsDebugAcc);
+    ImGui::Checkbox("デバッグ", (bool*)&fpsDebugAcc);
     ImGui::SameLine();
     HelpMarker("Blah");
 
@@ -2258,35 +2258,35 @@ void DisableKeyOpt()
             switch (g_input_opt.g_keyboardAPI)
             {
             default: str = "unknown";break;
-            case InputOpt::KeyboardAPI::Default_API:str = "default";break;
-            case InputOpt::KeyboardAPI::Force_dinput8KeyAPI:str = "force dinput8"; break;
-            case InputOpt::KeyboardAPI::Force_win32KeyAPI:str = "force win32";break;
-            case InputOpt::KeyboardAPI::Force_RawInput:str = "force raw input";break;
+            case InputOpt::KeyboardAPI::Default_API:str = "標準";break;
+            case InputOpt::KeyboardAPI::Force_dinput8KeyAPI:str = "Dinput8の使用を強制"; break;
+            case InputOpt::KeyboardAPI::Force_win32KeyAPI:str = "Win32の使用を強制";break;
+            case InputOpt::KeyboardAPI::Force_RawInput:str = "RawInputの使用を強制";break;
             }
-            ImGui::Text("current API: %s", str.c_str());
-            ImGui::Text("dinput_init: %s, ri_init: %s, gamepad disable: %s", (g_input_opt.ddevice == nullptr) ? "F" : "T", (g_input_opt.is_ri_inited) ? "T" : "F", (g_input_opt.g_disable_joy) ? "T" : "F");
+            ImGui::Text("現在のAPI: %s", str.c_str());
+            ImGui::Text("dinput_init: %s, ri_init: %s, ジョイスティックの無効化: %s", (g_input_opt.ddevice == nullptr) ? "F" : "T", (g_input_opt.is_ri_inited) ? "T" : "F", (g_input_opt.g_disable_joy) ? "T" : "F");
 
-            if (ImGui::Button("switch to Dinput")){
+            if (ImGui::Button("Dinputへ変更")){
                 g_input_opt.g_keyboardAPI = InputOpt::KeyboardAPI::Force_dinput8KeyAPI;
                 InitInput();
             }
             ImGui::SameLine();
-            if (ImGui::Button("switch to RawInput")) {
+            if (ImGui::Button("RawInputへ変更")) {
                 g_input_opt.g_keyboardAPI = InputOpt::KeyboardAPI::Force_RawInput;
                 InitInput();
             }
             ImGui::SameLine();
-            if (ImGui::Button("switch to Win32")) {
+            if (ImGui::Button("Win32へ変更")) {
                 g_input_opt.g_keyboardAPI = InputOpt::KeyboardAPI::Force_win32KeyAPI;
                 InitInput();
             }
             ImGui::SameLine();
-            if (ImGui::Button("switch to Default")) {
+            if (ImGui::Button("標準へ変更")) {
                 g_input_opt.g_keyboardAPI = InputOpt::KeyboardAPI::Default_API;
                 InitInput();
             }
             if (g_input_opt.g_keyboardAPI == InputOpt::KeyboardAPI::Force_dinput8KeyAPI ){
-                if (ImGui::Checkbox("use GetDeviceData", &g_input_opt.use_get_device_data)){
+                if (ImGui::Checkbox("GetDeviceDataを使用", &g_input_opt.use_get_device_data)){
                     if (g_input_opt.use_get_device_data)
                     {
                         if (g_input_opt.use_get_device_data && g_input_opt.ddevice) {

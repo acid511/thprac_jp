@@ -17,7 +17,7 @@ namespace TH12 {
     };
     std::vector<laser_hitbox_draw> g_th12_laser_hit_draw_vec;
 
-    
+
     enum addrs {
         CHARA = 0x4b0c90,
         SUBSHOT = 0x4b0c94,
@@ -568,16 +568,16 @@ namespace TH12 {
         PATCH_HK(0x436d2f, "eb"),
         PATCH_HK(0x4383cb, "83c4109090")
         HOTKEY_ENDDEF();
-        
-        
+
+
         HOTKEY_DEFINE(mInfBombs, TH_INFBOMBS, "F3", VK_F3)
         PATCH_HK(0x422F27, "00")
         HOTKEY_ENDDEF();
-        
+
         HOTKEY_DEFINE(mInfPower, TH_INFPOWER, "F4", VK_F4)
         PATCH_HK(0x43944B, "48")
         HOTKEY_ENDDEF();
-        
+
         HOTKEY_DEFINE(mAutoBomb, TH_AUTOBOMB, "F6", VK_F6)
         // PATCH_HK(0x436D9B, "c6")
         EHOOK_HK(0x436d9b, 7, {
@@ -604,7 +604,7 @@ namespace TH12 {
             SetFade(0.9f, 0.9f);
             SetPosRel(425.0f / 640.0f, 338.0f / 480.0f);
             SetSizeRel(210.0f / 640.0f, 0.0f);
-            SetWndFlag(ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | 
+            SetWndFlag(ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse |
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
@@ -737,7 +737,7 @@ namespace TH12 {
     public:
     };
 
-    
+
     EHOOK_ST(th12_all_clear_bonus_1, 0x420a9b, 7, {
         pCtx->Eip = 0x420acd;
     });
@@ -821,7 +821,7 @@ namespace TH12 {
 
 
     class THAdvOptWnd : public Gui::PPGuiWnd {
-        SINGLETON(THAdvOptWnd);    
+        SINGLETON(THAdvOptWnd);
     public:
         bool forceBossMoveDown = false;
     private:
@@ -974,7 +974,7 @@ namespace TH12 {
                 HelpMarker(S(TH_DISABLE_MASTER_DESC));
                 ImGui::Checkbox(S(TH_ENABLE_LOCK_TIMER), &g_adv_igi_options.enable_lock_timer_autoly);
 
-                if (ImGui::Checkbox("show laser hitbox(only practice mode)", &g_show_bullet_hitbox))
+                if (ImGui::Checkbox("レーザーの当たり判定を表示 (Practiceのみ)", &g_show_bullet_hitbox))
                 {
                     th12_laser_hit_test.Toggle(g_show_bullet_hitbox);
                 }
@@ -2010,7 +2010,7 @@ namespace TH12 {
         THGuiRep::singleton().Update();
         THOverlay::singleton().Update();
         TH12InGameInfo::singleton().Update();
-        
+
         auto p = ImGui::GetOverlayDrawList();
         // in case boss movedown do not disabled when playing normal games
         {
@@ -2023,7 +2023,7 @@ namespace TH12 {
 
         if (*(DWORD*)0x004B4514)
             RenderBlindView(9, *(DWORD*)(0x4ce8f0), *(ImVec2*)(*(DWORD*)0x004B4514 + 0x97C), { 192.0f, 0.0f }, { 32.0f, 16.0f }, ImGui::GetIO().DisplaySize.x / 640.0f);
-        
+
         if (g_adv_igi_options.show_keyboard_monitor && *(DWORD*)(0x004B4514)) {
             g_adv_igi_options.keyboard_style.size = { 40.0f, 40.0f };
             KeysHUD(12, { 1280.0f, 0.0f }, { 835.0f, 0.0f }, g_adv_igi_options.keyboard_style);
@@ -2032,7 +2032,7 @@ namespace TH12 {
 
         {
             //0x4B0CE0 prac mode
-            if (g_show_bullet_hitbox) 
+            if (g_show_bullet_hitbox)
             {
                 bool is_prac = ((*(byte*)(0x4B0CE0) == 0x10));
                 bool is_rep = false;
