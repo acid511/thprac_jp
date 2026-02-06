@@ -2,10 +2,26 @@
 
 RUEEE版thpracの日本語バージョン
 
+![thprac_JP_screenshot](https://github.com/user-attachments/assets/8ca2ca76-3928-4deb-9027-51fb7204e335)
+
+翻訳アプリケーションを使って雑に翻訳しただけなので、誤訳や不自然な表現が多々あると思います。ご了承ください。
+
+翻訳ミスや改善点等があれば、[Issues](https://github.com/acid511/thprac_jp/issues)又は[Twitter](https://x.com/kamayagi_jp)、[Discord](https://discordapp.com/users/1173819558558171246)等までご連絡ください。
+
 ## ダウンロード
 
-最新版は[Releases](https://github.com/acid511/thprac_jp/releases/latest)からダウンロードしてください。
+最新版は[Releases](https://github.com/acid511/thprac_jp/releases/latest)から```thprac_JP.exe```をダウンロードしてください。
+
+## メモ
+
+- keng tools(打開支援ツール？)は使い方がイマイチ分からなかったので翻訳が間違っている可能性高
+- 元から日本語訳されていた箇所は基本的にそのまま (そのうちここも翻訳し直すかも)
+- バレットフィリア達の闇市場を所持していないので、この作品の翻訳は未確認
 
 ## 更新情報
 
-[RUEEE版thpracの更新情報の日本語訳(翻訳途中)](https://github.com/acid511/thprac_jp/blob/main/README_RUEEE.md)
+[RUEEE版thpracの更新情報の日本語訳](https://github.com/acid511/thprac_jp/blob/main/README_RUEEE.md)
+
+### v1.0.0.0 (2026-02-07)
+
+- 公開
