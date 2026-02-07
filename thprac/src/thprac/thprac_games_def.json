@@ -1213,13 +1213,13 @@
   "keng": {
       "glossary": {
        "THPRAC_KENG":["填坑器","keng tools","打開支援ツール"],
-       "THPRAC_KENG_ADD_DIFF_POPUP":["增加难点##adpp","add difficulty##adpp","被弾箇所を追加##adpp"],
-       "THPRAC_KENG_DIFF_NAME":["难点名","difficulty name","被弾箇所名"],
+       "THPRAC_KENG_ADD_DIFF_POPUP":["增加难点##adpp","add difficulty##adpp","難所を追加##adpp"],
+       "THPRAC_KENG_DIFF_NAME":["难点名","difficulty name","難所名称"],
        "THPRAC_KENG_PLAY_NAME":["记录名:","play name","記録名"],
        "THPRAC_KENG_PLAY_CMT":["注释:","play comment","コメント"],
        "THPRAC_KENG_PLAY_DATE":["记录日期:","play date","日付"],
-       "THPRAC_KENG_DIFF_TABLE_CK":["难点选择","diff check","被弾箇所選択"],
-       "THPRAC_KENG_DIFF_TABLE_NAME":["难点名","difficulty name","被弾箇所名"],
+       "THPRAC_KENG_DIFF_TABLE_CK":["难点选择","diff check","被弾箇所を選択"],
+       "THPRAC_KENG_DIFF_TABLE_NAME":["难点名","difficulty name","難所名称"],
        "THPRAC_KENG_DIFF_TABLE_ADD":["[+]","[+]","[+]"],
        "THPRAC_KENG_DIFF_TABLE_REM":["[-]","[-]","[-]"],
        "THPRAC_KENG_DIFF_TABLE_U":["[↑]","[↑]","[↑]"],
@@ -1236,7 +1236,7 @@
        "THPRAC_KENG_DETAILS_CAL_EM_DESC":["打n次撞m次则计算为p(miss)=(m+1)/(n+2)","miss m times in n records, then p(miss)=(m+1)/(n+2)","n 個のレコードのうち m 回ミスがあった場合、p(ミス)=(m+1)/(n+2) となります。"],
 
 	   "THPRAC_KENG_DETAILS_POPUP":["详情##dtpp","details##dtpp","詳細##dtpp"],
-       "THPRAC_KENG_DETAILS_DIFF_TABLE":["难点详情","diff details","差分の詳細"],
+       "THPRAC_KENG_DETAILS_DIFF_TABLE":["难点详情","diff details","難所の詳細"],
        "THPRAC_KENG_DETAILS_DIFF_INDEX":["编号","index","索引"],
        "THPRAC_KENG_DETAILS_DIFF_NAME":["难点名","name","名前"],
        "THPRAC_KENG_DETAILS_DIFF_CNT":["计数","count","累計ミス数"],
