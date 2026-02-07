@@ -19,7 +19,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: thprac
+        name: thprac_JP
         path: |
-            Release/thprac.exe
-            Release/thprac.pdb
+            Release/thprac_JP.exe
+            Release/thprac_JP.pdb
