@@ -127,7 +127,7 @@ bool LauncherCfgInit(bool noCreate)
 
     std::wstring dataDir = LauncherGetDataDir();
     CreateDirectoryW(dataDir.c_str(), nullptr);
-    std::wstring jsonPath = dataDir + L"thpracP.json";
+    std::wstring jsonPath = dataDir + L"thpracJP.json";
 
     CreateNewSettingFile(jsonPath, dataDir + L"thprac.json");// copy from old version THP
     DWORD openFlag = noCreate ? OPEN_EXISTING : OPEN_ALWAYS;
@@ -1441,7 +1441,7 @@ public:
             if (SHGetFolderPathW(nullptr, CSIDL_APPDATA, nullptr, SHGFP_TYPE_CURRENT, appDataPath) == S_OK) {
                 std::wstring jsonPath = appDataPath;
                 jsonPath += L"\\thprac";
-                jsonPath += L"\\thpracP.json";
+                jsonPath += L"\\thpracJP.json";
                 DeleteFileW(jsonPath.c_str());
             }
         } else if (mCfgResetFlag == 2) {

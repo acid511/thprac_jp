@@ -442,7 +442,7 @@ private:
         WriteGameCfg();
         return result;
     }
-    void WriteGameCfg() 
+    void WriteGameCfg()
     {
         rapidjson::Document gameJson;
         auto& alloc = gameJson.GetAllocator();
@@ -453,7 +453,7 @@ private:
             rapidjson::Value gameTitleJson;
             gameTitleJson.SetObject();
             JsonAddMember(gameTitleJson, "default_launch", game.defaultLaunch, alloc);
-            
+
             rapidjson::Value gameInstances;
             gameInstances.SetArray();
             for (auto& inst : game.instances) {
@@ -590,7 +590,7 @@ public:
                             else
                                 break;
                         }
-                        filename_a += std::format("_{}.dat", i+1); 
+                        filename_a += std::format("_{}.dat", i+1);
                     } else {
                         filename_a = it.score_file_name_in_zip;
                     }
@@ -606,6 +606,9 @@ public:
                 thppath = appdata;
                 thppath += "\\thprac\\thpracP.json";
                 AddfiletoZip(zf, "thprac\\thpracP.json", thppath);
+                thppath = appdata;
+                thppath += "\\thprac\\thpracJP.json";
+                AddfiletoZip(zf, "thprac\\thpracJP.json", thppath);
                 thppath = appdata;
                 thppath += "\\thprac\\keng.dat";
                 AddfiletoZip(zf, "thprac\\keng.dat", thppath);
@@ -846,7 +849,7 @@ public:
         bool isRelative = false;
         LauncherSettingGet("use_relative_path", isRelative);
         GetModuleFileNameW(GetModuleHandleW(nullptr), currentPath, MAX_PATH);
-        
+
 
         // TODO: This variable is unused, but its assignment has a side effect.
         [[maybe_unused]] auto& gameGui = THGameGui::singleton();
@@ -2074,7 +2077,7 @@ public:
             if (ImGui::Checkbox(S(THPRAC_GAMES_USE_VPATCH), &currentInst.useVpatch)) {
                 if (currentInst.useVpatch) {
                     currentInst.useOILP = false;
-                } 
+                }
                 WriteGameCfg();
             }
             ImGui::SameLine();
@@ -2425,7 +2428,7 @@ public:
                 if (!BackupScoreFile())
                     ImGui::OpenPopup(S(THPRAC_BACKUP_FAILED_TITLE));
             }
-            
+
         }
         if (GuiModal(S(THPRAC_BACKUP_FAILED_TITLE))) {
             ImGui::PushTextWrapPos(ImGui::GetIO().DisplaySize.x * 0.9f);
@@ -2631,7 +2634,7 @@ public:
     }
     std::vector<std::wstring> GetAllGamePaths()
     {
-        std::vector<std::wstring> paths; 
+        std::vector<std::wstring> paths;
         for (auto& ig : mGames){
             for (auto& inst : ig.second.instances)
             {
