@@ -1533,7 +1533,18 @@ public:
     }
     void LoadRollWaifu()
     {
-        mRoll.InitRoll("waifu", waifus, mRandColor);
+        switch (Gui::LocaleGet())
+        {
+            case Gui::LOCALE_ZH_CN:
+                mRoll.InitRoll("waifu", waifus_CN, mRandColor);
+                break;
+            case Gui::LOCALE_JA_JP:
+                mRoll.InitRoll("waifu", waifus_JP, mRandColor);
+                break;
+            case Gui::LOCALE_EN_US:
+                mRoll.InitRoll("waifu", waifus_JP, mRandColor);
+                break;
+        }
     }
     bool GuiUpdate()
     {
