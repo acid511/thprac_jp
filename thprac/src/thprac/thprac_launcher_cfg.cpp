@@ -1337,7 +1337,7 @@ private:
         updObj.mChkUpdStatus = STATUS_CHKING_OR_UPDATING;
 
         std::vector<uint8_t> updateJson;
-        DWORD status = DownloadSingleFile(L"https://raw.githubusercontent.com/acid511/thprac/master/thprac_version.json", updateJson);
+        DWORD status = DownloadSingleFile(L"https://raw.githubusercontent.com/acid511/thprac/main/thprac_version.json", updateJson);
         if (status)
             updObj.mChkUpdStatus = STATUS_INTERNET_ERROR;
         else
@@ -3071,7 +3071,7 @@ bool LauncherPreUpdate(wchar_t* pCmdLine)
                 finalPath = cmd;
                 break;
             case 2:
-                finalPath = GetDirFromFullPath(cmd) + L"thprac.exe";
+                finalPath = GetDirFromFullPath(cmd) + L"thprac_JP.exe";
                 break;
             default:
                 finalPath = GetDirFromFullPath(cmd) + GetNameFromFullPath(std::wstring(exePathCstr));

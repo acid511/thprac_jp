@@ -228,7 +228,7 @@
       "THPRAC_UPDATE_WITHOUT_CONFIRMATION": [ "不作确认并自动更新thprac", "Update thprac without confirmation", "確認なしでthpracを更新する" ],
       "THPRAC_UPDATE_WITHOUT_CONFIRMATION_DESC": [ "(上个选项被设置成\"从不\"时无效)", "(Does nothing if the previous option is set to \"Never\")", "(前のオプションが「なし」に設定されている場合は効果がありません)" ],
       "THPRAC_FILENAME_AFTER_UPDATE": [ "更新后的程序文件名:", "Program filename after update:", "更新後のプログラムのファイル名:" ],
-      "THPRAC_FILENAME_AFTER_UPDATE_OPTION": [ "保留下载的文件名\\0使用之前的文件名\\0使用\"thprac.exe\"\\0\\0", "Keep downloaded filename\\0Use the previous filename\\0Use \"thprac.exe\"\\0\\0", "ダウンロードしたファイル名を保持\\0以前のファイル名を使用\\0「thprac.exe」を使用\\0\\0" ],
+      "THPRAC_FILENAME_AFTER_UPDATE_OPTION": [ "保留下载的文件名\\0使用之前的文件名\\0使用\"thprac.exe\"\\0\\0", "Keep downloaded filename\\0Use the previous filename\\0Use \"thprac.exe\"\\0\\0", "ダウンロードしたファイル名を保持\\0以前のファイル名を使用\\0「thprac_JP.exe」を使用\\0\\0" ],
       "THPRAC_UPDATE_DIALOG_TITLE": [ "更新thprac？", "Update thprac?", "thpracを更新しますか？" ],
       "THPRAC_UPDATE_DIALOG_TEXT": [
         "已检测到thprac的新版本。\n是否现在下载更新？",
@@ -324,7 +324,7 @@
       "フルスクリーン表示でカーソルが見えない場合にこの設定を有効にしてください。ウィンドウモードではカーソルが2つ重なって表示されます。"
     ],
     "THPRAC_WIN_KEY_STATE":["win键状态","win key state","winキーの状態"],
-	"THPRAC_DISABLE_WIN_KEY_CHECKBOX":["thp启动后自动禁用win键","disable win key when thprac.exe launches","thprac.exeが動作している時にwinキーを無効化"],
+	"THPRAC_DISABLE_WIN_KEY_CHECKBOX":["thp启动后自动禁用win键","disable win key when thprac.exe launches","thprac_JP.exeが動作している時にwinキーを無効化"],
 	"THPRAC_DISABLE_WIN_KEY_DESC":["可能引入延迟, 因此不建议通过软件禁用win键","might cause delay, so it's not recommended to disable win key by software","winキーを無効にすると遅延の原因となる可能性があるため、推奨されません。"],
 
     "THPRAC_KEYBIND":["修改按键映射","set keybind","キー割当を設定"],
