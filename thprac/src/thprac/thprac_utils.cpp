@@ -8,52 +8,55 @@
 #include <set>
 #include <format>
 
-#include "../3rdParties/d3d8/include/d3dx8tex.h"
-#pragma comment(lib, "d3dx8.lib")
-
 namespace THPrac {
 
-    
+double g_performance_freq = []() -> double {LARGE_INTEGER f; QueryPerformanceFrequency(&f); return f.QuadPart; }();
+std::vector<int64_t> g_clocks_start;
 
-ImTextureID ReadImage9(DWORD device, LPCSTR fileName, LPCSTR srcData, size_t srcSz)
+int SetUpClock()
 {
-    ImTextureID tex = nullptr;
-    static auto hd3dx9 = LoadLibraryA("d3dx9_43.dll"); // d3d8.lib is used...
-    if (hd3dx9) {
-        auto pCreateTexture = (HRESULT(WINAPI*)(DWORD, LPCSTR, DWORD))GetProcAddress(hd3dx9, "D3DXCreateTextureFromFileA");
-        if (fileName && GetFileAttributesA(fileName) != INVALID_FILE_ATTRIBUTES) {
-            if (pCreateTexture && pCreateTexture(device, fileName, (DWORD)&tex) != D3D_OK)
-                tex = nullptr;
-        }
-        if (!tex && srcData) {
-            auto pCreateTextureFromMemory = (HRESULT(WINAPI*)(DWORD, LPCSTR, DWORD, DWORD))GetProcAddress(hd3dx9, "D3DXCreateTextureFromFileInMemory");
-            if (pCreateTextureFromMemory && pCreateTextureFromMemory(device, srcData, srcSz, (DWORD)&tex) != D3D_OK)
-                tex = nullptr;
-        }
+    LARGE_INTEGER t;
+    QueryPerformanceCounter(&t);
+    g_clocks_start.push_back(t.QuadPart);
+    if (g_performance_freq == 0)
+    {
+        LARGE_INTEGER f;
+        QueryPerformanceFrequency(&f);
+        g_performance_freq = f.QuadPart;
     }
-    return tex;
+    return g_clocks_start.size() - 1;
 }
 
-ImTextureID ReadImage8(DWORD device, LPCSTR fileName, LPCSTR srcData, size_t srcSz)
+double ResetClock(int id)
 {
-    ImTextureID tex = nullptr;
-    if (fileName && GetFileAttributesA(fileName) != INVALID_FILE_ATTRIBUTES) {
-        if (D3DXCreateTextureFromFileA((IDirect3DDevice8*)device, fileName, (LPDIRECT3DTEXTURE8*)&tex) != D3D_OK)
-            tex = nullptr;
+    if (id < g_clocks_start.size() && id >= 0){
+        if (g_performance_freq == 0) {
+            LARGE_INTEGER f;
+            QueryPerformanceFrequency(&f);
+            g_performance_freq = f.QuadPart;
+        }
+        LARGE_INTEGER t;
+        QueryPerformanceCounter(&t);
+        double time_passed = ((double)(t.QuadPart - g_clocks_start[id])) / g_performance_freq;
+        g_clocks_start[id] = t.QuadPart;
+        if (time_passed < 0)
+            return 0;
+        return time_passed;
     }
-    if (!tex && srcData) {
-        if (D3DXCreateTextureFromFileInMemory((IDirect3DDevice8*)device, srcData, srcSz, (LPDIRECT3DTEXTURE8*)&tex) != D3D_OK)
-            tex = nullptr;
-    }
-    return tex;
+    return 0;
 }
 
-ImTextureID ReadImage(DWORD dxVer, DWORD device, LPCSTR fileName, LPCSTR srcData, size_t srcSz)
+double CheckTimePassed(int id)
 {
-    if (dxVer == 8)
-        return ReadImage8(device, fileName, srcData, srcSz);
-    else
-        return ReadImage9(device, fileName, srcData, srcSz);
+    if (id < g_clocks_start.size() && id >= 0) {
+        LARGE_INTEGER t;
+        QueryPerformanceCounter(&t);
+        double time_passed = ((double)(t.QuadPart - g_clocks_start[id])) / g_performance_freq;
+        if (time_passed < 0)
+            return 0;
+        return time_passed;
+    }
+    return 0;
 }
 
 #pragma region Key

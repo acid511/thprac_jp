@@ -1,4 +1,6 @@
 ﻿#include "thprac_games.h"
+#include "thprac_games_dx8.h"
+
 #include "thprac_utils.h"
 #include "../3rdParties/d3d8/include/d3d8.h"
 #include <fstream>
@@ -143,36 +145,32 @@ namespace TH06 {
 
         void IncreaseGameTime()
         {
-            static LARGE_INTEGER lastCount = { 0 }, performanceFreq = { 0 };
+            static int clockid = -1;
             static int64_t timePlayedns;
             DWORD gameState = *(DWORD*)(0x6C6EA4);
             BYTE pauseMenuState = *(BYTE*)(0x69D4BF);
             byte is_rep = *(byte*)(0x69BCBC);
             if ((!is_rep) && gameState == 2 && pauseMenuState == 0) {
+                if (clockid == -1)
+                    clockid = SetUpClock();
+                // SetThreadAffinityMask(GetCurrentThread(), 1);
+                // win7 has some problem with static performance counter when use full screen
                 byte cur_diff = *(byte*)(0x69BCB0);
                 byte cur_player_typea = *(byte*)(0x69D4BD);
                 byte cur_player_typeb = *(byte*)(0x69D4BE);
                 byte cur_player_type = (cur_player_typea << 1) | cur_player_typeb;
 
-                LARGE_INTEGER curCount;
-                QueryPerformanceCounter(&curCount);
-                if (lastCount.QuadPart != 0) {
-                    if (performanceFreq.QuadPart == 0) {
-                        QueryPerformanceFrequency(&performanceFreq);
-                    }
-                    int64_t time_ns = ((((double)(curCount.QuadPart - lastCount.QuadPart)) * 1e9 / (double)performanceFreq.QuadPart));
-                    save_total.timePlayer[cur_diff][cur_player_type] += time_ns;
-                    save_current.timePlayer[cur_diff][cur_player_type] += time_ns;
-                    timePlayedns += time_ns;
-                    if (timePlayedns >= (1000000000ll * 60 * 3)) { // save every 3 minutes automatically
-                        LoadSave();// if load have failed, it will eat the time, but anyway
-                        timePlayedns = 0;
-                        SaveSave();
-                    }
+                int64_t time_ns = ResetClock(clockid) * 1e9;
+                save_total.timePlayer[cur_diff][cur_player_type] += time_ns;
+                save_current.timePlayer[cur_diff][cur_player_type] += time_ns;
+                timePlayedns += time_ns;
+                if (timePlayedns >= (1000000000ll * 60 * 3)) { // save every 3 minutes automatically
+                    LoadSave();// if load have failed, it will eat the time, but anyway
+                    timePlayedns = 0;
+                    SaveSave();
                 }
-                lastCount = curCount;
             } else {
-                QueryPerformanceCounter(&lastCount);
+                ResetClock(clockid);
             }
         }
         
@@ -1300,7 +1298,6 @@ namespace TH06 {
             booksInfo.is_died = false;
             booksInfo.miss_count = 0;
             booksInfo.bomb_count = 0;
-            Live2D_ChangeState(Live2D_InputType::L2D_RESET);
         }
 
     protected:
@@ -1385,12 +1382,6 @@ namespace TH06 {
             if (gameState == 2)
             {
                 GameUpdateInner(6);
-                Live2D_Update(*(int8_t*)(0x69d4ba), THGuiRep::singleton().mRepStatus);
-            }
-            else
-            {
-                Live2D_ChangeState(Live2D_InputType::L2D_RESET);
-                Live2D_Update(1, false);
             }
             if (*THOverlay::singleton().mShowSpellCapture && (gameState == 2)) {
                 SetPosRel(433.0f / 640.0f, 245.0f / 480.0f);
@@ -1742,7 +1733,7 @@ namespace TH06 {
             ImGui::SameLine();
             HelpMarker(S(THPRAC_INGAMEINFO_ADV_DESC2));
 
-            SSS_UI();
+            SSS::SSS_UI(6);
 
             {
                 ImGui::SetNextWindowCollapsed(false);
@@ -3426,9 +3417,8 @@ namespace TH06 {
 
         auto p = ImGui::GetOverlayDrawList();
         RenderPlHitbox(ImGui::GetBackgroundDrawList());
-        if (*(DWORD*)(0x6C6EA4) == 2) {
-            RenderBlindView(8, *(DWORD*)0x6c6d20, *(ImVec2*)(0x6CAA68), { 0.0f, 0.0f }, { 32.0f, 16.0f }, 1.0f);
-        }
+        SSS::SSS_Update(6);
+
         RenderRepMarker(p);
         RenderBtHitbox(p);
         RenderLockTimer(p);
@@ -3487,11 +3477,9 @@ namespace TH06 {
     EHOOK_DY(th06_miss, 0x428DD9,2,// dec life
     {
         TH06InGameInfo::singleton().mMissCount++;
-        Live2D_ChangeState(Live2D_InputType::L2D_MISS);
         FastRetry(thPracParam.mode);
     })
     EHOOK_DY(th06_bomb, 0x4289CC, 6, {
-        Live2D_ChangeState(Live2D_InputType::L2D_BOMB);
     })
     EHOOK_DY(th06_lock_timer1, 0x41B27C,3, // initialize
     {

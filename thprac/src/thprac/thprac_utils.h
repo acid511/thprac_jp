@@ -31,7 +31,10 @@
 
 namespace THPrac {
 void InitHook(int ver,void* refreshRateAddr1 = nullptr, void* refreshRateAddr2 = nullptr);
-ImTextureID ReadImage(DWORD dxVer, DWORD device, LPCSTR name, LPCSTR srcData, size_t srcSz);
+
+int SetUpClock();
+double ResetClock(int id);
+double CheckTimePassed(int id);
 
 struct KeyDefine {
     uint16_t dik;

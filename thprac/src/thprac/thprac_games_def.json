@@ -240,16 +240,15 @@
 
     "THPRAC_RECORD_GAME_TIME":["记录飞行时间","record game time","ゲームの起動時間を記録"],
     "THPRAC_GAME_TIME_HINT":["飞行时间提示长度(小时)","game time hint(hour)","起動時間の目安(時間)"],
-    "THPRAC_GAME_TIME_HINT_SE":["飞行时间过长音效提示","game time too long SE","起動時間の目安を超過したら警告"],
-    "THPRAC_GAME_TIME_HINT_SE_STOP":["音效重复间隔秒数","SE repeat interval(second)","効果音の繰り返し間隔(秒)"],
-    "THPRAC_GAME_TIME_HINT_SE_TEST":["测试音效","SE test","効果音テスト"],
-    "THPRAC_GAME_TIME_HINT_SE_DESC":["将音效文件放在thprac同目录下, 名称为SE.wav","put SE file in thprac folder with name SE.wav","thpracフォルダにSE.wavという名前で効果音ファイルを配置"],
 
 	"THPRAC_DISABLE_MAXIMIZE_BTN":["靳止最大化窗口按钮的全屏切换","disable maximizebox to toggle full screen","ウィンドウの最大化ボタンを無効化する"],
 	"THPRAC_INIT_WINDOW_POS":["初始化窗口位置","init window pos","ウィンドウ位置の初期化"],
 	"THPRAC_INIT_WINDOW_POS_DESC":["如果遇到游戏启动后没窗口可尝试开启此选项","try this option when game is invisible after opened","ゲームを開いた後にゲームウィンドウが見えなくなった場合はこのオプションを試してください。"],
     "THPRAC_CHANGE_WINDOW_SZ_WHEN_OPEN":["修改启动时窗口的大小","change window size when open","ゲームを開いた時に自動的にウィンドウサイズを"],
     "THPRAC_CHANGE_WINDOW_SZ_WHEN_OPEN_SIZE":["窗口大小","window size","へ変更"],
+
+    "THPRAC_PRESENT_HOOK":["启用DX HOOK","enable DX hook","enable DX hook"],
+    "THPRAC_PRESENT_HOOK_DESC":["可以提供显示操作到渲染的延迟等功能(还需启用按键hook)","Can provide features such as displaying the latency from input to rendering (requires key hook to be enabled)","Can provide features such as displaying the latency from input to rendering (requires key hook to be enabled)"],
 
     "THPRAC_KEYBOARD_HOOK":["启用键盘HOOK","enable keyboard hook","入力制御機能の有効化"],
     "THPRAC_KEYBOARD_HOOK_DESC":["影响按键禁用/SOCD/按键修改等功能","relate to key disable, SOCD, keybind change, etc","キーの無効化、SOCD(Simultaneous Opposing Cardinal Directions)、キー割り当ての変更などに関係します"],
@@ -261,6 +260,8 @@
       "Opposite arrow key press logic is changed by this function.\nSince some high-end keyboard provides SOCD, here the program provides this function despite the fact that some online game consider SOCD as cheating.",
       "この機能を有効化することで、反対方向を示す複数の入力が同時に行われた際のロジックが変更されます。(=SOCDクリーナー機能)\n例えば「後入力優先」の場合、右矢印キーを入力後に左矢印キーを入力して物理的には両方のキーが押された状態であっても、システム上は最新の入力のみが有効となるため、右矢印キーを物理的に離すことなく瞬時に左方向へ移動を行うことができます。\n一部のオンラインゲームではSOCDが不正行為とされていますが、一部のハイエンドキーボードはSOCDに対応しているため、このプログラムではSOCD機能を提供しています。"
     ],
+
+	"THPRAC_TEST_INPUT_LATENCY":["测试键盘输入延迟(从Input到Present)","test keyboard input latency(from Input to Present)","test keyboard input latency(from Input to Present)"],
 
 	"THPRAC_KEYBOARD_API":["键盘API设置","keyboard API setting","キーボードAPI設定"],
 	"THPRAC_KEYBOARD_API_SETTINGS":["默认\\0强制Win32 API\\0强制 Dinput8\\0强制RawInput\\0\\0","default\\0force Win32 API\\0force Dinput8\\0force RawInput\\0\\0","標準\\0Win32 APIの使用を強制\\0Dinput8の使用を強制\\0RawInputの使用を強制\\0\\0"],
@@ -277,6 +278,7 @@
 	"THPRAC_MOF_UD_REP": [ "允许风神录replay记录多一页ud_xxxx.rpy", "add another page for ud_xxxx.rpy in MoF's replay", "風神録: ud_xxxx.rpyを再生するページを追加する" ],
 
   "THPRAC_MAKE_BGM_FASTER_WHEN_SPEEDUP": [ "游戏变速时加速bgm(测试中)", "make bgm faster when speed up(testing)", "ゲーム速度を上げた時にBGMを速くする(テスト中)" ],
+	"THPRAC_MAKE_BGM_FASTER_WHEN_SPEEDUP_NO_PITCH": [ "变速不变调(可能造成音频错乱，，？)", "no changing pitch(might cause BGM data wrong,,?)", "no changing pitch(might cause BGM data wrong,,?)" ],
 
     "THPRAC_DISABLE_F10_11_13":["在th11到th13靳用F10键","disable f10 for th11-13","地霊殿～神霊廟: f10キーを無効化"],
 
@@ -318,6 +320,9 @@
     "THPRAC_CUSTOM_FONT":["字体","font","フォント"],
 
     "THPRAC_FORCE_RENDER_CURSOR":["强制渲染鼠标","force render cursor","マウスカーソルを強制的にレンダリング"],
+    "THPRAC_FORCE_RENDER_CURSOR_ALWAYS":["总是使用IMGUI渲染鼠标","always render cursor using IMGUI","always render cursor using IMGUI"],
+    "THPRAC_FORCE_RENDER_CURSOR_ALWAYS_DESC":["支持使用 cursor.png 自定义光标(将文件放置于'游戏文件夹'下(不是启动器文件夹)),详见更新日志","Support for custom cursors using cursor.png (place the file in the 'game folder' (not the launcher folder)), see the changelog for details","Support for custom cursors using cursor.png (place the file in the 'game folder' (not the launcher folder)), see the changelog for details"],
+
     "THPRAC_FORCE_RENDER_CURSOR_DESC":[
       "全屏时无法看见鼠标则设置此项，将会导致窗口时出现两个重叠的鼠标",
       "set this setting to true when cannot see cursor fullscreen, it will made 2 overlapped cursor in window mode",
@@ -345,15 +350,7 @@
 	"THPRAC_ESC_WHEN_DEACTIVE":["窗口失焦时自动按esc","automatically press Esc when the window loses focus","ウィンドウがフォーカスを失ったときに自動的にEscキーを押す"],
 	"THPRAC_ESC_WHEN_DEACTIVE_DESC":["测试功能","for testing","テスト機能"],
 
-	"THPRAC_L2D_KEYBIND_TITLE":["Live2D的按键映射","l2d keybind","Live2Dのキー割り当て"],
-	"THPRAC_L2D_KEYBIND_TITLE2":["启用键盘HOOK并设置键盘API为强制dinput8以启用l2d按键/自动射击等功能","use keyboard hook and set keyboardAPI as dinput8 to enable l2d keys/auto shoot/...","入力制御機能の有効化&キーボードAPI設定を「Dinput8の使用を強制」に設定することで、Live2Dキーの押下/自動発動などの機能を有効にできます。"],
-	"THPRAC_L2D_ENABLE":["启用L2D按键","enable L2D keys","L2Dキーを有効にする"],
-	"THPRAC_L2D_KEYBIND":["修改用于Live2D的按键映射","set keybind for l2d","Live2Dのキー割り当てを変更"],
-	"THPRAC_L2D_KEYBIND_DESC":[
-    "将会在特定时刻自动模拟按下对应键(使用win32 API),绑定时按ESC取消",
-    "it will simulate key input for some specific moment(using win32 API), press esc to cancel the key",
-    "特定のタイミングで、対応するキーの入力を自動的にシミュレートします。(Win32 APIを使用) キャンセルするにはescキーを押してください。"
-  ],
+	"THPRAC_KEYBIND_TITLE2":["启用键盘HOOK并设置键盘API为强制dinput8以启用自动射击等功能","use keyboard hook and set keyboardAPI as dinput8 to enable features like auto shoot...","use keyboard hook and set keyboardAPI as dinput8 to enable features like auto shoot..."],
 
 	"THPRAC_AUTO_SHOOT":["自动射击","auto shoot","自動ショット"],
 	"THPRAC_AUTO_SHOOT_KEY":["自动射击按键","shoot key","Shotキー"],
@@ -362,21 +359,6 @@
     "automatically shoot(press z) after press this key, stop when keys except arrow/focus pressed, use keyboard hook and set keyboardAPI as dinput8 or RawInput to enable, cannot be bind to Z/X/C/D/ESC/R/Q",
     "キーを押すと、Shotキーが自動的に押し続けられたのと同じ動作になります。矢印キーとSlowキー以外のキーが押されると停止します。入力制御機能を有効にし、キーボードAPIをDinput8またはRawInputに設定する必要があります。Z/X/C/D/ESC/R/Qへのキー割り当ては機能しません。"
   ],
-
-	"THPRAC_L2D_KEYBIND_MISS":			["MISS动作","miss motion","ミスモーション"],
-	"THPRAC_L2D_KEYBIND_BORDER_BREAK":	["撞结界动作","border break motion","霊撃モーション"],
-	"THPRAC_L2D_KEYBIND_BORDER_BREAK_DESC":	["也适用于鬼","also for WBaBC hyper break","鬼形獣の霊撃も対応"],
-	"THPRAC_L2D_KEYBIND_RELEASING":	["季节解放动作","releasing motion","季節解放モーション"],
-	"THPRAC_L2D_KEYBIND_HYPER_DESC":	["也适用于庙","also for TD trance","神霊廟のトランスも対応"],
-	"THPRAC_L2D_KEYBIND_BOMB":	["丢B动作","bomb motion","ボムモーション"],
-	"THPRAC_L2D_HYPER":	["hyper动作","hyper motion","ハイパーモーション"],
-	"THPRAC_L2D_KEYBIND_RESET":		["重置动作","reset motion","リセットモーション"],
-
-	"THPRAC_L2D_KEYBIND_DYING":		["将死之人表情","dying expression","dying expression"],
-	"THPRAC_L2D_KEYBIND_DYING_DESC":	["残机为0触发, 为 expression(按一下切换, 第二下切回)","trigger when life=0, which is expression","残基が0の時に実行(1回押すと切り替え、2回目で元に戻る)"],
-
-	"THPRAC_L2D_SHOW_TIME":	["动作时间(ms)","expression time(ms)","動作時間(ミリ秒)"],
-	"THPRAC_L2D_SHOW_TIME_DESC":	["到时间自动切换为重置动作","auto trigger to reset motion after this time","この時間が経過したら自動的にリセットモーションに切り替え"],
 
       "THPRAC_TOOLS": [ "工具", "Tools", "ツール" ],
 
@@ -618,6 +600,9 @@
       "THPRAC_GAMES_LAUNCH_CUSTOM_ERR": [ "未能启动custom.exe！", "Failed to launch custom.exe!", "custom.exeの起動に失敗しました！" ],
       "THPRAC_GAMES_USE_VPATCH": [ "使用VsyncPatch (如果可用）", "Use VsyncPatch (if avaliable)", "VsyncPatch を使用する (利用可能な場合)" ],
 	  "THPRAC_GAMES_USE_OILP": [ "使用OpenInputLagPatch (如果可用）", "Use OpenInputLagPatch (if avaliable)", "OpenInputLagPatch を使用する (利用可能な場合)" ],
+	  "THPRAC_GAMES_USE_INNER_PATCH": [ "当VP/OILP均不可用时尝试使用内置VP", "Use Inner LagPatch when VP/OILP is not available", "Use Inner LagPatch when VP/OILP is not available" ],
+	  "THPRAC_GAMES_USE_INNER_PATCH_DESC": [ "当前只支持风神录...", "Only available for MoF currently...", "Only available for MoF currently..." ],
+
       "THPRAC_GAMES_APPLY_THPRAC": [ "应用thprac", "Apply thprac", "thpracを適用する" ],
       "THPRAC_GAMES_FORCE_THPRAC": [ "强制应用thprac", "Force thprac to apply", "thpracを強制的に適用する" ],
       "THPRAC_GAMES_FORCE_THPRAC_MODAL": [ "警告：强制应用thprac##modal", "Warning: Force thprac to apply##modal", "警告：thpracを強制的に適用する##modal" ],
