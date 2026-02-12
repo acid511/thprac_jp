@@ -1549,7 +1549,7 @@ public:
         ImGui::SameLine();
         GuiHelpMarker(S(THPRAC_TOOLS_ROLLF_CSV_DESC));
         ImGui::SameLine();
-        if (ImGui::Button("waifus"))
+        if (ImGui::Button("俺の嫁"))
             LoadRollWaifu();
         ImGui::SameLine();
         ImGui::Checkbox(S(THPRAC_TOOLS_ROLLF_RANDOM_COLOR), &mRandColor);
