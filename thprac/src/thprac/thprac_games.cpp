@@ -1579,3 +1579,4 @@ bool GameState_Assert(bool cond)
     else
         ExitProcess(UINT_MAX);
 }
+}
