@@ -4,7 +4,7 @@ namespace THPrac {
 
 
 #define THPRAC_VERSION_0 1
-#define THPRAC_VERSION_1 0
+#define THPRAC_VERSION_1 1
 #define THPRAC_VERSION_2 0
 #define THPRAC_VERSION_3 0
 
