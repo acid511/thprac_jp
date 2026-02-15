@@ -92,7 +92,7 @@ namespace TH11 {
                 AddJsonValue(boss_x);
                 AddJsonValue(boss_y);
             }
-                
+
 
             AddJsonValue(life);
             AddJsonValue(life_fragment);
@@ -248,7 +248,7 @@ namespace TH11 {
                     *mSection = player_type * 3 + 1;
                 }
             }
-             
+
             if (mStage())
             {
                 *mSection = *mChapter = 0;
@@ -534,17 +534,17 @@ namespace TH11 {
         PATCH_HK(0x431205, "eb"),
         PATCH_HK(0x432ae7, "83c40c9090")
         HOTKEY_ENDDEF();
-        
+
         HOTKEY_DEFINE(mInfPower, TH_INFPOWER, "F3", VK_F3)
         PATCH_HK(0x4311EB, "eb0a"),
         PATCH_HK(0x431298, "eb09"),
         PATCH_HK(0x4312E0, "0f1f4400")
         HOTKEY_ENDDEF();
-       
+
         HOTKEY_DEFINE(mAutoBomb, TH_AUTOBOMB, "F5", VK_F5)
         PATCH_HK(0x431279, "c6")
         HOTKEY_ENDDEF();
-       
+
     public:
         Gui::GuiHotKey mInfLives { TH_INFLIVES2, "F2", VK_F2,};
 
@@ -556,7 +556,7 @@ namespace TH11 {
         Gui::GuiHotKey mElBgm { TH_EL_BGM, "F6", VK_F6 };
         Gui::GuiHotKey mInGameInfo { THPRAC_INGAMEINFO, "F7", VK_F7 };
     };
-    
+
     class TH11InGameInfo : public Gui::GameGuiWnd {
 
         TH11InGameInfo() noexcept
@@ -565,7 +565,7 @@ namespace TH11 {
             SetFade(0.9f, 0.9f);
             SetPosRel(450.0f / 640.0f, 175.0f / 480.0f);
             SetSizeRel(170.0f / 640.0f, 0.0f);
-            SetWndFlag(ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | 
+            SetWndFlag(ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse |
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
@@ -623,12 +623,7 @@ namespace TH11 {
             if (*(DWORD*)(0x4A8EB4))
             {
                 GameUpdateInner(11);
-                Live2D_Update(*(int32_t*)(0x4a5718), THGuiRep::singleton().mRepStatus);
-            } else {
-                Live2D_ChangeState(Live2D_InputType::L2D_RESET);
-                Live2D_Update(1, false);
             }
-
             if (*(THOverlay::singleton().mInGameInfo) && *(DWORD*)(0x4A8EB4)) {
                 SetPosRel(450.0f / 640.0f, 175.0f / 480.0f);
                 SetSizeRel(170.0f / 640.0f, 0.0f);
@@ -670,7 +665,7 @@ namespace TH11 {
         if (cur_player_type == 4) {
             pCtx->Edx = g_marisaB_lock_type % 5;
         }
-        
+
     });
 
     float g_bossMoveDownRange = BOSS_MOVE_DOWN_RANGE_INIT;
@@ -684,7 +679,7 @@ namespace TH11 {
     });
 
     class THAdvOptWnd : public Gui::PPGuiWnd {
-        SINGLETON(THAdvOptWnd);    
+        SINGLETON(THAdvOptWnd);
     public:
         bool forceBossMoveDown = false;
     private:
@@ -761,7 +756,7 @@ namespace TH11 {
             marisaB_lock.Setup();
             marisaB_lock.Toggle(false);
         }
-        
+
 
     public:
         static void SetHint()
@@ -825,7 +820,7 @@ namespace TH11 {
                 EndOptGroup();
             }
             if (BeginOptGroup<TH_GAMEPLAY>()) {
-                ImGui::Checkbox("fix stage 6 replay", &g_fix_rep);
+                ImGui::Checkbox("6面のリプレイを修正", &g_fix_rep);
                 DisableKeyOpt();
                 KeyHUDOpt();
                 InfLifeOpt();
@@ -1394,7 +1389,7 @@ namespace TH11 {
             ecl << pair { 0x170, 4000 };
             ECLVoid(ecl, 0x174, 0x1f8, 0x1e20, 0x1e58, 0x1e6c);
             break;
-        case THPrac::TH11::TH11_ST4_RB3: 
+        case THPrac::TH11::TH11_ST4_RB3:
             {
             constexpr unsigned int st4BossRB3InvulnVal = 0x30fc + 0x10;
 
@@ -1406,7 +1401,7 @@ namespace TH11 {
             ecl << pair { 0x3390, 0x3c } << pair { 0x33c0, 0x3c }
                 << pair { st4BossRB3InvulnVal, 0 }; // note: we skip a bunch of waits that normally elapse the invuln timer before the spell even begins
             break;
-        } 
+        }
         case THPrac::TH11::TH11_ST4_RC1:
             ECLSatoriJump(ecl, 2);
             break;
@@ -1603,7 +1598,7 @@ namespace TH11 {
             ECLTimeFix(ecl, 0x75e8, -60);
             ecl << pair { st5BossSp4InvulnVal, 0 }; // note: invuln timer normally elapses before the spell even begins
             break;
-        } 
+        }
         case THPrac::TH11::TH11_ST6_MID1:
             THStage6STD();
             THStage6ANM();
@@ -1695,7 +1690,7 @@ namespace TH11 {
             ecl << 0 << 0x00200118 << 0x02ff0000 << 0 << 0 << 0x43600000;
             ecl << pair { st6BossSp4InvulnVal, 260 - 60 * 4 }; // accounting for skipped waits (=20f)
             break;
-        } 
+        }
         case THPrac::TH11::TH11_ST6_BOSS9:
             THStage6STD();
             THStage6ANM();
@@ -2245,22 +2240,18 @@ namespace TH11 {
     {
         TH11InGameInfo::singleton().mBombCount = 0;
         TH11InGameInfo::singleton().mMissCount = 0;
-        Live2D_ChangeState(Live2D_InputType::L2D_RESET);
     })
     EHOOK_DY(th11_bomb_dec, 0x4311E6,5, // bomb dec
     {
         TH11InGameInfo::singleton().mBombCount++;
-        Live2D_ChangeState(Live2D_InputType::L2D_BOMB);
     })
     EHOOK_DY(th11_bomb_dec2, 0x431293,5, // dead bomb
     {
         TH11InGameInfo::singleton().mBombCount++;
-        Live2D_ChangeState(Live2D_InputType::L2D_BOMB);
     })
     EHOOK_DY(th11_life_dec, 0x4327F0,6, // life dec
     {
         TH11InGameInfo::singleton().mMissCount++;
-        Live2D_ChangeState(Live2D_InputType::L2D_MISS);
         FastRetry(thPracParam.mode);
     })
     EHOOK_DY(th11_lock_timer1, 0x41A657,6, // initialize

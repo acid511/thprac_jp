@@ -330,13 +330,10 @@ private:
     int64_t mGameTimeTooLongSE_ns = -1;
     bool mUpdateGameTime = true;
 
-    LARGE_INTEGER mLastTime;
-    LARGE_INTEGER mFreq;
+    int clock_id;
 
     float mTooLongGamePlay_hour = 3.0f;
-    float mTooLongGamePlaySE_sec = 10.0f;
     bool mEnableRecordGameTime = false;
-    bool mEnableTooLongGamePlaySE = false;
     std::thread mUpdateThread;
 
 private:
@@ -344,29 +341,20 @@ public:
     static void UpdateGameTime(){
         THGameTimeRecorder& thiz = THGameTimeRecorder::singleton();
         while (thiz.mUpdateGameTime) {
-            if (thiz.mGameTimeCur_ns >= 1000000000ll * 3600 * (double)thiz.mTooLongGamePlay_hour) {
-                if (thiz.mEnableTooLongGamePlaySE && thiz.mGameTimeTooLongSE_ns >= thiz.mTooLongGamePlaySE_sec * 1000000000ll && thiz.mGameTimeTooLongSE_ns >= 5 * 1000000000ll && // mintime: 5sec
-                    CheckIfAnyGame2()) {
-                    PlaySoundW(L"SE.wav", NULL, SND_FILENAME | SND_ASYNC);
-                    thiz.mGameTimeTooLongSE_ns = 0;
-                }
-            }
             static bool is_game_open = false;
             Sleep(16);
             if (thiz.mGameTimeTestGameOpen_ns > 1000000000) { // test every second
                 is_game_open = CheckIfAnyGame2();
                 thiz.mGameTimeTestGameOpen_ns = 0;
             }
-            LARGE_INTEGER cur_time;
-            QueryPerformanceCounter(&cur_time);
-            int64_t passed_time = (((double)(cur_time.QuadPart - thiz.mLastTime.QuadPart)) / (double)(thiz.mFreq.QuadPart)) * 1e9;
+            double passed_time = ResetClock(thiz.clock_id)*1e9;
+
             if (is_game_open) {
                 thiz.mGameTime_ns += passed_time;
                 thiz.mGameTimeCur_ns += passed_time;
             }
             thiz.mGameTimeTestGameOpen_ns += passed_time;
             thiz.mGameTimeTooLongSE_ns += passed_time;
-            thiz.mLastTime = cur_time;
         }
         LauncherSetGameTime(thiz.mGameTime_ns);
     }
@@ -377,8 +365,6 @@ public:
     void UpdateGameTimeRecord()
     {
         LauncherSettingGet("gameTimeTooLong_Time", mTooLongGamePlay_hour);
-        LauncherSettingGet("gameTimeTooLong_SE", mEnableTooLongGamePlaySE);
-        LauncherSettingGet("gameTimeTooLong_SE_repeat", mTooLongGamePlaySE_sec);
     }
     void StartGameTimeRecord()
     {
@@ -392,8 +378,8 @@ public:
             mGameTimeTestGameOpen_ns = 0;
             mGameTimeTooLongSE_ns = 0;
             mUpdateGameTime = true;
-            QueryPerformanceFrequency(&mFreq);
-            QueryPerformanceCounter(&mLastTime);
+
+            clock_id = SetUpClock();
             mUpdateThread = std::thread(UpdateGameTime);
         }
     }

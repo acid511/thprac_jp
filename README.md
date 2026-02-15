@@ -68,6 +68,10 @@ keng tools (打開支援ツール)は、特定の箇所で被弾した回数を�
 
 [RUEEE版thpracの更新情報の日本語訳](https://github.com/acid511/thprac_jp/blob/main/README_RUEEE.md)
 
+### 1.1.0.0 (2026-02-15)
+
+- RUEEE/thpracの変更を統合 (2026-01-21 ～ 2026-02-11) & 統合した箇所の日本語訳
+
 ### v1.0.0.0 (2026-02-08)
 
 - 公開
