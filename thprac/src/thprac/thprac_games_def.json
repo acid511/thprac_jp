@@ -247,8 +247,8 @@
     "THPRAC_CHANGE_WINDOW_SZ_WHEN_OPEN":["修改启动时窗口的大小","change window size when open","ゲームを開いた時に自動的にウィンドウサイズを"],
     "THPRAC_CHANGE_WINDOW_SZ_WHEN_OPEN_SIZE":["窗口大小","window size","へ変更"],
 
-    "THPRAC_PRESENT_HOOK":["启用DX HOOK","enable DX hook","enable DX hook"],
-    "THPRAC_PRESENT_HOOK_DESC":["可以提供显示操作到渲染的延迟等功能(还需启用按键hook)","Can provide features such as displaying the latency from input to rendering (requires key hook to be enabled)","Can provide features such as displaying the latency from input to rendering (requires key hook to be enabled)"],
+    "THPRAC_PRESENT_HOOK":["启用DX HOOK","enable DX hook","DXフックを有効化"],
+    "THPRAC_PRESENT_HOOK_DESC":["可以提供显示操作到渲染的延迟等功能(还需启用按键hook)","Can provide features such as displaying the latency from input to rendering (requires key hook to be enabled)","入力から描画までの遅延を表示するなどの機能を使用できるようになります (入力制御機能の有効化が必要)"],
 
     "THPRAC_KEYBOARD_HOOK":["启用键盘HOOK","enable keyboard hook","入力制御機能の有効化"],
     "THPRAC_KEYBOARD_HOOK_DESC":["影响按键禁用/SOCD/按键修改等功能","relate to key disable, SOCD, keybind change, etc","キーの無効化、SOCD(Simultaneous Opposing Cardinal Directions)、キー割り当ての変更などに関係します"],
@@ -261,7 +261,7 @@
       "この機能を有効化することで、反対方向を示す複数の入力が同時に行われた際のロジックが変更されます。(=SOCDクリーナー機能)\n例えば「後入力優先」の場合、右矢印キーを入力後に左矢印キーを入力して物理的には両方のキーが押された状態であっても、システム上は最新の入力のみが有効となるため、右矢印キーを物理的に離すことなく瞬時に左方向へ移動を行うことができます。\n一部のオンラインゲームではSOCDが不正行為とされていますが、一部のハイエンドキーボードはSOCDに対応しているため、このプログラムではSOCD機能を提供しています。"
     ],
 
-	"THPRAC_TEST_INPUT_LATENCY":["测试键盘输入延迟(从Input到Present)","test keyboard input latency(from Input to Present)","test keyboard input latency(from Input to Present)"],
+	"THPRAC_TEST_INPUT_LATENCY":["测试键盘输入延迟(从Input到Present)","test keyboard input latency(from Input to Present)","キーボード入力の遅延((入力から描画まで)をテスト"],
 
 	"THPRAC_KEYBOARD_API":["键盘API设置","keyboard API setting","キーボードAPI設定"],
 	"THPRAC_KEYBOARD_API_SETTINGS":["默认\\0强制Win32 API\\0强制 Dinput8\\0强制RawInput\\0\\0","default\\0force Win32 API\\0force Dinput8\\0force RawInput\\0\\0","標準\\0Win32 APIの使用を強制\\0Dinput8の使用を強制\\0RawInputの使用を強制\\0\\0"],
@@ -278,7 +278,7 @@
 	"THPRAC_MOF_UD_REP": [ "允许风神录replay记录多一页ud_xxxx.rpy", "add another page for ud_xxxx.rpy in MoF's replay", "風神録: ud_xxxx.rpyを再生するページを追加する" ],
 
   "THPRAC_MAKE_BGM_FASTER_WHEN_SPEEDUP": [ "游戏变速时加速bgm(测试中)", "make bgm faster when speed up(testing)", "ゲーム速度を上げた時にBGMを速くする(テスト中)" ],
-	"THPRAC_MAKE_BGM_FASTER_WHEN_SPEEDUP_NO_PITCH": [ "变速不变调(可能造成音频错乱，，？)", "no changing pitch(might cause BGM data wrong,,?)", "no changing pitch(might cause BGM data wrong,,?)" ],
+	"THPRAC_MAKE_BGM_FASTER_WHEN_SPEEDUP_NO_PITCH": [ "变速不变调(可能造成音频错乱，，？)", "no changing pitch(might cause BGM data wrong,,?)", "ピッチを変えずに速くする (BGMがおかしくなる可能性あり)" ],
 
     "THPRAC_DISABLE_F10_11_13":["在th11到th13靳用F10键","disable f10 for th11-13","地霊殿～神霊廟: f10キーを無効化"],
 
@@ -297,7 +297,7 @@
     "THPRAC_DISABLE_LOCALE_CHANGE_HOTKEY":["禁用游戏内语言切换快捷键","disable in-game locale change hotkey","ゲーム内の言語切替ホットキーを無効化"],
     "THPRAC_DISABLE_LOCALE_CHANGE_HOTKEY_DESC":["快捷键:alt+1/2/3","hotkey: alt+1/2/3","ホットキー: alt+1/2/3"],
 
-    "THPRAC_FORCE_ONLY_RENDER_TEXT_USED":["只渲染用到的字体","only render used font","使用されているフォントのみをレンダリング"],
+    "THPRAC_FORCE_ONLY_RENDER_TEXT_USED":["只渲染用到的字体","only render used font","使用されているフォントのみを描画"],
     "THPRAC_FORCE_ONLY_RENDER_TEXT_USED_DESC":[
       "游戏启动时如果爆显存，导致字体显示全为白块或透明等错误，则需要设置此项",
       "if the VRAM is overflow, the text might shown as a white rectangle(or transparent and so on), use this setting to avoid it",
@@ -307,7 +307,7 @@
 	 "THPRAC_HOOK_MSG_BOX_A2W":["将弹窗提示修改为宽字节","use MessageBoxW instead of MessageBoxA","MessageBoxAの代わりにMessageBoxWを使用"],
 	 "THPRAC_HOOK_MSG_BOX_A2W_DESC":["可以防止某些弹窗乱码, 仅在使用thprac启动游戏时生效","might prevents possible garbled characters from msg box, only works when launch game by thprac","メッセージボックスの文字化けを防ぐことができます。thpracでゲームを起動した場合のみ動作します。"],
 
-    "THPRAC_RENDER_CORRECT_FONT":["渲染正确的日文字体","render correct ja fonts","正しい日本語フォントをレンダリング"],
+    "THPRAC_RENDER_CORRECT_FONT":["渲染正确的日文字体","render correct ja fonts","正しい日本語フォントを描画"],
     "THPRAC_RENDER_CORRECT_FONT_DESC":["当游戏字体(对话/符卡)渲染错误时尝试开启本选项, 仅在使用thprac启动游戏时生效","use this option when game fonts are wrong(msg/spell), only works when launch game by thprac","ゲームのフォント(メッセージ/スペルカード)が正しく表示されない場合に使用してください。thpracでゲームを起動した場合のみ動作します。"],
 	"THPRAC_RENDER_CORRECT_FONT_DESC2":[
     "原版游戏使用 MS Gothic 和 MS Mincho 字体, 若开启此选项后仍不能正确显示, 请确认两个字体已经安装",
@@ -319,9 +319,13 @@
     "THPRAC_CUSTOM_FONTS_DESC":["仅在使用thprac启动游戏时生效","only works when launch game by thprac","thpracでゲームを起動した場合のみ動作します。"],
     "THPRAC_CUSTOM_FONT":["字体","font","フォント"],
 
-    "THPRAC_FORCE_RENDER_CURSOR":["强制渲染鼠标","force render cursor","マウスカーソルを強制的にレンダリング"],
-    "THPRAC_FORCE_RENDER_CURSOR_ALWAYS":["总是使用IMGUI渲染鼠标","always render cursor using IMGUI","always render cursor using IMGUI"],
-    "THPRAC_FORCE_RENDER_CURSOR_ALWAYS_DESC":["支持使用 cursor.png 自定义光标(将文件放置于'游戏文件夹'下(不是启动器文件夹)),详见更新日志","Support for custom cursors using cursor.png (place the file in the 'game folder' (not the launcher folder)), see the changelog for details","Support for custom cursors using cursor.png (place the file in the 'game folder' (not the launcher folder)), see the changelog for details"],
+    "THPRAC_FORCE_RENDER_CURSOR":["强制渲染鼠标","force render cursor","マウスカーソルを強制的に描画"],
+    "THPRAC_FORCE_RENDER_CURSOR_ALWAYS":["总是使用IMGUI渲染鼠标","always render cursor using IMGUI","常にIMGUIを使用してカーソルを描画"],
+    "THPRAC_FORCE_RENDER_CURSOR_ALWAYS_DESC":[
+      "支持使用 cursor.png 自定义光标(将文件放置于'游戏文件夹'下(不是启动器文件夹)),详见更新日志",
+      "Support for custom cursors using cursor.png (place the file in the 'game folder' (not the launcher folder)), see the changelog for details",
+      "カスタムカーソル(cursor.png)に対応しました (cursor.pngはthprac_JP.exeのあるフォルダではなく「ゲームフォルダ」へ配置 / 詳細については変更履歴をご確認ください)"
+    ],
 
     "THPRAC_FORCE_RENDER_CURSOR_DESC":[
       "全屏时无法看见鼠标则设置此项，将会导致窗口时出现两个重叠的鼠标",
@@ -350,7 +354,7 @@
 	"THPRAC_ESC_WHEN_DEACTIVE":["窗口失焦时自动按esc","automatically press Esc when the window loses focus","ウィンドウがフォーカスを失ったときに自動的にEscキーを押す"],
 	"THPRAC_ESC_WHEN_DEACTIVE_DESC":["测试功能","for testing","テスト機能"],
 
-	"THPRAC_KEYBIND_TITLE2":["启用键盘HOOK并设置键盘API为强制dinput8以启用自动射击等功能","use keyboard hook and set keyboardAPI as dinput8 to enable features like auto shoot...","use keyboard hook and set keyboardAPI as dinput8 to enable features like auto shoot..."],
+	"THPRAC_KEYBIND_TITLE2":["启用键盘HOOK并设置键盘API为强制dinput8以启用自动射击等功能","use keyboard hook and set keyboardAPI as dinput8 to enable features like auto shoot...","入力制御機能の有効化&キーボードAPI設定を「Dinput8の使用を強制」に設定することで、自動ショットなどの機能を有効にできます。"],
 
 	"THPRAC_AUTO_SHOOT":["自动射击","auto shoot","自動ショット"],
 	"THPRAC_AUTO_SHOOT_KEY":["自动射击按键","shoot key","Shotキー"],
@@ -600,8 +604,8 @@
       "THPRAC_GAMES_LAUNCH_CUSTOM_ERR": [ "未能启动custom.exe！", "Failed to launch custom.exe!", "custom.exeの起動に失敗しました！" ],
       "THPRAC_GAMES_USE_VPATCH": [ "使用VsyncPatch (如果可用）", "Use VsyncPatch (if avaliable)", "VsyncPatch を使用する (利用可能な場合)" ],
 	  "THPRAC_GAMES_USE_OILP": [ "使用OpenInputLagPatch (如果可用）", "Use OpenInputLagPatch (if avaliable)", "OpenInputLagPatch を使用する (利用可能な場合)" ],
-	  "THPRAC_GAMES_USE_INNER_PATCH": [ "当VP/OILP均不可用时尝试使用内置VP", "Use Inner LagPatch when VP/OILP is not available", "Use Inner LagPatch when VP/OILP is not available" ],
-	  "THPRAC_GAMES_USE_INNER_PATCH_DESC": [ "当前只支持风神录...", "Only available for MoF currently...", "Only available for MoF currently..." ],
+	  "THPRAC_GAMES_USE_INNER_PATCH": [ "当VP/OILP均不可用时尝试使用内置VP", "Use Inner LagPatch when VP/OILP is not available", "VsyncPatch/OpenInputLagPatchが利用できない場合に内蔵LagPatchを使用する" ],
+	  "THPRAC_GAMES_USE_INNER_PATCH_DESC": [ "当前只支持风神录...", "Only available for MoF currently...", "現在は東方風神録のみ対応" ],
 
       "THPRAC_GAMES_APPLY_THPRAC": [ "应用thprac", "Apply thprac", "thpracを適用する" ],
       "THPRAC_GAMES_FORCE_THPRAC": [ "强制应用thprac", "Force thprac to apply", "thpracを強制的に適用する" ],

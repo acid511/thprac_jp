@@ -346,14 +346,14 @@ namespace SSS {
         }
     }
 
-    
+
 
 // EHOOK_ST(SSS_th15_ass, 0x4373E2, 6, {
 //     *(float*)(*(DWORD*)(pCtx->Edi + 0x94) + 0x3C) = 440.0f;
 //     *(float*)(*(DWORD*)(pCtx->Edi + 0x98) + 0x3C) = 440.0f;
 // });
 
-    
+
     void FlipY_UI(int ver)
     {
         //if (version == 15) {
@@ -412,7 +412,7 @@ namespace SSS {
             return;
         }
         static HookCtx* hook1 = nullptr;
-        if (ImGui::Button("ass bullet"))
+        if (ImGui::Button("上下操作反転"))
         {
             if (!g_flip_screen_y) {
                 g_flip_screen_y = true;
@@ -455,7 +455,7 @@ namespace SSS {
 
 void SSS_UI(int version)
 {
-    if (ImGui::CollapsingHeader("Super Secret Settings")) {
+    if (ImGui::CollapsingHeader("秘密の設定")) {
         switch (version) {
         case 6:
         case 12:
