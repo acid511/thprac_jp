@@ -7,7 +7,8 @@
 
 namespace THPrac {
 
-const char* th_glossary_str[3][1738] {
+const char* th_glossary_str[3][1738]
+{
     {
         "",
         "啤酒",
@@ -4331,8 +4332,8 @@ const char* th_glossary_str[3][1738] {
         "このゲームを削除しますか？",
         "削除##modal",
         "詳細ページ",
-        "Fix frame drops when ESC in some games due to D3DXLoadSurfaceFromSurface",
-        "Seems only DDC might have this problem...",
+        "D3DXLoadSurfaceFromSurfaceに起因する、一部のゲームでESCキー押下時に処理落ちする問題を修正",
+        "現状この問題が発生するのは輝針城だけのようです。",
         "thpracを強制的に適用する",
         "改造されたゲームでthpracを使用すると、thpracが正しく機能せず、特定の機能（ステージワープなど）がゲームをクラッシュさせる可能性があります。\n続行しますか？",
         "警告：thpracを強制的に適用する##modal",
