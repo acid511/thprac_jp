@@ -13,9 +13,9 @@ namespace THPrac {
     bool g_show_att_hitbox = false;
 namespace TH20 {
     using std::pair;
-    constexpr int32_t stoneGaugeInitialValue[] = { 1100, 1200, 1300, 1400, 1400, 1400, 1400 }; 
+    constexpr int32_t stoneGaugeInitialValue[] = { 1100, 1200, 1300, 1400, 1400, 1400, 1400 };
 
-    
+
     enum rel_addrs {
         DIFFICULTY = 0x1b0a60,
         WINDOW_PTR = 0x1b6758,
@@ -548,7 +548,7 @@ namespace TH20 {
                 auto value_str = std::format("{:.2f}", (float)(*mValue) / 5000.0f);
                 mValue(value_str.c_str());
 
-                
+
                 ImGui::Columns(2, 0, false);
                 if (mHyperActive()) {
                     if (*mHyperActive && *mHyper == 0)
@@ -995,7 +995,7 @@ namespace TH20 {
 
         // float interp_timer_val = 1320 - (1320 * thPracParam.stone);                         // option A: duration-accurate (50% stone = 50% of the duration)
         float interp_timer_val = 1320.0f * (1.0f - cbrtf(fmaxf(0.0001f, thPracParam.stone))); // option B: visuals-accurate (the drain meter is cubicly interpolated) (dont let it be 0) (just dont)
-        
+
         Timer20* stone_interp_timer = GetMemAddr<Timer20*>(RVA(ENM_STONE_MGR_PTR), 0x84 + 0x14);
         asm_call_rel<SET_TIMER_FUNC, Thiscall>(stone_interp_timer, (int32_t)interp_timer_val);
 
@@ -1030,13 +1030,13 @@ namespace TH20 {
     PATCH_DY(th20_master_disable1c, 0x875E0, "03")
     HOOKSET_ENDDEF()
 
-        
+
     class TH20InGameInfo : public Gui::GameGuiWnd {
         TH20InGameInfo() noexcept
         {
             SetTitle("igi");
             SetFade(0.9f, 0.9f);
-            SetPosRel(920.0f / 1280.0f, 550.0f / 960.0f);
+            SetPosRel(920.0f / 1280.0f, 500.0f / 960.0f);
             SetSizeRel(300.0f / 1280.0f, 0.0f);
             SetWndFlag(ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
@@ -1090,11 +1090,6 @@ namespace TH20 {
             ImGui::Text(diff_pl.c_str());
 
 
-            auto sub_pl = std::format("{}({}/{}/{})", S(IGI_PL_20_SUB[main_stone]), S(IGI_PL_20_SUB[substone_1]), S(IGI_PL_20_SUB[substone_3]), S(IGI_PL_20_SUB[substone_2]));
-
-            auto sub_pl_sz = ImGui::CalcTextSize(sub_pl.c_str());
-            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + std::max(0.0, ImGui::GetWindowSize().x * 0.5 - sub_pl_sz.x * 0.5));
-
             ImVec4 r = {1.0f,0.5f,0.5f,1.0f};
             ImVec4 g = {0.5f,1.0f,0.5f,1.0f};
             ImVec4 b = {0.5f,0.75f,1.0f,1.0f};
@@ -1102,21 +1097,30 @@ namespace TH20 {
             ImVec4 w = {1.0f,1.0f,1.0f,1.0f};
             ImVec4 stone_colors[] = { r, r, b, b, y, y, g, g, w };
 
-            ImGui::TextColored(stone_colors[main_stone], S(IGI_PL_20_SUB[main_stone]));
-            ImGui::SameLine(0.0f, 0.0f);
-            ImGui::Text("(");
-            ImGui::SameLine(0.0f, 0.0f);
-            ImGui::TextColored(stone_colors[substone_1], S(IGI_PL_20_SUB[substone_1]));
-            ImGui::SameLine(0.0f, 0.0f);
-            ImGui::Text("/");
-            ImGui::SameLine(0.0f, 0.0f);
-            ImGui::TextColored(stone_colors[substone_3], S(IGI_PL_20_SUB[substone_3]));
-            ImGui::SameLine(0.0f, 0.0f);
-            ImGui::Text("/");
-            ImGui::SameLine(0.0f, 0.0f);
-            ImGui::TextColored(stone_colors[substone_2], S(IGI_PL_20_SUB[substone_2]));
-            ImGui::SameLine(0.0f, 0.0f);
-            ImGui::Text(")");
+            // 異変石の装備
+            // メイン異変石
+            auto main_stone_pl = S(IGI_PL_20_SUB[main_stone]);
+            auto main_stone_pl_sz = ImGui::CalcTextSize(main_stone_pl);
+            ImGui::SetCursorPosX(std::max(0.0, ImGui::GetWindowSize().x * 0.5 - main_stone_pl_sz.x * 0.5));
+            ImGui::TextColored(stone_colors[main_stone], main_stone_pl);
+
+            // 拡散・集中石
+            auto sub_stone1_pl = S(IGI_PL_20_SUB[substone_1]);
+            auto sub_stone2_pl = S(IGI_PL_20_SUB[substone_2]);
+            auto sub_stone1_sz = ImGui::CalcTextSize(sub_stone1_pl);
+            auto sub_stone2_sz = ImGui::CalcTextSize(sub_stone2_pl);
+            float sub_stone_gap = ImGui::CalcTextSize(main_stone_pl).x;
+            float sub_stone_total = sub_stone1_sz.x + sub_stone_gap + sub_stone2_sz.x;
+            ImGui::SetCursorPosX(std::max(0.0, ImGui::GetWindowSize().x * 0.5 - sub_stone_total * 0.5f));
+            ImGui::TextColored(stone_colors[substone_2], sub_stone2_pl);
+            ImGui::SameLine(0.0f, sub_stone_gap);
+            ImGui::TextColored(stone_colors[substone_1], sub_stone1_pl);
+
+            // 支援石
+            auto sub_stone3_pl = S(IGI_PL_20_SUB[substone_3]);
+            auto sub_stone3_pl_sz = ImGui::CalcTextSize(sub_stone3_pl);
+            ImGui::SetCursorPosX(std::max(0.0, ImGui::GetWindowSize().x * 0.5 - sub_stone3_pl_sz.x * 0.5));
+            ImGui::TextColored(stone_colors[substone_3], sub_stone3_pl);
 
 
             ImGui::Columns(2);
@@ -1153,28 +1157,29 @@ namespace TH20 {
                 ImGui::TextColored(r, "%9d", pyramids_summoned);
             else
                 ImGui::TextColored(g, "%9d", pyramids_summoned);
-            
+
             auto lvR = *(int32_t*)(player_stats + 0x74);
             auto lvB = *(int32_t*)(player_stats + 0x78);
             auto lvY = *(int32_t*)(player_stats + 0x7C);
             auto lvG = *(int32_t*)(player_stats + 0x80);
 
+            // 異変敵のレベル
             ImGui::NextColumn();
             ImGui::Text(S(THPRAC_INGAMEINFO_20_PYRAMID_LV));
             ImGui::NextColumn();
-            ImGui::TextColored(r, "%d", lvR);
+            ImGui::TextColored(r, "%d", lvR + 1);
             ImGui::SameLine(0.0f, 0.0f);
             ImGui::Text("/");
             ImGui::SameLine(0.0f, 0.0f);
-            ImGui::TextColored(b, "%d", lvB);
+            ImGui::TextColored(b, "%d", lvB + 1);
             ImGui::SameLine(0.0f, 0.0f);
             ImGui::Text("/");
             ImGui::SameLine(0.0f, 0.0f);
-            ImGui::TextColored(y, "%d", lvY);
+            ImGui::TextColored(y, "%d", lvY + 1);
             ImGui::SameLine(0.0f, 0.0f);
             ImGui::Text("/");
             ImGui::SameLine(0.0f, 0.0f);
-            ImGui::TextColored(g, "%d", lvG);
+            ImGui::TextColored(g, "%d", lvG + 1);
             ImGui::SameLine(0.0f, 0.0f);
         }
 
@@ -1185,7 +1190,7 @@ namespace TH20 {
             } else {
             }
             if (*(THOverlay::singleton().mInGameInfo) && *(DWORD*)(RVA(0x1ba56c))) {
-                SetPosRel(920.0f / 1280.0f, 550.0f / 960.0f);
+                SetPosRel(920.0f / 1280.0f, 500.0f / 960.0f);
                 SetSizeRel(300.0f / 1280.0f, 0.0f);
                 Open();
             } else {
@@ -1285,7 +1290,7 @@ namespace TH20 {
             GameplayInit();
             MasterDisableInit();
 
-            
+
             th20_bossmovedown.Setup();
             th20_piv_overflow_fix.Setup();
             th20_piv_uncap_1.Setup();
@@ -1308,7 +1313,7 @@ namespace TH20 {
             th20_bullet_hitbox_fix_1.Toggle(g_adv_igi_options.th20_fix_bullet_hitbox);
             th20_bullet_hitbox_fix_2.Toggle(g_adv_igi_options.th20_fix_bullet_hitbox);
             th20_decrease_graze_effect.Toggle(g_adv_igi_options.th20_decrease_graze_effect);
-            
+
             // TODO(?)
             /*
             // thcrap base_tsa already patches this to fix the crash, don't try to rehook it if it's being used
@@ -1470,7 +1475,7 @@ namespace TH20 {
                 KeyHUDOpt();
                 InfLifeOpt();
 
-                
+
                 th20_piv_overflow_fix.Toggle(g_adv_igi_options.th20_piv_overflow_fix);
                 th20_piv_uncap_1.Toggle(g_adv_igi_options.th20_piv_uncap);
                 th20_piv_uncap_2.Toggle(g_adv_igi_options.th20_piv_uncap);
@@ -1515,7 +1520,7 @@ namespace TH20 {
                 if (ImGui::Checkbox(S(TH20_DECREASE_EFF), &g_adv_igi_options.th20_decrease_graze_effect)) {
                     th20_decrease_graze_effect.Toggle(g_adv_igi_options.th20_decrease_graze_effect);
                 }
-                
+
                 ImGui::SetNextItemWidth(180.0f);
                 EndOptGroup();
             }
@@ -2185,7 +2190,7 @@ namespace TH20 {
             default:
                 break;
             }
-        } 
+        }
     }
     __declspec(noinline) void THPatch(ECLHelper& ecl, th_sections_t section)
     {
@@ -2231,7 +2236,7 @@ namespace TH20 {
         constexpr unsigned int st5bsSpellSubCallOrd = 0x53c;
         constexpr unsigned int st5bsNonSubCallOrd = 0x84c + 0x18;
 
-        
+
         constexpr unsigned int st6BossCreateCall = 0x52c4;
         constexpr unsigned int st6bsPrePushSpellID = 0x534;
         constexpr unsigned int st6bsPostNotSpellPracCheck = 0x61c;
@@ -2240,7 +2245,7 @@ namespace TH20 {
         constexpr unsigned int st6bsNonSubCallOrd = 0xc88 + 0x18;
         constexpr unsigned int st6bsSetYPos = 0x324 + 0x14;
 
-        
+
         constexpr unsigned int st7MBossCreateCall = 0x7324;
         constexpr unsigned int st7MBossPreMsg = 0x7354;
         constexpr unsigned int st7MBossPostMsg = 0x73a0;
@@ -2804,8 +2809,8 @@ namespace TH20 {
             break;
         }
         case THPrac::TH20::TH20_ST6_BOSS12: {
-            auto disableWait = [&ecl]() -> void { 
-                ecl << pair { 0x3d4 + 0x4, (int16_t)0 }; 
+            auto disableWait = [&ecl]() -> void {
+                ecl << pair { 0x3d4 + 0x4, (int16_t)0 };
             };
             ECLStdExec(ecl, st6PostMaple, 1, 1);
             ECLJump(ecl, st6PostMaple + stdInterruptSize, st6BossCreateCall, 60);
@@ -2814,7 +2819,7 @@ namespace TH20 {
             ecl << pair { st6bsSpellHealthVal, 12000 }; // Set correct health (set in skipped non)
             ecl << pair { st6bsSpellSubCallOrd, (int8_t)0x37 }; // Set spell ID in sub call to '7'
             disableWait();
-            
+
             switch (thPracParam.phase) {
             case 1:
                 ecl << pair { 0xa7b0 + 0x10, 5400 };
@@ -3179,7 +3184,7 @@ namespace TH20 {
         auto GetClientFromStage = [](ImVec2 stage) -> ImVec2 {
             float x = stage.x;
             float y = stage.y;
-            
+
             y = y * 2.0f + 32.0f;
             x = x * 2.0f + 448.0f;
             ImGuiIO& io = ImGui::GetIO();
@@ -3199,7 +3204,7 @@ namespace TH20 {
             DWORD patt = *(DWORD*)(iter);
             if(patt){
                 if ((*(DWORD*)(patt + 0x14)) & 1) {
-                   
+
                     if ((*(DWORD*)(patt + 0x14)) & 0x2) // round
                     {
                         float x = *(float*)(patt + 0x34);
@@ -3269,15 +3274,15 @@ namespace TH20 {
         int32_t bgm_cmd = ((int32_t*)pCtx->Esp)[1];
         int32_t bgm_id = ((int32_t*)pCtx->Esp)[2];
         // 4th stack item = i32 call_addr
-    
+
         bool el_switch = *(THOverlay::singleton().mElBgm)
             && !THGuiRep::singleton().mRepStatus && (thPracParam.mode == 1)
             && thPracParam.section;
         bool is_practice = (GetMemContent(RVA(MODEFLAGS)) & 0x1);
-    
+
        bool result = ElBgmTest<0xD9B90, 0xD9BFE, 0xE60B8, 0xE64B8, 0xffffffff>(
             el_switch, is_practice, retn_addr, bgm_cmd, bgm_id, 0xffffffff);
-    
+
         if (result)
             pCtx->Eip = RVA(0x28DD5);
     })
@@ -3298,7 +3303,7 @@ namespace TH20 {
             globals->bomb_fragments = thPracParam.bomb_fragment;
             globals->current_power = thPracParam.power;
             globals->piv = thPracParam.value;
-    
+
             THSectionPatch();
         }
         thPracParam._playLock = true;
@@ -3306,7 +3311,7 @@ namespace TH20 {
     EHOOK_DY(th20_patch_stones, 0x1336F1, 1, {
         if (thPracParam.mode != 1)
             return;
-    
+
         uintptr_t game_side_main = RVA(GAME_SIDE0);
         GlobalsSide* globals = (GlobalsSide*)(game_side_main + 0x88);
         int32_t hyperMax = globals->hyper_meter_max;
@@ -3535,12 +3540,12 @@ namespace TH20 {
     })
     EHOOK_DY(th20_update, 0x12A72, 1, {
         GameGuiBegin(IMPL_WIN32_DX9, !THAdvOptWnd::singleton().IsOpen());
-    
+
         // Gui components update
         THGuiPrac::singleton().Update();
         THGuiRep::singleton().Update();
         THOverlay::singleton().Update();
-    
+
         TH20InGameInfo::singleton().Update();
         auto p = ImGui::GetOverlayDrawList();
         // in case boss movedown do not disabled when playing normal games
@@ -3551,14 +3556,14 @@ namespace TH20 {
                 p->AddText({ 240.0f, 0.0f }, 0xFFFF0000, S(TH_BOSS_FORCE_MOVE_DOWN));
             }
         }
-    
+
         if (g_adv_igi_options.show_keyboard_monitor && *(DWORD*)(RVA(0x1ba56c)))
             KeysHUD(20, { 1280.0f, 0.0f }, { 840.0f, 0.0f }, g_adv_igi_options.keyboard_style);
         SSS::SSS_Update(20);
         // if (g_show_att_hitbox)
         //     RenderHits();
         GameUpdateOuter(p, 20);
-    
+
         bool drawCursor = THAdvOptWnd::StaticUpdate() || THGuiPrac::singleton().IsOpen();
         GameGuiEnd(drawCursor);
     })
@@ -3584,7 +3589,7 @@ namespace TH20 {
         {
             TH20InGameInfo::singleton().mBombCount++;
         })
-    EHOOK_DY(th20_hyper_break, 0x132c10, 3, 
+    EHOOK_DY(th20_hyper_break, 0x132c10, 3,
         {
             TH20InGameInfo::singleton().mHyperBreakCount++;
         })
@@ -3624,7 +3629,7 @@ namespace TH20 {
         EnableAllHooks(THMainHook);
         EnableAllHooks(THInGameInfo);
 
-        
+
         // Replay menu string fixes
         auto stageStrings = (const char**)RVA(0x1AFFD0);
         stageStrings[4] = "St4";
@@ -3653,7 +3658,7 @@ namespace TH20 {
     // {
     //     return g_realMultiByteToWideChar(CP_ACP, dwFlags, lpMultiByteStr, cbMultiByte, lpWideCharStr, cchWideChar);
     // }
-    // 
+    //
     // int(__stdcall* g_reaWideCharToMultiByte)(UINT CodePage, DWORD dwFlags, LPCWCH lpWideCharStr, int cchWideChar, LPSTR lpMultiByteStr, int cbMultiByte, LPCCH lpDefaultChar, LPBOOL lpUsedDefaultChar);
     // int __stdcall WideCharToMultiByte_Changed(UINT CodePage, DWORD dwFlags, LPCWCH lpWideCharStr, int cchWideChar, LPSTR lpMultiByteStr, int cbMultiByte, LPCCH lpDefaultChar, LPBOOL lpUsedDefaultChar)
     // {
