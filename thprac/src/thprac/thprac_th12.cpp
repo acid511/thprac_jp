@@ -602,8 +602,8 @@ namespace TH12 {
         {
             SetTitle("igi");
             SetFade(0.9f, 0.9f);
-            SetPosRel(425.0f / 640.0f, 338.0f / 480.0f);
-            SetSizeRel(210.0f / 640.0f, 0.0f);
+            SetPosRel(440.0f / 640.0f, 338.0f / 480.0f);
+            SetSizeRel(180.0f / 640.0f, 0.0f);
             SetWndFlag(ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse |
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
@@ -723,8 +723,8 @@ namespace TH12 {
             } else {
             }
             if (*(THOverlay::singleton().mInGameInfo) && *(DWORD*)(0x004B4514)) {
-                SetPosRel(425.0f / 640.0f, 338.0f / 480.0f);
-                SetSizeRel(210.0f / 640.0f, 0.0f);
+                SetPosRel(440.0f / 640.0f, 338.0f / 480.0f);
+                SetSizeRel(180.0f / 640.0f, 0.0f);
                 Open();
             } else {
                 Close();
