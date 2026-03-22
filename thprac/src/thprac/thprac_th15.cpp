@@ -8,6 +8,21 @@
 
 namespace THPrac {
 namespace TH15 {
+    enum addrs {
+        CHARACTER = 0x4e7404,
+        BOMB_PTR = 0x4e9a68,
+        PLAYER_PTR = 0x4e9bb8,
+    };
+
+      enum funcs {
+        COPY_ANM_VM_FROM_LOADED = 0x40b880,
+        ANM_VM_RUN = 0x477e10,
+        APPEND_ANM_VM_TO_WORLD_LIST = 0x487bd0,
+        ANM_VM_INTERRUPT_TREE = 0x488620,
+        ALLOCATE_ANM_VM = 0x489460,
+    };
+
+
     int g_lock_timer = 0;
     bool g_lock_timer_flag = false;
 
@@ -38,6 +53,7 @@ namespace TH15 {
         int32_t power;
         int32_t value;
         int32_t graze;
+        int32_t reisen_shield;
 
         float doremy_normal_1_phase; // used for 123 Normal 1
         float enhanced_para; // used for st6boss6
@@ -70,6 +86,7 @@ namespace TH15 {
             GetJsonValue(graze);
             GetJsonValue(doremy_normal_1_phase);
             GetJsonValue(enhanced_para);
+            GetJsonValue(reisen_shield);
 
             return true;
         }
@@ -100,6 +117,8 @@ namespace TH15 {
             AddJsonValue(power);
             AddJsonValue(value);
             AddJsonValue(graze);
+            if (reisen_shield)
+                AddJsonValue(reisen_shield);
 
             ReturnJson();
         }
@@ -157,6 +176,8 @@ namespace TH15 {
                 thPracParam.power = *mPower;
                 thPracParam.value = *mValue;
                 thPracParam.graze = *mGraze;
+                if (GetMemContent(CHARACTER) == 3)
+                    thPracParam.reisen_shield = *mReisenShield;
                 break;
             case 4:
                 Close();
@@ -207,9 +228,11 @@ namespace TH15 {
             switch (section)
             {
             default:
-                return nullptr;
+                break;
             case TH15_ST6_BOSS11:
                 return TH_SPELL_PHASE2;
+            case TH15_ST7_END_S9:
+                return TH15_SPELL_PHASE_EXTRA_TIMEOUT;
             case TH15_ST7_END_S10:
                 return TH15_SPELL_PHASE_EXTRA_LAST;
             case TH15_ST5_MID1:
@@ -281,6 +304,9 @@ namespace TH15 {
                 mGraze();
                 mScore();
                 mScore.RoundDown(10);
+
+                if (GetMemContent(CHARACTER) == 3)
+                    mReisenShield();
             }
 
             mNavFocus();
@@ -343,7 +369,7 @@ namespace TH15 {
             case 1: // Chapter
                 mChapter.SetBound(1, chapterCounts[0] + chapterCounts[1]);
 
-                if (chapterCounts[1] == 0 && chapterCounts[2] != 0) {
+                if (chapterCounts[1] == 0 && chapterCounts[0] != 0) {
                     sprintf_s(chapterStr, S(TH_STAGE_PORTION_N), *mChapter);
                 } else if (*mChapter <= chapterCounts[0]) {
                     sprintf_s(chapterStr, S(TH_STAGE_PORTION_1), *mChapter);
@@ -396,10 +422,12 @@ namespace TH15 {
         Gui::GuiDrag<int, ImGuiDataType_S32> mValue { TH_VALUE, 0, 999990, 10, 100000 };
         Gui::GuiDrag<int, ImGuiDataType_S32> mGraze { TH_GRAZE, 0, 999999, 1, 100000 };
 
+        Gui::GuiSlider<int, ImGuiDataType_S32> mReisenShield { TH15_REISEN_SHIELD, 0, 3 };
+
         Gui::GuiNavFocus mNavFocus { TH_STAGE, TH_MODE, TH_WARP, TH_DLG,
             TH_MID_STAGE, TH_END_STAGE, TH_NONSPELL, TH_SPELL, TH_PHASE, TH_CHAPTER,
             TH_SCORE, TH_LIFE, TH_LIFE_FRAGMENT, TH_BOMB, TH_BOMB_FRAGMENT,
-            TH_POWER, TH_VALUE, TH_GRAZE };
+            TH_POWER, TH_VALUE, TH_GRAZE, TH15_REISEN_SHIELD };
 
         int mChapterSetup[7][2] {
             { 2, 4 },
@@ -420,7 +448,7 @@ namespace TH15 {
             GetEnvironmentVariableW(L"APPDATA", appdata, MAX_PATH);
             mAppdataPath = appdata;
         }
-        SINGLETON(THGuiRep);
+        SINGLETON(THGuiRep)
     public:
 
         void CheckReplay()
@@ -476,7 +504,7 @@ namespace TH15 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(THOverlay);
+        SINGLETON(THOverlay)
     public:
 
     protected:
@@ -579,7 +607,7 @@ namespace TH15 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(TH15InGameInfo);
+        SINGLETON(TH15InGameInfo)
 
     public:
         int32_t mMissCount;
@@ -630,12 +658,12 @@ namespace TH15 {
             bool is_in_P_mode = (*(byte*)(0x004E7795)) & 0x1;
             if (is_in_P_mode) // pplayer
             {
-                byte cur_player_type = (*(int32_t*)(0x4E7404));
+                byte cur_player_type = static_cast<byte>((*(int32_t*)(0x4E7404)));
                 int32_t diff = *((int32_t*)0x4e7410);
                 auto diff_pl = std::format("{} ({})", S(IGI_DIFF[diff]), S(IGI_PL_15[cur_player_type]));
                 auto diff_pl_sz = ImGui::CalcTextSize(diff_pl.c_str());
 
-                ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5 - diff_pl_sz.x * 0.5);
+                ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5f - diff_pl_sz.x * 0.5f);
                 ImGui::Text(diff_pl.c_str());
 
                 int cur_stage = *(int*)(0x004E73F0);
@@ -674,12 +702,12 @@ namespace TH15 {
                     }
                 }
             } else {
-                byte cur_player_type = (*(int32_t*)(0x4E7404));
+                byte cur_player_type = static_cast<byte>((*(int32_t*)(0x4E7404)));
                 int32_t diff = *((int32_t*)0x4e7410);
                 auto diff_pl = std::format("{} ({})", S(IGI_DIFF[diff]), S(IGI_PL_15[cur_player_type]));
                 auto diff_pl_sz = ImGui::CalcTextSize(diff_pl.c_str());
 
-                ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5 - diff_pl_sz.x * 0.5);
+                ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5f - diff_pl_sz.x * 0.5f);
                 ImGui::Text(diff_pl.c_str());
 
                 ImGui::Columns(2);
@@ -705,11 +733,11 @@ namespace TH15 {
 
         virtual void OnPreUpdate() override
         {
-            if (*(DWORD*)(0x004E9BB8)) {
+            if (GetMemContent(PLAYER_PTR)) {
                 GameUpdateInner(15);
             } else {
             }
-            if (*(THOverlay::singleton().mInGameInfo) && *(DWORD*)(0x004E9BB8)) {
+            if (*(THOverlay::singleton().mInGameInfo) && GetMemContent(PLAYER_PTR)) {
                 SetSizeRel(360.0f / 1280.0f, 0.0f);
                 SetPosRel(890.0f / 1280.0f, 510.0f / 960.0f);
                 Open();
@@ -757,7 +785,7 @@ namespace TH15 {
     });
 
     class THAdvOptWnd : public Gui::PPGuiWnd {
-        SINGLETON(THAdvOptWnd);
+        SINGLETON(THAdvOptWnd)
     public:
         bool forceBossMoveDown = false;
     private:
@@ -770,9 +798,9 @@ namespace TH15 {
         }
         void FpsInit()
         {
-            if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) {
+            if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) != NULL) {
                 OILPInit(mOptCtx);
-            } else if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"vpatch_th15.dll")) {
+            } else if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"vpatch_th15.dll")) != NULL) {
                 uint64_t hash[2];
                 CalcFileHash(L"vpatch_th15.dll", hash);
                 
@@ -992,6 +1020,8 @@ namespace TH15 {
         ecl.SetPos(start);
         ecl << ecl_time << 0x0018000C << 0x02ff0000 << 0x00000000 << dest - start << at_frame;
     }
+
+    constexpr unsigned int st7Start = 0x8f6c;
     __declspec(noinline) void THStageWarp(ECLHelper& ecl, int stage, int portion)
     {
         if (stage == 1) {
@@ -1268,6 +1298,15 @@ namespace TH15 {
             ecl << 0 << 0x0020000b << 0x01ff0000 << 0 << 0xc
                 << 0x73736f42 << 0x64726143 << ordinal;
         };
+        constexpr unsigned int st7BossCreateCall = 0x93cc;
+        constexpr unsigned int st7bsMovePosX = 0x498 + 0x10; // 0x4a8
+        constexpr unsigned int st7bsMovePosY = 0x498 + 0x14; // 0x4ac
+        constexpr unsigned int st7bsANMSelect = 0x56c + 0x10; // 0x57c
+        constexpr unsigned int st7bsANMSetMainArg2 = 0x580 + 0x14; // 0x594
+        constexpr unsigned int st7bsSetSpriteIns = 0x5d4 + 0x4; // 0x5d8
+        constexpr unsigned int st7bsANMSetSprite1Arg2 = 0x674 + 0x14; // 0x688
+        constexpr unsigned int st7bsANMSetSprite2Arg2 = 0x68c + 0x14; // 0x6a0
+        constexpr unsigned int st7bsMoveLimitIns = 0x640 + 0x4; // 0x644
 
         switch (section) {
         case THPrac::TH15::TH15_ST1_MID1:
@@ -1787,9 +1826,9 @@ namespace TH15 {
             break;
         case THPrac::TH15::TH15_ST7_MID1:
             if (thPracParam.dlg)
-                ECLJump(ecl, 0x8f6c, 0x9270, 60);
+                ECLJump(ecl, st7Start, 0x9270, 60);
             else {
-                ECLJump(ecl, 0x8f6c, 0x92a8, 60);
+                ECLJump(ecl, st7Start, 0x92a8, 60);
                 ECLSkipChapter(1);
                 ecl.SetFile(2);
 
@@ -1805,7 +1844,7 @@ namespace TH15 {
             }
             break;
         case THPrac::TH15::TH15_ST7_MID2:
-            ECLJump(ecl, 0x8f6c, 0x92a8, 60);
+            ECLJump(ecl, st7Start, 0x92a8, 60);
             ECLSkipChapter(1);
             ecl.SetFile(2);
 
@@ -1820,7 +1859,7 @@ namespace TH15 {
             ecl << pair{0x2fc, 2200} << pair{0x525, (int8_t)0x32}; // Spell Health & Spell Ordinal
             break;
         case THPrac::TH15::TH15_ST7_MID3:
-            ECLJump(ecl, 0x8f6c, 0x92a8, 60);
+            ECLJump(ecl, st7Start, 0x92a8, 60);
             ECLSkipChapter(1);
             ecl.SetFile(2);
 
@@ -1836,22 +1875,22 @@ namespace TH15 {
             break;
         case THPrac::TH15::TH15_ST7_END_NS1:
             if (thPracParam.dlg)
-                ECLJump(ecl, 0x8f6c, 0x93b8, 60);
+                ECLJump(ecl, st7Start, 0x93b8, 60);
             else {
                 th15_st7boss1_chapter_bonus.Enable();
-                ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+                ECLJump(ecl, st7Start, st7BossCreateCall, 60);
                 st7_hide_subboss();
             }
             ECLSkipChapter(1);
             break;
         case THPrac::TH15::TH15_ST7_END_S1:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
             st7_enter_spell(0x31, 3000);
             break;
         case THPrac::TH15::TH15_ST7_END_NS2:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
 
@@ -1861,22 +1900,22 @@ namespace TH15 {
             ecl << pair{0x199c, 59} << pair{0x19bc, 0} << pair{0x15dc, 0}; // Change Move Time, Wait Time & Inv. Time
 
             ecl.SetFile(3);
-            ecl << pair{0x5d8, (int16_t)0} << pair{0x191c, (int16_t)0}; // Void 303-0 & 306-0
-            ecl << pair{0x594, 14} << pair{0x6a0, 120}; // Change 306-0 & 303-2
+            ecl << pair{st7bsSetSpriteIns, (int16_t)0} << pair{0x191c, (int16_t)0}; // Void 303-0 & 306-0
+            ecl << pair{st7bsANMSetMainArg2, 14} << pair{st7bsANMSetSprite2Arg2, 120}; // Change 306-0 & 303-2
             ECLJump(ecl, 0x1a90, 0x1ae8, 24); // Jump Over Sprite Change
             break;
         case THPrac::TH15::TH15_ST7_END_S2:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
             st7_enter_spell(0x32, 3400);
 
             ecl.SetFile(3);
-            ecl << pair{0x5d8, (int16_t)0}; // Void 303-0
-            ecl << pair{0x594, 14} << pair{0x6a0, 120}; // Change 306-0 & 303-2
+            ecl << pair{st7bsSetSpriteIns, (int16_t)0}; // Void 303-0
+            ecl << pair{st7bsANMSetMainArg2, 14} << pair{st7bsANMSetSprite2Arg2, 120}; // Change 306-0 & 303-2
             break;
         case THPrac::TH15::TH15_ST7_END_NS3:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
 
@@ -1886,22 +1925,22 @@ namespace TH15 {
             ecl << pair{0x26d8, 59} << pair{0x26f8, 0} << pair{0x2318, 0}; // Change Move Time, Wait Time & Inv. Time
 
             ecl.SetFile(3);
-            ecl << pair{0x5d8, (int16_t)0} << pair{0x2658, (int16_t)0}; // Void 303-0 & 306-0
-            ecl << pair{0x594, 7} << pair{0x6a0, 132}; // Change 306-0 & 303-2
+            ecl << pair{st7bsSetSpriteIns, (int16_t)0} << pair{0x2658, (int16_t)0}; // Void 303-0 & 306-0
+            ecl << pair{st7bsANMSetMainArg2, 7} << pair{st7bsANMSetSprite2Arg2, 132}; // Change 306-0 & 303-2
             ECLJump(ecl, 0x276c, 0x2798, 24); // Jump Over Sprite Change
             break;
         case THPrac::TH15::TH15_ST7_END_S3:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
             st7_enter_spell(0x33, 3000);
 
             ecl.SetFile(3);
-            ecl << pair{0x5d8, (int16_t)0}; // Void 303-0
-            ecl << pair{0x594, 7} << pair{0x6a0, 132}; // Change 306-0 & 303-2
+            ecl << pair{st7bsSetSpriteIns, (int16_t)0}; // Void 303-0
+            ecl << pair{st7bsANMSetMainArg2, 7} << pair{st7bsANMSetSprite2Arg2, 132}; // Change 306-0 & 303-2
             break;
         case THPrac::TH15::TH15_ST7_END_NS4:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
 
@@ -1913,23 +1952,23 @@ namespace TH15 {
             ecl << pair{0x31c4, 10}; // Inv. Time
 
             ecl.SetFile(3);
-            ecl << pair{0x5d8, (int16_t)0} << pair{0x3510, (int16_t)0}; // Void 303-0 & 306-0
-            ecl << pair{0x594, 0} << pair{0x6a0, 116}; // Change 306-0 & 303-2
-            ecl << pair{0x57c, 5}; // Change 302
+            ecl << pair{st7bsSetSpriteIns, (int16_t)0} << pair{0x3510, (int16_t)0}; // Void 303-0 & 306-0
+            ecl << pair{st7bsANMSetMainArg2, 0} << pair{st7bsANMSetSprite2Arg2, 116}; // Change 306-0 & 303-2
+            ecl << pair{st7bsANMSelect, 5}; // Change 302
             break;
         case THPrac::TH15::TH15_ST7_END_S4:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
             st7_enter_spell(0x34, 2000, true);
 
             ecl.SetFile(3);
-            ecl << pair{0x5d8, (int16_t)0}; // Void 303-0
-            ecl << pair{0x594, 0} << pair{0x6a0, 116}; // Change 306-0 & 303-2
-            ecl << pair{0x57c, 5}; // Change 302
+            ecl << pair{st7bsSetSpriteIns, (int16_t)0}; // Void 303-0
+            ecl << pair{st7bsANMSetMainArg2, 0} << pair{st7bsANMSetSprite2Arg2, 116}; // Change 306-0 & 303-2
+            ecl << pair{st7bsANMSelect, 5}; // Change 302
             break;
         case THPrac::TH15::TH15_ST7_END_NS5:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
 
@@ -1944,13 +1983,13 @@ namespace TH15 {
             ecl << pair{0x46e8, (int16_t)0}; // Void 306-0
             break;
         case THPrac::TH15::TH15_ST7_END_S5:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
             st7_enter_spell(0x35, 3500);
             break;
         case THPrac::TH15::TH15_ST7_END_NS6:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
 
@@ -1960,23 +1999,23 @@ namespace TH15 {
             ecl << pair{0x5610, 59} << pair{0x5630, 0} << pair{0x5250, 0}; // Change Move Time, Wait Time & Inv. Time
 
             ecl.SetFile(3);
-            ecl << pair{0x5d8, (int16_t)0} << pair{0x5590, (int16_t)0}; // Void 303-0 & 306-0
-            ecl << pair{0x594, 14} << pair{0x6a0, 120}; // Change 306-0 & 303-2
+            ecl << pair{st7bsSetSpriteIns, (int16_t)0} << pair{0x5590, (int16_t)0}; // Void 303-0 & 306-0
+            ecl << pair{st7bsANMSetMainArg2, 14} << pair{st7bsANMSetSprite2Arg2, 120}; // Change 306-0 & 303-2
             ECLJump(ecl, 0x5694, 0x56ec, 24); // Jump Over Sprite Change
             break;
         case THPrac::TH15::TH15_ST7_END_S6:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
             st7_enter_spell(0x36, 3500);
             ecl << pair{0xd898, (int16_t)0}; // Void 316
 
             ecl.SetFile(3);
-            ecl << pair{0x5d8, (int16_t)0}; // Void 303-0
-            ecl << pair{0x594, 14} << pair{0x6a0, 120}; // Change 306-0 & 303-2
+            ecl << pair{st7bsSetSpriteIns, (int16_t)0}; // Void 303-0
+            ecl << pair{st7bsANMSetMainArg2, 14} << pair{st7bsANMSetSprite2Arg2, 120}; // Change 306-0 & 303-2
             break;
         case THPrac::TH15::TH15_ST7_END_NS7:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
 
@@ -1986,22 +2025,22 @@ namespace TH15 {
             ecl << pair{0x6440, 59} << pair{0x6460, 0} << pair{0x6080, 0}; // Change Move Time, Wait Time & Inv. Time
 
             ecl.SetFile(3);
-            ecl << pair{0x5d8, (int16_t)0} << pair{0x63c0, (int16_t)0}; // Void 303-0 & 306-0
-            ecl << pair{0x594, 7} << pair{0x6a0, 132}; // Change 306-0 & 303-2
+            ecl << pair{st7bsSetSpriteIns, (int16_t)0} << pair{0x63c0, (int16_t)0}; // Void 303-0 & 306-0
+            ecl << pair{st7bsANMSetMainArg2, 7} << pair{st7bsANMSetSprite2Arg2, 132}; // Change 306-0 & 303-2
             ECLJump(ecl, 0x64d4, 0x652c, 24); // Jump Over Sprite Change
             break;
         case THPrac::TH15::TH15_ST7_END_S7:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
             st7_enter_spell(0x37, 3000);
 
             ecl.SetFile(3);
-            ecl << pair{0x5d8, (int16_t)0}; // Void 303-0
-            ecl << pair{0x594, 7} << pair{0x6a0, 132}; // Change 306-0 & 303-2
+            ecl << pair{st7bsSetSpriteIns, (int16_t)0}; // Void 303-0
+            ecl << pair{st7bsANMSetMainArg2, 7} << pair{st7bsANMSetSprite2Arg2, 132}; // Change 306-0 & 303-2
             break;
         case THPrac::TH15::TH15_ST7_END_NS8:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
 
@@ -2013,34 +2052,41 @@ namespace TH15 {
             ecl << pair{0x6f54, 0}; // Inv. Time
 
             ecl.SetFile(3);
-            ecl << pair{0x5d8, (int16_t)0} << pair{0x72b4, (int16_t)0}; // Void 303-0 & 306-0
-            ecl << pair{0x594, 0} << pair{0x6a0, 116}; // Change 306-0 & 303-2
-            ecl << pair{0x57c, 5}; // Change 302
+            ecl << pair{st7bsSetSpriteIns, (int16_t)0} << pair{0x72b4, (int16_t)0}; // Void 303-0 & 306-0
+            ecl << pair{st7bsANMSetMainArg2, 0} << pair{st7bsANMSetSprite2Arg2, 116}; // Change 306-0 & 303-2
+            ecl << pair{st7bsANMSelect, 5}; // Change 302
             break;
         case THPrac::TH15::TH15_ST7_END_S8:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
             st7_enter_spell(0x38, 3000, true);
 
             ecl.SetFile(3);
-            ecl << pair{0x5d8, (int16_t)0}; // Void 303-0
-            ecl << pair{0x594, 0} << pair{0x6a0, 116}; // Change 306-0 & 303-2
-            ecl << pair{0x57c, 5}; // Change 302
+            ecl << pair{st7bsSetSpriteIns, (int16_t)0}; // Void 303-0
+            ecl << pair{st7bsANMSetMainArg2, 0} << pair{st7bsANMSetSprite2Arg2, 116}; // Change 306-0 & 303-2
+            ecl << pair{st7bsANMSelect, 5}; // Change 302
             break;
         case THPrac::TH15::TH15_ST7_END_S9:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+        {
+            constexpr unsigned int st7bsANMSelect2 = 0x6a4 + 0x10; // 0x6b4
+            constexpr unsigned int st7bsANMSetMainIns = 0x580 + 0x4; // 0x584
+
+            constexpr unsigned int st7BossSpell9Duration = 0x10408 + 0x18;
+            constexpr unsigned int st7BossSpell9TRStart = 0x104b8;
+            constexpr unsigned int st7BossSpell9TRBluePhaseTime = 120 * 3 + 180 * 5 + 280;
+
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
             st7_hide_subboss();
-
             ecl.SetFile(3);
-            ecl << pair{0x4a8, 0} << pair{0x4ac, 0x43600000}; // Pos
-            ecl << pair{0x5d8, (int16_t)0}; // Void 303-0
-            ecl << pair{0x57c, 5} << pair{0x6b4, 5}; // Change 302
-            ecl << pair{0x594, 0} << pair(0x688, -1) << pair(0x6a0, -1); // Change 306-0, 303-1 & 303-2
-            ecl << pair{0x644, (int16_t)0} << pair{0x584, (int16_t)0}; // Void 504, 303
-
-            ecl.SetFile(3);
+            ecl << pair { st7bsMovePosX, 0 } << pair { st7bsMovePosY, 0x43600000 }; // Center pos
+            ecl << pair { st7bsSetSpriteIns, (int16_t)0 }; // Cancel changing boss sprite
+            ecl << pair { st7bsANMSelect, 5 } << pair { st7bsANMSelect2, 5 }; // Change selected anim
+            ecl << pair { st7bsANMSetMainIns, (int16_t)0 }
+                << pair(st7bsANMSetSprite1Arg2, -1)
+                << pair(st7bsANMSetSprite2Arg2, -1); // More ANM fixing
+            ecl << pair { st7bsMoveLimitIns, (int16_t)0 }; // Remove move limits
             ecl.SetPos(0x6d0);
             // 306
             ecl << 0 << 0x00180132 << 0x02ff0000 << 0 << 0 << 0;
@@ -2051,16 +2097,38 @@ namespace TH15 {
             // Card
             ecl << 0 << 0x0020000b << 0x01ff0000 << 0 << 0xc
                 << 0x73736f42 << 0x64726143 << 0x39;
+
+            switch (thPracParam.phase) {
+            case 1: {
+                constexpr unsigned int st7BossSpell9TRGreenPhase = 0x10a50;
+
+                ecl << pair { st7BossSpell9Duration, 5400 - st7BossSpell9TRBluePhaseTime + 90 }; // Adjust duration (removing waits)
+                ecl << pair { 0x10bb0 + 0x10, 55 - (st7BossSpell9TRBluePhaseTime - 90) / 60 }; // Also adjust p2->p3 transition condition
+                ECLJump(ecl, st7BossSpell9TRStart, st7BossSpell9TRGreenPhase, 0);
+                break;
+            }
+            case 2: {
+                constexpr unsigned int st7BossSpell9TRRedPhase = 0x10c7c;
+
+                ecl << pair { st7BossSpell9Duration, 5400 - (55 * 60) - (90 + 18) }; // Adjust duration (hardcoded time threshold for p3 start, + wait)
+                ECLJump(ecl, st7BossSpell9TRStart, st7BossSpell9TRRedPhase, 0);
+                break;
+            }
+            default:
+                break;
+            }
+
+        }
             break;
         case THPrac::TH15::TH15_ST7_END_S10:
-            ECLJump(ecl, 0x8f6c, 0x93cc, 60);
+            ECLJump(ecl, st7Start, st7BossCreateCall, 60);
             ECLSkipChapter(2);
 
             // Hecatia
             ecl.SetFile(3);
-            ecl << pair{0x4a8, 0xc2800000} << pair{0x4ac, 0x43000000}; // Pos
-            ecl << pair{0x644, (int16_t)0}; // Void 504
-            ecl << pair(0x688, -1) << pair(0x6a0, -1); // Change 303-1 & 303-2
+            ecl << pair{st7bsMovePosX, 0xc2800000} << pair{st7bsMovePosY, 0x43000000}; // Pos
+            ecl << pair{st7bsMoveLimitIns, (int16_t)0}; // Void 504
+            ecl << pair(st7bsANMSetSprite1Arg2, -1) << pair(st7bsANMSetSprite2Arg2, -1); // Change 303-1 & 303-2
             ecl.SetPos(0x6d0);
             // Effect
             ecl << 5 << 0x0014012e << 0x01ff0000 << 0 << 5
@@ -2140,8 +2208,6 @@ namespace TH15 {
 
     static bool frameStarted = false;
 
-    
-
     static void RenderLockTimer(ImDrawList* p)
     {
         if (g_lock_timer_flag) {
@@ -2156,6 +2222,240 @@ namespace TH15 {
             p->AddText({ 220.0f - sz.x, 0.0f }, 0xFF000000, time_text.c_str());
         }
     }
+
+    void ABTestRender()
+    {
+        static int t = 0;
+        DWORD ecl_glob = *(DWORD*)(0x4E9A80);
+        DWORD m9923 = ecl_glob ? *(DWORD*)(ecl_glob + 0x18) : 0;
+        if (m9923 == 6) {
+            t++;
+            float intp = (t >= 90) ? 1.0f : t / 90.0f;
+            auto& io = ImGui::GetIO();
+            auto szx = io.DisplaySize.x;
+            auto szy = io.DisplaySize.y;
+            ImVec2 mid_st = { 64.0f + 384.0f, 32.0f + 448.0f };
+            mid_st.x *= szx / 1280.0f;
+            mid_st.y *= szy / 960.0f;
+            ImVec2 sz = { 380.0f * 2.0f, 600.0f * intp };
+            sz.x *= szx / 1280.0f;
+            sz.y *= szy / 960.0f;
+
+            ImGui::SetNextWindowPos({ mid_st.x - sz.x * 0.5f, mid_st.y - sz.y * 0.5f });
+            ImGui::SetNextWindowSize(sz);
+            ImGui::SetNextWindowBgAlpha(0.8f);
+            ImGui::Begin("##res", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
+            if (t >= 90) {
+                float result_origs[5] = {
+                    *(float*)(ecl_glob + 0x38),
+                    *(float*)(ecl_glob + 0x34),
+                    *(float*)(ecl_glob + 0x30),
+                    *(float*)(ecl_glob + 0x2C),
+                    *(float*)(ecl_glob + 0x28)
+                };
+                float scores[6] = { 0, 0.1, 0.5, 0.6, 0.9, 1.0 };
+                // calculates
+                {
+                    float div[5] = { 3.5f, 4.8f, 4.0f, 3.1f, 3.0f };
+                    float pows[5] = { 1.2, 1.1, 1.1, 1.2, 2.05 };
+                    for (int i = 0; i < 5; i++) {
+                        result_origs[i] = (result_origs[i] - 3.0f) / div[i];
+                        result_origs[i] = powf(result_origs[i], pows[i]);
+                    }
+                    scores[0] = 0.6f * result_origs[0] + 0.15f * result_origs[1] + 0.05f * result_origs[2] + 0.15f * result_origs[3] + 0.05f * result_origs[4];
+                    scores[1] = 0.0f * result_origs[0] + 0.5f * result_origs[1] + 0.2f * result_origs[2] + 0.15f * result_origs[3] + 0.15f * result_origs[4];
+                    scores[2] = 0.0f * result_origs[0] + 0.1f * result_origs[1] + 0.75f * result_origs[2] + 0.05f * result_origs[3] + 0.1f * result_origs[4];
+                    scores[3] = 0.1f * result_origs[0] + 0.4f * result_origs[1] + 0.0f * result_origs[2] + 0.5f * result_origs[3] + 0.0f * result_origs[4];
+                    scores[4] = 0.05f * result_origs[0] + 0.05f * result_origs[1] + 0.0f * result_origs[2] + 0.1f * result_origs[3] + 0.8f * result_origs[4];
+                    scores[5] = 0.1f * result_origs[0] + 0.3f * result_origs[1] + 0.3f * result_origs[2] + 0.2f * result_origs[3] + 0.1f * result_origs[4];
+                    for (int i = 0; i < 6; i++) {
+                        scores[i] = 1.0f / (1.0f + expf(1.8f - 4.0f * scores[i]));
+                    }
+                }
+                float avg_score = 0.0f;
+                for (int i = 0; i < 6; i++)
+                    avg_score += scores[i];
+                avg_score /= 6.0f;
+
+                const char* abtest_rank;
+                if (avg_score < 0.2f)
+                    abtest_rank = S(TH15_AB_TEST_RES_RANK_10);
+                else if (avg_score < 0.36f)
+                    abtest_rank = S(TH15_AB_TEST_RES_RANK_9);
+                else if (avg_score < 0.54f)
+                    abtest_rank = S(TH15_AB_TEST_RES_RANK_8);
+                else if (avg_score < 0.72f)
+                    abtest_rank = S(TH15_AB_TEST_RES_RANK_7);
+                else if (avg_score < 0.9f)
+                    abtest_rank = S(TH15_AB_TEST_RES_RANK_6);
+                else if (avg_score < 0.95f)
+                    abtest_rank = S(TH15_AB_TEST_RES_RANK_5);
+                else if (avg_score < 0.98f)
+                    abtest_rank = S(TH15_AB_TEST_RES_RANK_4);
+                else if (avg_score < 0.985f)
+                    abtest_rank = S(TH15_AB_TEST_RES_RANK_3);
+                else if (avg_score < 0.99f)
+                    abtest_rank = S(TH15_AB_TEST_RES_RANK_2);
+                else
+                    abtest_rank = S(TH15_AB_TEST_RES_RANK_1);
+
+                ImGui::Text("%s %s", S(TH15_AB_TEST_RES), abtest_rank);
+                ImGui::Text(S(TH15_AB_TEST_RES_DESC));
+
+                ImVec2 p0 = ImGui::GetCursorScreenPos();
+                ImVec2 csz = ImGui::GetContentRegionAvail();
+                ImVec2 cmid = { p0.x + csz.x * 0.5f, p0.y + csz.y * 0.5f };
+                ImVec2 p1 = { cmid.x + csz.x * 0.5f, cmid.y + csz.y * 0.5f };
+                float hheight = csz.y * 0.75f * 0.5f;
+
+                ImDrawList* pw = ImGui::GetWindowDrawList();
+                ImVec4 color1 = ImGui::GetStyleColorVec4(ImGuiCol_::ImGuiCol_ChildBg);
+                color1.w = 0.1f;
+                pw->AddRectFilled(p0, p1, ImGui::ColorConvertFloat4ToU32(color1));
+                pw->AddRect(p0, p1, ImGui::ColorConvertFloat4ToU32(ImGui::GetStyleColorVec4(ImGuiCol_::ImGuiCol_Text)));
+                pw->PushClipRect(p0, p1);
+                {
+                    ImVec2 points[6];
+                    // radar
+                    for (int i = 0; i < 6; i++) {
+                        pw->AddLine(cmid, { cmid.x + hheight * cosf(i * std::numbers::pi_v<float> * 2.0f / 6.0f - 1.57079f), cmid.y + hheight * sinf(i * std::numbers::pi_v<float> * 2.0f / 6.0f - 1.57079f) }, ImGui::ColorConvertFloat4ToU32(ImGui::GetStyleColorVec4(ImGuiCol_::ImGuiCol_Text)), 2.0f);
+                    }
+                    // lines
+                    constexpr float radiuses_ranks[] = {
+                        0.18f / 0.9f * 0.5f,
+                        0.36f / 0.9f * 0.5f,
+                        0.54f / 0.9f * 0.5f,
+                        0.72f / 0.9f * 0.5f,
+                        0.5f, 0.65f, 0.85f, 1.0f
+                    };
+                    for (int i = 0; i < 8; i++) {
+                        float ra = radiuses_ranks[i] * hheight;
+                        for (int j = 0; j < 6; j++) {
+                            points[j] = { cmid.x + ra * cosf(j * std::numbers::pi_v<float> * 2.0f / 6.0f - 1.57079f), cmid.y + ra * sinf(j * std::numbers::pi_v<float> * 2.0f / 6.0f - 1.57079f) };
+                        }
+                        pw->AddPolyline(points, 6, ImGui::ColorConvertFloat4ToU32(ImGui::GetStyleColorVec4(ImGuiCol_::ImGuiCol_Text)), ImDrawFlags_::ImDrawFlags_Closed, i == 7 ? 2.0f : 1.0f);
+                    }
+                    // scores
+                    auto MInterpolation = [](float t, float a, float b) {
+                        if (t < 0.0f) {
+                            return a;
+                        } else if (t < 0.5) {
+                            float k = (b - a) * 2.0f;
+                            return k * t * t + a;
+                        } else if (t < 1.0f) {
+                            float k = (b - a) * 2.0f;
+                            t = t - 1.0f;
+                            return -k * t * t + b;
+                        }
+                        return b;
+                    };
+                    float t2 = MInterpolation((t - 90.0f) / 90.0f, 0.0f, 1.0f);
+                    for (int i = 0; i < 6; i++)
+                        scores[i] *= t2;
+                    // animation
+                    for (int i = 0; i < 6; i++) {
+                        float radius = scores[i];
+                        if (scores[i] < 0.9f) {
+                            radius = scores[i] / 0.9f * 0.5f;
+                        } else if (scores[i] < 0.95f) {
+                            radius = scores[i] * 3.0f - 2.2f;
+                        } else if (scores[i] < 0.98f) {
+                            radius = scores[i] * 6.66667f - 5.683333f;
+                        } else {
+                            radius = scores[i] * 7.5f - 6.5f;
+                        }
+                        points[i] = { cmid.x + hheight * radius * cosf(i * std::numbers::pi_v<float> * 2.0f / 6.0f - 1.57079f), cmid.y + hheight * radius * sinf(i * std::numbers::pi_v<float> * 2.0f / 6.0f - 1.57079f) };
+                    }
+                    for (int i = 0; i < 6; i++) {
+                        auto col = ImGui::GetStyleColorVec4(ImGuiCol_PlotHistogram);
+                        col.w = 0.75f;
+                        pw->AddTriangleFilled(points[i], points[(i + 1) % 6], cmid, ImGui::ColorConvertFloat4ToU32(col));
+                    }
+                    pw->AddPolyline(points, 6, ImGui::ColorConvertFloat4ToU32(ImGui::GetStyleColorVec4(ImGuiCol_::ImGuiCol_PlotLines)), ImDrawFlags_::ImDrawFlags_Closed, 1.0f);
+
+                    // text
+                    const char* chars[] = {
+                        S(TH15_AB_TEST_REACTION),
+                        S(TH15_AB_TEST_MOV),
+                        S(TH15_AB_TEST_RET),
+                        S(TH15_AB_TEST_HORIZON),
+                        S(TH15_AB_TEST_PREC),
+                        S(TH15_AB_TEST_LUCK)
+                    };
+                    for (int i = 0; i < 6; i++) {
+                        const char* rank = "E";
+                        if (scores[i] < 0.18f)
+                            rank = "F";
+                        else if (scores[i] < 0.36f)
+                            rank = "E";
+                        else if (scores[i] < 0.54f)
+                            rank = "D";
+                        else if (scores[i] < 0.72f)
+                            rank = "C";
+                        else if (scores[i] < 0.9f)
+                            rank = "B";
+                        else if (scores[i] < 0.95f)
+                            rank = "A"; // 0.9-0.95
+                        else if (scores[i] < 0.98f)
+                            rank = "S"; // 0.95-0.98
+                        else if (scores[i] < 0.99f)
+                            rank = "SS"; // 0.98-0.99
+                        else
+                            rank = "???"; // 0.99+
+                        std::string text = std::format("{}:{}({:>3.1f})", chars[i], rank, scores[i] * 100.0f).c_str();
+                        auto sz_text = ImGui::CalcTextSize(text.c_str());
+                        float h2 = hheight;
+                        if (i == 0 || i == 3)
+                            h2 = hheight + sz_text.y;
+                        else
+                            h2 = hheight + sz_text.x * 0.85f;
+                        ImVec2 pos = { cmid.x + h2 * cosf(i * std::numbers::pi_v<float> * 2.0f / 6.0f - 1.57079f), cmid.y + h2 * sinf(i * std::numbers::pi_v<float> * 2.0f / 6.0f - 1.57079f) };
+                        pos.x -= sz_text.x * 0.5f;
+                        pos.y -= sz_text.y * 0.5f;
+                        pw->AddText(pos, ImGui::ColorConvertFloat4ToU32(ImGui::GetStyleColorVec4(ImGuiCol_::ImGuiCol_Text)), text.c_str());
+                    }
+                }
+                pw->PopClipRect();
+            }
+            ImGui::End();
+        } else {
+            t = 0;
+        }
+    }
+
+    void MakeReisenShieldANM(uintptr_t bombPtr, int32_t shieldCount)
+    {
+        if (!bombPtr || !shieldCount)
+            return;
+
+        // create shield anmVM
+        uintptr_t newAnmVm = asm_call<ALLOCATE_ANM_VM, Cdecl, uintptr_t>();
+        asm_call<COPY_ANM_VM_FROM_LOADED, Thiscall>(GetMemContent(PLAYER_PTR, 0xc), newAnmVm, 0xa);
+        *(int32_t*)(newAnmVm + 0x1c) |= 0x400;
+        asm_call<ANM_VM_RUN, Thiscall>(newAnmVm);
+
+        // add it to the world & to the bomb
+        uint32_t outID = 0;
+        asm_call<APPEND_ANM_VM_TO_WORLD_LIST, Stdcall>(&outID, newAnmVm);
+        *(int32_t*)(bombPtr + 0x50) = outID;
+
+        // remove shield rings based on shield count
+        // can't trigger 2 interrupts in the same frame to remove 2 rings, so we do the work ourselves
+        if (shieldCount <= 2) {
+            ThList<struct AnmVM>* childListHead = (ThList<struct AnmVM>*)(newAnmVm + 0x544 + 0x50);
+
+            for (ThList<struct AnmVM>* vmList = childListHead; vmList; vmList = vmList->next) {
+                uintptr_t childVm = GetMemContent((uintptr_t)vmList);
+                uint32_t childId = GetMemContent(childVm + 0x30);
+
+                if (childId == 11 || (childId == 12 && shieldCount == 1)) {
+                    uint8_t& flags = *GetMemAddr<uint8_t*>(childVm + 0x1c);
+                    flags = (flags & 0x9F) | 0x20; // mark for deletion
+                }
+            }
+        }
+    }
+
 
     HOOKSET_DEFINE(THMainHook)
     EHOOK_DY(th15_inf_lives, 0x456397,1,
@@ -2229,6 +2529,13 @@ namespace TH15 {
             *(int32_t*)(0x4E741C) = thPracParam.graze; // 0x4E7420: Chapter Graze
 
             THSectionPatch();
+            if (thPracParam.reisen_shield) {
+                uintptr_t bombPtr = GetMemContent(BOMB_PTR);
+                *(int32_t*)(bombPtr + 0x24) = 1; // active bomb
+                *(int32_t*)(bombPtr + 0x2c) = 31; // skip frame 30 of active state (plays shield SFX)
+                *(int32_t*)(bombPtr + 0x60) = thPracParam.reisen_shield; // shield count
+                MakeReisenShieldANM(bombPtr, thPracParam.reisen_shield);
+            }
         }
         thPracParam._playLock = true;
     })
@@ -2341,202 +2648,11 @@ namespace TH15 {
         // ab test
         {
             if (thPracParam.mode && thPracParam.section == TH15_ST8_AB_TEST) {
-                static int t = 0;
-                DWORD ecl_glob = *(DWORD*)(0x4E9A80);
-                DWORD m9923 = ecl_glob ? *(DWORD*)(ecl_glob + 0x18) : 0;
-                if (m9923 == 6) {
-                    t++;
-                    float intp = (t >= 90) ? 1.0f : t / 90.0f;
-                    auto &io = ImGui::GetIO();
-                    auto szx = io.DisplaySize.x;
-                    auto szy = io.DisplaySize.y;
-                    ImVec2 mid_st = { 64.0f + 384.0f, 32.0f + 448.0f };
-                    mid_st.x *= szx / 1280.0f;
-                    mid_st.y *= szy / 960.0f;
-                    ImVec2 sz = { 380.0f * 2.0f, 600.0f * intp };
-                    sz.x *= szx / 1280.0f;
-                    sz.y *= szy / 960.0f;
-                    
-                    ImGui::SetNextWindowPos({ mid_st.x - sz.x * 0.5f, mid_st.y - sz.y * 0.5f });
-                    ImGui::SetNextWindowSize(sz);
-                    ImGui::SetNextWindowBgAlpha(0.8f);
-                    ImGui::Begin("##res", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
-                    if (t >= 90) {
-                        float result_origs[5] = {
-                            *(float*)(ecl_glob + 0x38),
-                            *(float*)(ecl_glob + 0x34),
-                            *(float*)(ecl_glob + 0x30),
-                            *(float*)(ecl_glob + 0x2C),
-                            *(float*)(ecl_glob + 0x28)
-                        };
-                        float scores[6] = { 0, 0.1, 0.5, 0.6, 0.9, 1.0 };
-                        // calculates
-                        {
-                            float div[5] = { 3.5f, 4.8f, 4.0f, 3.1f, 3.0f };
-                            float pows[5] = { 1.2, 1.1, 1.1, 1.2, 2.05 };
-                            for (int i = 0; i < 5; i++) {
-                                result_origs[i] = (result_origs[i] - 3.0f) / div[i];
-                                result_origs[i] = powf(result_origs[i], pows[i]);
-                            }
-                            scores[0] = 0.6f * result_origs[0] + 0.15f * result_origs[1] + 0.05f * result_origs[2] + 0.15f * result_origs[3] + 0.05f * result_origs[4];
-                            scores[1] = 0.0f * result_origs[0] + 0.5f * result_origs[1] + 0.2f * result_origs[2] + 0.15f * result_origs[3] + 0.15f * result_origs[4];
-                            scores[2] = 0.0f * result_origs[0] + 0.1f * result_origs[1] + 0.75f * result_origs[2] + 0.05f * result_origs[3] + 0.1f * result_origs[4];
-                            scores[3] = 0.1f * result_origs[0] + 0.4f * result_origs[1] + 0.0f * result_origs[2] + 0.5f * result_origs[3] + 0.0f * result_origs[4];
-                            scores[4] = 0.05f * result_origs[0] + 0.05f * result_origs[1] + 0.0f * result_origs[2] + 0.1f * result_origs[3] + 0.8f * result_origs[4];
-                            scores[5] = 0.1f * result_origs[0] + 0.3f * result_origs[1] + 0.3f * result_origs[2] + 0.2f * result_origs[3] + 0.1f * result_origs[4];
-                            for (int i = 0; i < 6; i++) {
-                                scores[i] = 1.0f / (1.0f + expf(1.8f - 4.0f * scores[i]));
-                            }
-                        }
-                        float avg_score = 0.0f;
-                        for (int i = 0; i < 6; i++)
-                            avg_score += scores[i];
-                        avg_score /= 6.0f;
-
-                        const char* abtest_rank;
-                        if (avg_score < 0.2f)
-                            abtest_rank = S(TH15_AB_TEST_RES_RANK_10);
-                        else if (avg_score < 0.36f)
-                            abtest_rank = S(TH15_AB_TEST_RES_RANK_9);
-                        else if (avg_score < 0.54f)
-                            abtest_rank = S(TH15_AB_TEST_RES_RANK_8);
-                        else if (avg_score < 0.72f)
-                            abtest_rank = S(TH15_AB_TEST_RES_RANK_7);
-                        else if (avg_score < 0.9f)
-                            abtest_rank = S(TH15_AB_TEST_RES_RANK_6);
-                        else if (avg_score < 0.95f)
-                            abtest_rank = S(TH15_AB_TEST_RES_RANK_5);
-                        else if (avg_score < 0.98f)
-                            abtest_rank = S(TH15_AB_TEST_RES_RANK_4);
-                        else if (avg_score < 0.985f)
-                            abtest_rank = S(TH15_AB_TEST_RES_RANK_3);
-                        else if (avg_score < 0.99f)
-                            abtest_rank = S(TH15_AB_TEST_RES_RANK_2);
-                        else
-                            abtest_rank = S(TH15_AB_TEST_RES_RANK_1);
-
-                        ImGui::Text("%s %s", S(TH15_AB_TEST_RES), abtest_rank);
-                        ImGui::Text(S(TH15_AB_TEST_RES_DESC));
-
-                        ImVec2 p0 = ImGui::GetCursorScreenPos();
-                        ImVec2 csz = ImGui::GetContentRegionAvail();
-                        ImVec2 cmid = { p0.x + csz.x * 0.5f, p0.y + csz.y * 0.5f };
-                        ImVec2 p1 = { cmid.x + csz.x * 0.5f, cmid.y + csz.y * 0.5f };
-                        float hheight = csz.y * 0.75f * 0.5f;
-
-                        ImDrawList* p = ImGui::GetWindowDrawList();
-                        ImVec4 color1 = ImGui::GetStyleColorVec4(ImGuiCol_::ImGuiCol_ChildBg);
-                        color1.w = 0.1f;
-                        p->AddRectFilled(p0, p1, ImGui::ColorConvertFloat4ToU32(color1));
-                        p->AddRect(p0, p1, ImGui::ColorConvertFloat4ToU32(ImGui::GetStyleColorVec4(ImGuiCol_::ImGuiCol_Text)));
-                        p->PushClipRect(p0, p1);
-                        {
-                            ImVec2 points[6];
-                            //radar
-                            for (int i = 0; i < 6; i++) {
-                                p->AddLine(cmid, { cmid.x + hheight * cosf(i * std::numbers::pi * 2.0f / 6.0f - 1.57079f), cmid.y + hheight * sinf(i * std::numbers::pi * 2.0f / 6.0f - 1.57079f) }, ImGui::ColorConvertFloat4ToU32(ImGui::GetStyleColorVec4(ImGuiCol_::ImGuiCol_Text)), 2.0f);
-                            }
-                            // lines
-                            constexpr float radiuses_ranks[] = { 
-                                0.18f / 0.9f * 0.5f, 
-                                0.36f / 0.9f * 0.5f, 
-                                0.54f / 0.9f * 0.5f, 
-                                0.72f / 0.9f * 0.5f, 
-                                0.5f, 0.65f, 0.85f, 1.0f };
-                            for (int i = 0; i < 8; i++) {
-                                float ra = radiuses_ranks[i] * hheight;
-                                for (int i = 0; i < 6; i++) {
-                                    points[i] = { cmid.x + ra * cosf(i * std::numbers::pi * 2.0f / 6.0f - 1.57079f), cmid.y + ra * sinf(i * std::numbers::pi * 2.0f / 6.0f - 1.57079f) };
-                                }
-                                p->AddPolyline(points, 6, ImGui::ColorConvertFloat4ToU32(ImGui::GetStyleColorVec4(ImGuiCol_::ImGuiCol_Text)), ImDrawFlags_::ImDrawFlags_Closed, i == 7 ? 2.0f : 1.0f);
-                            }
-                            //scores
-                            auto MInterpolation = [](float t, float a, float b) {
-                                if (t < 0.0f) {
-                                    return a;
-                                } else if (t < 0.5) {
-                                    float k = (b - a) * 2.0f;
-                                    return k * t * t + a;
-                                } else if (t < 1.0f) {
-                                    float k = (b - a) * 2.0f;
-                                    t = t - 1.0f;
-                                    return -k * t * t + b;
-                                }
-                                return b;
-                            };
-                            float t2 = MInterpolation((t - 90.0f) / 90.0f, 0.0f, 1.0f);
-                            for (int i = 0; i < 6; i++)
-                                scores[i] *= t2;
-                            //animation
-                            for (int i = 0; i < 6; i++) {
-                                float radius = scores[i];
-                                if (scores[i] < 0.9f) {
-                                    radius = scores[i] / 0.9f * 0.5f;
-                                } else if (scores[i] < 0.95f){
-                                    radius = scores[i] * 3.0f - 2.2f;
-                                } else if (scores[i] < 0.98f) {
-                                    radius = scores[i] * 6.66667f - 5.683333f;
-                                } else {
-                                    radius = scores[i] * 7.5f - 6.5f;
-                                }
-                                points[i] = { cmid.x + hheight * radius * cosf(i * std::numbers::pi * 2.0f / 6.0f - 1.57079f), cmid.y + hheight * radius * sinf(i * std::numbers::pi * 2.0f / 6.0f - 1.57079f) };
-                            }
-                            for (int i = 0; i < 6; i++) {
-                                auto col = ImGui::GetStyleColorVec4(ImGuiCol_PlotHistogram); col.w = 0.75f;
-                                p->AddTriangleFilled(points[i], points[(i + 1) % 6], cmid, ImGui::ColorConvertFloat4ToU32(col));
-                            }
-                            p->AddPolyline(points, 6, ImGui::ColorConvertFloat4ToU32(ImGui::GetStyleColorVec4(ImGuiCol_::ImGuiCol_PlotLines)), ImDrawFlags_::ImDrawFlags_Closed, 1.0f);
-
-                            
-                            //text
-                            const char* chars[] = {
-                                S(TH15_AB_TEST_REACTION),
-                                S(TH15_AB_TEST_MOV),
-                                S(TH15_AB_TEST_RET),
-                                S(TH15_AB_TEST_HORIZON),
-                                S(TH15_AB_TEST_PREC),
-                                S(TH15_AB_TEST_LUCK) };
-                            for (int i = 0; i < 6; i++) {
-                                const char* rank = "E";
-                                if (scores[i] < 0.18f)
-                                    rank = "F"; 
-                                else if (scores[i] < 0.36f)
-                                    rank = "E"; 
-                                else if (scores[i] < 0.54f)
-                                    rank = "D"; 
-                                else if (scores[i] < 0.72f)
-                                    rank = "C"; 
-                                else if (scores[i] < 0.9f)
-                                    rank = "B"; 
-                                else if (scores[i] < 0.95f)
-                                    rank = "A"; // 0.9-0.95
-                                else if (scores[i] < 0.98f)
-                                    rank = "S"; // 0.95-0.98
-                                else if (scores[i] < 0.99f)
-                                    rank = "SS"; // 0.98-0.99
-                                else 
-                                    rank = "???"; // 0.99+
-                                std::string text = std::format("{}:{}({:>3.1f})", chars[i], rank, scores[i] * 100.0f).c_str();
-                                auto sz_text = ImGui::CalcTextSize(text.c_str());
-                                float h2 = hheight;
-                                if (i == 0 || i == 3) h2 = hheight + sz_text.y;
-                                else h2 = hheight + sz_text.x * 0.85f;
-                                ImVec2 pos = { cmid.x + h2 * cosf(i * std::numbers::pi * 2.0f / 6.0f - 1.57079f), cmid.y + h2 * sinf(i * std::numbers::pi * 2.0f / 6.0f - 1.57079f) };
-                                pos.x -= sz_text.x * 0.5f;
-                                pos.y -= sz_text.y * 0.5f;
-                                p->AddText(pos, ImGui::ColorConvertFloat4ToU32(ImGui::GetStyleColorVec4(ImGuiCol_::ImGuiCol_Text)), text.c_str());
-                            }
-                        }
-                        p->PopClipRect();
-                    }
-                    ImGui::End();
-                } else {
-                    t = 0;
-                }
+                ABTestRender();
             }
         }
         SSS::SSS_Update(15);
-        if (g_adv_igi_options.show_keyboard_monitor && *(DWORD*)(0x004E9BB8))
+        if (g_adv_igi_options.show_keyboard_monitor && GetMemContent(PLAYER_PTR))
             KeysHUD(15, { 1280.0f, 0.0f }, { 840.0f, 0.0f }, g_adv_igi_options.keyboard_style);
         
         RenderLockTimer(p);

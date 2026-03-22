@@ -256,7 +256,7 @@ bool LauncherSettingGet(const char* name, std::string& valueOut)
         return false;
     }
 }
-void LauncherSettingSet(const char* name, int& valueIn)
+void LauncherSettingSet(const char* name, int valueIn)
 {
     auto& settingsJson = GetCfgSettingsJson();
     if (settingsJson.HasMember(name)) {
@@ -265,7 +265,7 @@ void LauncherSettingSet(const char* name, int& valueIn)
     JsonAddMember(settingsJson, name, valueIn, gCfgJson.GetAllocator());
     LauncherCfgWrite();
 }
-void LauncherSettingSet(const char* name, unsigned int& valueIn)
+void LauncherSettingSet(const char* name, unsigned int valueIn)
 {
     auto& settingsJson = GetCfgSettingsJson();
     if (settingsJson.HasMember(name)) {
@@ -274,7 +274,7 @@ void LauncherSettingSet(const char* name, unsigned int& valueIn)
     JsonAddMember(settingsJson, name, valueIn, gCfgJson.GetAllocator());
     LauncherCfgWrite();
 }
-void LauncherSettingSet(const char* name, bool& valueIn)
+void LauncherSettingSet(const char* name, bool valueIn)
 {
     auto& settingsJson = GetCfgSettingsJson();
     if (settingsJson.HasMember(name)) {
@@ -283,7 +283,7 @@ void LauncherSettingSet(const char* name, bool& valueIn)
     JsonAddMember(settingsJson, name, valueIn, gCfgJson.GetAllocator());
     LauncherCfgWrite();
 }
-void LauncherSettingSet(const char* name, float& valueIn)
+void LauncherSettingSet(const char* name, float valueIn)
 {
     auto& settingsJson = GetCfgSettingsJson();
     if (settingsJson.HasMember(name)) {
@@ -341,7 +341,7 @@ void LauncherSettingSet(const char* name, const char* valueIn) {
     JsonAddMemberA(settingsJson, name, valueIn, gCfgJson.GetAllocator());
     LauncherCfgWrite();
 }
-void LauncherSettingSet(const char* name, const std::string& valueIn)
+void LauncherSettingSet(const char* name, const std::string valueIn)
 {
     LauncherSettingSet(name, valueIn.c_str());
 }
@@ -812,7 +812,7 @@ private:
     {
 
     }
-    SINGLETON(THUpdate);
+    SINGLETON(THUpdate)
 
 public:
     enum ChkUpdateStatus {
@@ -1415,7 +1415,7 @@ private:
             mThcrapGames[game.type].push_back(game);
         }
     }
-    SINGLETON(THCfgGui);
+    SINGLETON(THCfgGui)
 
 public:
     void GuiUpdate()
@@ -1535,7 +1535,6 @@ private:
     }
     void KeyBindSettings()
     {
-        bool dirSettingModalFlag = false;
         bool confirmModalFlag = false;
         LauncherSettingGet_KeyBind();
 
@@ -2178,14 +2177,14 @@ private:
             mHotkeyF12MenuListening = false;
             mHotkeyScreenshotListening = false;
             mHotkeyLanguageListening = false;
-            int backspace_menu_chord = 1 << Gui::ChordKey_Backspace;
-            int advanced_menu_chord = 1 << Gui::ChordKey_F12;
-            int screenshot_chord = 1 << Gui::ChordKey_Home;
-            int language_chord = 1 << Gui::ChordKey_Alt;
-            LauncherSettingSet("backspace_menu_chord", backspace_menu_chord);
-            LauncherSettingSet("advanced_menu_chord", advanced_menu_chord);
-            LauncherSettingSet("screenshot_chord", screenshot_chord);
-            LauncherSettingSet("language_chord", language_chord);
+            int backspace_menu_chord_r = 1 << Gui::ChordKey_Backspace;
+            int advanced_menu_chord_r = 1 << Gui::ChordKey_F12;
+            int screenshot_chord_r = 1 << Gui::ChordKey_Home;
+            int language_chord_r = 1 << Gui::ChordKey_Alt;
+            LauncherSettingSet("backspace_menu_chord", backspace_menu_chord_r);
+            LauncherSettingSet("advanced_menu_chord", advanced_menu_chord_r);
+            LauncherSettingSet("screenshot_chord", screenshot_chord_r);
+            LauncherSettingSet("language_chord", language_chord_r);
         }
     }
 
@@ -2364,7 +2363,7 @@ private:
             mWindowSize.Gui(S(THPRAC_CHANGE_WINDOW_SZ_WHEN_OPEN_SIZE));
 
             mUD_Replay_10.Gui(S(THPRAC_MOF_UD_REP));
-            mPauseBGM_06.Gui(S(THPRAC_PAUSE_BGM_TH06));
+            mPauseBGM_06.Gui(S(THPRAC_PAUSE_BGM_TH678), S(THPRAC_PAUSE_BGM_TH678_DESC));
             mAlwaysSave_07.Gui(S(THPRAC_TH07_ALWAYS_SAVE_SCORE_SPELL_HIST), S(THPRAC_TH07_ALWAYS_SAVE_SCORE_SPELL_HIST_DESC));
             mSpeedupBGM.Gui(S(THPRAC_MAKE_BGM_FASTER_WHEN_SPEEDUP));
             if (mSpeedupBGM.Get())
@@ -2463,6 +2462,7 @@ private:
             mCfgEnableTH12_ChromaticUFO_info.Gui(S(THPRAC_INGAMEINFO_12_UFO_SUPER_ULTRA_CHROMATIC_INFO_PRO));
             mCfgEnableTH13_ShowHits_autoly.Gui(S(THPRAC_INGAMEINFO_TH13_SHOW_HITS2));
             mCfgEnableTH13_ShowHitBar_autoly.Gui(S(THPRAC_INGAMEINFO_TH13_SHOW_HIT_BAR2));
+            mCfgEnableTH13_DisableMissTrance_autoly.Gui(S(THPRAC_TH13_DISABLE_TRANCE_AUTO));
             mCfgEnableTH14_ShowBonus_autoly.Gui(S(THPRAC_INGAMEINFO_TH14_SHOW_BONUS2));
             mCfgEnableTH14_ShowItemsCnt_autoly.Gui(S(THPRAC_INGAMEINFO_TH14_SHOW_ITEMS2));
             mCfgEnableTH14_ShowDropBar_autoly.Gui(S(THPRAC_INGAMEINFO_TH14_SHOW_DROP_BAR2));
@@ -2705,6 +2705,7 @@ private:
     THCfgCheckbox mCfgEnableTH12_ChromaticUFO_info { "chromatic_UFO_info", false };
     THCfgCheckbox mCfgEnableTH13_ShowHits_autoly { "auto_th13_show_hits", false };
     THCfgCheckbox mCfgEnableTH13_ShowHitBar_autoly { "auto_th13_show_hitbar", false };
+    THCfgCheckbox mCfgEnableTH13_DisableMissTrance_autoly { "auto_th13_disable_miss_trance", false };
     THCfgCheckbox mCfgEnableTH14_ShowBonus_autoly { "auto_th14_show_bonus", false };
     THCfgCheckbox mCfgEnableTH14_ShowItemsCnt_autoly { "auto_th14_show_item_cnt", false };
     THCfgCheckbox mCfgEnableTH14_ShowDropBar_autoly { "auto_th14_show_drop_bar", false };

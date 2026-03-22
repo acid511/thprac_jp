@@ -3,6 +3,7 @@
 #include <metrohash128.h>
 #include <format>
 
+#include <d3d9.h>
 
 namespace THPrac {
 namespace TH18 {
@@ -28,21 +29,47 @@ namespace TH18 {
         SND_INVALID = 16,
     };
 
+    static inline constexpr uint32_t COUNTERSTOP = 999999999;
+    static inline constexpr int32_t STAGE_COUNT = 8;
+
     int g_lock_timer = 0;
     bool g_lock_timer_flag = false;
 
     enum addrs {
-        GAME_THREAD_PTR = 0x4cf2e4,
-        BULLET_MANAGER_PTR = 0x4cf2bc,
-        ITEM_MANAGER_PTR = 0x4cf2ec,
-        ABILTIY_MANAGER_PTR = 0x4cf298,
-        ABILITY_SHOP_PTR = 0x4cf2a4,
+        REPLAY_MANAGER_PTR = 0x4cf418,
+        CARD_PRICE_TABLE = 0x4b35c4,
         CARD_DESC_LIST = 0x4c53c0,
+        MENU_INPUT = 0x4ca21c,
+        MODEFLAGS = 0x4cccc8,
+        STAGE_NUM = 0x4cccdc,
+        NEXT_STAGE_NUM = 0x4ccce0,
+        SCORE = 0x4cccfc,
+        FUNDS = 0x4ccd34,
+        POWER = 0x4ccd38,
+        LIVES = 0x4ccd48,
+        BOMBS = 0x4ccd58,
+        ABILITY_MANAGER_PTR = 0x4cf298,
+        ABILITY_SHOP_PTR = 0x4cf2a4,
+        ASCII_MANAGER_PTR = 0x4cf2ac,
+        TRANSITION_STG_PTR = 0x4cf2b0,
+        BULLET_MANAGER_PTR = 0x4cf2bc,
         MUKADE_ADDR = 0x4cf2d4,
+        GAME_THREAD_PTR = 0x4cf2e4,
+        ITEM_MANAGER_PTR = 0x4cf2ec,
+        PAUSE_MENU_PTR = 0x4cf40c,
+        PLAYER_PTR = 0x4cf410,
+        SCOREFILE_MANAGER_PTR = 0x4cf41c,
+        MAIN_MENU_PTR = 0x4cf43c,
+        ANM_MANAGER_PTR = 0x51f65c,
         WINDOW_PTR = 0x568c30,
     };
+
+    enum funcs {
+        SAVE_REPLAY = 0x461e90,
+        SET_MENU = 0x4646e0,
+    };
     
-    enum cards {
+   enum cards {
         KOZUCHI = 42,
         KANAME,
         MOON,
@@ -57,58 +84,129 @@ namespace TH18 {
         MUKADE
     };
 
-    struct Thread {
-        void* vtable;
-        void* thread;
-        uint32_t tid;
-        int32_t __bool_c;
-        int32_t __bool_10;
-        HINSTANCE* phModule;
-        char filler_24[0x4];
-    };
+ struct Thread {
+       void* vtable; // 0x0
+       void* thread; // 0x4
+       uint32_t tid; // 0x8
+       int32_t __bool_c; // 0xc
+       int32_t __bool_10; // 0x10
+       HINSTANCE* phModule; // 0x14
+       char filler_24[0x4]; // 0x18
+   };
 
     struct CardBase {
-        struct VTableCard* vtable;
-        int32_t card_id;
-        int32_t array_index___plus_1_i_think;
-        ThList<CardBase> list_node;
-        int32_t anm_id_for_ingame_effect;
-        Timer recharge_timer;
-        Timer _recharge_timer;
-        int32_t recharge_time;
-        struct TableCardData* table_entry;
-        int32_t flags;
+       struct VTableCard* vtable; // 0x0
+       int32_t card_id; // 0x4
+       int32_t array_index___plus_1_i_think; // 0x8
+       ThList<CardBase> list_node; // 0xc
+       int32_t anm_id_for_ingame_effect; // 0x1c
+       Timer recharge_timer; // 0x20
+       Timer _recharge_timer; // 0x34
+       int32_t recharge_time; // 0x48
+       struct TableCardData* table_entry; // 0x4c
+       int32_t flags; // 0x50
     };
 
     struct CardLily : public CardBase {
-        int32_t count;
+        int32_t count; // 0x54
+    };
+
+    struct TableCardData {
+        char* internal_name;
+        uint32_t card_id;
+        uint32_t in_trial;
+        uint32_t category;
+        uint32_t price;
+        uint32_t weight;
+        uint32_t appearance_condition;
+        uint32_t allow_duplicates;
+        uint32_t menu_equippable;
+        uint32_t default_unlock;
+        uint32_t __not_basic_resource;
+        uint32_t sprite_large;
+        uint32_t sprite_small;
     };
 
     struct AbilityManager {
-        char filler_0[0x4];
-        struct UpdateFunc* on_tick;
-        struct UpdateFunc* on_draw;
-        struct AnmLoaded* ability_anm;
-        struct AnmLoaded* abcard_anm;
-        struct AnmLoaded* abmenu_anm;
-        ThList<CardBase> card_list_head;
-        int32_t num_total_cards;
-        int32_t num_active_cards;
-        int32_t num_equipment_cards;
-        int32_t num_passive_cards;
-        CardBase* selected_active_card;
-        int32_t __id_3c;
-        char filler_64[0xc];
-        int32_t __id_4c;
-        char filler_80[0x4];
-        int32_t flags;
-        int32_t __array_1[0x100];
-        int32_t __array_2[0x100];
-        int32_t __array_3[0x100];
-        char filler_3160[0xc];
-        int32_t __created_ability_txt;
-        struct Thread __thread;
-        char filler_3208[0xe8];
+        char filler_0[0x4]; // 0x0
+        struct UpdateFunc* on_tick; // 0x4
+        struct UpdateFunc* on_draw; // 0x8
+        struct AnmLoaded* ability_anm; // 0xc
+        struct AnmLoaded* abcard_anm; // 0x10
+        struct AnmLoaded* abmenu_anm; // 0x14
+        ThList<CardBase> card_list_head; // 0x18
+        int32_t num_total_cards; // 0x28
+        int32_t num_active_cards; // 0x2c
+        int32_t num_equipment_cards; // 0x30
+        int32_t num_passive_cards; // 0x34
+        CardBase* selected_active_card; // 0x38
+        int32_t __id_3c; // 0x3c
+        char filler_64[0xc]; // 0x40 - 0x48
+        int32_t __id_4c; // 0x4c
+        char filler_80[0x4]; // 0x50
+        int32_t flags; // 0x54
+        int32_t __array_1[0x100]; // 0x58
+        int32_t __array_2[0x100]; // 0x458
+        int32_t __array_3[0x100]; // 0x858
+        char filler_3160[0xc]; // 0xc58
+        int32_t __created_ability_txt; // 0xc64
+        struct Thread __thread; // 0xc68
+        int32_t bought_flags[0x40]; // 0xc84
+    };
+
+    struct AnmSprite { // size 0x44
+        char _pad0[0x8];
+        int32_t __index_8; // 0x8
+        char _pad1[0x38];
+    };
+
+    struct AnmImage { // size 0x18
+        LPDIRECT3DTEXTURE9 d3d_texture; // 0x0
+        char _pad0[0x14];
+    };
+
+    struct AnmLoaded { // size 0x13c
+        char _pad0[0x11c];
+        AnmSprite* sprites; // 0x11c
+        char _pad1[0x4];
+        AnmImage* images; // 0x124
+        char _pad2[0x14];
+    };
+
+    struct AnmManager {
+        char _pad0[0x312072c];
+        AnmLoaded* loaded_anm_files[33]; // 0x312072c
+    };
+
+    struct ReplayStageData { // size 0x28
+        struct ReplayFrameInput* input_start;
+        struct ReplayFrameInput* input_current; // 0x4
+        uint8_t* fps_counts_start; // 0x8
+        uint8_t* fps_counts_current; // 0xC
+        struct ReplayGameState* gamestate_start; // 0x10
+        int32_t current_frame; // 0x14
+        ThList<ReplayStageData> list_node; // 0x18
+    };
+
+    struct Replay { // size 0x31C
+        char _pad0[0xc];
+        uint32_t replay_mode; // 0xc
+        int __dword_10; // 0x10
+        struct ReplayHeader* header; // 0x14
+        struct ReplayInfo* info; // 0x18
+        struct ReplayGameState* game_states[STAGE_COUNT]; // 0x1c
+        ThList<struct ReplayChunk> chunk_lists[STAGE_COUNT]; // 0x3c
+        ThList<struct ReplayChunk>* current_chunk_node; // 0xbc
+        int __chunk_count; // 0xc0
+        struct ReplayStageData stage_data[STAGE_COUNT]; // 0xc4
+        void* file_buffer; // 0x204
+        uint8_t __byte_208; // 0x208
+        char _pad1[0x3]; // 0x209
+        int32_t __int_20C; // 0x20c
+        struct UpdateFunc* on_tick_func_B; // 0x210
+        int32_t stage_number; // 0x214
+        uint32_t flags; // 0x218
+        char file_path[0x100]; // 0x21c
     };
 
     using std::pair;
@@ -133,6 +231,7 @@ namespace TH18 {
         int32_t vampire;
         int32_t sun;
         int32_t lily_count;
+        int32_t lily_cycle;
         int32_t lily_cd;
         int32_t bassdrum;
         int32_t psyco;
@@ -146,6 +245,7 @@ namespace TH18 {
         void Reset()
         {
             memset(this, 0, sizeof(THPracParam));
+            lily_cycle = -1; // to detect older replays not having it
         }
         bool ReadJson(std::string& json)
         {
@@ -172,6 +272,7 @@ namespace TH18 {
             GetJsonValue(vampire);
             GetJsonValue(sun);
             GetJsonValue(lily_count);
+            GetJsonValue(lily_cycle);
             GetJsonValue(lily_cd);
             GetJsonValue(bassdrum);
             GetJsonValue(psyco);
@@ -211,6 +312,7 @@ namespace TH18 {
                 AddJsonValue(vampire);
                 AddJsonValue(sun);
                 AddJsonValue(lily_count);
+                AddJsonValue(lily_cycle);
                 AddJsonValue(lily_cd);
                 AddJsonValue(bassdrum);
                 AddJsonValue(psyco);
@@ -265,6 +367,7 @@ namespace TH18 {
 
             mMukade.SetCurrentStep(100);
             *mMukade = 800;
+            *mLilyCycle = 1; // match vanilla behavior for counter=10 by default
 
             SetFade(0.8f, 0.1f);
             SetStyle(ImGuiStyleVar_WindowRounding, 0.0f);
@@ -272,7 +375,7 @@ namespace TH18 {
             SetViewport((void*)0x4cd420);
             OnLocaleChange();
         }
-        SINGLETON(THGuiPrac);
+        SINGLETON(THGuiPrac)
 
     public:
 
@@ -316,7 +419,8 @@ namespace TH18 {
                 thPracParam.mikoflash = 10000 - *mMikoflash;
                 thPracParam.vampire = 10000 - *mVampire;
                 thPracParam.sun = 10000 - *mSun;
-                thPracParam.lily_count = 10000 - *mLilyCount;
+                thPracParam.lily_count = *mLilyCount;
+                thPracParam.lily_cycle = *mLilyCycle;
                 thPracParam.lily_cd = 10000 - *mLilyCD;
                 thPracParam.bassdrum = 10000 - *mBassdrum;
                 thPracParam.psyco = 10000 - *mPsyco;
@@ -340,7 +444,7 @@ namespace TH18 {
                 pair.second.second = false;
 
             uint32_t* list = nullptr;
-            for (uint32_t* i = (uint32_t*)GetMemContent(ABILTIY_MANAGER_PTR, 0x1c); i; i = (uint32_t*)i[1]) {
+            for (uint32_t* i = (uint32_t*)GetMemContent(ABILITY_MANAGER_PTR, 0x1c); i; i = (uint32_t*)i[1]) {
                 list = i;
                 auto cardId = ((uint32_t**)list)[0][1];
 
@@ -441,16 +545,18 @@ namespace TH18 {
                         if (card.first == MUKADE)
                             continue;
 
-                        if (card.first == LILY)
+                       if (card.first == LILY) {
                             mLilyCount();
+
+                            if (*mLilyCount >= 10)
+                                mLilyCycle();
+                        }
 
                         char str[20];
                         sprintf(str, "%.2f %%%%", **slider * 0.01f);
                         (*slider)(str);
                     }
                 }
-
-                
             }
 
             mNavFocus();
@@ -503,7 +609,7 @@ namespace TH18 {
             case 1: // Chapter
                 mChapter.SetBound(1, chapterCounts[0] + chapterCounts[1]);
 
-                if (chapterCounts[1] == 0 && chapterCounts[2] != 0) {
+                if (chapterCounts[1] == 0 && chapterCounts[0] != 0) {
                     sprintf_s(chapterStr, S(TH_STAGE_PORTION_N), *mChapter);
                 } else if (*mChapter <= chapterCounts[0]) {
                     sprintf_s(chapterStr, S(TH_STAGE_PORTION_1), *mChapter);
@@ -563,6 +669,7 @@ namespace TH18 {
         Gui::GuiSlider<int, ImGuiDataType_S32> mVampire { TH18_VAMPIRE_CD, 0, 10000, 1, 1000 };
         Gui::GuiSlider<int, ImGuiDataType_S32> mSun { TH18_SUN_CD, 0, 10000, 1, 1000 };
         Gui::GuiSlider<int, ImGuiDataType_S32> mLilyCount { TH18_LILY_COUNT, 0, 10, 1, 1, 1 };
+        Gui::GuiCombo mLilyCycle { TH18_LILY_CYCLE, TH18_LILY_CYCLE_LIST };
         Gui::GuiSlider<int, ImGuiDataType_S32> mLilyCD { TH18_LILY_CD, 0, 10000, 1, 1000 };
         Gui::GuiSlider<int, ImGuiDataType_S32> mBassdrum { TH18_BASSDRUM_CD, 0, 10000, 1, 1000 };
         Gui::GuiSlider<int, ImGuiDataType_S32> mPsyco { TH18_PSYCO_CD, 0, 10000, 1, 1000 };
@@ -590,8 +697,8 @@ namespace TH18 {
             TH_SCORE, TH_LIFE, TH_LIFE_FRAGMENT, TH_BOMB, TH_BOMB_FRAGMENT,
             TH_POWER, TH18_FUNDS, TH18_MUKADE, TH18_KOZUCHI_CD, TH18_KANAME_CD,
             TH18_MOON_CD, TH18_MIKOFLASH_CD, TH18_VAMPIRE_CD, TH18_SUN_CD,
-            TH18_LILY_COUNT, TH18_LILY_CD, TH18_BASSDRUM_CD, TH18_PSYCO_CD,
-            TH18_CYLINDER_CD, TH18_RICEBALL_CD };
+            TH18_LILY_COUNT, TH18_LILY_CYCLE, TH18_LILY_CD, TH18_BASSDRUM_CD,
+            TH18_PSYCO_CD,TH18_CYLINDER_CD, TH18_RICEBALL_CD };
 
         int mChapterSetup[7][2] {
             { 3, 2 },
@@ -605,6 +712,17 @@ namespace TH18 {
 
         int mDiffculty = 0;
     };
+
+     struct LoadedReplayData {
+        std::wstring originalName;
+        std::wstring originalPath;
+        uint64_t metroHash[2];
+        uint32_t header[9];
+        void* decoded = nullptr;
+        void* extraData = nullptr;
+        size_t extraSize = 0;
+    };
+
     class THGuiRep : public Gui::GameGuiWnd {
         THGuiRep() noexcept
         {
@@ -612,30 +730,68 @@ namespace TH18 {
             GetEnvironmentVariableW(L"APPDATA", appdata, MAX_PATH);
             mAppdataPath = appdata;
         }
-        SINGLETON(THGuiRep);
+        SINGLETON(THGuiRep)
 
     public:
-        std::wstring mRepDir;
-        std::wstring mRepName;
-        uint64_t mRepMetroHash[2];
+        THPracParam mRepParam;
         bool mRepSelected = false;
+        uint32_t mSelectedRepStartStage;
+        uint32_t mSelectedRepEndStage;
+        uint32_t mSelectedRepPlaybackStartStage;
+        uint32_t mSelectedRepScores[STAGE_COUNT];
+        LoadedReplayData mSelectedRepData;
+        std::wstring mSelectedRepDir;
+        std::wstring mSelectedRepName;
+        std::wstring mSelectedRepPath;
+        std::wstring mAppdataPath;
+        uint64_t mRepMetroHash[2];
+
+        void DisableCardFix();
+        void EnableCardFix(LoadedReplayData& rd);
+        void ResetCardFix();
+        void ResetScoreFix();
 
         void CheckReplay()
         {
-            uint32_t index = GetMemContent(0x4cf43c, 0x5aac);
-            char* repName_ = (char*)GetMemAddr(0x4cf43c, index * 4 + 0x5ab4, 0x21c);
-            std::wstring repName = mb_to_utf16(repName_, 932);
+            const uint32_t index = GetMemContent(MAIN_MENU_PTR, 0x5aac);
+            const Replay replay = *GetMemContent<Replay*>(MAIN_MENU_PTR, index * 4 + 0x5ab4);
+
+            std::wstring repName = mb_to_utf16(replay.file_path, 932);
             std::wstring repDir(mAppdataPath);
             repDir.append(L"\\ShanghaiAlice\\th18\\replay\\");
-            repDir.append(repName);
-            mRepName = repName;
-            mRepDir = repDir;
+            mSelectedRepName = repName;
+            mSelectedRepDir = repDir;
 
+            // if selected replay changes, reset fixed score cache
+            if (mSelectedRepPath != repDir + repName) {
+                mSelectedRepPath = repDir + repName;
+                ResetCardFix();
+                ResetScoreFix();
+            }
+
+            // load thprac params if in replay
             std::string param;
-            if (ReplayLoadParam(repDir.c_str(), param) && mRepParam.ReadJson(param))
+            if (ReplayLoadParam(mSelectedRepPath.c_str(), param) && mRepParam.ReadJson(param))
                 mParamStatus = true;
             else
                 mRepParam.Reset();
+
+            
+            // determine scores & start/end stages of replay
+            for (size_t st = 1; st <= 7; ++st) {
+                if (replay.stage_data[st].input_start) {
+                    if (!mSelectedRepStartStage)
+                        mSelectedRepStartStage = st;
+                    mSelectedRepEndStage = st;
+
+                    mSelectedRepScores[st - 1] = GetMemContent((uintptr_t)&replay.stage_data[st].gamestate_start, 0x68 + 0x20);
+                }
+            }
+            mSelectedRepScores[mSelectedRepEndStage] = GetMemContent((uintptr_t)&replay.info, 0x18);
+
+            // load & decrypt file data
+            LoadSelectedReplayData();
+            EnableCardFix(mSelectedRepData);
         }
 
         bool mRepStatus = false;
@@ -648,6 +804,13 @@ namespace TH18 {
                 mRepSelected = false;
                 mRepStatus = false;
                 mParamStatus = false;
+                mSelectedRepStartStage = 0;
+                mSelectedRepEndStage = 0;
+                mSelectedRepPlaybackStartStage = 0;
+                memset(mSelectedRepScores, 0, sizeof(mSelectedRepScores));
+                UnloadReplayData();
+                DisableCardFix();
+
                 thPracParam.Reset();
                 break;
             case 2:
@@ -656,38 +819,86 @@ namespace TH18 {
                 break;
             case 3:
                 mRepStatus = true;
+                mSelectedRepPlaybackStartStage = GetMemContent(RVA(MAIN_MENU_PTR), 0x24) + 1;
+
                 if (mParamStatus)
                     memcpy(&thPracParam, &mRepParam, sizeof(THPracParam));
-                CalcFileHash(mRepDir.c_str(), mRepMetroHash);
+                CalcFileHash(mSelectedRepPath.c_str(), mRepMetroHash);
                 break;
             default:
                 break;
             }
         }
 
-        std::wstring mAppdataPath;
+        #define ThDecrypt(data, size1, param1, param2, param3, size2) asm_call<0x401e40, Fastcall>(data, size1, param1, param2, param3, size2)
+#define ThUnlzss(dataBuffer, dataSize, outBuffer, outSize) asm_call<0x46f840, Fastcall>(dataBuffer, dataSize, outBuffer, outSize)
+
+        __declspec(noinline) void LoadSelectedReplayData()
+        {
+            // Load replay file
+            MappedFile file(THGuiRep::singleton().mSelectedRepPath.c_str());
+            mSelectedRepData.originalName = THGuiRep::singleton().mSelectedRepName;
+            mSelectedRepData.originalPath = THGuiRep::singleton().mSelectedRepPath;
+
+            // Decode and copy data
+            void* mRepDataRaw = nullptr;
+            memcpy(mSelectedRepData.header, file.fileMapView, 0x24);
+            mRepDataRaw = malloc(mSelectedRepData.header[7]);
+            mSelectedRepData.decoded = malloc(mSelectedRepData.header[8]);
+            mSelectedRepData.extraSize = file.fileSize - mSelectedRepData.header[3];
+            mSelectedRepData.extraData = malloc(mSelectedRepData.extraSize);
+            memcpy(mRepDataRaw, (void*)((uint32_t)file.fileMapView + 0x24), mSelectedRepData.header[7]);
+            memcpy(mSelectedRepData.extraData, (void*)((uint32_t)file.fileMapView + mSelectedRepData.header[3]), mSelectedRepData.extraSize);
+            ThDecrypt(mRepDataRaw, mSelectedRepData.header[7], 0x5c, 0xe1, 0x400, mSelectedRepData.header[7]);
+            ThDecrypt(mRepDataRaw, mSelectedRepData.header[7], 0x7d, 0x3a, 0x100, mSelectedRepData.header[7]);
+            ThUnlzss(mRepDataRaw, mSelectedRepData.header[7], mSelectedRepData.decoded, mSelectedRepData.header[8]);
+            free(mRepDataRaw);
+
+            // Calc Hash
+            mSelectedRepData.metroHash[0] = 0;
+            mSelectedRepData.metroHash[1] = 0;
+            MetroHash128::Hash((uint8_t*)file.fileMapView, file.fileSize, (uint8_t*)mSelectedRepData.metroHash);
+        }
+
+        __declspec(noinline) void UnloadReplayData()
+        {
+            if (mSelectedRepData.decoded) {
+                free(mSelectedRepData.decoded);
+                mSelectedRepData.decoded = nullptr;
+            }
+            if (mSelectedRepData.extraData) {
+                free(mSelectedRepData.extraData);
+                mSelectedRepData.extraData = nullptr;
+                mSelectedRepData.extraSize = 0;
+            }
+        }
 
     protected:
         bool mParamStatus = false;
-        THPracParam mRepParam;
     };
+
+     const uint8_t* GetEquippedCardCounts()
+    {
+        uint32_t* list = nullptr;
+        static uint8_t cardIdArray[64];
+        memset(cardIdArray, 0, 64);
+
+        for (uint32_t* i = (uint32_t*)GetMemContent(ABILITY_MANAGER_PTR, 0x1c); i; i = (uint32_t*)i[1]) {
+            list = i;
+            auto cardId = ((uint32_t**)list)[0][1];
+            cardIdArray[cardId] += 1;
+        }
+
+        return cardIdArray;
+    }
+
     void AddIndicateCard()
     {
         if (GetMemContent(0x4ccd00) == 4) {
             th18_free_blank.Enable();
-            asm_call<0x411460, Thiscall>(GetMemContent(ABILTIY_MANAGER_PTR), 0, 2);
-        } else {
-            uint32_t* list = nullptr;
-            uint8_t cardIdArray[64];
-            memset(cardIdArray, 0, 64);
-            for (uint32_t* i = (uint32_t*)GetMemContent(ABILTIY_MANAGER_PTR, 0x1c); i; i = (uint32_t*)i[1]) {
-                list = i;
-                auto cardId = ((uint32_t**)list)[0][1];
-                cardIdArray[cardId] += 1;
-            }
-            if (!cardIdArray[55]) {
-                asm_call<0x411460, Thiscall>(*(uint32_t*)ABILTIY_MANAGER_PTR, 55, 2);
-            }
+            asm_call<0x411460, Thiscall>(GetMemContent(ABILITY_MANAGER_PTR), 0, 2);
+        } else if (!GetEquippedCardCounts()[55]) {
+            asm_call<0x411460, Thiscall>(*(uint32_t*)ABILITY_MANAGER_PTR, 55, 2);
         }
     }
     PATCH_ST(th18_pause_skip_1, 0x458692, "E93F010000");
@@ -720,7 +931,7 @@ namespace TH18 {
             th18_shop_escape_2.Setup();
             th18_free_blank.Setup();
         }
-        SINGLETON(THOverlay);
+        SINGLETON(THOverlay)
 
     protected:
         inline void ResetCardMenu()
@@ -735,7 +946,7 @@ namespace TH18 {
         inline void AddCard(uint32_t cardId)
         {
             if (cardId < 55)
-                asm_call<0x411460, Thiscall>(*(uint32_t*)ABILTIY_MANAGER_PTR, cardId, 2);
+                asm_call<0x411460, Thiscall>(*(uint32_t*)ABILITY_MANAGER_PTR, cardId, 2);
                 asm_call<0x418de0, Fastcall>(cardId, 0);
         }
         void CheckMarket()
@@ -898,14 +1109,26 @@ namespace TH18 {
         HOTKEY_ENDDEF();
         
         HOTKEY_DEFINE(mInfPower, TH_INFPOWER, "F4", VK_F4)
-        PATCH_HK(0x45748e, "9090")
+        PATCH_HK(0x45748e, NOP(2)),
+        PATCH_HK(0x418283, NOP(2)),
+        EHOOK_HK(0x418427, 3, { // add indicator card for fraudulent purchases
+            uint32_t price = GetMemContent(CARD_PRICE_TABLE + 0x4 * ((TableCardData*)pCtx->Eax)->price);
+            if (price > GetMemContent(FUNDS) + GetMemContent(POWER) - 100)
+                AddIndicateCard();
+        })
         HOTKEY_ENDDEF();
         
         HOTKEY_DEFINE(mInfFunds, TH18_INFFUNDS, "F5", VK_F5)
         PATCH_HK(0x45c244, "909090909090"),
         PATCH_HK(0x40d96f, "90909090909090909090"),
         PATCH_HK(0x418496, "90909090909090909090"),
-        PATCH_HK(0x418465, "9090")
+        PATCH_HK(0x418465, NOP(2)),
+        PATCH_HK(0x418225, NOP(2)),
+        EHOOK_HK(0x41842a, 5, { // add indicator card for fraudulent purchases
+            uint32_t price = GetMemContent(CARD_PRICE_TABLE + 0x4 * ((TableCardData*)pCtx->Eax)->price);
+            if (price > GetMemContent(FUNDS) + GetMemContent(POWER) - 100)
+                AddIndicateCard();
+        })
         HOTKEY_ENDDEF();
         
         
@@ -956,7 +1179,7 @@ namespace TH18 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(TH18InGameInfo);
+        SINGLETON(TH18InGameInfo)
 
     public:
         int32_t mMissCount;
@@ -1001,11 +1224,11 @@ namespace TH18 {
 
         virtual void OnPreUpdate() override
         {
-            if (*(DWORD*)(0x004CF410)) {
+            if (GetMemContent(PLAYER_PTR)) {
                 GameUpdateInner(18);
             } else {
             }
-            if (*(THOverlay::singleton().mInGameInfo) && *(DWORD*)(0x004CF410)) {
+            if (*(THOverlay::singleton().mInGameInfo) && GetMemContent(PLAYER_PTR)) {
                 SetPosRel(900.0f / 1280.0f, 840.0f / 960.0f);
                 SetSizeRel(340.0f / 1280.0f, 0.0f);
                 Open();
@@ -1020,14 +1243,12 @@ namespace TH18 {
     class THGuiSP : public Gui::GameGuiWnd {
         THGuiSP() noexcept
         {
-            *mBugFix = true;
-
             SetFade(0.8f, 0.1f);
             SetStyle(ImGuiStyleVar_WindowRounding, 0.0f);
             SetStyle(ImGuiStyleVar_WindowBorderSize, 0.0f);
             OnLocaleChange();
         }
-        SINGLETON(THGuiSP);
+        SINGLETON(THGuiSP)
 
     public:
         int mState = 0;
@@ -1133,7 +1354,6 @@ namespace TH18 {
 
         unsigned int mSpellId = UINT_MAX;
 
-        Gui::GuiCheckBox mBugFix { TH16_BUGFIX };
         Gui::GuiCombo mPhase { TH_PHASE };
         Gui::GuiNavFocus mNavFocus { TH_PHASE };
     };
@@ -1169,44 +1389,11 @@ namespace TH18 {
         { .addr = 0x45f2c4, .data = PatchCode("ffffffff") },
         { .addr = 0x45f2cf, .data = PatchCode("ffffffff") },
     };
-    EHOOK_ST(th18_st6final_fix, 0x438e47, 8, {
-        static int st6FinalDummy[4] { 0, 0, 0, 0 };
-        if (!pCtx->Ecx) {
-            pCtx->Ecx = (uint32_t)st6FinalDummy - 0x1270;
-        }
-    });
-    EHOOK_ST(th18_scroll_fix, 0x407e05, 10, {
-        if (GetMemContent(GAME_THREAD_PTR) && GetMemContent(GAME_THREAD_PTR, 0xd0) && *(uint32_t*)(pCtx->Esp + 0x18) == 0x417955 && *(uint32_t*)(pCtx->Esp + 0x3c) == 0x417d39) {
-            pCtx->Eip = 0x407e0f;
-        }
-    });
-    EHOOK_ST(th18_mukade_fix, 0x412c76, 10, {
-        auto caller = *(uint32_t*)(pCtx->Esp + 0x20);
-        if (caller == 0x417974) {
-            pCtx->Eip = 0x412c80;
-        } else if (caller == 0x462e2a) {
-            if (*(uint32_t*)0x4cccdc != *(uint32_t*)0x4ccce0) {
-                pCtx->Eip = 0x412c80;
-            }
-        }
-    });
-    EHOOK_ST(th18_active_card_fix, 0x462f33, 3, {
-        if (GetMemContent(GAME_THREAD_PTR) && !GetMemContent(GAME_THREAD_PTR, 0xd0)) {
-            uint32_t activeCardId = GetMemContent(ABILTIY_MANAGER_PTR, 0x38);
-            if (activeCardId) {
-                *(uint32_t*)(pCtx->Esi + 0x964) = GetMemContent(activeCardId + 4);
-            } else {
-                *(uint32_t*)(pCtx->Esi + 0x964) = UINT_MAX;
-            }
-        }
-    });
-    PATCH_ST(th18_eirin_eiki_card_uninit_fix, 0x411ac2, "54");
-    PATCH_ST(th18_func_call2_uninit_fix, 0x4390ec, "0f1f4000");
-    PATCH_ST(th18_func_call3_uninit_fix, 0x43926c, "0f1f4000");
+   
     PATCH_ST(th18_all_clear_bonus_1, 0x4448ab, "eb0b909090");
     EHOOK_ST(th18_all_clear_bonus_2, 0x444afa, 7, {
-        *(int32_t*)(GetMemAddr(0x4cf2e0, 0x158)) = *(int32_t*)(0x4cccfc);
-        if (GetMemContent(0x4cccc8) & 0x10) {
+        *(int32_t*)(GetMemAddr(0x4cf2e0, 0x158)) = *(int32_t*)(SCORE);
+        if (GetMemContent(MODEFLAGS) & 0x10) {
             typedef void (*PScoreFunc)();
             PScoreFunc a = (PScoreFunc)0x458bd0;
             a();
@@ -1214,8 +1401,8 @@ namespace TH18 {
         }
     });
     EHOOK_ST(th18_all_clear_bonus_3, 0x444c49, 7, {
-        *(int32_t*)(GetMemAddr(0x4cf2e0, 0x158)) = *(int32_t*)(0x4cccfc);
-        if (GetMemContent(0x4cccc8) & 0x10) {
+        *(int32_t*)(GetMemAddr(0x4cf2e0, 0x158)) = *(int32_t*)(SCORE);
+        if (GetMemContent(MODEFLAGS) & 0x10) {
             typedef void (*PScoreFunc)();
             PScoreFunc a = (PScoreFunc)0x458bd0;
             a();
@@ -1223,9 +1410,8 @@ namespace TH18 {
         }
     });
     EHOOK_ST(th18_score_uncap_replay_fix, 0x4620b9, 3, {
-        if (pCtx->Eax >= 0x3b9aca00) {
-            pCtx->Eax = 0x3b9ac9ff;
-        }
+        if (pCtx->Eax > COUNTERSTOP)
+            pCtx->Eax = COUNTERSTOP;
     });
     EHOOK_ST(th18_score_uncap_replay_disp, 0x468405, 1, {
         *(const char**)(pCtx->Esp) = scoreDispFmt;
@@ -1257,7 +1443,6 @@ namespace TH18 {
 
     extern HookCtx th18_static_mallet_replay_gold;
     extern HookCtx th18_static_mallet_replay_green;
-    extern HookCtx th18_score_uncap_replay_factor;
     extern HookCtx th18_rep_card_fix;
 
     class THAdvOptWnd : public Gui::PPGuiWnd {
@@ -1280,19 +1465,12 @@ namespace TH18 {
             MasterDisableInit();
             ScoreUncapInit();
             BossMovementInit();
-            th18_mukade_fix.Setup();
-            th18_scroll_fix.Setup();
-            th18_st6final_fix.Setup();
-            th18_active_card_fix.Setup();
-            th18_eirin_eiki_card_uninit_fix.Setup();
-            th18_func_call2_uninit_fix.Setup();
-            th18_func_call3_uninit_fix.Setup();
             th18_rep_card_fix.Setup();
             th18_static_mallet_replay_gold.Setup();
             th18_static_mallet_replay_green.Setup();
             th18_bossmovedown.Setup();
         }
-        SINGLETON(THAdvOptWnd);
+        SINGLETON(THAdvOptWnd)
 
     public:
         static void StaticMalletConversion(PCONTEXT pCtx) {
@@ -1317,9 +1495,8 @@ namespace TH18 {
             }
         }
 
-        bool scoreUncapChkbox = false;
-        bool scoreUncapOverwrite = false;
-        bool scoreReplayFactor = false;
+        bool scoreUncapChkbox = true;
+        bool scoreUncapOverride = false;
         bool staticMalletReplay = false;
     public:
         int forceBossMoveDir = 0;
@@ -1329,10 +1506,11 @@ namespace TH18 {
         bool st6FinalFix = false;
         bool scrollFix = false;
         bool mukadeFix = false;
-        bool restartFix = false;
+        bool restartResetMarket = false;
         bool activeCardIdFix = false;
         bool eirinEikiCardFix = false;
         bool funcCallFix = false;
+        bool activeCardRepFix = false;
 
         struct FixData {
             uint32_t stage;
@@ -1345,16 +1523,7 @@ namespace TH18 {
         };
         bool mShowFixInstruction = false;
         std::vector<FixData> mFixData;
-        std::wstring mRepOriginalName;
-        std::wstring mRepOriginalPath;
-        uint64_t mRepMetroHash[2];
-        uint32_t mRepHeader[9];
-        void* mRepDataDecoded = nullptr;
-        void* mRepExtraData = nullptr;
-        size_t mRepExtraDataSize = 0;
-        const char* mStageStr[9] {
-            "?", "1", "2", "3", "4", "5", "6", "Extra", "?"
-        };
+        uint32_t mScoreOverwrites[STAGE_COUNT];
         
         __declspec(noinline) uint32_t* FindCardDesc(uint32_t id)
         {
@@ -1366,97 +1535,26 @@ namespace TH18 {
         }
 
 #define ThEncrypt(data, size1, param1, param2, param3, size2) asm_call<0x401f50, Fastcall>(data, size1, param1, param2, param3, size2)
-#define ThDecrypt(data, size1, param1, param2, param3, size2) asm_call<0x401e40, Fastcall>(data, size1, param1, param2, param3, size2)
-#define ThUnlzss(dataBuffer, dataSize, outBuffer, outSize)    asm_call<0x46f840, Fastcall>(dataBuffer, dataSize, outBuffer, outSize)
 #define ThLzss(dataBuffer, dataSize, outSize)                 asm_call<0x46f5b0, Fastcall, void*>(dataBuffer, dataSize, outSize)
 #define _builtin_free(buffer)                                 asm_call<0x491a3f, Cdecl>(buffer)
 
-        __declspec(noinline) void UnloadReplay()
+        __declspec(noinline) bool SaveReplayWithData(LoadedReplayData& rd, void* repDataCopy)
         {
-            if (mRepDataDecoded) {
-                free(mRepDataDecoded);
-                mRepDataDecoded = nullptr;
-            }
-            if (mRepExtraData) {
-                free(mRepExtraData);
-                mRepExtraData = nullptr;
-            }
-
-            mFixData.clear();
-            th18_rep_card_fix.Disable();
-        }
-        __declspec(noinline) void OverwriteReplayData(void* replayData)
-        {
-            for (auto& fix : mFixData) {
-                if (fix.activeCardVec.size()) {
-                    int32_t* cardIdx = (int32_t*)(fix.activeCardIdPtr + (uint32_t)replayData);
-                    *cardIdx = fix.activeCardVec[fix.activeCardComboIdx];
-                }
-            }
-        }
-        __declspec(noinline) void ParseReplayData()
-        {
-            if (!mRepDataDecoded) {
-                return;
-            }
-
-            uint32_t repData = (uint32_t)mRepDataDecoded + 0xc8;
-            int limit = *(int*)((uint32_t)mRepDataDecoded + 0xa8);
-            if (limit >= 8) {
-                limit = 6;
-            }
-
-            for (int i = 0; i < limit; ++i) {
-                if (*(uint16_t*)(repData) >= 1 && *(uint16_t*)(repData) <= 7) {
-                    FixData data;
-                    data.stage = *(uint16_t*)(repData);
-
-                    uint8_t cardTrigger[57];
-                    memset(cardTrigger, 0, 57);
-                    data.activeCardId = *(int32_t*)(repData + 0x964);
-                    data.activeCardIdPtr = repData + 0x964 - (uint32_t)mRepDataDecoded;
-                    for (int32_t* j = (int32_t*)((uint32_t)repData + 0x164); *j >= 0; j++) {
-                        auto cardStruct = FindCardDesc(*j);
-                        if (cardStruct && cardStruct[3] == 0 && !cardTrigger[*j]) {
-                            data.activeCardVec.push_back(*j);
-                            data.activeCardLabelVec.push_back(TH18_CARD_LIST[*j]);
-                            cardTrigger[*j] = 1;
-                        }
-                    }
-                    data.activeCardLabelVec.push_back(0);
-                    data.activeCardComboIdx = 0;
-                    for (size_t k = 0; k < data.activeCardVec.size(); ++k) {
-                        if (data.activeCardId == data.activeCardVec[k]) {
-                            data.activeCardComboIdx = k;
-                            break;
-                        }
-                    }
-
-                    mFixData.push_back(data);
-                }
-                repData = repData + *(uint32_t*)(repData + 8) + 0x126c;
-            }
-        }
-        __declspec(noinline) void SaveReplay()
-        {
+            // Setup header copy
             uint32_t repHeader[9];
-            memcpy(repHeader, mRepHeader, sizeof(repHeader));
+            memcpy(repHeader, rd.header, sizeof(repHeader));
 
-            void* repDataOutput = malloc(repHeader[8]);
-            memcpy(repDataOutput, mRepDataDecoded, repHeader[8]);
-            OverwriteReplayData(repDataOutput);
-
+            // Re-encode data from data copy
             uint32_t repDataEncodedSize;
-            auto repDataEncoded = ThLzss(repDataOutput, repHeader[8], &repDataEncodedSize);
+            auto repDataEncoded = ThLzss(repDataCopy, repHeader[8], &repDataEncodedSize);
             repHeader[7] = repDataEncodedSize;
             repHeader[3] = repDataEncodedSize + 0x24;
-            ThEncrypt(repDataEncoded, mRepHeader[7], 0x7d, 0x3a, 0x100, repHeader[7]);
-            ThEncrypt(repDataEncoded, mRepHeader[7], 0x5c, 0xe1, 0x400, repHeader[7]);
-            free(repDataOutput);
+            ThEncrypt(repDataEncoded, rd.header[7], 0x7d, 0x3a, 0x100, repHeader[7]);
+            ThEncrypt(repDataEncoded, rd.header[7], 0x5c, 0xe1, 0x400, repHeader[7]);
+            free(repDataCopy);
 
+            // Setup file picker
             DWORD bytesProcessed;
-            std::wstring repDir = THGuiRep::singleton().mAppdataPath;
-            repDir.append(L"\\ShanghaiAlice\\th18\\replay\\");
             OPENFILENAMEW ofn;
             wchar_t szFile[512];
             wcscpy_s(szFile, L"th18_ud----.rpy");
@@ -1469,9 +1567,11 @@ namespace TH18 {
             ofn.nFilterIndex = 1;
             ofn.lpstrFileTitle = nullptr;
             ofn.nMaxFileTitle = 0;
-            ofn.lpstrInitialDir = repDir.c_str();
+            ofn.lpstrInitialDir = THGuiRep::singleton().mSelectedRepDir.c_str();
             ofn.lpstrDefExt = L".rpy";
             ofn.Flags = OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
+
+            // Open file picker & write file
             if (GetSaveFileNameW(&ofn)) {
                 auto outputFile = CreateFileW(szFile, GENERIC_READ | GENERIC_WRITE, 0, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
                 if (outputFile == INVALID_HANDLE_VALUE) {
@@ -1482,59 +1582,135 @@ namespace TH18 {
                 SetEndOfFile(outputFile);
                 WriteFile(outputFile, repHeader, sizeof(repHeader), &bytesProcessed, nullptr);
                 WriteFile(outputFile, repDataEncoded, repDataEncodedSize, &bytesProcessed, nullptr);
-                WriteFile(outputFile, mRepExtraData, mRepExtraDataSize, &bytesProcessed, nullptr);
+                WriteFile(outputFile, rd.extraData, rd.extraSize, &bytesProcessed, nullptr);
                 CloseHandle(outputFile);
 
+                // OK checkbox & close replay menu to force a reload
                 MsgBox(MB_ICONINFORMATION | MB_OK, S(TH_REPFIX_SAVE_SUCCESS), S(TH_REPFIX_SAVE_SUCCESS_DESC), utf16_to_utf8(szFile).c_str(), ofn.hwndOwner);
+                uintptr_t mainMenu = GetMemContent(MAIN_MENU_PTR);
+                if (mainMenu) {
+                    THGuiRep::singleton().State(1);
+                    asm_call<SET_MENU, Thiscall>(mainMenu, 1);
+                }
+
+                _builtin_free(repDataEncoded);
+                return true;
+            }
+        end:
+            _builtin_free(repDataEncoded);
+            return false;
+        }
+        
+        __declspec(noinline) bool SaveReplayScoreFix()
+        {
+            auto& guiRep = THGuiRep::singleton();
+            LoadedReplayData rd = guiRep.mSelectedRepData;
+
+            // Setup copy
+            void* repDataCopy = malloc(rd.header[8]);
+            memcpy(repDataCopy, rd.decoded, rd.header[8]);
+
+            // Overwrite score data in replay data copy
+            uint32_t repData = (uint32_t)rd.decoded + 0xc8;
+            int limit = *(int*)((uint32_t)rd.decoded + 0xa8);
+            if (limit >= 8)
+                limit = 6;
+
+            for (int i = 0; i < limit; ++i) {
+                const uint16_t stage = GetMemContent<uint16_t>(repData);
+                const uint32_t newScore = mScoreOverwrites[stage - 1];
+
+                if (stage > 1 && stage <= 7 && newScore && guiRep.mSelectedRepScores[stage - 1] < newScore) {
+                    uintptr_t trScoreAddr = (uint32_t)repDataCopy + (repData - (uint32_t)rd.decoded) + 0x88;
+                    *(uint32_t*)trScoreAddr = newScore;
+                }
+
+                repData += *(uint32_t*)(repData + 8) + 0x126c;
             }
 
-            end:
-            _builtin_free(repDataEncoded);
+            uintptr_t finalScoreAddr = (uint32_t)repDataCopy + 0x18;
+            *(uint32_t*)finalScoreAddr = (uint32_t)mScoreOverwrites[guiRep.mSelectedRepEndStage];
+
+            return SaveReplayWithData(rd, repDataCopy);
         }
-        __declspec(noinline) void LoadReplay()
+
+        __declspec(noinline) void ParseReplayCardData(LoadedReplayData& rd)
         {
-            UnloadReplay();
+            if (!rd.decoded)
+                return;
 
-            // Load replay
-            MappedFile file(THGuiRep::singleton().mRepDir.c_str());
+            uint32_t repData = (uint32_t)rd.decoded + 0xc8;
+            int limit = *(int*)((uint32_t)rd.decoded + 0xa8);
+            if (limit >= 8)
+                limit = 6;
 
-            mRepOriginalName = THGuiRep::singleton().mRepName;
-            mRepOriginalPath = THGuiRep::singleton().mRepDir;
+            for (int i = 0; i < limit; ++i) {
+                if (*(uint16_t*)(repData) >= 1 && *(uint16_t*)(repData) <= 7) {
+                    FixData data;
+                    data.stage = *(uint16_t*)(repData);
 
-            // Decode and copy data
-            void* mRepDataRaw = nullptr;
-            memcpy(mRepHeader, file.fileMapView, 0x24);
-            mRepDataRaw = malloc(mRepHeader[7]);
-            mRepDataDecoded = malloc(mRepHeader[8]);
-            mRepExtraDataSize = file.fileSize - mRepHeader[3];
-            mRepExtraData = malloc(mRepExtraDataSize);
-            memcpy(mRepDataRaw, (void*)((uint32_t)file.fileMapView + 0x24), mRepHeader[7]);
-            memcpy(mRepExtraData, (void*)((uint32_t)file.fileMapView + mRepHeader[3]), mRepExtraDataSize);
-            ThDecrypt(mRepDataRaw, mRepHeader[7], 0x5c, 0xe1, 0x400, mRepHeader[7]);
-            ThDecrypt(mRepDataRaw, mRepHeader[7], 0x7d, 0x3a, 0x100, mRepHeader[7]);
-            ThUnlzss(mRepDataRaw, mRepHeader[7], mRepDataDecoded, mRepHeader[8]);
-            free(mRepDataRaw);
+                    uint8_t cardTrigger[57];
+                    memset(cardTrigger, 0, 57);
+                    data.activeCardId = *(int32_t*)(repData + 0x964);
+                    data.activeCardIdPtr = repData + 0x964 - (uint32_t)rd.decoded;
+                    for (int32_t* j = (int32_t*)((uint32_t)repData + 0x164); *j >= 0; j++) {
+                        auto cardStruct = FindCardDesc(*j);
 
-            // Calc Hash
-            mRepMetroHash[0] = 0;
-            mRepMetroHash[1] = 0;
-            MetroHash128::Hash((uint8_t*)file.fileMapView, file.fileSize, (uint8_t*)mRepMetroHash);
+                        if (cardStruct && cardStruct[3] == 0 && !cardTrigger[*j]) {
+                            data.activeCardVec.push_back(*j);
+                            data.activeCardLabelVec.push_back(TH18_CARD_LIST[*j]);
+                            cardTrigger[*j] = 1;
+                        }
+                    }
 
-            ParseReplayData();
-            th18_rep_card_fix.Enable();
+                    data.activeCardLabelVec.push_back(0);
+                    data.activeCardComboIdx = 0;
+                    for (size_t k = 0; k < data.activeCardVec.size(); ++k) {
+                        if (data.activeCardId == data.activeCardVec[k]) {
+                            data.activeCardComboIdx = k;
+                            break;
+                        }
+                    }
 
-            return;
+                    mFixData.push_back(data);
+                }
+
+                repData += *(uint32_t*)(repData + 8) + 0x126c;
+            }
         }
+        
+
+        __declspec(noinline) bool SaveReplayCardFix()
+        {
+            LoadedReplayData& mRepLoaded = THGuiRep::singleton().mSelectedRepData;
+
+            // Setup copy
+            void* repDataCopy = malloc(mRepLoaded.header[8]);
+            memcpy(repDataCopy, mRepLoaded.decoded, mRepLoaded.header[8]);
+            // Overwrite card data in replay copy
+            for (auto& fix : mFixData) {
+                if (fix.activeCardVec.size()) {
+                    int32_t* cardIdx = (int32_t*)(fix.activeCardIdPtr + (uint32_t)repDataCopy);
+                    *cardIdx = fix.activeCardVec[fix.activeCardComboIdx];
+
+                }
+               
+            }
+
+            return SaveReplayWithData(mRepLoaded, repDataCopy);
+        }
+        
         bool GetAvailability()
         {
-            if (!mRepDataDecoded) {
+            LoadedReplayData& mRepLoaded = THGuiRep::singleton().mSelectedRepData;
+            if (!mRepLoaded.decoded) {
                 return false;
             }
             auto& repMenu = THGuiRep::singleton();
             if (GetMemContent(GAME_THREAD_PTR) && !GetMemContent(GAME_THREAD_PTR, 0xd0)) {
                 return false;
             }
-            if (repMenu.mRepStatus && (repMenu.mRepMetroHash[0] != mRepMetroHash[0] || repMenu.mRepMetroHash[1] != mRepMetroHash[1])) {
+            if (repMenu.mRepStatus && (repMenu.mRepMetroHash[0] != mRepLoaded.metroHash[0] || repMenu.mRepMetroHash[1] != mRepLoaded.metroHash[1])) {
                 return false;
             }
             return true;
@@ -1544,72 +1720,172 @@ namespace TH18 {
             bool wndFocus = true;
 
             if (BeginOptGroup<TH_REPLAY_FIX>()) {
-                ImGui::TextUnformatted(S(TH18_REPFIX_DESC));
-                if (mShowFixInstruction) {
-                    if (ImGui::Button(S(TH18_REPFIX_HIDE_INS)))
-                        mShowFixInstruction = false;
-                } else {
-                    if (ImGui::Button(S(TH18_REPFIX_SHOW_INS)))
-                        mShowFixInstruction = true;
-                }
-                if (mShowFixInstruction) {
-                    ImGui::PushTextWrapPos(GetRelWidth(0.95f));
-                    ImGui::TextUnformatted(S(TH18_REPFIX_INS));
-                    ImGui::PopTextWrapPos();
-                }
-                ImGui::NewLine();
+                // Counterstop replay fix tool
+                CustomMarker(S(TH_REPFIX_NO_THPRAC), S(TH_REPFIX_NO_THPRAC_DESC));
+                ImGui::SameLine();
+                ImGui::TextUnformatted(S(TH18_CS_REPFIX));
+                ImGui::SameLine();
+                HelpMarker(S(TH18_CS_REPFIX_DESC));
 
-                if (!mRepDataDecoded) {
-                    if (THGuiRep::singleton().mRepSelected) {
-                        ImGui::Text(S(TH_REPFIX_SELECTED), THGuiRep::singleton().mRepName.c_str());
+                auto& guiReplay = THGuiRep::singleton();
+                uint32_t finalScore = guiReplay.mSelectedRepScores[guiReplay.mSelectedRepEndStage];
 
-                        if (!mRepDataDecoded) {
-                            ImGui::SameLine();
-                            if (ImGui::Button(S(TH18_REPFIX_LOCK))) {
-                                LoadReplay();
+                if (!scoreUncapChkbox)
+                    ImGui::TextDisabled(S(TH18_CS_REPFIX_NO_UNCAP));
+                else if (!finalScore)
+                    ImGui::TextDisabled(S(TH_REPFIX_SELECTED_NONE));
+                else if (finalScore < COUNTERSTOP)
+                    ImGui::TextDisabled(S(TH18_CS_REPFIX_SELECTED_NO_CS));
+                else if (finalScore > COUNTERSTOP)
+                    ImGui::TextDisabled(S(TH_REPFIX_SELECTED_ALREADY_FIXED));
+                else {
+                    ImGui::Text(S(TH_REPFIX_SELECTED), THGuiRep::singleton().mSelectedRepName.c_str());
+                    const uint32_t curStage = GetMemContent(RVA(STAGE_NUM));
+                    const bool startedOnCS = guiReplay.mSelectedRepScores[guiReplay.mSelectedRepPlaybackStartStage - 1] == COUNTERSTOP;
+                    const bool inTransition = GetMemContent(TRANSITION_STG_PTR);
+
+                    uint32_t firstStageCS = 0;
+                    uint32_t counterStopCount = 0;
+                    uint32_t unknownCount = 0;
+
+                    ImGui::Columns(2, 0, false);
+
+                    for (size_t st = guiReplay.mSelectedRepStartStage; st <= guiReplay.mSelectedRepEndStage; st++) {
+                        const uint32_t stScore = guiReplay.mSelectedRepScores[st];
+                        const uint32_t stScoreOverwrite = mScoreOverwrites[st];
+                        const uint32_t curScore = GetMemContent(SCORE);
+
+                        if (stScore == COUNTERSTOP) {
+                            if (!firstStageCS)
+                                firstStageCS = st;
+                            if (stScoreOverwrite <= stScore)
+                                unknownCount += 1;
+
+                            counterStopCount += 1;
+                        }
+
+                        ImGui::Text(S(st == 7 ? TH18_CS_REPFIX_EXTRA : TH18_CS_REPFIX_STAGE), st);
+                        ImGui::SameLine();
+
+                        if (stScoreOverwrite > stScore) {
+                            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.3f, 0.9f, 0.3f, 1.0f));
+                            ImGui::Text("%s", FormatNumberWithCommas(((int64_t)stScoreOverwrite * 10)));
+                            ImGui::PopStyleColor();
+                            if (ImGui::IsItemHovered())
+                                ImGui::SetTooltip(S(TH18_CS_REPFIX_READY_HINT));
+
+                        } else if (stScore == COUNTERSTOP) {
+                            if (guiReplay.mRepStatus && (curStage == st || inTransition) && curScore && !startedOnCS) {
+                                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.9f, 0.9f, 0.3f, 1.0f));
+                                ImGui::Text("%s", FormatNumberWithCommas(((int64_t)curScore * 10)));
+                                ImGui::PopStyleColor();
+                                if (ImGui::IsItemHovered())
+                                    ImGui::SetTooltip(S(TH18_CS_REPFIX_RECORDING_HINT));
+
+                            } else {
+                                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.9f, 0.3f, 0.3f, 1.0f));
+                                ImGui::Text(S(TH_TYPE_UNKOWN));
+                                ImGui::PopStyleColor();
+                                if (ImGui::IsItemHovered())
+                                    ImGui::SetTooltip(S(firstStageCS == st ? TH18_CS_REPFIX_FIRST_UNKNOWN_HINT
+                                                                           : TH18_CS_REPFIX_UNKNOWN_HINT),
+                                        firstStageCS);
                             }
+                        } else {
+                            ImGui::Text("%s", FormatNumberWithCommas(((int64_t)stScore * 10)));
+                        }
+
+                        if (st == 3)
+                            ImGui::NextColumn();
+                    }
+                    ImGui::Columns(1);
+
+                    if (unknownCount) {
+                        char buttonLabel[64];
+                        snprintf(buttonLabel, sizeof(buttonLabel), S(TH_REPFIX_SAVE_PROGRESS),
+                            counterStopCount - unknownCount, counterStopCount);
+
+                        ImGui::BeginDisabled();
+                        ImGui::Button(buttonLabel);
+                        ImGui::EndDisabled();
+                        if (ImGui::IsItemHovered())
+                            ImGui::SetTooltip(S(TH18_CS_REPFIX_SAVE_PROGRESS_HINT), unknownCount, firstStageCS);
+
+                    } else if (ImGui::Button(S(TH_REPFIX_SAVE)))
+                        SaveReplayScoreFix();
+                }
+
+                // Seperate tools
+                ImGui::NewLine();
+                ImGui::Separator();
+
+                // Active card replay desync fix tool
+                CustomMarker(S(TH_REPFIX_NO_THPRAC), S(TH_REPFIX_NO_THPRAC_DESC));
+                ImGui::SameLine();
+                ImGui::TextUnformatted(S(TH18_AC_REPFIX));
+                ImGui::SameLine();
+                HelpMarker(S(TH18_AC_REPFIX_DESC));
+
+                ImGui::SameLine();
+                ImGui::Checkbox(S(TH_TOOL_SHOW_TOGGLE), &activeCardRepFix);
+
+                if (activeCardRepFix) {
+                    if (THGuiRep::singleton().mRepSelected) {
+                        bool hasFixOptions = false;
+                        for (auto& data : mFixData) {
+                            if (data.activeCardId != -1) {
+                                hasFixOptions = true;
+                                break;
+                            }
+                        }
+
+                        if (hasFixOptions) {
+                            ImGui::Text(S(TH_REPFIX_SELECTED), THGuiRep::singleton().mSelectedRepName.c_str());
+
+                            auto isAvailable = GetAvailability();
+                            if (!isAvailable) {
+                                ImGui::TextUnformatted(S(TH18_AC_REPFIX_MISMATCH));
+                                ImGui::BeginDisabled();
+                            }
+
+                            char comboId[64];
+                            auto fontSize = ImGui::GetFontSize();
+                            ImGui::Columns(2, 0, false);
+
+                            for (auto& data : mFixData) {
+                                if (data.activeCardId != -1) {
+                                    ImGui::Text(S(data.stage == 7 ? TH_EXTRA : TH_STAGE_NUM), data.stage);
+                                    ImGui::SameLine();
+                                    ImGui::TextUnformatted(S(TH18_AC_REPFIX_INITIAL_CARD));
+                                    ImGui::SameLine(0.0f, 0.0f);
+
+                                    sprintf_s(comboId, "##active_card_idx_st%d", data.stage);
+                                    ImGui::PushItemWidth(fontSize * 10.0f);
+                                    ImGui::ComboSectionsDefault(comboId, &data.activeCardComboIdx, data.activeCardLabelVec.data(), Gui::LocaleGetCurrentGlossary(), "");
+                                    if (ImGui::IsPopupOpen(comboId)) {
+                                        wndFocus = false;
+                                    }
+                                    ImGui::PopItemWidth();
+                                }
+
+                                if (data.stage == 3)
+                                    ImGui::NextColumn();
+                            }
+                            ImGui::Columns(1);
+
+                            if (!isAvailable)
+                                ImGui::EndDisabled();
+
+                            ImGui::PushID("CARDFIX_SAVE");
+                            if (ImGui::Button(S(TH_REPFIX_SAVE)))
+                                SaveReplayCardFix();
+                            ImGui::PopID();
+
+                        } else {
+                            ImGui::TextDisabled(S(TH18_AC_REPFIX_NOTHING));
                         }
                     } else {
-                        ImGui::TextUnformatted(S(TH18_REPFIX_NOTHING));
-                    }
-                } else {
-                    ImGui::Text(S(TH18_REPFIX_LOCKED), mRepOriginalName.c_str());
-                    ImGui::SameLine();
-                    if (ImGui::Button(S(TH18_REPFIX_UNLOCK))) {
-                        UnloadReplay();
-                    }
-                    ImGui::SameLine();
-                    if (ImGui::Button(S(TH_REPFIX_SAVE))) {
-                        SaveReplay();
-                    }
-
-                    auto isAvailable = GetAvailability();
-                    if (!isAvailable) {
-                        ImGui::TextUnformatted(S(TH18_REPFIX_MISMATCH));
-                        ImGui::BeginDisabled();
-                    }
-
-                    char comboId[64];
-                    auto fontSize = ImGui::GetFontSize();
-                    for (auto& data : mFixData) {
-                        if (data.activeCardId != -1) {
-                            ImGui::Text("Stage %s:", mStageStr[data.stage]);
-                            ImGui::SameLine();
-                            ImGui::TextUnformatted(S(TH18_REPFIX_INITIAL_CARD));
-                            ImGui::SameLine(0.0f, 0.0f);
-
-                            sprintf_s(comboId, "##active_card_idx_st%d", data.stage);
-                            ImGui::PushItemWidth(fontSize * 10.0f);
-                            ImGui::ComboSectionsDefault(comboId, &data.activeCardComboIdx, data.activeCardLabelVec.data(), Gui::LocaleGetCurrentGlossary(), "");
-                            if (ImGui::IsPopupOpen(comboId)) {
-                                wndFocus = false;
-                            }
-                            ImGui::PopItemWidth();
-                        }
-                    }
-
-                    if (!isAvailable) {
-                        ImGui::EndDisabled();
+                        ImGui::TextDisabled(S(TH_REPFIX_SELECTED_NONE));
                     }
                 }
 
@@ -1620,21 +1896,21 @@ namespace TH18 {
         }
 
     public:
-        void RestartFix()
+        void RestartResetMarket()
         {
-            if (restartFix) {
-                if (*(uint32_t*)0x4cccdc == *(uint32_t*)0x4ccce0) {
+            if (restartResetMarket) {
+                if (*(uint32_t*)STAGE_NUM == *(uint32_t*)NEXT_STAGE_NUM) {
                     uint32_t* list = nullptr;
                     uint8_t cardIdArray[64];
                     memset(cardIdArray, 0, 64);
-                    for (uint32_t* i = (uint32_t*)GetMemContent(ABILTIY_MANAGER_PTR, 0x1c); i; i = (uint32_t*)i[1]) {
+                    for (uint32_t* i = (uint32_t*)GetMemContent(ABILITY_MANAGER_PTR, 0x1c); i; i = (uint32_t*)i[1]) {
                         list = i;
                         auto cardId = ((uint32_t**)list)[0][1];
                         cardIdArray[cardId] += 1;
                     }
 
                     for (int i = 0; i < 56; ++i) {
-                        *(uint32_t*)GetMemAddr(ABILTIY_MANAGER_PTR, 0xc84 + i * 4) = cardIdArray[i] ? 1 : 0;
+                        *(uint32_t*)GetMemAddr(ABILITY_MANAGER_PTR, 0xc84 + i * 4) = cardIdArray[i] ? 1 : 0;
                     }
                 }
             }
@@ -1643,7 +1919,7 @@ namespace TH18 {
     private:
         void FpsInit()
         {
-            if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) {
+            if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) != NULL) {
                 OILPInit(mOptCtx);
             } else if (*(uint8_t*)0x4cd011 == 3) {
                 mOptCtx.fps_status = 1;
@@ -1699,7 +1975,6 @@ namespace TH18 {
 
             th18_score_uncap_replay_fix.Setup();
             th18_score_uncap_replay_disp.Setup();
-            th18_score_uncap_replay_factor.Setup();
             {
                 *(uintptr_t*)((uintptr_t)scoreUncapStageTrFix[0].data.buffer.ptr + 1) = (uintptr_t)&globals_assign_hooked - 0x4179c7;
                 *(uintptr_t*)((uintptr_t)scoreUncapStageTrFix[1].data.buffer.ptr + 1) = (uintptr_t)&globals_assign_hooked - 0x463045;
@@ -1712,7 +1987,7 @@ namespace TH18 {
             for (auto& hook : scoreUncapHooks) {
                 hook.Toggle(scoreUncapChkbox);
             }
-            th18_score_uncap_replay_fix.Toggle(!scoreUncapOverwrite);
+            th18_score_uncap_replay_fix.Toggle(scoreUncapOverride);
             th18_score_uncap_replay_disp.Toggle(scoreUncapChkbox);
             scoreUncapStageTrFix[0].Toggle(scoreUncapChkbox);
             scoreUncapStageTrFix[1].Toggle(scoreUncapChkbox);
@@ -1847,26 +2122,19 @@ namespace TH18 {
 
                 if (GameplayOpt(mOptCtx))
                     GameplaySet();
-                if (ImGui::Checkbox(S(TH18_UNCAP), &scoreUncapChkbox)) {
-                    if (!scoreUncapChkbox) {
-                        scoreUncapOverwrite = false;
-                    }
+                if (ImGui::Checkbox(S(TH18_UNCAP), &scoreUncapChkbox))
                     ScoreUncapSet();
-                }
                 ImGui::SameLine();
-                if (!scoreUncapChkbox) {
-                    ImGui::BeginDisabled();
-                }
-                if (ImGui::Checkbox(S(TH18_UNCAP_OVERWRITE), &scoreUncapOverwrite)) {
-                    ScoreUncapSet();
-                }
-                if (!scoreUncapChkbox) {
-                    ImGui::EndDisabled();
-                }
+                HelpMarker(S(TH18_UNCAP_DESC));
 
-                if (ImGui::Checkbox(S(TH18_REPLAY_BONUS), &scoreReplayFactor)) {
-                    th18_score_uncap_replay_factor.Toggle(scoreReplayFactor);
-                }
+                /* Inclusion of this option is more confusing than it's worth
+                * Note that score uncap already affects replay scores (e.g. st5)
+                * & all the override does is force counterstop when writing the
+                * last stage's score
+                if (!scoreUncapChkbox) ImGui::BeginDisabled();
+                if (ImGui::Checkbox(S(TH18_UNCAP_OVERRIDE), &scoreUncapOverride))
+                    ScoreUncapSet();
+                if (!scoreUncapChkbox) ImGui::EndDisabled();*/
                 
                 if (ImGui::Checkbox(S(TH18_STATIC_MALLET), &staticMalletReplay)) {
                     th18_static_mallet_replay_gold.Toggle(staticMalletReplay);
@@ -1877,49 +2145,13 @@ namespace TH18 {
                 
                 EndOptGroup();
             }
-            if (BeginOptGroup<TH18_BUG_FIX>()) {
-                ImGui::TextUnformatted(S(TH18_BUG_FIX_DESC));
-
-                if (ImGui::Checkbox(S(TH18_MUKADE_FIX), &mukadeFix)) {
-                    th18_mukade_fix.Toggle(mukadeFix);
-                }
-                ImGui::SameLine();
-                HelpMarker(S(TH18_MUKADE_FIX_DESC));
-
-                if (ImGui::Checkbox(S(TH18_SCROLL_FIX), &scrollFix)) {
-                    th18_scroll_fix.Toggle(scrollFix);
-                }
-                ImGui::SameLine();
-                HelpMarker(S(TH18_SCROLL_FIX_DESC));
-
-                if (ImGui::Checkbox(S(TH18_ST6FINAL_FIX), &st6FinalFix)) {
-                    th18_st6final_fix.Toggle(st6FinalFix);
-                }
-                ImGui::SameLine();
-                HelpMarker(S(TH18_ST6FINAL_FIX_DESC));
-
-                ImGui::Checkbox(S(TH18_RESTART_FIX), &restartFix);
-
-                if (ImGui::Checkbox(S(TH18_AC_FIX), &activeCardIdFix)) {
-                    th18_active_card_fix.Toggle(activeCardIdFix);
-                }
-                ImGui::SameLine();
-                HelpMarker(S(TH18_AC_FIX_DESC));
-                if (ImGui::Checkbox(S(TH18_EIRIN_EIKI_FIX), &eirinEikiCardFix)) {
-                    th18_eirin_eiki_card_uninit_fix.Toggle(eirinEikiCardFix);
-                }
-                ImGui::SameLine();
-                HelpMarker(S(TH18_EIRIN_EIKI_FIX_DESC));
-
-                if (ImGui::Checkbox(S(TH18_FUNC_CALL_FIX), &funcCallFix)) {
-                    th18_func_call2_uninit_fix.Toggle(funcCallFix);
-                    th18_func_call3_uninit_fix.Toggle(funcCallFix);
-                }
-                ImGui::SameLine();
-                HelpMarker(S(TH18_FUNC_CALL_FIX_DESC));
-
-                EndOptGroup();
-            }
+            //if (BeginOptGroup<TH_BUGFIX>()) {
+            //ImGui::TextUnformatted(S(TH18_BUGFIX_DESC));
+            ImGui::TextUnformatted(S(TH_BUGFIX_AUTO));
+            ImGui::SameLine();
+            HelpMarker(S(TH18_BUGFIX_AUTO_DESC));
+            //EndOptGroup();
+            //}
 
             wndFocus &= ReplayMenu();
             InGameReactionTestOpt();
@@ -1936,9 +2168,42 @@ namespace TH18 {
         adv_opt_ctx mOptCtx;
     };
 
+     __declspec(noinline) void THGuiRep::DisableCardFix()
+    {
+        th18_rep_card_fix.Disable();
+    }
+
+    __declspec(noinline) void THGuiRep::EnableCardFix(LoadedReplayData& rd)
+    {
+        auto& advOptWnd = THAdvOptWnd::singleton();
+
+        if (!advOptWnd.mFixData.size())
+            advOptWnd.ParseReplayCardData(rd);
+        for (auto& data : advOptWnd.mFixData) {
+            if (data.activeCardId != -1) {
+                th18_rep_card_fix.Enable();
+                return;
+            }
+        }
+    }
+
+    __declspec(noinline) void THGuiRep::ResetCardFix()
+    {
+        THAdvOptWnd::singleton().mFixData.clear();
+        th18_rep_card_fix.Disable();
+    }
+
+    __declspec(noinline) void THGuiRep::ResetScoreFix()
+    {
+        auto& advOptWnd = THAdvOptWnd::singleton();
+        memset(advOptWnd.mScoreOverwrites, 0, sizeof(advOptWnd.mScoreOverwrites));
+    }
+
     EHOOK_ST(th18_rep_card_fix, 0x462e4b, 5, {
-        if (THAdvOptWnd::singleton().GetAvailability()) {
-            auto& fixVec = THAdvOptWnd::singleton().mFixData;
+        auto& advOptWnd = THAdvOptWnd::singleton();
+
+        if (advOptWnd.activeCardRepFix && advOptWnd.GetAvailability()) {
+            auto& fixVec = advOptWnd.mFixData;
             for (auto& fix : fixVec) {
                 if (fix.stage == *(uint32_t*)0x4CCCDC) {
                     *(int32_t*)pCtx->Esp = fix.activeCardVec[fix.activeCardComboIdx];
@@ -1948,29 +2213,12 @@ namespace TH18 {
         }
     });
     EHOOK_ST(th18_static_mallet_replay_gold, 0x429222, 6, {
-        if (GetMemContent(GAME_THREAD_PTR, 0xd0))
+        if (THGuiRep::singleton().mRepStatus)
             THAdvOptWnd::StaticMalletConversion(pCtx);
     });
     EHOOK_ST(th18_static_mallet_replay_green, 0x42921d, 5, {
-        if (GetMemContent(GAME_THREAD_PTR, 0xd0))
+        if (THGuiRep::singleton().mRepStatus)
             THAdvOptWnd::StaticMalletConversion(pCtx);
-    });
-    EHOOK_ST(th18_score_uncap_replay_factor, 0x44480d, 5, {
-        uint32_t* score = (uint32_t*)0x4cccfc;
-        uint32_t* stage_num = (uint32_t*)0x4cccdc;
-        uint32_t* lifes = (uint32_t*)0x4ccd48;
-        uint32_t* bombs = (uint32_t*)0x4ccd58;
-
-        auto stageBonus = 100000 * *stage_num;
-        auto clearBonus = 100000 * (*lifes * 5 + *bombs);
-        if (GetMemContent(GAME_THREAD_PTR, 0xd0)) {
-            uint32_t rpy = *(uint32_t*)(*(uint32_t*)0x4cf418 + 0x18);
-            if (*(uint32_t*)(rpy + 0xb8) == 8 && (*stage_num == 6 || *stage_num == 7))
-                *score += clearBonus;
-            *score += stageBonus;
-            if (!THAdvOptWnd::singleton().scoreUncapChkbox && *score > 999999999)
-                *score = 999999999;
-        }
     });
 
     void ECLStdExec(ECLHelper& ecl, unsigned int start, int std_id, int ecl_time = 0)
@@ -1987,6 +2235,15 @@ namespace TH18 {
             start = ecl.GetPos();
         ecl << ecl_time << 0x0018000C << 0x02ff0000 << 0x00000000 << dest - start << at_frame;
     }
+
+    constexpr unsigned int st1PostMaple = 0xa750;
+    constexpr unsigned int st2PostMaple = 0x90b4;
+    constexpr unsigned int st3PostMaple = 0x83a0;
+    constexpr unsigned int st4PostMaple = 0x5a04;
+    constexpr unsigned int st5PostMaple = 0x96ec;
+    constexpr unsigned int st6PostMaple = 0x7e70;
+    constexpr unsigned int st7PostMaple = 0xa8fc;
+    constexpr unsigned int stdInterruptSize = 0x14;
     __declspec(noinline) void THStageWarp(ECLHelper& ecl, int stage, int portion)
     {
         if (stage == 1) {
@@ -1994,19 +2251,19 @@ namespace TH18 {
             case 1:
                 break;
             case 2:
-                ECLJump(ecl, 0xa750, 0xab90, 60, 90);
+                ECLJump(ecl, st1PostMaple, 0xab90, 60, 90);
                 ECLJump(ecl, 0x6fc8, 0x7088, 0);
                 break;
             case 3:
-                ECLJump(ecl, 0xa750, 0xab90, 60, 90);
+                ECLJump(ecl, st1PostMaple, 0xab90, 60, 90);
                 ECLJump(ecl, 0x6fc8, 0x70bc, 0);
                 break;
             case 4:
-                ECLStdExec(ecl, 0xa750, 1, 1);
+                ECLStdExec(ecl, st1PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0xac2c, 60, 90);
                 break;
             case 5:
-                ECLStdExec(ecl, 0xa750, 1, 1);
+                ECLStdExec(ecl, st1PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0xac2c, 60, 90);
                 ECLJump(ecl, 0x7184, 0x71f4, 0);
                 break;
@@ -2018,19 +2275,19 @@ namespace TH18 {
             case 1:
                 break;
             case 2:
-                ECLJump(ecl, 0x90b4, 0x94cc, 60, 90); // 0x9550, 0x9594, 0x9600
+                ECLJump(ecl, st2PostMaple, 0x94cc, 60, 90); // 0x9550, 0x9594, 0x9600
                 ECLJump(ecl, 0x55e0, 0x5614, 0, 0);
                 break;
             case 3:
-                ECLJump(ecl, 0x90b4, 0x94cc, 60, 90); // 0x9550, 0x9594, 0x9600
+                ECLJump(ecl, st2PostMaple, 0x94cc, 60, 90); // 0x9550, 0x9594, 0x9600
                 ECLJump(ecl, 0x55e0, 0x56a8, 0, 0);
                 break;
             case 4:
-                ECLStdExec(ecl, 0x90b4, 1, 1);
+                ECLStdExec(ecl, st2PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0x9594, 60, 90); // 0x9550, 0x9594, 0x9600
                 break;
             case 5:
-                ECLStdExec(ecl, 0x90b4, 1, 1);
+                ECLStdExec(ecl, st2PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0x9594, 60, 90); // 0x9550, 0x9594, 0x9600
                 ECLJump(ecl, 0x573c, 0x5770, 0, 0);
                 break;
@@ -2042,21 +2299,21 @@ namespace TH18 {
             case 1:
                 break;
             case 2:
-                ECLJump(ecl, 0x83a0, 0x86ec, 60, 90); // 0x8784, 0x87c8, 0x8848
+                ECLJump(ecl, st3PostMaple, 0x86ec, 60, 90); // 0x8784, 0x87c8, 0x8848
                 ECLJump(ecl, 0x4c34, 0x4c68, 0, 0);
                 break;
             case 3:
-                ECLJump(ecl, 0x83a0, 0x86ec, 60, 90); // 0x8784, 0x87c8, 0x8848
+                ECLJump(ecl, st3PostMaple, 0x86ec, 60, 90); // 0x8784, 0x87c8, 0x8848
                 ECLJump(ecl, 0x4c34, 0x4cc8, 0, 0);
                 break;
             case 4:
                 // ECLStdExec(ecl, 0x83a0, 1, 1);
-                ECLStdExec(ecl, 0x83a0, 0, 1);
+                ECLStdExec(ecl, st3PostMaple, 0, 1);
                 ECLJump(ecl, 0, 0x87c8, 60, 90); // 0x8784, 0x87c8, 0x8848
                 break;
             case 5:
                 // ECLStdExec(ecl, 0x83a0, 1, 1);
-                ECLStdExec(ecl, 0x83a0, 0, 1);
+                ECLStdExec(ecl, st3PostMaple, 0, 1);
                 ECLJump(ecl, 0, 0x87c8, 60, 90); // 0x8784, 0x87c8, 0x8848
                 ECLJump(ecl, 0x4d90, 0x4dd8, 0, 0);
                 break;
@@ -2066,7 +2323,7 @@ namespace TH18 {
                     ECLJump(ecl, 0x66D0, 0x6590, 0, 0);
                     ECLJump(ecl, 0x68B0, 0x6770, 0, 0);
                 }
-                ECLStdExec(ecl, 0x83a0, 0, 1);
+                ECLStdExec(ecl, st3PostMaple, 0, 1);
                 ECLJump(ecl, 0, 0x87c8, 60, 90); // 0x8784, 0x87c8, 0x8848
                 ECLJump(ecl, 0x4d90, 0x4e38, 0, 0);
                 break;
@@ -2078,36 +2335,36 @@ namespace TH18 {
             case 1:
                 break;
             case 2:
-                ECLJump(ecl, 0x5a04, 0x5d50, 60, 90); // 0x5d94, 0x5dd8, 0x5e58
+                ECLJump(ecl, st4PostMaple, 0x5d50, 60, 90); // 0x5d94, 0x5dd8, 0x5e58
                 ECLJump(ecl, 0x33cc, 0x3400, 0, 0);
                 break;
             case 3:
-                ECLJump(ecl, 0x5a04, 0x5d50, 60, 90); // 0x5d94, 0x5dd8, 0x5e58
+                ECLJump(ecl, st4PostMaple, 0x5d50, 60, 90); // 0x5d94, 0x5dd8, 0x5e58
                 ECLJump(ecl, 0x33cc, 0x3434, 0, 0);
                 break;
             case 4:
                 if(thPracParam.phase==1) {
                     ECLJump(ecl, 0x43E4, 0x4364, 0, 0);
                 }
-                ECLJump(ecl, 0x5a04, 0x5d50, 60, 90); // 0x5d94, 0x5dd8, 0x5e58
+                ECLJump(ecl, st4PostMaple, 0x5d50, 60, 90); // 0x5d94, 0x5dd8, 0x5e58
                 ECLJump(ecl, 0x33cc, 0x3468, 0, 0);
                 break;
             case 5:
-                ECLStdExec(ecl, 0x5a04, 1, 1);
+                ECLStdExec(ecl, st4PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0x5dd8, 60, 90); // 0x5d94, 0x5dd8, 0x5e58
                 break;
             case 6:
-                ECLStdExec(ecl, 0x5a04, 1, 1);
+                ECLStdExec(ecl, st4PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0x5dd8, 60, 90); // 0x5d94, 0x5dd8, 0x5e58
                 ECLJump(ecl, 0x34fc, 0x3598, 0, 0);
                 break;
             case 7:
-                ECLStdExec(ecl, 0x5a04, 1, 1);
+                ECLStdExec(ecl, st4PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0x5dd8, 60, 90); // 0x5d94, 0x5dd8, 0x5e58
                 ECLJump(ecl, 0x34fc, 0x35cc, 0, 0);
                 break;
             case 8:
-                ECLStdExec(ecl, 0x5a04, 1, 1);
+                ECLStdExec(ecl, st4PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0x5dd8, 60, 90); // 0x5d94, 0x5dd8, 0x5e58
                 ECLJump(ecl, 0x34fc, 0x3640, 0, 0);
                 break;
@@ -2117,34 +2374,34 @@ namespace TH18 {
         } else if (stage == 5) {
             switch (portion) {
             case 1:
-                ECLJump(ecl, 0x96ec, 0x9b28, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
+                ECLJump(ecl, st5PostMaple, 0x9b28, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
                 ecl << pair{0x4c50, 0};
                 break;
             case 2:
-                ECLJump(ecl, 0x96ec, 0x9b28, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
+                ECLJump(ecl, st5PostMaple, 0x9b28, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
                 ECLJump(ecl, 0x4c40, 0x4c88, 0, 0);
                 break;
             case 3:
-                ECLJump(ecl, 0x96ec, 0x9b28, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
+                ECLJump(ecl, st5PostMaple, 0x9b28, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
                 ECLJump(ecl, 0x4c40, 0x4cbc, 0, 0);
                 break;
             case 4:
-                ECLJump(ecl, 0x96ec, 0x9b28, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
+                ECLJump(ecl, st5PostMaple, 0x9b28, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
                 ECLJump(ecl, 0x4c40, 0x4cf0, 0, 0);
                 break;
             case 5:
                 if (thPracParam.phase == 1) {
                     ECLJump(ecl, 0x5D7C, 0x5CDC, 0, 0);
                 }
-                ECLJump(ecl, 0x96ec, 0x9bd8, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
+                ECLJump(ecl, st5PostMaple, 0x9bd8, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
                 ecl << pair{0x4d94, 0};
                 break;
             case 6:
-                ECLJump(ecl, 0x96ec, 0x9bd8, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
+                ECLJump(ecl, st5PostMaple, 0x9bd8, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
                 ECLJump(ecl, 0x4d84, 0x4df8, 0, 0);
                 break;
             case 7:
-                ECLStdExec(ecl, 0x96ec, 1, 1);
+                ECLStdExec(ecl, st5PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0x9bd8, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
                 ECLJump(ecl, 0x4d84, 0x4e2c, 0, 0);
                 break;
@@ -2152,12 +2409,12 @@ namespace TH18 {
                 if (thPracParam.phase == 1) {
                     ECLJump(ecl, 0x675C, 0x6630, 0, 0);
                 }
-                ECLStdExec(ecl, 0x96ec, 1, 1);
+                ECLStdExec(ecl, st5PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0x9bd8, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
                 ECLJump(ecl, 0x4d84, 0x4e8c, 0, 0);
                 break;
             case 9:
-                ECLStdExec(ecl, 0x96ec, 1, 1);
+                ECLStdExec(ecl, st5PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0x9bd8, 60, 90); // 0x9b94, 0x9bd8, 0x9c58
                 ECLJump(ecl, 0x4d84, 0x4ec0, 0, 0);
                 break;
@@ -2167,24 +2424,24 @@ namespace TH18 {
         } else if (stage == 6) {
             switch (portion) {
             case 1:
-                ECLJump(ecl, 0x7e70, 0x82ac, 60, 90); // 0x8318, 0x835c, 0x83dc
+                ECLJump(ecl, st6PostMaple, 0x82ac, 60, 90); // 0x8318, 0x835c, 0x83dc
                 ecl << pair{0x5ca0, 0};
                 break;
             case 2:
-                ECLJump(ecl, 0x7e70, 0x82ac, 60, 90); // 0x8318, 0x835c, 0x83dc
+                ECLJump(ecl, st6PostMaple, 0x82ac, 60, 90); // 0x8318, 0x835c, 0x83dc
                 ECLJump(ecl, 0x5c90, 0x5d0c, 0, 0);
                 break;
             case 3:
-                ECLJump(ecl, 0x7e70, 0x82ac, 60, 90); // 0x8318, 0x835c, 0x83dc
+                ECLJump(ecl, st6PostMaple, 0x82ac, 60, 90); // 0x8318, 0x835c, 0x83dc
                 ECLJump(ecl, 0x5c90, 0x5d74, 0, 0);
                 break;
             case 4:
-                ECLStdExec(ecl, 0x7e70, 1, 1);
+                ECLStdExec(ecl, st6PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0x835c, 60, 90); // 0x8318, 0x835c, 0x83dc
                 ECLJump(ecl, 0x5e3c, 0x5e7c, 0, 0);
                 break;
             case 5:
-                ECLStdExec(ecl, 0x7e70, 1, 1);
+                ECLStdExec(ecl, st6PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0x835c, 60, 90); // 0x8318, 0x835c, 0x83dc
                 ECLJump(ecl, 0x5e3c, 0x5eb0, 0, 0);
                 break;
@@ -2194,51 +2451,51 @@ namespace TH18 {
         } else if (stage == 7) {
             switch (portion) {
             case 1:
-                ECLJump(ecl, 0xa8fc, 0xaf34, 124, 90); // 0xafa0, 0xafe4, 0xb064
+                ECLJump(ecl, st7PostMaple, 0xaf34, 124, 90); // 0xafa0, 0xafe4, 0xb064
                 ecl << pair{0x5a18, 0};
                 break;
             case 2:
-                ECLJump(ecl, 0xa8fc, 0xaf34, 124, 90); // 0xafa0, 0xafe4, 0xb064
+                ECLJump(ecl, st7PostMaple, 0xaf34, 124, 90); // 0xafa0, 0xafe4, 0xb064
                 ECLJump(ecl, 0x5a08, 0x5a50, 0, 0);
                 break;
             case 3:
-                ECLJump(ecl, 0xa8fc, 0xaf34, 124, 90); // 0xafa0, 0xafe4, 0xb064
+                ECLJump(ecl, st7PostMaple, 0xaf34, 124, 90); // 0xafa0, 0xafe4, 0xb064
                 ECLJump(ecl, 0x5a08, 0x5a84, 0, 0);
                 break;
             case 4:
-                ECLJump(ecl, 0xa8fc, 0xaf34, 124, 90); // 0xafa0, 0xafe4, 0xb064
+                ECLJump(ecl, st7PostMaple, 0xaf34, 124, 90); // 0xafa0, 0xafe4, 0xb064
                 ECLJump(ecl, 0x5a08, 0x5ab8, 0, 0);
                 break;
             case 5:
-                ECLJump(ecl, 0xa8fc, 0xaf34, 124, 90); // 0xafa0, 0xafe4, 0xb064
+                ECLJump(ecl, st7PostMaple, 0xaf34, 124, 90); // 0xafa0, 0xafe4, 0xb064
                 ECLJump(ecl, 0x5a08, 0x5b18, 0, 0);
                 break;
             case 6:
-                ECLJump(ecl, 0xa8fc, 0xaf34, 124, 90); // 0xafa0, 0xafe4, 0xb064
+                ECLJump(ecl, st7PostMaple, 0xaf34, 124, 90); // 0xafa0, 0xafe4, 0xb064
                 ECLJump(ecl, 0x5a08, 0x5b4c, 0, 0);
                 break;
             case 7:
-                ECLStdExec(ecl, 0xa8fc, 1, 1);
+                ECLStdExec(ecl, st7PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0xafe4, 124, 90); // 0xafa0, 0xafe4, 0xb064
                 ecl << pair{0x5bd4, 0};
                 break;
             case 8:
-                ECLStdExec(ecl, 0xa8fc, 1, 1);
+                ECLStdExec(ecl, st7PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0xafe4, 124, 90); // 0xafa0, 0xafe4, 0xb064
                 ECLJump(ecl, 0x5bb4, 0x5c38, 0, 0);
                 break;
             case 9:
-                ECLStdExec(ecl, 0xa8fc, 1, 1);
+                ECLStdExec(ecl, st7PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0xafe4, 124, 90); // 0xafa0, 0xafe4, 0xb064
                 ECLJump(ecl, 0x5bb4, 0x5c6c, 0, 0);
                 break;
             case 10:
-                ECLStdExec(ecl, 0xa8fc, 1, 1);
+                ECLStdExec(ecl, st7PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0xafe4, 124, 90); // 0xafa0, 0xafe4, 0xb064
                 ECLJump(ecl, 0x5bb4, 0x5ccc, 0, 0);
                 break;
             case 11:
-                ECLStdExec(ecl, 0xa8fc, 1, 1);
+                ECLStdExec(ecl, st7PostMaple, 1, 1);
                 ECLJump(ecl, 0, 0xafe4, 124, 90); // 0xafa0, 0xafe4, 0xb064
                 ECLJump(ecl, 0x5bb4, 0x5d00, 0, 0);
                 break;
@@ -2249,20 +2506,29 @@ namespace TH18 {
     }
     __declspec(noinline) void THPatch(ECLHelper& ecl, th_sections_t section)
     {
+        constexpr unsigned int st7BossCreateCall = 0xb064;
+        constexpr unsigned int st7EndPreDialogue = 0x57cc;
+        constexpr unsigned int st7EndPostDialogue = 0x585c;
+        constexpr unsigned int st7bsPreDialogue = 0x718;
+        constexpr unsigned int st7bsPostDialogue = 0x758;
+        constexpr unsigned int st7bsPrePushSpellID = 0x80c;
+        constexpr unsigned int st7bsNonSubCallOrd = 0x1174 + 0x18;
+        constexpr unsigned int st7BossSpawnY = 0x56c + 0x14;
+
         switch (section) {
         case THPrac::TH18::TH18_ST1_MID1:
-            ECLStdExec(ecl, 0xa750, 1, 1);
+            ECLStdExec(ecl, st1PostMaple, 1, 1);
             ECLJump(ecl, 0, 0xabe8, 60);
             break;
         case THPrac::TH18::TH18_ST1_BOSS1:
-            ECLStdExec(ecl, 0xa750, 1, 1);
+            ECLStdExec(ecl, st1PostMaple, 1, 1);
             if (thPracParam.dlg)
                 ECLJump(ecl, 0, 0xacac, 60);
             else
                 ECLJump(ecl, 0, 0xacc0, 60);
             break;
         case THPrac::TH18::TH18_ST1_BOSS2:
-            ECLStdExec(ecl, 0xa750, 1, 1);
+            ECLStdExec(ecl, st1PostMaple, 1, 1);
             ECLJump(ecl, 0, 0xacc0, 60);
             ecl.SetFile(2);
             ECLJump(ecl, 0x3e4, 0x4cc, 1); // Utilize Spell Practice Jump
@@ -2270,7 +2536,7 @@ namespace TH18 {
             ecl << pair{0x4fc, (int8_t)0x31}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST1_BOSS3:
-            ECLStdExec(ecl, 0xa750, 1, 1);
+            ECLStdExec(ecl, st1PostMaple, 1, 1);
             ECLJump(ecl, 0, 0xacc0, 60);
             ecl.SetFile(2);
             ecl << pair{0x61c, (int8_t)0x32}; // Change Nonspell
@@ -2279,7 +2545,7 @@ namespace TH18 {
             ECLJump(ecl, 0x15d0, 0x1650, 0); // Skip wait
             break;
         case THPrac::TH18::TH18_ST1_BOSS4:
-            ECLStdExec(ecl, 0xa750, 1, 1);
+            ECLStdExec(ecl, st1PostMaple, 1, 1);
             ECLJump(ecl, 0, 0xacc0, 60);
             ecl.SetFile(2);
             ECLJump(ecl, 0x3e4, 0x4cc, 1); // Utilize Spell Practice Jump
@@ -2289,18 +2555,18 @@ namespace TH18 {
 
 
         case THPrac::TH18::TH18_ST2_MID1:
-            ECLStdExec(ecl, 0x90b4, 1, 1);
+            ECLStdExec(ecl, st2PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x9550, 60); // 0x9550, 0x9594, 0x9600
             break;
         case THPrac::TH18::TH18_ST2_BOSS1:
-            ECLStdExec(ecl, 0x90b4, 1, 1);
+            ECLStdExec(ecl, st2PostMaple, 1, 1);
             if (thPracParam.dlg)
                 ECLJump(ecl, 0, 0x95ec, 60);
             else
                 ECLJump(ecl, 0, 0x9600, 60); // 0x9550, 0x9594, 0x9600
             break;
         case THPrac::TH18::TH18_ST2_BOSS2:
-            ECLStdExec(ecl, 0x90b4, 1, 1);
+            ECLStdExec(ecl, st2PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x9600, 60); // 0x9550, 0x9594, 0x9600
 
             ecl.SetFile(2);
@@ -2309,7 +2575,7 @@ namespace TH18 {
             ecl << pair{0x524, (int8_t)0x31}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST2_BOSS3:
-            ECLStdExec(ecl, 0x90b4, 1, 1);
+            ECLStdExec(ecl, st2PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x9600, 60); // 0x9550, 0x9594, 0x9600
 
             ecl.SetFile(2);
@@ -2319,7 +2585,7 @@ namespace TH18 {
             ECLJump(ecl, 0x13bc, 0x13fc, 0); // Skip wait
             break;
         case THPrac::TH18::TH18_ST2_BOSS4:
-            ECLStdExec(ecl, 0x90b4, 1, 1);
+            ECLStdExec(ecl, st2PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x9600, 60); // 0x9550, 0x9594, 0x9600
 
             ecl.SetFile(2);
@@ -2328,7 +2594,7 @@ namespace TH18 {
             ecl << pair{0x524, (int8_t)0x32}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST2_BOSS5:
-            ECLStdExec(ecl, 0x90b4, 1, 1);
+            ECLStdExec(ecl, st2PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x9600, 60); // 0x9550, 0x9594, 0x9600
 
             ecl.SetFile(2);
@@ -2340,7 +2606,7 @@ namespace TH18 {
 
         case THPrac::TH18::TH18_ST3_MID1:
             //ECLStdExec(ecl, 0x83a0, 1, 1);
-            ECLStdExec(ecl, 0x83a0, 0, 1);
+            ECLStdExec(ecl, st3PostMaple, 0, 1);
             ECLJump(ecl, 0, 0x8784, 60); // 0x8784, 0x87c8, 0x8848
             ecl.SetFile(3);
             ecl << pair{0x324, (int16_t)100};
@@ -2349,14 +2615,14 @@ namespace TH18 {
             ECLJump(ecl, 0, 0x47c, 0);
             break;
         case THPrac::TH18::TH18_ST3_BOSS1:
-            ECLStdExec(ecl, 0x83a0, 1, 1);
+            ECLStdExec(ecl, st3PostMaple, 1, 1);
             if (thPracParam.dlg)
                 ECLJump(ecl, 0, 0x8834, 60);
             else
                 ECLJump(ecl, 0, 0x8848, 60); // 0x8784, 0x87c8, 0x8848
             break;
         case THPrac::TH18::TH18_ST3_BOSS2:
-            ECLStdExec(ecl, 0x83a0, 1, 1);
+            ECLStdExec(ecl, st3PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x8848, 60); // 0x8784, 0x87c8, 0x8848
 
             ecl.SetFile(2);
@@ -2365,7 +2631,7 @@ namespace TH18 {
             ecl << pair{0x584, (int8_t)0x31}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST3_BOSS3:
-            ECLStdExec(ecl, 0x83a0, 1, 1);
+            ECLStdExec(ecl, st3PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x8848, 60); // 0x8784, 0x87c8, 0x8848
 
             ecl.SetFile(2);
@@ -2375,7 +2641,7 @@ namespace TH18 {
             ecl << pair{0x183c, (int16_t)0};
             break;
         case THPrac::TH18::TH18_ST3_BOSS4:
-            ECLStdExec(ecl, 0x83a0, 1, 1);
+            ECLStdExec(ecl, st3PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x8848, 60); // 0x8784, 0x87c8, 0x8848
 
             ecl.SetFile(2);
@@ -2384,7 +2650,7 @@ namespace TH18 {
             ecl << pair{0x584, (int8_t)0x32}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST3_BOSS5:
-            ECLStdExec(ecl, 0x83a0, 1, 1);
+            ECLStdExec(ecl, st3PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x8848, 60); // 0x8784, 0x87c8, 0x8848
 
             ecl.SetFile(2);
@@ -2394,7 +2660,7 @@ namespace TH18 {
             ecl << pair{0x2864, (int16_t)0};
             break;
         case THPrac::TH18::TH18_ST3_BOSS6:
-            ECLStdExec(ecl, 0x83a0, 1, 1);
+            ECLStdExec(ecl, st3PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x8848, 60); // 0x8784, 0x87c8, 0x8848
 
             ecl.SetFile(2);
@@ -2405,18 +2671,18 @@ namespace TH18 {
 
 
         case THPrac::TH18::TH18_ST4_MID1:
-            ECLStdExec(ecl, 0x5a04, 1, 1);
+            ECLStdExec(ecl, st4PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x5d94, 60); // 0x5d94, 0x5dd8, 0x5e58
             break;
         case THPrac::TH18::TH18_ST4_BOSS1:
-            ECLStdExec(ecl, 0x5a04, 1, 1);
+            ECLStdExec(ecl, st4PostMaple, 1, 1);
             if (thPracParam.dlg)
                 ECLJump(ecl, 0, 0x5e44, 60); // 0x5d94, 0x5dd8, 0x5e58
             else
                 ECLJump(ecl, 0, 0x5e58, 60); // 0x5d94, 0x5dd8, 0x5e58
             break;
         case THPrac::TH18::TH18_ST4_BOSS2:
-            ECLStdExec(ecl, 0x5a04, 1, 1);
+            ECLStdExec(ecl, st4PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x5e58, 60); // 0x5d94, 0x5dd8, 0x5e58
 
             ecl.SetFile(2);
@@ -2425,7 +2691,7 @@ namespace TH18 {
             ecl << pair{0x514, (int8_t)0x31}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST4_BOSS3:
-            ECLStdExec(ecl, 0x5a04, 1, 1);
+            ECLStdExec(ecl, st4PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x5e58, 60); // 0x5d94, 0x5dd8, 0x5e58
 
             ecl.SetFile(2);
@@ -2435,7 +2701,7 @@ namespace TH18 {
             ecl << pair{0x1624, (int16_t)0};
             break;
         case THPrac::TH18::TH18_ST4_BOSS4:
-            ECLStdExec(ecl, 0x5a04, 1, 1);
+            ECLStdExec(ecl, st4PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x5e58, 60); // 0x5d94, 0x5dd8, 0x5e58
 
             ecl.SetFile(2);
@@ -2444,7 +2710,7 @@ namespace TH18 {
             ecl << pair{0x514, (int8_t)0x32}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST4_BOSS5:
-            ECLStdExec(ecl, 0x5a04, 1, 1);
+            ECLStdExec(ecl, st4PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x5e58, 60); // 0x5d94, 0x5dd8, 0x5e58
 
             ecl.SetFile(2);
@@ -2454,7 +2720,7 @@ namespace TH18 {
             ecl << pair{0x2450, (int16_t)0};
             break;
         case THPrac::TH18::TH18_ST4_BOSS6:
-            ECLStdExec(ecl, 0x5a04, 1, 1);
+            ECLStdExec(ecl, st4PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x5e58, 60); // 0x5d94, 0x5dd8, 0x5e58
 
             ecl.SetFile(2);
@@ -2465,14 +2731,14 @@ namespace TH18 {
 
 
         case THPrac::TH18::TH18_ST5_MID1:
-            ECLJump(ecl, 0x96ec, 0x9b94, 60); // 0x9b94, 0x9bd8, 0x9c58
+            ECLJump(ecl, st5PostMaple, 0x9b94, 60); // 0x9b94, 0x9bd8, 0x9c58
             ecl.SetFile(3);
             ecl << pair{0x324, (int16_t)100};
             ecl.SetPos(0x3ac);
             ecl << 0 << 0x002401ff << 0x01ff0000 << 0 << 13000;
             break;
         case THPrac::TH18::TH18_ST5_BOSS1:
-            ECLStdExec(ecl, 0x96ec, 1, 1);
+            ECLStdExec(ecl, st5PostMaple, 1, 1);
             if (thPracParam.dlg)
                 ECLJump(ecl, 0, 0x9c44, 60); // 0x9b94, 0x9bd8, 0x9c58
             else {
@@ -2481,7 +2747,7 @@ namespace TH18 {
             }
             break;
         case THPrac::TH18::TH18_ST5_BOSS2:
-            ECLStdExec(ecl, 0x96ec, 1, 1);
+            ECLStdExec(ecl, st5PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x9c58, 60); // 0x9b94, 0x9bd8, 0x9c58
             ECLJump(ecl, 0x4a44, 0x4a94, 3);
 
@@ -2491,7 +2757,7 @@ namespace TH18 {
             ecl << pair{0x548, (int8_t)0x31}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST5_BOSS3:
-            ECLStdExec(ecl, 0x96ec, 1, 1);
+            ECLStdExec(ecl, st5PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x9c58, 60); // 0x9b94, 0x9bd8, 0x9c58
             ECLJump(ecl, 0x4a44, 0x4a94, 3);
 
@@ -2502,7 +2768,7 @@ namespace TH18 {
             ecl << pair{0x13f4, (int16_t)0};
             break;
         case THPrac::TH18::TH18_ST5_BOSS4:
-            ECLStdExec(ecl, 0x96ec, 1, 1);
+            ECLStdExec(ecl, st5PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x9c58, 60); // 0x9b94, 0x9bd8, 0x9c58
             ECLJump(ecl, 0x4a44, 0x4a94, 3);
 
@@ -2512,7 +2778,7 @@ namespace TH18 {
             ecl << pair{0x548, (int8_t)0x32}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST5_BOSS5:
-            ECLStdExec(ecl, 0x96ec, 1, 1);
+            ECLStdExec(ecl, st5PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x9c58, 60); // 0x9b94, 0x9bd8, 0x9c58
             ECLJump(ecl, 0x4a44, 0x4a94, 3);
 
@@ -2523,7 +2789,7 @@ namespace TH18 {
             ecl << pair{0x1f0c, (int16_t)0};
             break;
         case THPrac::TH18::TH18_ST5_BOSS6:
-            ECLStdExec(ecl, 0x96ec, 1, 1);
+            ECLStdExec(ecl, st5PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x9c58, 60); // 0x9b94, 0x9bd8, 0x9c58
             ECLJump(ecl, 0x4a44, 0x4a94, 3);
 
@@ -2533,7 +2799,7 @@ namespace TH18 {
             ecl << pair{0x548, (int8_t)0x33}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST5_BOSS7:
-            ECLStdExec(ecl, 0x96ec, 1, 1);
+            ECLStdExec(ecl, st5PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x9c58, 60); // 0x9b94, 0x9bd8, 0x9c58
             ECLJump(ecl, 0x4a44, 0x4a94, 3);
 
@@ -2545,7 +2811,7 @@ namespace TH18 {
 
 
         case THPrac::TH18::TH18_ST6_MID1:
-            ECLStdExec(ecl, 0x7e70, 1, 1);
+            ECLStdExec(ecl, st6PostMaple, 1, 1);
             ECLJump(ecl, 0, 0x8318, 60); // 0x8318, 0x835c, 0x83dc
             ecl.SetFile(3);
             ecl << pair{0x324, (int16_t)100};
@@ -2553,7 +2819,7 @@ namespace TH18 {
             ecl << 0 << 0x002401ff << 0x01ff0000 << 0 << 14000;
             break;
         case THPrac::TH18::TH18_ST6_BOSS1:
-            ECLStdExec(ecl, 0x7e70, 2, 1);
+            ECLStdExec(ecl, st6PostMaple, 2, 1);
             if (thPracParam.dlg) {
                 ECLJump(ecl, 0, 0x83c8, 60);
             } else {
@@ -2564,7 +2830,7 @@ namespace TH18 {
             }
             break;
         case THPrac::TH18::TH18_ST6_BOSS2:
-            ECLStdExec(ecl, 0x7e70, 2, 1);
+            ECLStdExec(ecl, st6PostMaple, 2, 1);
             ECLJump(ecl, 0, 0x83dc, 60); // 0x8318, 0x835c, 0x83dc
             ECLJump(ecl, 0x5a94, 0x5ae4, 3);
 
@@ -2575,7 +2841,7 @@ namespace TH18 {
             ecl << pair{0x6f0, (int8_t)0x31}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST6_BOSS3:
-            ECLStdExec(ecl, 0x7e70, 2, 1);
+            ECLStdExec(ecl, st6PostMaple, 2, 1);
             ECLJump(ecl, 0, 0x83dc, 60); // 0x8318, 0x835c, 0x83dc
             ECLJump(ecl, 0x5a94, 0x5ae4, 3);
 
@@ -2587,7 +2853,7 @@ namespace TH18 {
             ecl << pair{0x216c, (int16_t)0};
             break;
         case THPrac::TH18::TH18_ST6_BOSS4:
-            ECLStdExec(ecl, 0x7e70, 2, 1);
+            ECLStdExec(ecl, st6PostMaple, 2, 1);
             ECLJump(ecl, 0, 0x83dc, 60); // 0x8318, 0x835c, 0x83dc
             ECLJump(ecl, 0x5a94, 0x5ae4, 3);
 
@@ -2598,7 +2864,7 @@ namespace TH18 {
             ecl << pair{0x6f0, (int8_t)0x32}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST6_BOSS5:
-            ECLStdExec(ecl, 0x7e70, 3, 1);
+            ECLStdExec(ecl, st6PostMaple, 3, 1);
             ECLJump(ecl, 0, 0x83dc, 60); // 0x8318, 0x835c, 0x83dc
             ECLJump(ecl, 0x5a94, 0x5ae4, 3);
 
@@ -2612,7 +2878,7 @@ namespace TH18 {
             ecl << pair{0x370, 176.0f};
             break;
         case THPrac::TH18::TH18_ST6_BOSS6:
-            ECLStdExec(ecl, 0x7e70, 3, 1);
+            ECLStdExec(ecl, st6PostMaple, 3, 1);
             ECLJump(ecl, 0, 0x83dc, 60); // 0x8318, 0x835c, 0x83dc
             ECLJump(ecl, 0x5a94, 0x5ae4, 3);
 
@@ -2623,7 +2889,7 @@ namespace TH18 {
             ecl << pair{0x6f0, (int8_t)0x33}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST6_BOSS7:
-            ECLStdExec(ecl, 0x7e70, 4, 1);
+            ECLStdExec(ecl, st6PostMaple, 4, 1);
             ECLJump(ecl, 0, 0x83dc, 60); // 0x8318, 0x835c, 0x83dc
             ECLJump(ecl, 0x5a94, 0x5ae4, 3);
 
@@ -2636,7 +2902,7 @@ namespace TH18 {
             ecl << pair{0x304c, (int16_t)0};
             break;
         case THPrac::TH18::TH18_ST6_BOSS8:
-            ECLStdExec(ecl, 0x7e70, 4, 1);
+            ECLStdExec(ecl, st6PostMaple, 4, 1);
             ECLJump(ecl, 0, 0x83dc, 60); // 0x8318, 0x835c, 0x83dc
             ECLJump(ecl, 0x5a94, 0x5ae4, 3);
 
@@ -2647,7 +2913,7 @@ namespace TH18 {
             ecl << pair{0x6f0, (int8_t)0x34}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST6_BOSS9:
-            ECLStdExec(ecl, 0x7e70, 5, 1);
+            ECLStdExec(ecl, st6PostMaple, 5, 1);
             ECLJump(ecl, 0, 0x83dc, 60); // 0x8318, 0x835c, 0x83dc
             ECLJump(ecl, 0x5a94, 0x5ae4, 3);
 
@@ -2658,7 +2924,7 @@ namespace TH18 {
             ecl << pair{0x6f0, (int8_t)0x35}; // Set Spell Ordinal
             break;
         case THPrac::TH18::TH18_ST6_BOSS10:
-            ECLStdExec(ecl, 0x7e70, 5, 1);
+            ECLStdExec(ecl, st6PostMaple, 5, 1);
             ECLJump(ecl, 0, 0x83dc, 60); // 0x8318, 0x835c, 0x83dc
             ECLJump(ecl, 0x5a94, 0x5ae4, 3);
 
@@ -2687,9 +2953,8 @@ namespace TH18 {
             }
             break;
 
-
         case THPrac::TH18::TH18_ST7_MID1:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
             if (thPracParam.dlg)
                 ECLJump(ecl, 0, 0xaf78, 124); // 0xafa0, 0xafe4, 0xb064
             else
@@ -2701,7 +2966,7 @@ namespace TH18 {
             ECLJump(ecl, 0, 0x428, 0);
             break;
         case THPrac::TH18::TH18_ST7_MID2:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
             ECLJump(ecl, 0, 0xafa0, 124); // 0xafa0, 0xafe4, 0xb064
             ecl.SetFile(3);
             ecl << pair{0x2d0, 99999} << pair{0x2d8, (int16_t)0} << pair{0x368, 90};
@@ -2710,7 +2975,7 @@ namespace TH18 {
             ECLJump(ecl, 0, 0x4c4, 0);
             break;
         case THPrac::TH18::TH18_ST7_MID3:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
             ECLJump(ecl, 0, 0xafa0, 124); // 0xafa0, 0xafe4, 0xb064
             ecl.SetFile(3);
             ecl << pair{0x2d0, 99999} << pair{0x2d8, (int16_t)0} << pair{0x368, 90};
@@ -2718,208 +2983,326 @@ namespace TH18 {
             ecl << 0 << 0x00140017 << 0x01ff0000 << 0 << 90;
             ECLJump(ecl, 0, 0x560, 0);
             break;
-        case THPrac::TH18::TH18_ST7_END_NS1:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
+        case THPrac::TH18::TH18_ST7_END_NS1: {
+            constexpr unsigned int st7DialogRead = 0xb050;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
             if (thPracParam.dlg)
-                ECLJump(ecl, 0, 0xb050, 124); // 0xafa0, 0xafe4, 0xb064
+                ECLJump(ecl, 0, st7DialogRead, 124); // 0xafa0, 0xafe4, 0xb064
             else {
-                ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-                ECLJump(ecl, 0x57cc, 0x585c, 3);
+                ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+                ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
                 ecl.SetFile(2);
-                ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
+                ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
             }
             break;
-        case THPrac::TH18::TH18_ST7_END_S1:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_S1: {
+            constexpr unsigned int st7bsSpell1SPLifeSet = 0x8ac;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ECLJump(ecl, 0x80c, 0x8ac, 9); // Utilize Spell Practice Jump
+            ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsSpell1SPLifeSet, 9); // Utilize Spell Practice Jump
             break;
-        case THPrac::TH18::TH18_ST7_END_NS2:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+
+        case THPrac::TH18::TH18_ST7_END_NS2: {
+            constexpr unsigned int st7bsNon2BossItemCallOp = 0x1cb8 + 0x4;
+            constexpr unsigned int st7bsNon2PlaySoundOp = 0x1de4 + 0x4;
+            constexpr unsigned int st7bsSpell1Bounds = 0x60e0;
+            constexpr unsigned int st7bsSpell1PostBounds = 0x6100;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ecl << pair{0x118c, (int8_t)0x32}; // Change Nonspell
-            ecl << pair{0x1cbc, (int16_t)0} << pair{0x1de8, (int16_t)0}; // Disable Item Drops & SE
+            ECLJump(ecl, st7bsPreDialogue, st7bsSpell1Bounds, 2); // Skip dialogue while setting
+            ECLJump(ecl, st7bsSpell1PostBounds, st7bsPostDialogue, 9); // movement bounds from Spell1
+            ecl << pair { st7bsNonSubCallOrd, (int8_t)0x32 } // Change Nonspell (2)
+                << pair { st7bsNon2BossItemCallOp, (int16_t)0 } // Disable item drops
+                << pair { st7bsNon2PlaySoundOp, (int16_t)0 }; // Disable drop SFX
             break;
-        case THPrac::TH18::TH18_ST7_END_S2:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_S2: {
+            constexpr unsigned int st7bsSpell2SPLifeSet = 0x948;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ECLJump(ecl, 0x80c, 0x948, 9); // Utilize Spell Practice Jump
+            ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsSpell2SPLifeSet, 9); // Utilize Spell Practice Jump
             break;
-        case THPrac::TH18::TH18_ST7_END_NS3:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_NS3: {
+            constexpr unsigned int st7bsNon3InvulnVal = 0x23f4 + 0x10;
+            constexpr unsigned int st7bsNon3BossItemCallOp = 0x24d8 + 0x4;
+            constexpr unsigned int st7bsNon3PlaySoundOp = 0x2604 + 0x4;
+            constexpr unsigned int st7bsNon3InterruptTimeVal = 0x2714 + 0x18;
+            constexpr unsigned int st7bsNon3PreWait = 0x2770;
+            constexpr unsigned int st7bsNon3PostWait = 0x27a4;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ecl << pair{0x118c, (int8_t)0x33}; // Change Nonspell
-            ecl << pair{0x2404, (int16_t)0}; // Disable Invincible
-            ecl << pair{0x24dc, (int16_t)0} << pair{0x2608, (int16_t)0}; // Disable Item Drops & SE
-            ECLJump(ecl, 0x2770, 0x27a4, 0); // Skip wait
+            ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
+            ecl << pair { st7bsNonSubCallOrd, (int8_t)0x33 } // Change Nonspell (3)
+                << pair { st7bsNon3InvulnVal, (int16_t)0 } // Disable iframes
+                << pair { st7bsNon3BossItemCallOp, (int16_t)0 } // Disable item drops
+                << pair { st7bsNon3PlaySoundOp, (int16_t)0 } // Disable drop SFX
+                << pair { st7bsNon3InterruptTimeVal, (int16_t)(3600 - 120) }; // Reduce timer by wait time skipped
+            ECLJump(ecl, st7bsNon3PreWait, st7bsNon3PostWait, 0); // Skip wait
             break;
-        case THPrac::TH18::TH18_ST7_END_S3:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_S3: {
+            constexpr unsigned int st7bsSpell3SPLifeSet = 0x9e4;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ECLJump(ecl, 0x80c, 0x9e4, 9); // Utilize Spell Practice Jump
+            ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsSpell3SPLifeSet, 9); // Utilize Spell Practice Jump
             break;
-        case THPrac::TH18::TH18_ST7_END_NS4:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_NS4: {
+            constexpr unsigned int st7bsNon4InvulnVal = 0x2c7c + 0x10;
+            constexpr unsigned int st7bsNon4BossItemCallOp = 0x2d60 + 0x4;
+            constexpr unsigned int st7bsNon4PlaySoundOp = 0x2e8c + 0x4;
+            constexpr unsigned int st7bsNon4InterruptTimeVal = 0x2f9c + 0x18;
+            constexpr unsigned int st7bsNon4PreWait = 0x2ff8;
+            constexpr unsigned int st7bsNon4PostWait = 0x303c;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ecl << pair{0x118c, (int8_t)0x34}; // Change Nonspell
-            ecl << pair{0x2c8c, (int16_t)0}; // Disable Invincible
-            ecl << pair{0x2d64, (int16_t)0} << pair{0x2e90, (int16_t)0}; // Disable Item Drops & SE
-            ECLJump(ecl, 0x2ff8, 0x303c, 0); // Skip wait
+            ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
+            ecl << pair { st7bsNonSubCallOrd, (int8_t)0x34 } // Change Nonspell (4)
+                << pair { st7bsNon4InvulnVal, (int16_t)0 } // Disable iframes
+                << pair { st7bsNon4BossItemCallOp, (int16_t)0 } // Disable item drops
+                << pair { st7bsNon4PlaySoundOp, (int16_t)0 } // Disable drop SFX
+                << pair { st7bsNon4InterruptTimeVal, (int16_t)(3600 - 120) }; // Reduce timer by wait time skipped
+            ECLJump(ecl, st7bsNon4PreWait, st7bsNon4PostWait, 0); // Skip wait
             break;
-        case THPrac::TH18::TH18_ST7_END_S4:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_S4: {
+            constexpr unsigned int st7bsSpell4SPLifeSet = 0xa80;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ECLJump(ecl, 0x80c, 0xa80, 9); // Utilize Spell Practice Jump
+            ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsSpell4SPLifeSet, 9); // Utilize Spell Practice Jump
+
             break;
-        case THPrac::TH18::TH18_ST7_END_NS5:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_NS5: {
+            constexpr unsigned int st7bsNon5InvulnVal = 0x3514 + 0x10;
+            constexpr unsigned int st7bsNon5BossItemCallOp = 0x35f8 + 0x4;
+            constexpr unsigned int st7bsNon5PlaySoundOp = 0x3724 + 0x4;
+            constexpr unsigned int st7bsNon5InterruptTimeVal = 0x3834 + 0x18;
+            constexpr unsigned int st7bsNon5PreWait = 0x3890;
+            constexpr unsigned int st7bsNon5PostWait = 0x38c4;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ecl << pair{0x118c, (int8_t)0x35}; // Change Nonspell
-            ecl << pair{0x3524, (int16_t)0}; // Disable Invincible
-            ecl << pair{0x35fc, (int16_t)0} << pair{0x3728, (int16_t)0}; // Disable Item Drops & SE
-            ECLJump(ecl, 0x3890, 0x38c4, 0); // Skip wait
+            ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
+            ecl << pair { st7BossSpawnY, 96.0f } // Adjust boss spawn Y
+                << pair { st7bsNonSubCallOrd, (int8_t)0x35 } // Change Nonspell (5)
+                << pair { st7bsNon5InvulnVal, (int16_t)0 } // Disable iframes
+                << pair { st7bsNon5BossItemCallOp, (int16_t)0 } // Disable item drops
+                << pair { st7bsNon5PlaySoundOp, (int16_t)0 } // Disable drop SFX
+                << pair { st7bsNon5InterruptTimeVal, (int16_t)(4200 - 120) }; // Reduce timer by wait time skipped
+            ECLJump(ecl, st7bsNon5PreWait, st7bsNon5PostWait, 0); // Skip wait (120f)
             break;
-        case THPrac::TH18::TH18_ST7_END_S5:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_S5: {
+            constexpr unsigned int st7bsNon5Bounds = 0x38c4;
+            constexpr unsigned int st7bsNon5PostBounds = 0x38e4;
+            constexpr unsigned int st7bsSpell5SPLifeSet = 0xb1c;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ECLJump(ecl, 0x80c, 0xb1c, 9); // Utilize Spell Practice Jump
+            ECLJump(ecl, st7bsPreDialogue, st7bsNon5Bounds, 2); // Skip dialogue while setting
+            ECLJump(ecl, st7bsNon5PostBounds, st7bsPostDialogue, 9); // movement bounds from Non5
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsSpell5SPLifeSet, 9); // Utilize Spell Practice Jump
             break;
-        case THPrac::TH18::TH18_ST7_END_NS6:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_NS6: {
+            constexpr unsigned int st7bsNon6InvulnVal = 0x3d9c + 0x10;
+            constexpr unsigned int st7bsNon6BossItemCallOp = 0x3eb0 + 0x4;
+            constexpr unsigned int st7bsNon6PlaySoundOp = 0x3fdc + 0x4;
+            constexpr unsigned int st7bsNon6InterruptTimeVal = 0x40ec + 0x18;
+            constexpr unsigned int st7bsNon6PreWait = 0x4158;
+            constexpr unsigned int st7bsNon6PostWait = 0x418c;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ecl << pair{0x118c, (int8_t)0x36}; // Change Nonspell
-            ecl << pair{0x3dac, (int16_t)0}; // Disable Invincible
-            ecl << pair{0x3eb4, (int16_t)0} << pair{0x3fe0, (int16_t)0}; // Disable Item Drops & SE
-            ECLJump(ecl, 0x4158, 0x418c, 0); // Skip wait
+            ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
+            ecl << pair { st7bsNonSubCallOrd, (int8_t)0x36 } // Change Nonspell (6)
+                << pair { st7bsNon6InvulnVal, (int16_t)0 } // Disable iframes
+                << pair { st7bsNon6BossItemCallOp, (int16_t)0 } // Disable item drops
+                << pair { st7bsNon6PlaySoundOp, (int16_t)0 } // Disable drop SFX
+                << pair { st7bsNon6InterruptTimeVal, (int16_t)(4200 - 120) }; // Reduce timer by wait time skipped
+            ECLJump(ecl, st7bsNon6PreWait, st7bsNon6PostWait, 0); // Skip wait (120f)
             break;
-        case THPrac::TH18::TH18_ST7_END_S6:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_S6: {
+            constexpr unsigned int st7bsSpell6SPLifeSet = 0xbb8;
+            constexpr unsigned int st7bsSpell6FloatInterpTime = 0xc678 + 0x18;
+            constexpr unsigned int st7bsSpell6FloatInterpInit = 0xc678 + 0x20;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ECLJump(ecl, 0x80c, 0xbb8, 9); // Utilize Spell Practice Jump
+            ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsSpell6SPLifeSet, 9); // Utilize Spell Practice Jump
 
             switch (thPracParam.phase) {
             case 1:
-                ecl << pair{0xc690, 1} << pair{0xc690, 1} << pair{0xc698, 60.0f};
+                ecl << pair { st7bsSpell6FloatInterpTime, 1 }
+                    << pair { st7bsSpell6FloatInterpInit, 60.0f }; // Already start at min. delay
                 break;
             default:
                 break;
             }
             break;
-        case THPrac::TH18::TH18_ST7_END_NS7:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_NS7: {
+            constexpr unsigned int st7bsNon7InvulnVal = 0x4664 + 0x10;
+            constexpr unsigned int st7bsNon7BossItemCallOp = 0x4748 + 0x4;
+            constexpr unsigned int st7bsNon7PlaySoundOp = 0x4874 + 0x4;
+            constexpr unsigned int st7bsNon7InterruptTimeVal = 0x4984 + 0x18;
+            constexpr unsigned int st7bsNon7PreWait = 0x49e0;
+            constexpr unsigned int st7bsNon7PostWait = 0x4a24;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ecl << pair{0x118c, (int8_t)0x37}; // Change Nonspell
-            ecl << pair{0x4674, (int16_t)0}; // Disable Invincible
-            ecl << pair{0x474c, (int16_t)0} << pair{0x4878, (int16_t)0}; // Disable Item Drops & SE
-            ECLJump(ecl, 0x49e0, 0x4a24, 0); // Skip wait
+            ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
+            ecl << pair { st7bsNonSubCallOrd, (int8_t)0x37 } // Change Nonspell (7)
+                << pair { st7bsNon7InvulnVal, (int16_t)0 } // Disable iframes
+                << pair { st7bsNon7BossItemCallOp, (int16_t)0 } // Disable item drops
+                << pair { st7bsNon7PlaySoundOp, (int16_t)0 } // Disable drop SFX
+                << pair { st7bsNon7InterruptTimeVal, (int16_t)(4200 - 120) }; // Reduce timer by wait time skipped
+            ECLJump(ecl, st7bsNon7PreWait, st7bsNon7PostWait, 0); // Skip wait (120f)
             break;
-        case THPrac::TH18::TH18_ST7_END_S7:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_S7: {
+            constexpr unsigned int st7bsSpell7SPLifeSet = 0xc54;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ECLJump(ecl, 0x80c, 0xc54, 9); // Utilize Spell Practice Jump
+            ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsSpell7SPLifeSet, 9); // Utilize Spell Practice Jump
+
             break;
-        case THPrac::TH18::TH18_ST7_END_NS8:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_NS8: {
+            constexpr unsigned int st7bsNon8InvulnVal = 0x4efc + 0x10;
+            constexpr unsigned int st7bsNon8BossItemCallOp = 0x4fe0 + 0x4;
+            constexpr unsigned int st7bsNon8PlaySoundOp = 0x510c + 0x4;
+            constexpr unsigned int st7bsNon8InterruptTimeVal = 0x521c + 0x18;
+            constexpr unsigned int st7bsNon8PreWait = 0x5278;
+            constexpr unsigned int st7bsNon8PostWait = 0x52bc;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ecl << pair{0x118c, (int8_t)0x38}; // Change Nonspell
-            ecl << pair{0x4f0c, (int16_t)0}; // Disable Invincible
-            ecl << pair{0x4fe4, (int16_t)0} << pair{0x5110, (int16_t)0}; // Disable Item Drops & SE
-            ECLJump(ecl, 0x5278, 0x52bc, 0); // Skip wait
+            ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
+            ecl << pair { st7bsNonSubCallOrd, (int8_t)0x38 } // Change Nonspell (8)
+                << pair { st7bsNon8InvulnVal, (int16_t)0 } // Disable iframes
+                << pair { st7bsNon8BossItemCallOp, (int16_t)0 } // Disable item drops
+                << pair { st7bsNon8PlaySoundOp, (int16_t)0 } // Disable drop SFX
+                << pair { st7bsNon8InterruptTimeVal, (int16_t)(4200 - 120) }; // Reduce timer by wait time skipped
+            ECLJump(ecl, st7bsNon8PreWait, st7bsNon8PostWait, 0); // Skip wait
             break;
-        case THPrac::TH18::TH18_ST7_END_S8:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_S8: {
+            constexpr unsigned int st7bsSpell8SPLifeSet = 0xcf0;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ECLJump(ecl, 0x80c, 0xcf0, 9); // Utilize Spell Practice Jump
+            ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsSpell8SPLifeSet, 9); // Utilize Spell Practice Jump
+
             break;
-        case THPrac::TH18::TH18_ST7_END_S9:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_S9: {
+            constexpr unsigned int st7bsSpell9SPLifeSet = 0xd8c;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ECLJump(ecl, 0x80c, 0xd8c, 9); // Utilize Spell Practice Jump
+            ECLJump(ecl, st7bsPreDialogue, st7bsPostDialogue, 9); // Skip dialogue
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsSpell9SPLifeSet, 9); // Utilize Spell Practice Jump
+
             break;
-        case THPrac::TH18::TH18_ST7_END_S10:
-            ECLStdExec(ecl, 0xa8fc, 1, 1);
-            ECLJump(ecl, 0, 0xb064, 124); // 0xafa0, 0xafe4, 0xb064
-            ECLJump(ecl, 0x57cc, 0x585c, 3);
+        }
+        case THPrac::TH18::TH18_ST7_END_S10: {
+            constexpr unsigned int st7bsHurtbox = 0x76c;
+            constexpr unsigned int st7bsPostHurtbox = 0x784;
+            constexpr unsigned int st7bsSpell8Hurtbox = 0xf908;
+            constexpr unsigned int st7bsSpell8PostHurtbox = 0xf934;
+            constexpr unsigned int st7bsSpell10SPLifeSet = 0xe28;
+
+            ECLStdExec(ecl, st7PostMaple, 1, 1);
+            ECLJump(ecl, 0, st7BossCreateCall, 124); // 0xafa0, 0xafe4, 0xb064
+            ECLJump(ecl, st7EndPreDialogue, st7EndPostDialogue, 3);
 
             ecl.SetFile(2);
-            ECLJump(ecl, 0x718, 0x758, 9); // Skip dialogue
-            ECLJump(ecl, 0x80c, 0xe28, 9); // Utilize Spell Practice Jump
+            ECLJump(ecl, st7bsPreDialogue, st7bsSpell8Hurtbox, 2); // Skip dialogue
+            ECLJump(ecl, st7bsSpell8PostHurtbox, st7bsPostDialogue, 9); // and grab the Dragon Eater hurtbox
+            ECLJump(ecl, st7bsHurtbox, st7bsPostHurtbox, 9); // Avoid overwriting hurtbox (while still setting chapter 43 just in case)
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsSpell10SPLifeSet, 9); // Utilize Spell Practice Jump
 
             switch (thPracParam.phase) {
             case 1:
-                ecl << pair{0xe38, 9000};
+                ecl << pair { st7bsSpell10SPLifeSet + 0x10, 9000 };
                 ECLJump(ecl, 0x68f4, 0x69a0, 90);
                 break;
             case 2:
-                ecl << pair{0xe38, 6500};
+                ecl << pair { st7bsSpell10SPLifeSet + 0x10, 6500 };
                 ECLJump(ecl, 0x68f4, 0x6a4c, 90);
                 break;
             case 3:
-                ecl << pair{0xe38, 4000};
+                ecl << pair { st7bsSpell10SPLifeSet + 0x10, 4000 };
                 ECLJump(ecl, 0x68cc, 0x6b40, 90);
                 break;
             case 4:
@@ -2930,6 +3313,7 @@ namespace TH18 {
                 break;
             }
             break;
+        }
         default:
             break;
         }
@@ -3063,7 +3447,7 @@ namespace TH18 {
         bool result;
 
         el_switch = *(THOverlay::singleton().mElBgm) && !THGuiRep::singleton().mRepStatus && (thPracParam.mode == 1) && thPracParam.section;
-        is_practice = (*((int32_t*)0x4cccc8) & 0x1);
+        is_practice = (*((int32_t*)MODEFLAGS) & 0x1);
         result = ElBgmTest<0x4546d3, 0x443762, 0x45873a, 0x45a24e, 0xffffffff>(
             el_switch, is_practice, retn_addr, bgm_cmd, bgm_id, 0xffffffff);
 
@@ -3095,7 +3479,7 @@ namespace TH18 {
     // Specifying the hook struct manually because code passed to a macro can't declare a macro
     { .addr = 0x4432a7, .name = "th18_patch_main", .callback = []([[maybe_unused]] PCONTEXT pCtx, [[maybe_unused]] HookCtx* self) {
          defer({
-             THAdvOptWnd::singleton().RestartFix();
+             // THAdvOptWnd::singleton().RestartResetMarket();
              thPracParam._playLock = true;
          });
 
@@ -3106,7 +3490,7 @@ namespace TH18 {
     card->_recharge_timer.current = static_cast<int32_t>(card->recharge_time * (static_cast<float>(thPracParam.name) / 10000)); \
     card->_recharge_timer.current_f = card->recharge_time * (thPracParam.name / 10000.0f)
 
-         *(int32_t*)(0x4cccfc) = (int32_t)(thPracParam.score / 10);
+         *(int32_t*)(SCORE) = (int32_t)(thPracParam.score / 10);
          *(int32_t*)(0x4ccd48) = thPracParam.life;
          *(int32_t*)(0x4ccd4c) = thPracParam.life_fragment;
          *(int32_t*)(0x4ccd58) = thPracParam.bomb;
@@ -3114,7 +3498,7 @@ namespace TH18 {
          *(int32_t*)(0x4ccd38) = thPracParam.power;
          *(int32_t*)(0x4ccd30) = *(int32_t*)(0x4ccd34) = thPracParam.funds;
 
-         auto* ability_manager = *(AbilityManager**)ABILTIY_MANAGER_PTR;
+         auto* ability_manager = *(AbilityManager**)ABILITY_MANAGER_PTR;
 
          for (ThList<CardBase>* entry = &ability_manager->card_list_head; entry; entry = entry->next) {
              CardBase* card = entry->entry;
@@ -3141,7 +3525,14 @@ namespace TH18 {
                  R(sun);
                  break;
              case LILY:
-                 static_cast<CardLily*>(card)->count = thPracParam.lily_count;
+                 if (thPracParam.lily_cycle == -1) { // backwards compatibility with old buggy behavior
+                     ((CardLily*)card)->count = 10000 - thPracParam.lily_count;
+                 } else {
+                     ((CardLily*)card)->count = thPracParam.lily_count;
+
+                     if (thPracParam.lily_count >= 10)
+                         ((CardLily*)card)->count += thPracParam.lily_cycle + 2;
+                 }
                  R(lily_cd);
                  break;
              case BASSDRUM:
@@ -3208,45 +3599,135 @@ namespace TH18 {
             pCtx->Eip = 0x459578;
         }
     })
-     EHOOK_DY(th18_add_card, 0x411460, 1, {
-        uint32_t* list = nullptr;
-        uint32_t sub_count = 0;
-        uint32_t cardAddId = *(uint32_t*)(pCtx->Esp + 4);
-        uint32_t cardAddType = 0;
-        uint8_t cardIdArray[64] = {};
+    EHOOK_DY(th18_stage_transition, 0x443e60, 1, {
+        auto& guiReplay = THGuiRep::singleton();
+        auto& advOptWnd = THAdvOptWnd::singleton();
 
-        for (uint32_t* i = (uint32_t*)GetMemContent(ABILTIY_MANAGER_PTR, 0x1c); i; i = (uint32_t*)i[1]) {
-            list = i;
-            auto cardId = ((uint32_t**)list)[0][1];
-            cardIdArray[cardId] += 1;
-        }
+        const uint32_t stage = GetMemContent(RVA(STAGE_NUM));
+        const uint32_t score = GetMemContent(SCORE);
+        const bool startedOnCS = guiReplay.mSelectedRepScores[guiReplay.mSelectedRepPlaybackStartStage - 1] == COUNTERSTOP;
 
-        for (int i = 0; i < 56; ++i) {
-            uint32_t* cardsSrcOffset = (uint32_t*)(CARD_DESC_LIST + 0x34 * i);
-            if (cardIdArray[cardsSrcOffset[1]]) {
-                if (cardsSrcOffset[3] == 1) {
-                    sub_count += (cardsSrcOffset[1] == 51 ? 2 : 1) * cardIdArray[cardsSrcOffset[1]];
-                }
-            }
-            if (cardsSrcOffset[1] == cardAddId) {
-                cardAddType = cardsSrcOffset[3];
-            }
-        }
+        if (guiReplay.mRepStatus && !startedOnCS && score && stage > 1 && advOptWnd.mScoreOverwrites[stage - 1] < score)
+            advOptWnd.mScoreOverwrites[stage - 1] = score;
+    }) EHOOK_DY(th18_replay_end, 0x4588f0, 1, {
+        auto& guiReplay = THGuiRep::singleton();
+        auto& advOptWnd = THAdvOptWnd::singleton();
 
-        auto op = *(uint32_t*)(pCtx->Esp + 8);;
-        if (op != 3) {
-            if (cardAddType == 1) {
-                sub_count += (cardAddId == 51 ? 2 : 1);
-                if (sub_count > 12) {
-                    pCtx->Eip = 0x412d29;
-                }
-            } else if (cardAddId == 54 && cardIdArray[54]) {
-                pCtx->Eip = 0x412d29;
-            }
-        }
+        const uint32_t stage = GetMemContent(RVA(STAGE_NUM));
+        const uint32_t score = GetMemContent(SCORE);
+        const bool startedOnCS = guiReplay.mSelectedRepScores[guiReplay.mSelectedRepPlaybackStartStage - 1] == COUNTERSTOP;
+
+        if (guiReplay.mRepStatus && !startedOnCS && score && stage && advOptWnd.mScoreOverwrites[stage - 1] < score)
+            advOptWnd.mScoreOverwrites[stage] = score;
+    })
+    // fix AoD timeout in Spell Prac crashing the game
+    EHOOK_DY(th18_st6final_fix, 0x438e47, 8, {
+        static int st6FinalDummy[4] { 0, 0, 0, 0 };
+        uint32_t stageNum = GetMemContent(STAGE_NUM);
+        bool inSpellPrac = GetMemContent(MODEFLAGS) & 32;
+
+        if (stageNum == 6 && inSpellPrac && !pCtx->Ecx)
+            pCtx->Ecx = (uint32_t)st6FinalDummy - 0x1270;
+    })
+
+    // fix Eiki & Eirin cards randomly crashing during transitions
+    PATCH_DY(th18_eirin_eiki_card_uninit_fix, 0x411ac2, "54")
+
+    // fix Centipede value being reset on stage transition in replays due to card reinitialization
+    EHOOK_DY(th18_mukade_transition_fix, 0x412c76, 10, {
+        if (!THGuiRep::singleton().mRepStatus)
+            return;
+        auto caller = *(uint32_t*)(pCtx->Esp + 0x20);
+
+        if (caller == 0x417974 || // from shop cleanup
+            (caller == 0x462e2a && *(uint32_t*)STAGE_NUM != *(uint32_t*)NEXT_STAGE_NUM)) // from replay transition?
+            pCtx->Eip = 0x412c80;
+    })
+
+    // fix funcCalls used by Momoyo Sp6 taking into account Z axis, leading to desyncs
+    PATCH_DY(th18_func_call2_uninit_fix, 0x4390ec, NOP(4)) PATCH_DY(th18_func_call3_uninit_fix, 0x43926c, NOP(4))
+
+    // fix active card CD scroll mult. being reset after shops due to cleanup (desyncs Extra)
+    EHOOK_DY(th18_scroll_fix, 0x407e05, 10, { // hooks on card resets
+        if (THGuiRep::singleton().mRepStatus
+            && *(uint32_t*)(pCtx->Esp + 0x18) == 0x417955 // called from shop cleanup
+            && *(uint32_t*)(pCtx->Esp + 0x3c) == 0x417d39) // which was called from on tick
+            pCtx->Eip = 0x407e0f; // skip resetting active card cooldown mult
+    })
+
+    // fix pre-transition active card selection being written to replay on transition
+    EHOOK_DY(th18_active_card_fix, 0x462f33, 3, { // in stage transition record / playback data handling
+        if (THGuiRep::singleton().mRepStatus)
+            return;
+        uint32_t activeCardId = GetMemContent(ABILITY_MANAGER_PTR, 0x38);
+
+        if (activeCardId)
+            *(uint32_t*)(pCtx->Esi + 0x964) = GetMemContent(activeCardId + 4);
+        else
+            *(uint32_t*)(pCtx->Esi + 0x964) = UINT_MAX;
+    })
+
+    // factor in stage/clear bonus when playing back replays
+    EHOOK_DY(th18_score_uncap_replay_factor, 0x44480d, 5, { // runs on replay's final stage end (i.e. s6 in runs, sX in practice, not for gameovers)
+        if (!THGuiRep::singleton().mRepStatus)
+            return;
+        uint32_t rpyInfo = (uint32_t)GetMemContent<Replay*>(REPLAY_MANAGER_PTR)->info;
+
+        uintptr_t score = GetMemAddr(SCORE);
+        uint32_t stageNum = GetMemContent(STAGE_NUM);
+        uint32_t lives = GetMemContent(LIVES);
+        uint32_t bombs = GetMemContent(BOMBS);
+
+        auto stageBonus = 100000 * stageNum;
+        auto clearBonus = 100000 * (lives * 5 + bombs);
+
+        if (*(uint32_t*)(rpyInfo + 0xb8) == 8 && (stageNum == 6 || stageNum == 7))
+            *(uint32_t*)score += clearBonus;
+
+        *(uint32_t*)score += stageBonus;
+
+        if (!THAdvOptWnd::singleton().scoreUncapChkbox && *(uint32_t*)score > 999999999)
+            *(uint32_t*)score = 999999999;
+    })
+    EHOOK_DY(th18_add_card, 0x411460, 1, {
+       uint32_t* list = nullptr;
+       uint32_t sub_count = 0;
+       uint32_t cardAddId = *(uint32_t*)(pCtx->Esp + 4);
+       uint32_t cardAddType = 0;
+       uint8_t cardIdArray[64] = {};
+
+       for (uint32_t* i = (uint32_t*)GetMemContent(ABILITY_MANAGER_PTR, 0x1c); i; i = (uint32_t*)i[1]) {
+           list = i;
+           auto cardId = ((uint32_t**)list)[0][1];
+           cardIdArray[cardId] += 1;
+       }
+
+       for (int i = 0; i < 56; ++i) {
+           uint32_t* cardsSrcOffset = (uint32_t*)(CARD_DESC_LIST + 0x34 * i);
+           if (cardIdArray[cardsSrcOffset[1]]) {
+               if (cardsSrcOffset[3] == 1) {
+                   sub_count += (cardsSrcOffset[1] == 51 ? 2 : 1) * cardIdArray[cardsSrcOffset[1]];
+               }
+           }
+           if (cardsSrcOffset[1] == cardAddId) {
+               cardAddType = cardsSrcOffset[3];
+           }
+       }
+
+       auto op = *(uint32_t*)(pCtx->Esp + 8);;
+       if (op != 3) {
+           if (cardAddType == 1) {
+               sub_count += (cardAddId == 51 ? 2 : 1);
+               if (sub_count > 12) {
+                   pCtx->Eip = 0x412d29;
+               }
+           } else if (cardAddId == 54 && cardIdArray[54]) {
+               pCtx->Eip = 0x412d29;
+           }
+       }
     })
     EHOOK_DY(th18_active_buy_swap_fix, 0x412d94, 3, {
-        asm_call<0x408c30, Fastcall>(*(uint32_t*)ABILTIY_MANAGER_PTR);
+        asm_call<0x408c30, Fastcall>(*(uint32_t*)ABILITY_MANAGER_PTR);
     })
     EHOOK_DY(th18_rep_save, 0x462657, 5, {
         char* repName = (char*)(pCtx->Esp + 0x30);
@@ -3294,7 +3775,7 @@ namespace TH18 {
             }
         }
 
-        if (g_adv_igi_options.show_keyboard_monitor && *(DWORD*)(0x004CF410))
+        if (g_adv_igi_options.show_keyboard_monitor && GetMemContent(PLAYER_PTR))
             KeysHUD(18, { 1280.0f, 0.0f }, { 840.0f, 0.0f }, g_adv_igi_options.keyboard_style);
         
         RenderLockTimer(p);
@@ -3323,7 +3804,7 @@ namespace TH18 {
                     stage = stage - 1;
                 int card_id2 = -1;
                 for (int i = 0; i < 56; i++) { 
-                    if (g_adv_igi_options.th18_cards[stage] == *(DWORD*)(CARD_DESC_LIST + 0x34 * i + 4)){
+                    if (g_adv_igi_options.th18_cards[stage] == *(int32_t*)(CARD_DESC_LIST + 0x34 * i + 4)){
                         card_id2 = i;
                         break;
                     }

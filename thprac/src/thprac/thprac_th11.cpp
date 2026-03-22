@@ -10,12 +10,42 @@ namespace TH11 {
         char gap0[0x8bab];
         int32_t marisa_b_formation;
     };
+
+    struct Globals {
+        int32_t __field_0;
+        int32_t score;
+        int32_t power;
+        int32_t __field_c;
+        int32_t piv;
+        int32_t __field_14;
+        int32_t __field_18;
+        Timer __timer_1c;
+        int32_t chara;
+        int32_t subshot;
+        int32_t lives;
+        int32_t life_pieces;
+        int32_t difficulty;
+        int32_t __field_44;
+        int32_t stage;
+        int32_t _stage_2;
+        int32_t __field_50;
+        int32_t __field_54;
+        int32_t __field_58;
+        int32_t continues;
+        int32_t __field_60;
+        int32_t rank;
+        int32_t max_power;
+        int32_t power_per_level;
+        int32_t __field_70;
+        int32_t graze;
+    };
+    static_assert(sizeof(Globals) == 0x78);
+
+#define player (*(Player**)0x4a8eb4)
+    Globals* globals = (Globals*)0x4a56e0;
+
     static_assert(offsetof(Player, marisa_b_formation) == 0x8bac);
     enum addrs {
-        CHARA = 0x4a5710,
-        SUBSHOT = 0x4a5714,
-        PLAYER_PTR = 0x4a8eb4,
-        STAGE_NUM = 0x4a5728,
         STAGE_PTR = 0x4a8d60,
         REPLAY_MGR_PTR = 0x4a8eb8,
         GAME_THREAD_PTR = 0x4a8e88,
@@ -115,13 +145,14 @@ namespace TH11 {
             *mPower = 80;
             *mMode = 1;
             *mValue = 50000;
+            *mSpellCategory = globals->chara * 3 + globals->subshot;
 
             SetFade(0.8f, 0.1f);
             SetStyle(ImGuiStyleVar_WindowRounding, 0.0f);
             SetStyle(ImGuiStyleVar_WindowBorderSize, 0.0f);
             OnLocaleChange();
         }
-        SINGLETON(THGuiPrac);
+        SINGLETON(THGuiPrac)
     public:
 
         __declspec(noinline) void State(int state)
@@ -240,34 +271,32 @@ namespace TH11 {
         void PracticeMenu()
         {
             static int32_t last_player_type = 0;
-            int32_t player_type = (*(byte*)(CHARA)) * 3 + (*(byte*)(SUBSHOT));
+            int32_t player_type = globals->chara * 3 + globals->subshot;
             mMode();
             if (player_type != last_player_type) {
                 last_player_type = player_type;
-                if(*mMode==1 && *mStage==3 && *mWarp==5){
-                    *mSection = player_type * 3 + 1;
+                if(*mMode==1 && *mStage==3){
+                    *mSpellCategory = player_type + 1;
                 }
             }
 
-            if (mStage())
-            {
+            if (mStage()){
                 *mSection = *mChapter = 0;
-                if (*mStage == 3 && *mWarp == 5) {
-                    *mSection = player_type * 3 + 1;
+                if (*mMode == 1 && *mStage == 3) {
+                    *mSpellCategory = player_type + 1;
                 }
             }
             if (*mMode == 1) {
                 if (mWarp()){
                     *mSection = *mChapter = *mPhase = 0;
-                    if (*mStage == 3 && *mWarp == 5)
-                    {
-                        *mSection = player_type * 3 + 1;
-                    }
                 }
                 if (*mWarp) {
+                    if (*mStage == 3) {
+                        mSpellCategory();
+                    }
                     SectionWidget();
                     mPhase(TH_PHASE, SpellPhase());
-                     auto section = CalcSection();
+                    auto section = CalcSection();
                     if (section == TH11_ST4_RA2 && *mPhase!=0){
                         mBossX();
                         mBossY();
@@ -288,7 +317,7 @@ namespace TH11 {
                 mValue.RoundDown(10);
                 mScore();
                 mScore.RoundDown(10);
-                if (GetMemContent<uint32_t>(CHARA) == 1 && GetMemContent(SUBSHOT) == 1) {
+                if (globals->chara == 1 && globals->subshot == 1) {
                     mMarisaBFormation();
                 }
             }
@@ -297,6 +326,10 @@ namespace TH11 {
         }
         int CalcSection()
         {
+            int st = 0;
+            if (*mStage == 3) {
+                st = *mSpellCategory ? (*mSpellCategory + 3) : 0;
+            }
             int chapterId = 0;
             switch (*mWarp) {
             case 1: // Chapter
@@ -308,11 +341,11 @@ namespace TH11 {
                 break;
             case 2:
             case 3: // Mid boss & End boss
-                return th_sections_cba[*mStage][*mWarp - 2][*mSection];
+                return th_sections_cba[*mStage + st][*mWarp - 2][*mSection];
                 break;
             case 4:
             case 5: // Non-spell & Spellcard
-                return th_sections_cbt[*mStage][*mWarp - 4][*mSection];
+                return th_sections_cbt[*mStage + st][*mWarp - 4][*mSection];
                 break;
             default:
                 return 0;
@@ -340,6 +373,10 @@ namespace TH11 {
         {
             static char chapterStr[256] {};
             auto& chapterCounts = mChapterSetup[*mStage];
+            int st = 0;
+            if (*mStage == 3) {
+                st = *mSpellCategory ? (*mSpellCategory + 3) : 0 ;
+            }
 
             switch (*mWarp) {
             case 1: // Chapter
@@ -358,7 +395,7 @@ namespace TH11 {
             case 2:
             case 3: // Mid boss & End boss
                 if (mSection(TH_WARP_SELECT[*mWarp],
-                        th_sections_cba[*mStage][*mWarp - 2],
+                        th_sections_cba[*mStage + st][*mWarp - 2],
                         th_sections_str[::THPrac::Gui::LocaleGet()][mDiffculty]))
                     *mPhase = 0;
                 if (SectionHasDlg(th_sections_cba[*mStage][*mWarp - 2][*mSection]))
@@ -367,7 +404,7 @@ namespace TH11 {
             case 4:
             case 5: // Non-spell & Spellcard
                 if (mSection(TH_WARP_SELECT[*mWarp],
-                        th_sections_cbt[*mStage][*mWarp - 4],
+                        th_sections_cbt[*mStage + st][*mWarp - 4],
                         th_sections_str[::THPrac::Gui::LocaleGet()][mDiffculty]))
                     *mPhase = 0;
                 if (SectionHasDlg(th_sections_cbt[*mStage][*mWarp - 4][*mSection]))
@@ -394,11 +431,12 @@ namespace TH11 {
         Gui::GuiSlider<int, ImGuiDataType_S32> mPower { TH_POWER, 0, 80 };
         Gui::GuiDrag<int64_t, ImGuiDataType_S64> mScore { TH_SCORE, 0, 9999999990, 10, 100000000 };
         Gui::GuiDrag<int, ImGuiDataType_S32> mValue { TH_FAITH, 0, 999990, 10, 100000 };
+        Gui::GuiCombo mSpellCategory { TH11_SPELL_CATEGORY, TH11_TYPE_SELECT };
 
         Gui::GuiDrag<float, ImGuiDataType_Float> mBossX { TH_BOSSX, -140.0f, 140.0f, 1.0f, 100.0f };
         Gui::GuiDrag<float, ImGuiDataType_Float> mBossY { TH_BOSSY, 80.0f, 176.0f, 1.0f, 100.0f };
 
-        Gui::GuiNavFocus mNavFocus { TH_STAGE, TH_MODE, TH_WARP, TH_DLG,
+        Gui::GuiNavFocus mNavFocus { TH_STAGE, TH_MODE, TH11_SPELL_CATEGORY, TH_WARP, TH_DLG,
             TH_MID_STAGE, TH_END_STAGE, TH_NONSPELL, TH_SPELL, TH_PHASE, TH_CHAPTER,
             TH_LIFE, TH_FAITH, TH_SCORE, TH_POWER, TH_GRAZE, TH11_MARISAB_FORMATION_LABEL };
 
@@ -420,7 +458,7 @@ namespace TH11 {
         THGuiRep() noexcept
         {
         }
-        SINGLETON(THGuiRep);
+        SINGLETON(THGuiRep)
     public:
 
         void CheckReplay()
@@ -474,7 +512,7 @@ namespace TH11 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(THOverlay);
+        SINGLETON(THOverlay)
     public:
 
     protected:
@@ -569,7 +607,7 @@ namespace TH11 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(TH11InGameInfo);
+        SINGLETON(TH11InGameInfo)
 
     public:
         int32_t mMissCount;
@@ -600,12 +638,12 @@ namespace TH11 {
 
         virtual void OnContentUpdate() override
         {
-            byte cur_player_type = (*(byte*)(CHARA)) * 3 + (*(byte*)(SUBSHOT));
+            byte cur_player_type = globals->chara * 3 + globals->subshot;
             int32_t diff = *((int32_t*)0x4a5720);
             auto diff_pl = std::format("{} ({})", S(IGI_DIFF[diff]), S(IGI_PL_11[cur_player_type]));
             auto diff_pl_sz = ImGui::CalcTextSize(diff_pl.c_str());
 
-            ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5 - diff_pl_sz.x * 0.5);
+            ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5f - diff_pl_sz.x * 0.5f);
             ImGui::Text(diff_pl.c_str());
 
             ImGui::Columns(2);
@@ -661,7 +699,7 @@ namespace TH11 {
     int g_marisaB_lock_type = 0;
     bool g_marisaB_lock = false;
     EHOOK_ST(marisaB_lock, 0x430921, 6, {
-        byte cur_player_type = (*(byte*)(CHARA)) * 3 + (*(byte*)(SUBSHOT));
+        byte cur_player_type = globals->chara * 3 + globals->subshot;
         if (cur_player_type == 4) {
             pCtx->Edx = g_marisaB_lock_type % 5;
         }
@@ -679,7 +717,7 @@ namespace TH11 {
     });
 
     class THAdvOptWnd : public Gui::PPGuiWnd {
-        SINGLETON(THAdvOptWnd);
+        SINGLETON(THAdvOptWnd)
     public:
         bool forceBossMoveDown = false;
     private:
@@ -690,9 +728,9 @@ namespace TH11 {
         }
         void FpsInit()
         {
-            if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) {
+            if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) != NULL) {
                 OILPInit(mOptCtx);
-            } else if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"vpatch_th11.dll")) {
+            } else if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"vpatch_th11.dll")) != NULL) {
                 uint64_t hash[2];
                 CalcFileHash(L"vpatch_th11.dll", hash);
                 if (hash[0] != 5913416708557704950ll || hash[1] != 10824003281749047314ll)
@@ -859,7 +897,7 @@ namespace TH11 {
                         ImGui::SetNextItemWidth(180.0f);
                         ImGui::Combo(
                             S(TH11_MARISAB_FORMATION_LABEL), &g_marisaB_lock_type,
-                            [](void* data, int idx, const char** out_text) -> bool {
+                            []([[maybe_unused]]void* data, int idx, const char** out_text) -> bool {
                                 *out_text = S(TH11_MARISAB_FORMATION[idx]);
                                 return true;
                             },
@@ -1328,35 +1366,67 @@ namespace TH11 {
             ECLVoid(ecl, 0x1074, 0x2db4, 0x2dc4);
             ecl << pair{0x2bf8, 2700} << pair{0x65cc, (int16_t)0};
             break;
+        case THPrac::TH11::TH11_ST4_RA_MID1:
+        case THPrac::TH11::TH11_ST4_RB_MID1:
+        case THPrac::TH11::TH11_ST4_RC_MID1:
+        case THPrac::TH11::TH11_ST4_MA_MID1:
+        case THPrac::TH11::TH11_ST4_MB_MID1:
+        case THPrac::TH11::TH11_ST4_MC_MID1:
         case THPrac::TH11::TH11_ST4_MID1:
             ECLJump(ecl, 0xf764, 0xf7c0);
             ecl << pair{0x95f0, (int16_t)0} << pair{0x7b74, (int16_t)0} << pair{0x7af4, (int16_t)0}
                 << pair{0xf7f0, 900};
             break;
+        case THPrac::TH11::TH11_ST4_RA_MID2:
+        case THPrac::TH11::TH11_ST4_RB_MID2:
+        case THPrac::TH11::TH11_ST4_RC_MID2:
+        case THPrac::TH11::TH11_ST4_MA_MID2:
+        case THPrac::TH11::TH11_ST4_MB_MID2:
+        case THPrac::TH11::TH11_ST4_MC_MID2:
         case THPrac::TH11::TH11_ST4_MID2:
             ECLJump(ecl, 0xf764, 0xf8b0);
             ecl << pair{0x9668, (int16_t)0};
             break;
+        case THPrac::TH11::TH11_ST4_RA_BOSS1:
+        case THPrac::TH11::TH11_ST4_RB_BOSS1:
+        case THPrac::TH11::TH11_ST4_RC_BOSS1:
+        case THPrac::TH11::TH11_ST4_MA_BOSS1:
+        case THPrac::TH11::TH11_ST4_MB_BOSS1:
+        case THPrac::TH11::TH11_ST4_MC_BOSS1:
         case THPrac::TH11::TH11_ST4_BOSS1:
             if (thPracParam.dlg)
                 ECLJump(ecl, 0xf764, 0xf9e0);
             else
                 ECLJump(ecl, 0xf764, 0xfa04);
             break;
+        case THPrac::TH11::TH11_ST4_RA_BOSS2:
+        case THPrac::TH11::TH11_ST4_RB_BOSS2:
+        case THPrac::TH11::TH11_ST4_RC_BOSS2:
+        case THPrac::TH11::TH11_ST4_MA_BOSS2:
+        case THPrac::TH11::TH11_ST4_MB_BOSS2:
+        case THPrac::TH11::TH11_ST4_MC_BOSS2:
         case THPrac::TH11::TH11_ST4_BOSS2:
             ECLJump(ecl, 0xf764, 0xfa04);
             ecl << pair{0xfe4, 1900};
             ECLVoid(ecl, 0x48f0);
             break;
+        case THPrac::TH11::TH11_ST4_RA_BOSS3:
+        case THPrac::TH11::TH11_ST4_RB_BOSS3:
+        case THPrac::TH11::TH11_ST4_RC_BOSS3:
+        case THPrac::TH11::TH11_ST4_MA_BOSS3:
+        case THPrac::TH11::TH11_ST4_MB_BOSS3:
+        case THPrac::TH11::TH11_ST4_MC_BOSS3:
         case THPrac::TH11::TH11_ST4_BOSS3:
             ECLJump(ecl, 0xf764, 0xfa04);
             ecl << pair{0x1110, (int8_t)0x32};
             ECLVoid(ecl, 0x2fa4, 0x1058, 0x2fb4);
             ECLTimeFix(ecl, 0x1020, -60);
             break;
+        case THPrac::TH11::TH11_ST4_RA_BOSS4:
         case THPrac::TH11::TH11_ST4_RA1:
             ECLSatoriJump(ecl, 0);
             break;
+        case THPrac::TH11::TH11_ST4_RA_BOSS5:
         case THPrac::TH11::TH11_ST4_RA2:
             switch (thPracParam.phase) {
             case 0:
@@ -1372,6 +1442,7 @@ namespace TH11 {
             ecl << pair{0x124, 6000};
             ECLVoid(ecl, 0x128, 0x644, 0x690, 0x654);
             break;
+        case THPrac::TH11::TH11_ST4_RA_BOSS6:
         case THPrac::TH11::TH11_ST4_RA3:
             ECLSatoriJump(ecl, 0);
             ecl.SetFile(2);
@@ -1379,9 +1450,11 @@ namespace TH11 {
             ecl << pair{0x124, 3500};
             ECLVoid(ecl, 0x128, 0x1cf8, 0x1d08);
             break;
+        case THPrac::TH11::TH11_ST4_RB_BOSS4:
         case THPrac::TH11::TH11_ST4_RB1:
             ECLSatoriJump(ecl, 1);
             break;
+        case THPrac::TH11::TH11_ST4_RB_BOSS5:
         case THPrac::TH11::TH11_ST4_RB2:
             ECLSatoriJump(ecl, 1);
             ecl.SetFile(3);
@@ -1389,6 +1462,7 @@ namespace TH11 {
             ecl << pair { 0x170, 4000 };
             ECLVoid(ecl, 0x174, 0x1f8, 0x1e20, 0x1e58, 0x1e6c);
             break;
+        case THPrac::TH11::TH11_ST4_RB_BOSS6:
         case THPrac::TH11::TH11_ST4_RB3:
             {
             constexpr unsigned int st4BossRB3InvulnVal = 0x30fc + 0x10;
@@ -1402,9 +1476,11 @@ namespace TH11 {
                 << pair { st4BossRB3InvulnVal, 0 }; // note: we skip a bunch of waits that normally elapse the invuln timer before the spell even begins
             break;
         }
+        case THPrac::TH11::TH11_ST4_RC_BOSS4:
         case THPrac::TH11::TH11_ST4_RC1:
             ECLSatoriJump(ecl, 2);
             break;
+        case THPrac::TH11::TH11_ST4_RC_BOSS5:
         case THPrac::TH11::TH11_ST4_RC2:
             ECLSatoriJump(ecl, 2);
             ecl.SetFile(4);
@@ -1412,6 +1488,7 @@ namespace TH11 {
             ecl << pair{0x180, 4400} << pair{0x230, 5100};
             ECLVoid(ecl, 0x184, 0x2b8, 0x234, 0x1d40, 0x1d78, 0x1d8c);
             break;
+        case THPrac::TH11::TH11_ST4_RC_BOSS6:
         case THPrac::TH11::TH11_ST4_RC3:
             ECLSatoriJump(ecl, 2);
             ecl.SetFile(4);
@@ -1419,9 +1496,11 @@ namespace TH11 {
             ecl << pair{0x180, 2500} << pair{0x230, 3200};
             ECLVoid(ecl, 0x184, 0x2b8, 0x234, 0x2f1c, 0x2f2c, 0x2f98);
             break;
+        case THPrac::TH11::TH11_ST4_MA_BOSS4:
         case THPrac::TH11::TH11_ST4_MA1:
             ECLSatoriJump(ecl, 3);
             break;
+        case THPrac::TH11::TH11_ST4_MA_BOSS5:
         case THPrac::TH11::TH11_ST4_MA2:
             ECLSatoriJump(ecl, 3);
             ecl.SetFile(5);
@@ -1429,6 +1508,7 @@ namespace TH11 {
             ecl << pair{0x198, 3600};
             ECLVoid(ecl, 0x19c, 0x234, 0x1258, 0x1290, 0x12c4);
             break;
+        case THPrac::TH11::TH11_ST4_MA_BOSS6:
         case THPrac::TH11::TH11_ST4_MA3:
             ECLSatoriJump(ecl, 3);
             ecl.SetFile(5);
@@ -1436,9 +1516,11 @@ namespace TH11 {
             ecl << pair{0x198, 2000};
             ECLVoid(ecl, 0x19c, 0x234, 0x23c8, 0x23d8, 0x2444);
             break;
+        case THPrac::TH11::TH11_ST4_MB_BOSS4:
         case THPrac::TH11::TH11_ST4_MB1:
             ECLSatoriJump(ecl, 4);
             break;
+        case THPrac::TH11::TH11_ST4_MB_BOSS5:
         case THPrac::TH11::TH11_ST4_MB2:
             ECLSatoriJump(ecl, 4);
             ecl.SetFile(6);
@@ -1446,6 +1528,7 @@ namespace TH11 {
             ecl << pair{0x130, 4400};
             ECLVoid(ecl, 0x134, 0x1b8, 0xa08, 0xa40, 0xa94);
             break;
+        case THPrac::TH11::TH11_ST4_MB_BOSS6:
         case THPrac::TH11::TH11_ST4_MB3:
             ECLSatoriJump(ecl, 4);
             ecl.SetFile(6);
@@ -1453,9 +1536,11 @@ namespace TH11 {
             ecl << pair{0x130, 2400};
             ECLVoid(ecl, 0x134, 0x1b8, 0x14f8, 0x1508, 0x1574);
             break;
+        case THPrac::TH11::TH11_ST4_MC_BOSS4:
         case THPrac::TH11::TH11_ST4_MC1:
             ECLSatoriJump(ecl, 5);
             break;
+        case THPrac::TH11::TH11_ST4_MC_BOSS5:
         case THPrac::TH11::TH11_ST4_MC2:
             ECLSatoriJump(ecl, 5);
             ecl.SetFile(7);
@@ -1463,6 +1548,7 @@ namespace TH11 {
             ecl << pair{0xd0c, 4400};
             ECLVoid(ecl, 0xd10, 0xd94, 0x1c5c, 0x1c94, 0x1ce8);
             break;
+        case THPrac::TH11::TH11_ST4_MC_BOSS6:
         case THPrac::TH11::TH11_ST4_MC3:
             ECLSatoriJump(ecl, 5);
             ecl.SetFile(7);
@@ -2069,42 +2155,39 @@ namespace TH11 {
     EHOOK_DY(th11_prac_menu_enter_2, 0x43da13, 1, {
         pCtx->Eax = thPracParam.stage;
     })
-     EHOOK_DY(th11_patch_main, 0x41fdfb, 1, {
-        if (thPracParam.mode == 1) {
-            uint32_t* target;
-            target = (uint32_t*)0x4a5718; // Life
-            *target = thPracParam.life;
-            target = (uint32_t*)0x4a571c; // Life Fragments
-            *target = thPracParam.life_fragment;
-            target = (uint32_t*)0x4a56e8; // Power
-            *target = thPracParam.power;
-            target = (uint32_t*)0x4a5754; // Graze
-            *target = thPracParam.graze;
-            target = (uint32_t*)0x4a56f4; // Signal
-            target = (uint32_t*)0x4a56f0; // Value
-            auto value = thPracParam.value;
-            value *= 100;
-            *target = *((uint32_t*)&value);
-            target = (uint32_t*)0x4a56e4; // Score
-            auto score = thPracParam.score;
-            score /= 10;
-            *target = *((uint32_t*)&score);
+    EHOOK_DY(th11_patch_main, 0x41fdfb, 1, {
+       if (thPracParam.mode == 1) {
+           uint32_t* target;
+           target = (uint32_t*)0x4a5718; // Life
+           *target = thPracParam.life;
+           target = (uint32_t*)0x4a571c; // Life Fragments
+           *target = thPracParam.life_fragment;
+           target = (uint32_t*)0x4a56e8; // Power
+           *target = thPracParam.power;
+           target = (uint32_t*)0x4a5754; // Graze
+           *target = thPracParam.graze;
+           target = (uint32_t*)0x4a56f4; // Signal
+           target = (uint32_t*)0x4a56f0; // Value
+           auto value = thPracParam.value;
+           value *= 100;
+           *target = *((uint32_t*)&value);
+           target = (uint32_t*)0x4a56e4; // Score
+           auto score = thPracParam.score;
+           score /= 10;
+           *target = *((uint32_t*)&score);
 
-            Player* player = GetMemContent<Player*>(PLAYER_PTR);
-            player->marisa_b_formation = thPracParam.marisa_b_formation;
+           player->marisa_b_formation = thPracParam.marisa_b_formation;
 
-            THSectionPatch();
-        }
-        if (g_marisaB_lock)
-        {
-            byte cur_player_type = (*(byte*)(CHARA)) * 3 + (*(byte*)(SUBSHOT));
-            if (cur_player_type == 4)
-            {
-                Player* player = GetMemContent<Player*>(PLAYER_PTR);
-                player->marisa_b_formation = g_marisaB_lock_type % 5;
-            }
-        }
-        thPracParam._playLock = true;
+           THSectionPatch();
+       }
+       if (g_marisaB_lock)
+       {
+           byte cur_player_type = globals->chara * 3 + globals->subshot;
+           if (cur_player_type == 4){
+               player->marisa_b_formation = g_marisaB_lock_type % 5;
+           }
+       }
+       thPracParam._playLock = true;
     })
     EHOOK_DY(th11_disable_logo, 0x41a7ef, 7, {
         if (thPracParam.mode == 1 && thPracParam.section) {
@@ -2113,7 +2196,7 @@ namespace TH11 {
             }
         }
     })
-     EHOOK_DY(th11_rep_save, 0x436b1f, 10, {
+    EHOOK_DY(th11_rep_save, 0x436b1f, 10, {
          char* repName = (char*)(pCtx->Esp + 0x28);
          if (thPracParam.mode)
              THSaveReplay(repName);
@@ -2127,9 +2210,7 @@ namespace TH11 {
             if (!THGuiRep::singleton().mRepStatus)
                 return;
 
-            uint32_t stage_num = *(uint32_t*)STAGE_NUM;
-            if (stage_num != 6)
-                return;
+            if (globals->stage != 6) return;
 
             uint32_t stage = *(uint32_t*)STAGE_PTR;
             Timer* stage_std_timer = (Timer*)(stage + 0x38);
@@ -2167,17 +2248,17 @@ namespace TH11 {
          }
      })
      EHOOK_DY(th11_bgm_3, 0x420542, 5, {
-         if (*((int32_t*)STAGE_NUM) == 6 && thPracParam.mode && thPracParam.section) {
+         if (globals->stage == 6 && thPracParam.mode && thPracParam.section) {
              pCtx->Eip = 0x420547;
          }
      })
      EHOOK_DY(th11_bgm_4, 0x42C706, 1, {
-         if (*((int32_t*)STAGE_NUM) == 6 && thPracParam.mode && thPracParam.section) {
+         if (globals->stage == 6 && thPracParam.mode && thPracParam.section) {
              pCtx->EFlags &= ~EFLAGS::ZF;
          }
      })
      EHOOK_DY(th11_bgm_5, 0x42C889, 7, {
-         if (*((int32_t*)STAGE_NUM) == 6 && thPracParam.mode && thPracParam.section) {
+         if (globals->stage == 6 && thPracParam.mode && thPracParam.section) {
              pCtx->EFlags &= ~EFLAGS::ZF;
              pCtx->Eip += self->data.hook.instr_len;
          }

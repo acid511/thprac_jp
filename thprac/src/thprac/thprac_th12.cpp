@@ -17,16 +17,6 @@ namespace TH12 {
     };
     std::vector<laser_hitbox_draw> g_th12_laser_hit_draw_vec;
 
-
-    enum addrs {
-        CHARA = 0x4b0c90,
-        SUBSHOT = 0x4b0c94,
-        PLAYER_PTR = 0x4b4514,
-        MODEFLAGS = 0x4b0ce0,
-        STAGE_NUM = 0x4b0cb0,
-        REPLAY_MGR_PTR = 0x4b4518,
-    };
-
     constexpr uint32_t playerDmgSrcCnt = 0x80;
 
     struct PlayerDamageSource {
@@ -35,8 +25,23 @@ namespace TH12 {
     };
 
     struct Player {
-        char gap0[0x8988];
-        PlayerDamageSource damage_sources[playerDmgSrcCnt]; // 0x8988
+        char gap0[35208];
+        PlayerDamageSource damage_sources[129];
+        char gapC3FC[4];
+        Timer iframes;
+        char gapC414[388];
+        int32_t field_C598;
+    };
+
+    static_assert(offsetof(Player, iframes) == 0xc400);
+
+#define player (*(Player**)0x4b4514)
+    enum addrs {
+        CHARA = 0x4b0c90,
+        SUBSHOT = 0x4b0c94,
+        MODEFLAGS = 0x4b0ce0,
+        STAGE_NUM = 0x4b0cb0,
+        REPLAY_MGR_PTR = 0x4b4518,
     };
 
     using std::pair;
@@ -183,7 +188,7 @@ namespace TH12 {
             SetStyle(ImGuiStyleVar_WindowBorderSize, 0.0f);
             OnLocaleChange();
         }
-        SINGLETON(THGuiPrac);
+        SINGLETON(THGuiPrac)
     public:
 
         __declspec(noinline) void State(int state)
@@ -377,7 +382,7 @@ namespace TH12 {
             case 1: // Chapter
                 mChapter.SetBound(1, chapterCounts[0] + chapterCounts[1]);
 
-                if (chapterCounts[1] == 0 && chapterCounts[2] != 0) {
+                if (chapterCounts[1] == 0 && chapterCounts[0] != 0) {
                     sprintf_s(chapterStr, S(TH_STAGE_PORTION_N), *mChapter);
                 } else if (*mChapter <= chapterCounts[0]) {
                     sprintf_s(chapterStr, S(TH_STAGE_PORTION_1), *mChapter);
@@ -452,7 +457,7 @@ namespace TH12 {
         THGuiRep() noexcept
         {
         }
-        SINGLETON(THGuiRep);
+        SINGLETON(THGuiRep)
     public:
 
         void CheckReplay()
@@ -506,7 +511,7 @@ namespace TH12 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(THOverlay);
+        SINGLETON(THOverlay)
     public:
 
     protected:
@@ -608,7 +613,7 @@ namespace TH12 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(TH12InGameInfo);
+        SINGLETON(TH12InGameInfo)
 
     public:
         int32_t mMissCount;
@@ -658,7 +663,7 @@ namespace TH12 {
             auto diff_pl = std::format("{} ({})", S(IGI_DIFF[diff]), S(IGI_PL_12[cur_player_type]));
             auto diff_pl_sz = ImGui::CalcTextSize(diff_pl.c_str());
 
-            ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5 - diff_pl_sz.x * 0.5);
+            ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5f - diff_pl_sz.x * 0.5f);
             ImGui::Text(diff_pl.c_str());
 
             auto ufo_cnt = std::format("{}/{}/{}/{}", mRUFOCount, mGUFOCount, mBUFOCount, mCUFOCount);
@@ -692,7 +697,7 @@ namespace TH12 {
             ImGui::Text(S(THPRAC_INGAMEINFO_12_UFO_COUNT1));
             ImGui::NextColumn();
             if (ufo_cnt_sz * 0.5 < last_item_width)
-                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + last_item_width - ufo_cnt_sz * 0.5);
+                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + last_item_width - ufo_cnt_sz * 0.5f);
             ImGui::TextColored({ 1.0f, 0.5f, 0.5f, 1.0f }, "%d", mRUFOCount);
             ImGui::SameLine(0.0f,0.0f);
             ImGui::Text("/");
@@ -722,7 +727,7 @@ namespace TH12 {
                 GameUpdateInner(12);
             } else {
             }
-            if (*(THOverlay::singleton().mInGameInfo) && *(DWORD*)(0x004B4514)) {
+            if (*(THOverlay::singleton().mInGameInfo) && player) {
                 SetPosRel(440.0f / 640.0f, 338.0f / 480.0f);
                 SetSizeRel(180.0f / 640.0f, 0.0f);
                 Open();
@@ -811,14 +816,13 @@ namespace TH12 {
                 posB = GetClientFromStage(Add(posB, pos_tail));
                 posC = GetClientFromStage(Add(posC, pos_tail));
                 posD = GetClientFromStage(Add(posD, pos_tail));
-                auto p = ImGui::GetOverlayDrawList();
                 g_th12_laser_hit_draw_vec.push_back({ posA, posB, posD, posC });
             }
         });
 
 
     class THAdvOptWnd : public Gui::PPGuiWnd {
-        SINGLETON(THAdvOptWnd);
+        SINGLETON(THAdvOptWnd)
     public:
         bool forceBossMoveDown = false;
     private:
@@ -829,9 +833,9 @@ namespace TH12 {
         }
         void FpsInit()
         {
-            if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) {
+            if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) != NULL) {
                 OILPInit(mOptCtx);
-            } else if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"vpatch_th12.dll")) {
+            } else if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"vpatch_th12.dll")) != NULL) {
                 uint64_t hash[2];
                 CalcFileHash(L"vpatch_th12.dll", hash);
                 if (hash[0] != 666604866657820391ll || hash[1] != 18391463919001639953ll)
@@ -1919,7 +1923,6 @@ namespace TH12 {
         if (stageNum == 1 && !THGuiRep::singleton().mRepStatus && !thPracParam.mode)
             thPracParam.Reset();
         else if (stageNum > 1 && stageNum <= 6 && !(GetMemContent(MODEFLAGS) & 0b10000)) {
-            Player* player = GetMemContent<Player*>(PLAYER_PTR);
 
             if (THGuiRep::singleton().mRepStatus) { // Playback
                 for (int i = 0; i < playerDmgSrcCnt; i++) // if there are already active sources, its a transition - skip
@@ -1974,10 +1977,9 @@ namespace TH12 {
         if (!GetMemContent(REPLAY_MGR_PTR, 0xa8 + 0x24 * 1))
             return; // must have st1 in replay
 
-        Timer* iframes_timer = (Timer*)GetMemAddr(PLAYER_PTR, 0xc400);
-        iframes_timer->previous = 1;
-        iframes_timer->current = 0;
-        iframes_timer->current_f = 0.0f;
+        player->iframes.previous = 1;
+        player->iframes.current = 0;
+        player->iframes.current_f = 0.0f;
     })
     EHOOK_DY(th12_bgm, 0x42293a, 1, {
         if (THBGMTest()) {
@@ -2019,7 +2021,7 @@ namespace TH12 {
         }
         SSS::SSS_Update(12);
 
-        if (g_adv_igi_options.show_keyboard_monitor && *(DWORD*)(0x004B4514)) {
+        if (g_adv_igi_options.show_keyboard_monitor && player) {
             g_adv_igi_options.keyboard_style.size = { 40.0f, 40.0f };
             KeysHUD(12, { 1280.0f, 0.0f }, { 835.0f, 0.0f }, g_adv_igi_options.keyboard_style);
         }

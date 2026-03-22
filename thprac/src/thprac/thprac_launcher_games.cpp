@@ -489,7 +489,7 @@ private:
         thcrapSetup();
         mGuiUpdFunc = [&]() { GuiMain(); };
     }
-    SINGLETON(THGameGui);
+    SINGLETON(THGameGui)
 
 public:
     bool BackupScoreFile(bool auto_backup = false) {
@@ -544,7 +544,24 @@ public:
                 }
                 if (gamebackup06.score_paths.size() != 0)
                     all_backup.push_back(gamebackup06);
-            }
+            } else if(strcmp(game.signature.idStr, "th20") == 0) {
+                    GameBackup gamebackup20;
+                    gamebackup20.zip_folder = "th20_pyras";
+                    gamebackup20.score_file_name_in_zip = "score20pyra.dat";
+                    for (auto& inst : game.instances) {
+                        if (inst.autoBackup) {
+                            have_backup = true;
+                            std::string scorefilepath;
+                            GetEnvironmentVariableA("APPDATA", appdata, MAX_PATH);
+                            scorefilepath = appdata;
+                            scorefilepath += "\\ShanghaiAlice\\th20\\score20pyra.dat";
+                            gamebackup20.score_paths.push_back(scorefilepath);
+                            break;
+                        }
+                    }
+                    if (gamebackup20.score_paths.size() != 0)
+                        all_backup.push_back(gamebackup20);
+                }
             GameBackup gamebackup;
             gamebackup.zip_folder = game.signature.idStr;
             gamebackup.score_file_name_in_zip = game.signature.scoreFileStr;
@@ -580,7 +597,7 @@ public:
             zipFile zf = zipOpen(zipfilename.c_str(), APPEND_STATUS_CREATE);
 
             for (auto& it : all_backup) {
-                for (int i = 0; i < it.score_paths.size(); i++) {
+                for (int i = 0; i < std::ssize(it.score_paths); i++) {
                     std::string filename_a;
                     if (it.score_paths.size() >= 2){
                         filename_a = "";
@@ -2524,8 +2541,6 @@ public:
     void GameTable(const char* title, THGameCatagory catagory)
     {
         int columns = 1;
-        int i = 0;
-
         ImGui::TextUnformatted(title);
         ImGui::Columns(columns);
         for (size_t i = 0; i < elementsof(gGameDefs); i++) {

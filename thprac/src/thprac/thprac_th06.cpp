@@ -12,6 +12,8 @@
 #include "thprac_res.h"
 #include "thprac_th06.h"
 
+#include <mmeapi.h>
+
 namespace THPrac {
 extern bool g_forceRenderCursor;
 
@@ -46,7 +48,7 @@ namespace TH06 {
     using std::pair;
 
     class TH06Save {
-        SINGLETON(TH06Save);
+        SINGLETON(TH06Save)
     public:
         enum TH06SpellState {
             Capture = 0,
@@ -160,7 +162,7 @@ namespace TH06 {
                 byte cur_player_typeb = *(byte*)(0x69D4BE);
                 byte cur_player_type = (cur_player_typea << 1) | cur_player_typeb;
 
-                int64_t time_ns = ResetClock(clockid) * 1e9;
+                int64_t time_ns = static_cast<int64_t>(ResetClock(clockid) * 1e9);
                 save_total.timePlayer[cur_diff][cur_player_type] += time_ns;
                 save_current.timePlayer[cur_diff][cur_player_type] += time_ns;
                 timePlayedns += time_ns;
@@ -252,18 +254,18 @@ namespace TH06 {
             rankLock = false;
             fakeType = 0;
 
-            bY1 = 32.0f,
-            bY2 = 128.0f,
-            bY3 = 144.0f,
-            bY4 = 64.0f,
-            bY5 = 80.0f,
-            bY6 = 96.0f;
-            bX1 = 0.0f;
-            bX2 = 0.0f;
-            bX3 = 0.0f;
-            bX4 = 0.0f;
-            bX5 = 0.0f;
-            bX6 = 0.0f;
+            bY1 = 32,
+            bY2 = 128,
+            bY3 = 144,
+            bY4 = 64,
+            bY5 = 80,
+            bY6 = 96;
+            bX1 = 0;
+            bX2 = 0;
+            bX3 = 0;
+            bX4 = 0;
+            bX5 = 0;
+            bX6 = 0;
             bF = 0;
             snipeN = 0;
             snipeF = 0;
@@ -377,7 +379,7 @@ namespace TH06 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(THOverlay);
+        SINGLETON(THOverlay)
     public:
 
     protected:
@@ -489,7 +491,7 @@ namespace TH06 {
             SetStyle(ImGuiStyleVar_WindowBorderSize, 0.0f);
             OnLocaleChange();
         }
-        SINGLETON(THGuiPrac);
+        SINGLETON(THGuiPrac)
     public:
 
         __declspec(noinline) void State(int state)
@@ -728,10 +730,8 @@ namespace TH06 {
                     *mBookC6 = true,*mBookX6 = 180, *mBookY6 = 96;
                 }
                 if (*mWarp) {
-                    int st = 0;
                     if (*mStage == 3) {
                         mFakeShot();
-                        st = (*mFakeShot ? *mFakeShot - 1 : mShotType) + 4;
                     }
                     SectionWidget();
                     SpellPhase();
@@ -964,7 +964,7 @@ namespace TH06 {
             SetStyle(ImGuiStyleVar_WindowRounding, 0.0f);
             SetStyle(ImGuiStyleVar_WindowBorderSize, 0.0f);
         }
-        SINGLETON(THPauseMenu);
+        SINGLETON(THPauseMenu)
     public:
 
         bool el_bgm_signal { false };
@@ -1225,7 +1225,7 @@ namespace TH06 {
         THGuiRep() noexcept
         {
         }
-        SINGLETON(THGuiRep);
+        SINGLETON(THGuiRep)
     public:
 
         void CheckReplay()
@@ -1278,7 +1278,7 @@ namespace TH06 {
             SetWndFlag(ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(TH06InGameInfo);
+        SINGLETON(TH06InGameInfo)
 
     public:
         int32_t mMissCount;
@@ -1335,7 +1335,7 @@ namespace TH06 {
             auto diff_pl = std::format("{} ({})", S(IGI_DIFF[diff]), S(IGI_PL_06[cur_player_type]));
             auto diff_pl_sz = ImGui::CalcTextSize(diff_pl.c_str());
 
-            ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5 - diff_pl_sz.x * 0.5);
+            ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5f - diff_pl_sz.x * 0.5f);
             ImGui::Text(diff_pl.c_str());
 
             ImGui::Columns(2);
@@ -1378,12 +1378,11 @@ namespace TH06 {
         }
         virtual void OnPreUpdate() override
         {
-            DWORD gameState = *(DWORD*)(0x6C6EA4);
-            if (gameState == 2)
+            if (GAME_MANAGER->isInGame)
             {
                 GameUpdateInner(6);
             }
-            if (*THOverlay::singleton().mShowSpellCapture && (gameState == 2)) {
+            if (*THOverlay::singleton().mShowSpellCapture && ((GAME_MANAGER->isInGame || GAME_MANAGER->isInGameMenu || GAME_MANAGER->isInRetryMenu))) {
                 SetPosRel(433.0f / 640.0f, 245.0f / 480.0f);
                 SetSizeRel(180.0f / 640.0f, 0.0f);
                 Open();
@@ -1397,9 +1396,9 @@ namespace TH06 {
 
     float g_bossMoveDownRange = BOSS_MOVE_DOWN_RANGE_INIT;
     EHOOK_ST(th06_bossmovedown, 0x0040917F, 5, {
-        float* left = (float*)(pCtx->Ecx + 0xE60);
+        //float* left = (float*)(pCtx->Ecx + 0xE60);
         float* top = (float*)(pCtx->Ecx + 0xE64);
-        float* right = (float*)(pCtx->Ecx + 0xE68);
+        //float* right = (float*)(pCtx->Ecx + 0xE68);
         float* bottom = (float*)(pCtx->Ecx + 0xE6C);
         float range = *bottom - *top;
         *top = *bottom - range * (1.0f - g_bossMoveDownRange);
@@ -1423,15 +1422,15 @@ namespace TH06 {
 
 
     class THAdvOptWnd : public Gui::PPGuiWnd {
-        SINGLETON(THAdvOptWnd);
+        SINGLETON(THAdvOptWnd)
         // Option Related Functions
 
     private:
         void FpsInit()
         {
-            if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) {
+            if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) != NULL) {
                 OILPInit(mOptCtx);
-            }else if (mOptCtx.vpatch_base = (int32_t)GetModuleHandleW(L"vpatch_th06.dll")){
+            } else if ((mOptCtx.vpatch_base = (int32_t)GetModuleHandleW(L"vpatch_th06.dll")) != NULL) {
                 uint64_t hash[2];
                 CalcFileHash(L"vpatch_th06.dll", hash);
                 if (hash[0] != 3665784961181135876ll || hash[1] != 9283021252209177490ll)
@@ -1440,7 +1439,7 @@ namespace TH06 {
                     mOptCtx.fps_status = 2;
                     mOptCtx.fps = *(int32_t*)(mOptCtx.vpatch_base + 0x17034);
                 }
-            } else if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"vpatch_th06_unicode.dll")) {
+            } else if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"vpatch_th06_unicode.dll")) != NULL) {
                 uint64_t hash[2];
                 CalcFileHash(L"vpatch_th06_unicode.dll", hash);
                 if (hash[0] != 5021620919341617817ll || hash[1] != 10919509441391235291ll)
@@ -1711,7 +1710,7 @@ namespace TH06 {
                 g_hitbox_textureID = ReadImage(8, *(DWORD*)0x6c6d20, "hitbox.png", hitbox_file, sizeof(hitbox_file));
                 D3DSURFACE_DESC desc;
                 ((LPDIRECT3DTEXTURE8)g_hitbox_textureID)->GetLevelDesc(0, &desc);
-                g_hitbox_sz.x = desc.Width,g_hitbox_sz.y = desc.Height;
+                g_hitbox_sz.x = static_cast<float>(desc.Width),g_hitbox_sz.y = static_cast<float>(desc.Height);
             }
             ImGui::Checkbox(S(THPRAC_TH06_SHOW_REP_MARKER), &g_adv_igi_options.th06_showRepMarker);
             ImGui::Checkbox(S(THPRAC_TH06_FIX_RAND_SEED), &g_adv_igi_options.th06_fix_seed);
@@ -3052,9 +3051,14 @@ namespace TH06 {
             THPauseMenu::singleton().el_bgm_changed = true;
         }
     })
-    EHOOK_DY(th06_bgm_stop, 0x430f80, 1, {
+    EHOOK_DY(th06_bgm_stop, 0x424D3B, 1, {
         if (THPauseMenu::singleton().el_bgm_signal) {
-            pCtx->Eip = 0x43107b;
+            pCtx->Eip = 0x424D7E;
+        }
+    })
+    EHOOK_DY(th06_midi_read, 0x421FF0, 1, {
+        if (THPauseMenu::singleton().el_bgm_signal) {
+            pCtx->Eip = 0x422066;
         }
     })
     EHOOK_DY(th06_prac_menu_1, 0x437179, 7, {
@@ -3098,7 +3102,7 @@ namespace TH06 {
         {
             if (*(DWORD*)(thiz) != 7) {
                 WORD key = *(WORD*)(0x69D904);
-                WORD key_last = *(WORD*)(0x69D908);
+                //WORD key_last = *(WORD*)(0x69D908);
                 if (Gui::KeyboardInputGetRaw('R') || (key & 0x124) == 0x124) { // ctrl+shift+down or R
                     *(DWORD*)(thiz) = 7;
                     threstartflag_normalgame = true;
@@ -3124,13 +3128,13 @@ namespace TH06 {
 
     EHOOK_DY(th06_pause_menu_pauseBGM, 0x402714,3,{
         if (g_adv_igi_options.th06_pauseBGM) {
+            BYTE pauseMenuState = *(BYTE*)(0x69D4BF);
             DWORD soundstruct = *(DWORD*)(0x6D457C);
             if (soundstruct)
             {
                 int32_t n = *(int32_t*)(soundstruct + 0x10);
-                IDirectSound8* d;
                 IDirectSoundBuffer** soundbuffers = *(IDirectSoundBuffer***)(soundstruct + 0x4);
-                if (*(BYTE*)(0x69D4BF) == 0 || (*(THOverlay::singleton().mElBgm) && thPracParam.mode)) // show menu==0
+                if (pauseMenuState == 0 || (*(THOverlay::singleton().mElBgm) && thPracParam.mode)) // show menu==0
                 {
                     for (int i = 0; i < n; i++) {
                         DWORD st = 0;
@@ -3148,6 +3152,22 @@ namespace TH06 {
                         }
                     }
                 }
+            } else if (*(BYTE*)(0x6C6E44 + 3) == 2 && *(DWORD*)0x6C6EC8) // Cfg.Midi
+            {
+                if (pauseMenuState == 0 || (*(THOverlay::singleton().mElBgm) && thPracParam.mode)) // show menu==0
+                {
+                    // play
+                    asm_call<0x421C90, Thiscall>(*(DWORD*)0x6C6EC8,1, 0, 0); 
+                } else {
+                    // stop
+                    asm_call<0x421D10, Thiscall>(*(DWORD*)0x6C6EC8); // StopTimer
+                    HMIDIOUT hmid = *(HMIDIOUT*)(*(DWORD*)(0x6C6EC8)+0x13C);
+                    for (int i = 0; i < 16; i++) {
+                        midiOutShortMsg(hmid, (0xB0 | i) | (0x7B << 8) | (0x0 << 16));
+                        midiOutShortMsg(hmid, (0xB0 | i) | (0x79 << 8) | (0x0 << 16));
+                    }
+                }
+
             }
         }
     })
@@ -3298,7 +3318,7 @@ namespace TH06 {
                 unsigned int(__fastcall * sb_41E7F0_rand_int)(DWORD thiz);
                 sb_41E7F0_rand_int = (decltype(sb_41E7F0_rand_int))0x41E7F0;
                 unsigned int randi = sb_41E7F0_rand_int(0x69D8F8);
-                return (double)randi / 4294967296.0;
+                return static_cast<float>((double)randi / 4294967296.0);
             }; // rand from 0 to 1
             if (thPracParam.section == TH06_ST6_BOSS6)
             {
@@ -3351,7 +3371,6 @@ namespace TH06 {
                 float plx = *(float*)(0x6CAA68);
                 float ply = *(float*)(0x6CAA6C);
                 float angle_pl = atan2f(ply - bossy, plx - bossx);
-                float dist_pl = hypotf(ply - bossy, plx - bossx);
 
                 float decision = GetRandF();
                 if (decision < 0.8) {
@@ -3709,7 +3728,7 @@ namespace TH06 {
         g_hitbox_textureID = ReadImage(8, *(DWORD*)0x6c6d20, "hitbox.png", hitbox_file, sizeof(hitbox_file));
         D3DSURFACE_DESC desc;
         ((LPDIRECT3DTEXTURE8)g_hitbox_textureID)->GetLevelDesc(0, &desc);
-        g_hitbox_sz.x = desc.Width, g_hitbox_sz.y = desc.Height;
+        g_hitbox_sz.x = static_cast<float>(desc.Width), g_hitbox_sz.y = static_cast<float>(desc.Height);
 
         // Gui components creation
         THGuiPrac::singleton();

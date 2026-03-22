@@ -10,10 +10,21 @@ namespace TH08 {
     bool g_show_bullet_hitbox=false;
     int g_lock_timer = 0;
 
-    enum ADDRS {
+     enum ADDRS {
+        SHOTTYPE_ADDR = 0x164d0b1,
+        DIFF_ADDR = 0x160f538,
         INPUT_ADDR = 0x164d528,
         GUI_ADDR = 0x160f428,
+        STAGE_PENDING_INTERRUPT = 0x4ea290,
+        SPELLCARD_ID_ADDR = 0x4EA678,
+        MISS_COUNT_ADDR = 0x0164CFA4,
+        BOMB_COUNT_ADDR = 0x0164CFA8,
+        DEATHBOMB_COUNT_ADDR = 0x0164CFAC,
+        GAMEMODE_ADDR = 0x17CE8B0,
+        GAMEMODE_NEXT_ADDR = 0x17CE8B4,
+        GAMEMODE_PREV_ADDR = 0x17CE8B8,
     };
+
     using std::pair;
     struct THPracParam {
         int32_t mode;
@@ -142,7 +153,7 @@ namespace TH08 {
             SetStyle(ImGuiStyleVar_WindowBorderSize, 0.0f);
             OnLocaleChange();
         }
-        SINGLETON(THGuiPrac);
+        SINGLETON(THGuiPrac)
     public:
 
         __declspec(noinline) void State(int state)
@@ -313,8 +324,8 @@ namespace TH08 {
                         if (section == TH08_ST2_BOSS3) {
                             if (mDropPoints()){
                                 // set some default
-                                *mBossX = 48.0f;
-                                *mBossY = 96.0f;
+                                *mBossX = 48;
+                                *mBossY = 96;
                                 *mPower = 127;
                             }
                             ImGui::SetNextItemWidth(100.0f);
@@ -530,7 +541,7 @@ namespace TH08 {
         THGuiRep() noexcept
         {
         }
-        SINGLETON(THGuiRep);
+        SINGLETON(THGuiRep)
     public:
 
         void CheckReplay()
@@ -583,7 +594,7 @@ namespace TH08 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(THOverlay);
+        SINGLETON(THOverlay)
     public:
 
     protected:
@@ -694,7 +705,7 @@ namespace TH08 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(TH08InGameInfo);
+        SINGLETON(TH08InGameInfo)
 
     public:
         int32_t mMissCount;
@@ -741,7 +752,7 @@ namespace TH08 {
             auto diff_pl = std::format("{} ({})", S(IGI_DIFF[diff]), S(IGI_PL_08[cur_player_type]));
             auto diff_pl_sz = ImGui::CalcTextSize(diff_pl.c_str());
 
-            ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5 - diff_pl_sz.x * 0.5);
+            ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5f - diff_pl_sz.x * 0.5f);
             ImGui::Text(diff_pl.c_str());
 
             ImGui::Columns(2);
@@ -764,7 +775,7 @@ namespace TH08 {
 
         virtual void OnPreUpdate() override
         {
-            DWORD gameState = *(DWORD*)(0x17CE8B4);
+            DWORD gameState = GetMemContent(GAMEMODE_ADDR);
             if (gameState == 2) {
                 GameUpdateInner(8);
             } else {
@@ -805,7 +816,7 @@ namespace TH08 {
             std::string str = std::format("{}", captured);
 
             DWORD thiz = *(DWORD*)(pCtx->Ebp - 0x28);
-            *(float*)(thiz + 8920) = *(float*)(thiz + 8920) + 28.0;
+            *(float*)(thiz + 8920) = *(float*)(thiz + 8920) + 28.0f;
 
             float inc = 25.0f / (float)str.size();
             for (auto ch : str) {
@@ -823,7 +834,7 @@ namespace TH08 {
             std::string str = std::format("{}", captured);
 
             DWORD thiz = *(DWORD*)(pCtx->Ebp - 0x28);
-            *(float*)(thiz + 8920) = *(float*)(thiz + 8920) + 7.0;
+            *(float*)(thiz + 8920) = *(float*)(thiz + 8920) + 7.0f;
 
             float inc = 25.0f / (float)str.size();
             for (auto ch : str) {
@@ -846,9 +857,9 @@ namespace TH08 {
         }
         void FpsInit()
         {
-            if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) {
+            if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) != NULL) {
                 OILPInit(mOptCtx);
-            } else if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"vpatch_th08.dll")) {
+            } else if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"vpatch_th08.dll")) != NULL) {
                 uint64_t hash[2];
                 CalcFileHash(L"vpatch_th08.dll", hash);
                 if (hash[0] != 14324321420199198230ll || hash[1] != 10561235471127337137ll)
@@ -909,7 +920,7 @@ namespace TH08 {
             th08_forceLS.Setup();
             th08_forceLS.Toggle(g_adv_igi_options.th08_forceLS);
         }
-        SINGLETON(THAdvOptWnd);
+        SINGLETON(THAdvOptWnd)
 
     public:
         __declspec(noinline) static bool StaticUpdate()
@@ -2510,7 +2521,7 @@ namespace TH08 {
         // show bullet hitbox
         if (g_show_bullet_hitbox) {
             DWORD mode = *(DWORD*)(0x164D0B4);
-            if (((mode & 0x1) || (mode & 0x8)) && (*(DWORD*)(0x17CE8B4) == 2)) {
+            if (((mode & 0x1) || (mode & 0x8)) && (GetMemContent(GAMEMODE_ADDR) == 2)) {
                 p->PushClipRect({ 32.0f, 16.0f }, { 416.0f, 464.0f });
 
                 ImVec2 plpos1 = *(ImVec2*)(0x017D6284);
@@ -2658,7 +2669,7 @@ namespace TH08 {
         case TH08_ST6B_LS5:
             el_switch = false;
         }
-        is_practice = *((int32_t*)0x17ce8b4) == 2;
+        is_practice = GetMemContent(GAMEMODE_NEXT_ADDR) == 2;
         if (retn_addr == 0x4480ed && th08_pause_test == 0x434d08)
             result = ElBgmTest<0x447ef4, 0x4480ed, 0x43a170, 0x406c68, 0x43a048>(
                 el_switch, is_practice, 0x447ef4, 2, 2, call_addr);
@@ -2670,6 +2681,42 @@ namespace TH08 {
             pCtx->Eip = 0x45e2be;
         }
     })
+    // TODO: elBGM restart(difficult,,,)
+     EHOOK_DY(th08_midi_pause, 0x45D7DC, 3, {
+         if (g_adv_igi_options.th06_pauseBGM && *(BYTE*)(0x17CE88F) == 2) {
+     
+             // mid BGM uses a different method, so everlasting_bgm hook cannot set BGM playing correctly
+             bool el_switch;
+             el_switch = *(THOverlay::singleton().mElBgm) && !THGuiRep::singleton().mRepStatus && thPracParam.mode;
+             switch (thPracParam.section) {
+             case TH08_ST6A_LS:
+             case TH08_ST6B_LS1:
+             case TH08_ST6B_LS2:
+             case TH08_ST6B_LS3:
+             case TH08_ST6B_LS4:
+             case TH08_ST6B_LS5:
+                 el_switch = false;
+             }
+     
+             if (el_switch) {
+                 return;
+             } else {
+                 int cmd = *(int*)(pCtx->Ebp - 0x3C);
+                 if (cmd == 5) // stop
+                 {
+                     asm_call<0x443ED0, Thiscall>(*(DWORD*)0x17CE8E4); // StopTimer
+                     HMIDIOUT hmid = *(HMIDIOUT*)(*(DWORD*)(0x17CE8E4) + 0x13C);
+                     for (int i = 0; i < 16; i++) {
+                         midiOutShortMsg(hmid, (0xB0 | i) | (0x7B << 8) | (0x0 << 16));
+                         midiOutShortMsg(hmid, (0xB0 | i) | (0x79 << 8) | (0x0 << 16));
+                     }
+                 } else if (cmd == 6) // play
+                 {
+                     asm_call<0x443E50, Thiscall>(*(DWORD*)0x17CE8E4, 1, 0, 0); // find from midiOutOpen
+                 }
+             }
+         }
+     })
      EHOOK_DY(th08_game_init, 0x4674ed, 1, {
         if (thPracParam.mode == 1 && thPracParam.stage == 9) {
             *(DWORD*)(pCtx->Ebp - 0x40) = 8;
@@ -2699,7 +2746,7 @@ namespace TH08 {
 
             int32_t* sp = (int32_t*)0x164D0B4;
              *sp |= 0x4000;
-            int16_t sp_idx = thPracParam.section - TH08_LW_1 + 205; // sp index
+            int16_t sp_idx = static_cast<int16_t>(thPracParam.section - TH08_LW_1 + 205); // sp index
             *(WORD*)(0x164D0B8) = sp_idx;
             int stage = 3;
             switch (sp_idx)
@@ -2845,7 +2892,7 @@ namespace TH08 {
         THOverlay::singleton().Update();
         TH08InGameInfo::singleton().Update();
 
-        if (g_adv_igi_options.show_keyboard_monitor && (*(DWORD*)(0x17CE8B4) == 2)) {
+        if (g_adv_igi_options.show_keyboard_monitor && (GetMemContent(GAMEMODE_ADDR) == 2)) {
             g_adv_igi_options.keyboard_style.size = { 34.0f, 34.0f };
             KeysHUD(8, { 1280.0f, 0.0f }, { 833.0f, 0.0f }, g_adv_igi_options.keyboard_style);
         }

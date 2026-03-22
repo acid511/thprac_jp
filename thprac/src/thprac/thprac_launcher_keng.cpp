@@ -18,6 +18,7 @@
 #include <chrono>
 #include <map>
 #include "..\3rdParties\rapidcsv\rapidcsv.h"
+#include "thprac_compatible.h"
 
 namespace THPrac {
     #define DIFF_NAME_SIZE 256
@@ -461,6 +462,7 @@ namespace THPrac {
     case Gui::LOCALE_EN_US:
         return &Preset_EN;
     }
+    return &Preset_EN;
     }
 
     void KengSave();
@@ -499,7 +501,7 @@ namespace THPrac {
         {
             strcpy_s(name, nname);
         }
-        KengDifficulty(std::istream& is, int ver)
+        KengDifficulty(std::istream& is, [[maybe_unused]] int ver)
         {
             is.read((char*)&id, sizeof(id));
             is.read((char*)name, sizeof(name));
@@ -519,7 +521,7 @@ namespace THPrac {
             std::swap(selects[idx_u], selects[idx_u - 1]);
             std::swap(diffs[idx_u], diffs[idx_u - 1]);
         }
-        if (idx_d != -1 && diffs.size() >= 2 && idx_d <= diffs.size() - 2) {
+        if (idx_d != -1 && std::ssize(diffs) >= 2 && idx_d <= std::ssize(diffs) - 2) {
             std::swap(selects[idx_d], selects[idx_d + 1]);
             std::swap(diffs[idx_d], diffs[idx_d + 1]);
         }
@@ -552,7 +554,7 @@ namespace THPrac {
                 if (retnValue == 1 || ImGui::IsKeyDown(0xD)) {//enter
                     std::string name_input = std::string(diff_name);
                     bool find=false;
-                    for (int i = 0; i < diffs.size(); i++)
+                    for (int i = 0; i < std::ssize(diffs); i++)
                         if (!strcmp(diffs[i].name,diff_name)){
                             find = true;
                             break;
@@ -631,7 +633,7 @@ namespace THPrac {
 
         char* GetTimeDesc(){
             static char chs[256] = { 0 };
-            sprintf_s(chs, S(THPRAC_OTHER_TODAY), mTimeCreate.year(),mTimeCreate.month(), mTimeCreate.day());
+            sprintf_s(chs, S(THPRAC_OTHER_TODAY), static_cast<int>(mTimeCreate.year()), static_cast<unsigned int>(mTimeCreate.month()), static_cast<unsigned int>(mTimeCreate.day()));
             return chs;
         }
 
@@ -697,7 +699,7 @@ namespace THPrac {
             for (auto& i : diffs_select)
                 i = false;
             for (auto& id : mDiffsDied){
-                for (int j = 0; j < diffs.size(); j++){
+                for (int j = 0; j < std::ssize(diffs); j++){
                     if (diffs[j].id == id){
                         diffs_select[j] = true;
                         break;
@@ -721,7 +723,7 @@ namespace THPrac {
                     if (ImGui::Button(S(THPRAC_KENG_DIFF_TABLE_ADD)))
                         idx_add = 0;
                 }
-                for (int idx = 0; idx < diffs.size(); idx++) {
+                for (int idx = 0; idx < std::ssize(diffs); idx++) {
                     ImGui::TableNextRow();
                     ImGui::TableNextColumn();
                     if (ImGui::Button(std::format("{}##diff_add_{}", S(THPRAC_KENG_DIFF_TABLE_ADD), idx).c_str()))
@@ -773,7 +775,7 @@ namespace THPrac {
                         ImGui::SetCursorPosY(std::fmaxf(ImGui::GetCursorPosY(), ImGui::GetWindowHeight() - ImGui::GetTextLineHeightWithSpacing() * 1.5f));
                         if (ImGui::Button(S(THPRAC_APPLY)) || ImGui::IsKeyDown(0xD)) { // enter
                             bool find = false;
-                            for (int i = 0; i < diffs.size(); i++)
+                            for (int i = 0; i < std::ssize(diffs); i++)
                                 if (!strcmp(diffs[i].name, diffname)) {
                                     find = true;
                                     break;
@@ -802,7 +804,7 @@ namespace THPrac {
             }
             if (is_changed){
                 std::vector<int> ids;
-                for (int i = 0; i < diffs.size(); i++) {
+                for (int i = 0; i < std::ssize(diffs); i++) {
                     if (diffs_select[i])
                         ids.push_back(diffs[i].id);
                 }
@@ -917,7 +919,7 @@ namespace THPrac {
         char* GetTimeDesc()
         {
             static char chs[256] = { 0 };
-            sprintf_s(chs, S(THPRAC_OTHER_TODAY), mTimeCreate.year(), mTimeCreate.month(), mTimeCreate.day());
+            sprintf_s(chs, S(THPRAC_OTHER_TODAY), static_cast<int>(mTimeCreate.year()), static_cast<unsigned int>(mTimeCreate.month()), static_cast<unsigned int>(mTimeCreate.day()));
             return chs;
         }
 
@@ -971,7 +973,7 @@ namespace THPrac {
                     }
                 }
                 probs_pass_vec.resize(mKengDifficulties.size(), 0.0);
-                for (int i = 0; i < mKengDifficulties.size(); i++) {
+                for (int i = 0; i < std::ssize(mKengDifficulties); i++) {
                     if (diffs_die_count.contains(mKengDifficulties[i].id)) {
                         if (use_EM)
                             probs_pass_map[mKengDifficulties[i].id] = probs_pass_vec[i] = 1.0 - ((double)diffs_die_count[mKengDifficulties[i].id] + 1.0) / std::max(1.0, (double)n_plays + 2.0);
@@ -988,11 +990,11 @@ namespace THPrac {
                     // n: 1..N, m: 0..n
                     std::vector<std::vector<double>> p;
                     p.push_back({ 1.0 }); // init  p[0][n]
-                    for (int i = 1; i <= probs_single.size(); i++) {
+                    for (int i = 1; i <= std::ssize(probs_single); i++) {
                         p.push_back(std::vector<double>());
                         p[i].resize(static_cast<size_t>(i) + 1, -1); // init p[i][m]
                     }
-                    for (int i = 1; i <= probs_single.size(); i++) {
+                    for (int i = 1; i <= std::ssize(probs_single); i++) {
                         // cal p[n][0]
                         p[i][0] = 1.0;
                         for (int j = 1; j <= i; j++) {
@@ -1000,7 +1002,7 @@ namespace THPrac {
                         }
                     }
                     p[0][0] = 1.0; // init p[0][0]
-                    for (int i = 1; i <= probs_single.size(); i++) {
+                    for (int i = 1; i <= std::ssize(probs_single); i++) {
                         for (int j = 1; j <= i; j++) {
                             p[i][j] = p[i - 1][j - 1] * probs_single[i - 1] + (j <= i - 1 ? p[i - 1][j] * (1 - probs_single[i - 1]) : 0.0);
                         }
@@ -1082,7 +1084,7 @@ namespace THPrac {
                         float r, g, b;
                         double passrate = item.pass_rate;
                         passrate = std::clamp(passrate, 0.0, 1.0);
-                        ImGui::ColorConvertHSVtoRGB(passrate * passrate * passrate * passrate * 0.33f, 0.75f, 1.0f, r, g, b);
+                        ImGui::ColorConvertHSVtoRGB((float)(passrate * passrate * passrate * passrate)* 0.33f, 0.75f, 1.0f, r, g, b);
                         ImGui::TextColored({r,g,b,1.0f}, "%6.2lf%%", passrate * 100.0);
                     }
                     ImGui::EndTable();
@@ -1097,7 +1099,7 @@ namespace THPrac {
                         ImGui::TableSetupColumn(S(THPRAC_KENG_DETAILS_PASS_EXCEPTION), ImGuiTableColumnFlags_WidthStretch, ImGui::GetWindowWidth() * 0.43f);
                         ImGui::TableHeadersRow();
 
-                        for (int miss = 0; miss < pass_rate.size(); miss++) {
+                        for (int miss = 0; miss < std::ssize(pass_rate); miss++) {
                             ImGui::TableNextRow();
                             ImGui::TableNextColumn();
                             ImGui::Text("%6d", miss);
@@ -1164,19 +1166,19 @@ namespace THPrac {
             //header.push_back("name");
             //header.push_back("date");
             //header.push_back("comment");
-            for (int i = 0; i < mKengDifficulties.size(); i++)
+            for (int i = 0; i < std::ssize(mKengDifficulties); i++)
                 doc.SetColumnName(i + 3, mKengDifficulties[i].name);
                 //header.push_back(mKengDifficulties[i].name);
             //doc.SetRow(0, header);
-            for (int j = 0; j < mPlays.size(); j++){
+            for (int j = 0; j < std::ssize(mPlays); j++) {
                 auto &play = mPlays[j];
                 std::vector<std::string> row;
                 row.push_back(play.mPlayName);
                 row.push_back(std::format("{}/{}/{}", (int32_t)play.mTimeCreate.year(), (unsigned)(play.mTimeCreate.month()), (unsigned)(play.mTimeCreate.day())));
                 row.push_back(play.mPlayComment);
-                for (int df = 0; df < mKengDifficulties.size(); df++){
+                for (int df = 0; df < std::ssize(mKengDifficulties); df++) {
                     bool is_died = false;
-                    for (int k = 0; k < play.mDiffsDied.size(); k++){
+                    for (int k = 0; k < std::ssize(play.mDiffsDied); k++) {
                         if (mKengDifficulties[df].id == play.mDiffsDied[k]){
                             row.push_back("1");
                             is_died = true;
@@ -1207,15 +1209,15 @@ namespace THPrac {
                 mKengDifficulties.emplace_back(i, header[i+3].c_str());
             }
             mDifficulties_idtot = diff_count;
-            for (int i = 1; i < doc.GetRowCount();i++){
+            for (int i = 1; i < (int)doc.GetRowCount();i++){
                 std::vector<std::string> rw = doc.GetRow<std::string>(i);
-                std::string name = rw[0];
+                std::string plname = rw[0];
                 std::string date = rw[1];
                 std::string cmt = rw[2];
                 std::vector<int> ids;
-                for (int i = 0; i < std::min((int)(rw.size()) - 3, diff_count); i++){
-                    if (rw[i + 3] == "1")
-                        ids.push_back(i);
+                for (int j = 0; j < std::min((int)(rw.size()) - 3, diff_count); j++){
+                    if (rw[j + 3] == "1")
+                        ids.push_back(j);
                 }
                 int y, m, d;
                 std::chrono::year_month_day time_play;
@@ -1224,7 +1226,7 @@ namespace THPrac {
                 }else{
                     time_play = std::chrono::year_month_day(std::chrono::floor<std::chrono::days>(std::chrono::system_clock::now()));
                 }
-                mPlays.emplace_back(name.c_str(), cmt.c_str(), ids, time_play);
+                mPlays.emplace_back(plname.c_str(), cmt.c_str(), ids, time_play);
             }
         }
         Keng(const char* name, const char* desc, std::chrono::year_month_day t, std::vector<std::string> diffs) : mTimeCreate(t)
@@ -1232,7 +1234,7 @@ namespace THPrac {
             strcpy_s(mKengName, name);
             strcpy_s(mKengDescription, desc);
             mDifficulties_idtot = diffs.size();
-            for (int i = 0; i < diffs.size(); i++){
+            for (int i = 0; i < std::ssize(diffs); i++) {
                 mKengDifficulties.emplace_back(i,diffs[i].c_str());
             }
         }
@@ -1408,7 +1410,7 @@ namespace THPrac {
                                     idx_add = 0;
                             }
 
-                            for (int idx = 0; idx < mKengDifficulties.size(); idx++) {
+                            for (int idx = 0; idx < std::ssize(mKengDifficulties); idx++) {
                                 ImGui::TableNextRow();
                                 ImGui::TableNextColumn();
                                 if (ImGui::Button(std::format("{}##diff_add_{}", S(THPRAC_KENG_DIFF_TABLE_ADD), idx).c_str()))
@@ -1442,7 +1444,7 @@ namespace THPrac {
                         auto retnValue = GuiCornerButton(S(THPRAC_APPLY), S(THPRAC_CANCEL), ImVec2(1.5f, 0.0f), true);
                         if (retnValue == 1) {
                             std::vector<int> ids;
-                            for (int i = 0; i < mKengDifficulties.size(); i++) {
+                            for (int i = 0; i < std::ssize(mKengDifficulties); i++) {
                                 if (diffs_select[i])
                                     ids.push_back(mKengDifficulties[i].id);
                             }
@@ -1482,6 +1484,7 @@ namespace THPrac {
                         try {
                             WriteToCsv(szFile);
                         } catch (std::exception& e) {
+                            MessageBoxA(NULL, e.what(), "Error", MB_OK);
                         }
                     }
                 }
@@ -1500,7 +1503,7 @@ namespace THPrac {
                         ImGui::TableSetupColumn(S(THPRAC_KENG_PLAY_CMT), ImGuiTableColumnFlags_WidthStretch, LauncherWndGetSize().x * 0.9f * 0.4f);
                         ImGui::TableSetupColumn(S(THPRAC_KENG_PLAY_CNT), ImGuiTableColumnFlags_WidthStretch, LauncherWndGetSize().x * 0.9f * 0.15f);
                         ImGui::TableHeadersRow();
-                        int idx = mPlays.size()-1;
+                        int idx = std::ssize(mPlays) - 1;
                         for (auto it = mPlays.rbegin(); it != mPlays.rend(); it++) {
 
                             ImGui::TableNextRow();
@@ -1581,7 +1584,7 @@ namespace THPrac {
         }
         void DrawKengs()
         {
-            if (cur_draw_keng_idx >= mKengs.size() || cur_draw_keng_idx < 0)
+            if (cur_draw_keng_idx >= std::ssize(mKengs) || cur_draw_keng_idx < 0)
                 cur_draw_keng_idx = -1;
             if (cur_draw_keng_idx == -1)
             {
@@ -1646,7 +1649,7 @@ namespace THPrac {
                         ImGui::NextColumn();
                         static std::vector<std::pair<std::string, std::vector<std::string>>>* cur_preset;
                         cur_preset = GetPreset(Gui::LocaleGet());
-                        ImGui::Combo("##keng preset", &keng_preset_id, [](void* data, int idx, const char** out) -> bool {
+                        ImGui::Combo("##keng preset", &keng_preset_id, []([[maybe_unused]]void* data, int idx, const char** out) -> bool {
                                 *out = (*cur_preset)[idx].first.c_str();
                                 return 1;
                             },nullptr,cur_preset->size());
@@ -1684,7 +1687,7 @@ namespace THPrac {
                         mKengs.emplace_back(file);
                         KengSave();
                     } catch (std::exception& e) {
-
+                        MessageBoxA(NULL, e.what(), "Error", MB_OK);
                     }
                 }
             }else{
@@ -1707,7 +1710,7 @@ public:
     KengRecorder mRecorder;
 
     THKengRecorder() { }
-    SINGLETON(THKengRecorder);
+    SINGLETON(THKengRecorder)
 
 private:
 
@@ -1724,7 +1727,7 @@ private:
     {
 
     }
-    SINGLETON(THKengsGui);
+    SINGLETON(THKengsGui)
 
 public:
     void GuiUpdate(){
@@ -1759,7 +1762,6 @@ void LauncherKengUpdate()
 
 void KengSave()
 {
-    int version = 1;
     PushCurrentDirectory(L"%appdata%\\thprac");
     auto fs = ::std::fstream("keng.dat", ::std::ios::out | ::std::ios::binary);
     if (fs.is_open()) {
