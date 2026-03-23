@@ -828,7 +828,7 @@ public:
     {
         int chkUpdate = 0;
         LauncherSettingGet("check_update_timing", chkUpdate);
-        chkUpdate = 2;// disable update
+        // chkUpdate = 2;// disable update
 
         if (!chkUpdate && mChkUpdStatus == STATUS_RSV) {
             mUpdateThread.Stop();
@@ -2618,10 +2618,10 @@ private:
         ImGui::Separator();
         if (ImGui::CollapsingHeader(S(THPRAC_SETTING_UPDATE))) {
             mCheckUpdateTiming.Gui(S(THPRAC_CHECK_UPDATE_WHEN), S(THPRAC_CHECK_UPDATE_WHEN_OPTION));
-            int time = 2;
-            mCheckUpdateTiming.Set(time);
-            ImGui::SameLine();
-            GuiHelpMarker(S(THPRAC_CHECK_UPDATE_WHEN_OPTION_2));
+            // int time = 2;
+            // mCheckUpdateTiming.Set(time);
+            // ImGui::SameLine();
+            // GuiHelpMarker(S(THPRAC_CHECK_UPDATE_WHEN_OPTION_2));
             if (mCheckUpdateTiming.Get() == 2) {
                 ImGui::BeginDisabled();
                 mUpdateWithoutConfirm.Gui(S(THPRAC_UPDATE_WITHOUT_CONFIRMATION));
@@ -2797,7 +2797,7 @@ private:
     THCfgCombo mExistingGameAction { "existing_game_launch_action", 0, 3 };
     THCfgCheckbox mDontSearchOngoingGame { "dont_search_ongoing_game", false };
     THCfgCheckbox mAdminRights { "thprac_admin_rights", false };
-    THCfgCombo mCheckUpdateTiming { "check_update_timing", 2, 3 };
+    THCfgCombo mCheckUpdateTiming { "check_update_timing", 0, 3 };
     THCfgCheckbox mUpdateWithoutConfirm { "update_without_confirmation", false };
     THCfgCombo mFilenameAfterUpdate { "filename_after_update", 0, 3 };
     int mOriginalLanguage;
