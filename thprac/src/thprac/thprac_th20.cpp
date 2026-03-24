@@ -1761,8 +1761,8 @@ namespace TH20 {
         {
             SetTitle("igi");
             SetFade(0.9f, 0.9f);
-            SetPosRel(920.0f / 1280.0f, 500.0f / 960.0f);
-            SetSizeRel(300.0f / 1280.0f, 0.0f);
+            SetPosRel(890.0f / 1280.0f, 450.0f / 960.0f);
+            SetSizeRel(360.0f / 1280.0f, 0.0f);
             SetWndFlag(ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
@@ -1801,6 +1801,7 @@ namespace TH20 {
         virtual void OnContentUpdate() override
         {
             uintptr_t player_stats = RVA(0x1BA5F0);
+            ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(ImGui::GetStyle().ItemSpacing.x, 2.0f));
 
             int32_t cur_player_type = (*(int32_t*)(player_stats + 0x8));
             int32_t main_stone = (*(int32_t*)(player_stats + 0x1C));
@@ -1927,7 +1928,6 @@ namespace TH20 {
                 };
                 int spid = TH20Save::singleton().pyraState.lastPyraSpellId;
                 int plstone_type = TH20Save::GetPlayerType(cur_player_type, main_stone);
-                ImGui::NewLine();
 
 
                 ImVec4 spell_color = spells_colors[spid];
@@ -1995,6 +1995,8 @@ namespace TH20 {
                             / std::fmaxf(1.0f, ((float)TH20Save::singleton().saveTotal.ScHistory[spid][diff][plstone_type][TH20Save::Attempt])) * 100.0f));
                 }
             }
+
+            ImGui::PopStyleVar();
         }
 
         virtual void OnPreUpdate() override
@@ -2004,8 +2006,8 @@ namespace TH20 {
             } else {
             }
             if (*(THOverlay::singleton().mInGameInfo) && *(DWORD*)(RVA(0x1ba56c))) {
-                SetPosRel(920.0f / 1280.0f, 500.0f / 960.0f);
-                SetSizeRel(300.0f / 1280.0f, 0.0f);
+                SetPosRel(890.0f / 1280.0f, 450.0f / 960.0f);
+                SetSizeRel(360.0f / 1280.0f, 0.0f);
                 Open();
             } else {
                 Close();
