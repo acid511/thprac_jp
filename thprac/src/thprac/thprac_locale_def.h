@@ -239,6 +239,7 @@ enum th_glossary_t
     TH14_CORRECTION_SN_SIGNED,
     TH14_CORRECTION_VALUE,
     TH14_CORRECTION_ZERO,
+    TH14_CYCLE,
     TH14_CYCLE_1,
     TH14_CYCLE_2,
     TH14_CYCLE_3,
@@ -537,7 +538,8 @@ enum th_glossary_t
     TH18_AC_REPFIX_UNLOCK,
     TH18_BASSDRUM_CD,
     TH18_BUGFIX_AUTO_DESC,
-    TH18_BUGFIX_DESC,
+    TH18_BUG_FIX,
+    TH18_BUG_FIX_DESC,
     TH18_CARD,
     TH18_CARD_00,
     TH18_CARD_01,
@@ -1313,6 +1315,7 @@ enum th_glossary_t
     THPRAC_OTHER_NAME,
     THPRAC_OTHER_TODAY,
     THPRAC_OVERWRTITE_DATA,
+    THPRAC_PAUSE_BGM_TH06,
     THPRAC_PAUSE_BGM_TH678,
     THPRAC_PAUSE_BGM_TH678_DESC,
     THPRAC_PRESENT_HOOK,
@@ -1703,6 +1706,7 @@ enum th_glossary_t
     TH_GAME_SPEED_PLSPD_KEEP,
     TH_GRAZE,
     TH_HEALTH,
+    TH_HECATIA_RAGE,
     TH_INFBOMBS,
     TH_INFCHARGE,
     TH_INFHEALTH,
@@ -1712,6 +1716,7 @@ enum th_glossary_t
     TH_INFPOWER,
     TH_INFSPELLCHARGE,
     TH_INFSUBP,
+    TH_JUNKO_RAGE,
     TH_LEFT,
     TH_LIFE,
     TH_LIFE_FRAGMENT,
@@ -1830,7 +1835,7 @@ enum th_glossary_t
     TH_WARP,
 };
 
-extern const char* th_glossary_str[3][1818];
+extern const char* th_glossary_str[3][1823];
 
 extern const th_glossary_t TH_TYPE_SELECT[13];
 
@@ -2452,153 +2457,154 @@ extern const th_glossary_t ALCOSTG_STAGE_SELECT[4];
 
 namespace TH11 {
 
-    enum th_sections_t : uint8_t {
-        A0000ERROR,
-        TH11_ST1_MID1,
-        TH11_ST1_MID2,
-        TH11_ST1_MID3_EN,
-        TH11_ST1_MID3_HL,
-        TH11_ST1_BOSS1,
-        TH11_ST1_BOSS2,
-        TH11_ST1_BOSS3,
-        TH11_ST1_BOSS4,
-        TH11_ST2_MID1,
-        TH11_ST2_MID2,
-        TH11_ST2_BOSS1,
-        TH11_ST2_BOSS2,
-        TH11_ST2_BOSS3,
-        TH11_ST2_BOSS4,
-        TH11_ST2_BOSS5,
-        TH11_ST3_MID1,
-        TH11_ST3_MID2,
-        TH11_ST3_MID3,
-        TH11_ST3_BOSS1,
-        TH11_ST3_BOSS2,
-        TH11_ST3_BOSS3,
-        TH11_ST3_BOSS4,
-        TH11_ST3_BOSS5,
-        TH11_ST3_BOSS6,
-        TH11_ST4_MID1,
-        TH11_ST4_MID2,
-        TH11_ST4_BOSS1,
-        TH11_ST4_BOSS2,
-        TH11_ST4_BOSS3,
-        TH11_ST4_RA1,
-        TH11_ST4_RA2,
-        TH11_ST4_RA3,
-        TH11_ST4_RB1,
-        TH11_ST4_RB2,
-        TH11_ST4_RB3,
-        TH11_ST4_RC1,
-        TH11_ST4_RC2,
-        TH11_ST4_RC3,
-        TH11_ST4_MA1,
-        TH11_ST4_MA2,
-        TH11_ST4_MA3,
-        TH11_ST4_MB1,
-        TH11_ST4_MB2,
-        TH11_ST4_MB3,
-        TH11_ST4_MC1,
-        TH11_ST4_MC2,
-        TH11_ST4_MC3,
-        TH11_ST5_MID1,
-        TH11_ST5_MID2,
-        TH11_ST5_MID3,
-        TH11_ST5_BOSS1,
-        TH11_ST5_BOSS2,
-        TH11_ST5_BOSS3,
-        TH11_ST5_BOSS4,
-        TH11_ST5_BOSS5,
-        TH11_ST5_BOSS6,
-        TH11_ST5_BOSS7,
-        TH11_ST6_MID1,
-        TH11_ST6_BOSS1,
-        TH11_ST6_BOSS2,
-        TH11_ST6_BOSS3,
-        TH11_ST6_BOSS4,
-        TH11_ST6_BOSS5,
-        TH11_ST6_BOSS6,
-        TH11_ST6_BOSS7,
-        TH11_ST6_BOSS8,
-        TH11_ST6_BOSS9,
-        TH11_ST7_MID1,
-        TH11_ST7_MID2,
-        TH11_ST7_MID3,
-        TH11_ST7_END_NS1,
-        TH11_ST7_END_S1,
-        TH11_ST7_END_NS2,
-        TH11_ST7_END_S2,
-        TH11_ST7_END_NS3,
-        TH11_ST7_END_S3,
-        TH11_ST7_END_NS4,
-        TH11_ST7_END_S4,
-        TH11_ST7_END_NS5,
-        TH11_ST7_END_S5,
-        TH11_ST7_END_NS6,
-        TH11_ST7_END_S6,
-        TH11_ST7_END_NS7,
-        TH11_ST7_END_S7,
-        TH11_ST7_END_NS8,
-        TH11_ST7_END_S8,
-        TH11_ST7_END_S9,
-        TH11_ST7_END_S10,
-        TH11_ST4_RA_MID1,
-        TH11_ST4_RA_MID2,
-        TH11_ST4_RA_BOSS1,
-        TH11_ST4_RA_BOSS2,
-        TH11_ST4_RA_BOSS3,
-        TH11_ST4_RA_BOSS4,
-        TH11_ST4_RA_BOSS5,
-        TH11_ST4_RA_BOSS6,
-        TH11_ST4_RB_MID1,
-        TH11_ST4_RB_MID2,
-        TH11_ST4_RB_BOSS1,
-        TH11_ST4_RB_BOSS2,
-        TH11_ST4_RB_BOSS3,
-        TH11_ST4_RB_BOSS4,
-        TH11_ST4_RB_BOSS5,
-        TH11_ST4_RB_BOSS6,
-        TH11_ST4_RC_MID1,
-        TH11_ST4_RC_MID2,
-        TH11_ST4_RC_BOSS1,
-        TH11_ST4_RC_BOSS2,
-        TH11_ST4_RC_BOSS3,
-        TH11_ST4_RC_BOSS4,
-        TH11_ST4_RC_BOSS5,
-        TH11_ST4_RC_BOSS6,
-        TH11_ST4_MA_MID1,
-        TH11_ST4_MA_MID2,
-        TH11_ST4_MA_BOSS1,
-        TH11_ST4_MA_BOSS2,
-        TH11_ST4_MA_BOSS3,
-        TH11_ST4_MA_BOSS4,
-        TH11_ST4_MA_BOSS5,
-        TH11_ST4_MA_BOSS6,
-        TH11_ST4_MB_MID1,
-        TH11_ST4_MB_MID2,
-        TH11_ST4_MB_BOSS1,
-        TH11_ST4_MB_BOSS2,
-        TH11_ST4_MB_BOSS3,
-        TH11_ST4_MB_BOSS4,
-        TH11_ST4_MB_BOSS5,
-        TH11_ST4_MB_BOSS6,
-        TH11_ST4_MC_MID1,
-        TH11_ST4_MC_MID2,
-        TH11_ST4_MC_BOSS1,
-        TH11_ST4_MC_BOSS2,
-        TH11_ST4_MC_BOSS3,
-        TH11_ST4_MC_BOSS4,
-        TH11_ST4_MC_BOSS5,
-        TH11_ST4_MC_BOSS6,
-    };
+enum th_sections_t : uint8_t
+{
+    A0000ERROR,
+    TH11_ST1_MID1,
+    TH11_ST1_MID2,
+    TH11_ST1_MID3_EN,
+    TH11_ST1_MID3_HL,
+    TH11_ST1_BOSS1,
+    TH11_ST1_BOSS2,
+    TH11_ST1_BOSS3,
+    TH11_ST1_BOSS4,
+    TH11_ST2_MID1,
+    TH11_ST2_MID2,
+    TH11_ST2_BOSS1,
+    TH11_ST2_BOSS2,
+    TH11_ST2_BOSS3,
+    TH11_ST2_BOSS4,
+    TH11_ST2_BOSS5,
+    TH11_ST3_MID1,
+    TH11_ST3_MID2,
+    TH11_ST3_MID3,
+    TH11_ST3_BOSS1,
+    TH11_ST3_BOSS2,
+    TH11_ST3_BOSS3,
+    TH11_ST3_BOSS4,
+    TH11_ST3_BOSS5,
+    TH11_ST3_BOSS6,
+    TH11_ST4_MID1,
+    TH11_ST4_MID2,
+    TH11_ST4_BOSS1,
+    TH11_ST4_BOSS2,
+    TH11_ST4_BOSS3,
+    TH11_ST4_RA1,
+    TH11_ST4_RA2,
+    TH11_ST4_RA3,
+    TH11_ST4_RB1,
+    TH11_ST4_RB2,
+    TH11_ST4_RB3,
+    TH11_ST4_RC1,
+    TH11_ST4_RC2,
+    TH11_ST4_RC3,
+    TH11_ST4_MA1,
+    TH11_ST4_MA2,
+    TH11_ST4_MA3,
+    TH11_ST4_MB1,
+    TH11_ST4_MB2,
+    TH11_ST4_MB3,
+    TH11_ST4_MC1,
+    TH11_ST4_MC2,
+    TH11_ST4_MC3,
+    TH11_ST5_MID1,
+    TH11_ST5_MID2,
+    TH11_ST5_MID3,
+    TH11_ST5_BOSS1,
+    TH11_ST5_BOSS2,
+    TH11_ST5_BOSS3,
+    TH11_ST5_BOSS4,
+    TH11_ST5_BOSS5,
+    TH11_ST5_BOSS6,
+    TH11_ST5_BOSS7,
+    TH11_ST6_MID1,
+    TH11_ST6_BOSS1,
+    TH11_ST6_BOSS2,
+    TH11_ST6_BOSS3,
+    TH11_ST6_BOSS4,
+    TH11_ST6_BOSS5,
+    TH11_ST6_BOSS6,
+    TH11_ST6_BOSS7,
+    TH11_ST6_BOSS8,
+    TH11_ST6_BOSS9,
+    TH11_ST7_MID1,
+    TH11_ST7_MID2,
+    TH11_ST7_MID3,
+    TH11_ST7_END_NS1,
+    TH11_ST7_END_S1,
+    TH11_ST7_END_NS2,
+    TH11_ST7_END_S2,
+    TH11_ST7_END_NS3,
+    TH11_ST7_END_S3,
+    TH11_ST7_END_NS4,
+    TH11_ST7_END_S4,
+    TH11_ST7_END_NS5,
+    TH11_ST7_END_S5,
+    TH11_ST7_END_NS6,
+    TH11_ST7_END_S6,
+    TH11_ST7_END_NS7,
+    TH11_ST7_END_S7,
+    TH11_ST7_END_NS8,
+    TH11_ST7_END_S8,
+    TH11_ST7_END_S9,
+    TH11_ST7_END_S10,
+    TH11_ST4_RA_MID1,
+    TH11_ST4_RA_MID2,
+    TH11_ST4_RA_BOSS1,
+    TH11_ST4_RA_BOSS2,
+    TH11_ST4_RA_BOSS3,
+    TH11_ST4_RA_BOSS4,
+    TH11_ST4_RA_BOSS5,
+    TH11_ST4_RA_BOSS6,
+    TH11_ST4_RB_MID1,
+    TH11_ST4_RB_MID2,
+    TH11_ST4_RB_BOSS1,
+    TH11_ST4_RB_BOSS2,
+    TH11_ST4_RB_BOSS3,
+    TH11_ST4_RB_BOSS4,
+    TH11_ST4_RB_BOSS5,
+    TH11_ST4_RB_BOSS6,
+    TH11_ST4_RC_MID1,
+    TH11_ST4_RC_MID2,
+    TH11_ST4_RC_BOSS1,
+    TH11_ST4_RC_BOSS2,
+    TH11_ST4_RC_BOSS3,
+    TH11_ST4_RC_BOSS4,
+    TH11_ST4_RC_BOSS5,
+    TH11_ST4_RC_BOSS6,
+    TH11_ST4_MA_MID1,
+    TH11_ST4_MA_MID2,
+    TH11_ST4_MA_BOSS1,
+    TH11_ST4_MA_BOSS2,
+    TH11_ST4_MA_BOSS3,
+    TH11_ST4_MA_BOSS4,
+    TH11_ST4_MA_BOSS5,
+    TH11_ST4_MA_BOSS6,
+    TH11_ST4_MB_MID1,
+    TH11_ST4_MB_MID2,
+    TH11_ST4_MB_BOSS1,
+    TH11_ST4_MB_BOSS2,
+    TH11_ST4_MB_BOSS3,
+    TH11_ST4_MB_BOSS4,
+    TH11_ST4_MB_BOSS5,
+    TH11_ST4_MB_BOSS6,
+    TH11_ST4_MC_MID1,
+    TH11_ST4_MC_MID2,
+    TH11_ST4_MC_BOSS1,
+    TH11_ST4_MC_BOSS2,
+    TH11_ST4_MC_BOSS3,
+    TH11_ST4_MC_BOSS4,
+    TH11_ST4_MC_BOSS5,
+    TH11_ST4_MC_BOSS6,
+};
 
-    extern const char* th_sections_str[3][4][137];
+extern const char* th_sections_str[3][4][137];
 
-    extern const uint8_t th_sections_bgm[137];
+extern const uint8_t th_sections_bgm[137];
 
-    extern const th_sections_t th_sections_cba[13][2][22];
+extern const th_sections_t th_sections_cba[13][2][22];
 
-    extern const th_sections_t th_sections_cbt[13][2][20];
+extern const th_sections_t th_sections_cbt[13][2][20];
 
 extern const th_glossary_t TH11_SPELL_5PHASE[9];
 
@@ -2608,7 +2614,7 @@ extern const th_glossary_t TH11_WAVE2_START[5];
 
 extern const th_glossary_t TH11_MARISAB_FORMATION[6];
 
-    extern const th_glossary_t TH11_TYPE_SELECT[8];
+extern const th_glossary_t TH11_TYPE_SELECT[8];
 
 }
 
@@ -3104,9 +3110,9 @@ extern const th_glossary_t TH14_CYCLE_LIST[6];
 
 extern const th_glossary_t TH14_SPELL_4PHASE[5];
 
-    extern const th_glossary_t TH14_SPELL_5PHASE[6];
+extern const th_glossary_t TH14_SPELL_5PHASE[6];
 
-    extern const th_glossary_t TH14_SPELL_PHASE_TIMEOUT[4];
+extern const th_glossary_t TH14_SPELL_PHASE_TIMEOUT[4];
 
 extern const th_glossary_t TH14_MODE_COMBO[5];
 
@@ -3207,9 +3213,9 @@ extern const th_glossary_t TH15_ST6_BOSS6_PHASE[3];
 
 extern const th_glossary_t TH15_ITS_LUNATIC_TIME[8];
 
-    extern const th_glossary_t TH15_SPELL_PHASE_EXTRA_LAST[5];
+extern const th_glossary_t TH15_SPELL_PHASE_EXTRA_LAST[5];
 
-    extern const th_glossary_t TH15_SPELL_PHASE_EXTRA_TIMEOUT[4];
+extern const th_glossary_t TH15_SPELL_PHASE_EXTRA_TIMEOUT[4];
 
 extern const th_glossary_t TH15_AB_5PHASE[6];
 
@@ -3479,9 +3485,9 @@ extern const uint8_t th_sections_bgm[66];
 
 extern const th_sections_t th_sections_cba[7][2][19];
 
-    extern const th_sections_t th_sections_cbt[7][2][14];
+extern const th_sections_t th_sections_cbt[7][2][14];
 
-    extern const th_glossary_t TH18_LILY_CYCLE_LIST[4];
+extern const th_glossary_t TH18_LILY_CYCLE_LIST[4];
 
 extern const th_glossary_t TH18_CARD_LIST[58];
 
@@ -3619,10 +3625,10 @@ extern const th_glossary_t TH20_EXPIRED_PYRAMID_FIX_OPT[6];
 
 }
 
-extern const wchar_t __thprac_loc_range_zh[3563];
+extern const wchar_t __thprac_loc_range_zh[2937];
 
 extern const wchar_t __thprac_loc_range_en[57];
 
-extern const wchar_t __thprac_loc_range_ja[2887];
+extern const wchar_t __thprac_loc_range_ja[2393];
 
 }
