@@ -1833,25 +1833,25 @@ namespace TH20 {
             auto main_stone_pl = S(IGI_PL_20_SUB[main_stone]);
             auto main_stone_pl_sz = ImGui::CalcTextSize(main_stone_pl);
             ImGui::SetCursorPosX(std::max(0.0, ImGui::GetWindowSize().x * 0.5 - main_stone_pl_sz.x * 0.5));
-            ImGui::TextColored(stone_colors[main_stone], main_stone_pl);
+            ImGui::TextColored(stones_colors[main_stone], main_stone_pl);
 
             // 拡散・集中石
-            auto sub_stone1_pl = S(IGI_PL_20_SUB[substone_1]);
-            auto sub_stone2_pl = S(IGI_PL_20_SUB[substone_2]);
-            auto sub_stone1_sz = ImGui::CalcTextSize(sub_stone1_pl);
-            auto sub_stone2_sz = ImGui::CalcTextSize(sub_stone2_pl);
-            float sub_stone_gap = ImGui::CalcTextSize(main_stone_pl).x;
-            float sub_stone_total = sub_stone1_sz.x + sub_stone_gap + sub_stone2_sz.x;
-            ImGui::SetCursorPosX(std::max(0.0, ImGui::GetWindowSize().x * 0.5 - sub_stone_total * 0.5f));
-            ImGui::TextColored(stone_colors[substone_2], sub_stone2_pl);
-            ImGui::SameLine(0.0f, sub_stone_gap);
-            ImGui::TextColored(stone_colors[substone_1], sub_stone1_pl);
+            auto substone_f_pl = S(IGI_PL_20_SUB[substone_f]);
+            auto substone_uf_pl = S(IGI_PL_20_SUB[substone_uf]);
+            auto substone_f_sz = ImGui::CalcTextSize(substone_f_pl);
+            auto substone_uf_sz = ImGui::CalcTextSize(substone_uf_pl);
+            float substone_gap = ImGui::CalcTextSize(main_stone_pl).x;
+            float substone_total = substone_f_sz.x + substone_gap + substone_uf_sz.x;
+            ImGui::SetCursorPosX(std::max(0.0, ImGui::GetWindowSize().x * 0.5 - substone_total * 0.5f));
+            ImGui::TextColored(stones_colors[substone_uf], substone_uf_pl);
+            ImGui::SameLine(0.0f, substone_gap);
+            ImGui::TextColored(stones_colors[substone_f], substone_f_pl);
 
             // 支援石
-            auto sub_stone3_pl = S(IGI_PL_20_SUB[substone_3]);
-            auto sub_stone3_pl_sz = ImGui::CalcTextSize(sub_stone3_pl);
-            ImGui::SetCursorPosX(std::max(0.0, ImGui::GetWindowSize().x * 0.5 - sub_stone3_pl_sz.x * 0.5));
-            ImGui::TextColored(stone_colors[substone_3], sub_stone3_pl);
+            auto substone_s_pl = S(IGI_PL_20_SUB[substone_s]);
+            auto substone_s_pl_sz = ImGui::CalcTextSize(substone_s_pl);
+            ImGui::SetCursorPosX(std::max(0.0, ImGui::GetWindowSize().x * 0.5 - substone_s_pl_sz.x * 0.5));
+            ImGui::TextColored(stones_colors[substone_s], substone_s_pl);
 
 
             ImGui::Columns(2);
