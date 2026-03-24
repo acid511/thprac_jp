@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include "utils/wininternal.h"
+#include <fstream>
 
 #pragma warning(disable : 4706)
 // WTF Microsoft
@@ -14,6 +15,733 @@ namespace THPrac {
 namespace TH20 {
     using std::pair;
     constexpr int32_t stoneGaugeInitialValue[] = { 1100, 1200, 1300, 1400, 1400, 1400, 1400 };
+
+    class TH20Save {
+        SINGLETON(TH20Save)
+    public:
+        enum TH20SpellResult {
+            Capture = 0,
+            Attempt = 1,
+            Timeout = 2,
+            UNK_RES = 3,
+        };
+        enum TH20PyramidType {
+            ST4P_1 = 0,
+            ST4P_A = 1,
+            ST4P_B = 2,
+            ST4P_C = 3,
+            ST4P_D = 4,
+            ST5P = 5,
+            NOT_INITED = 6,
+        };
+        const int cSaveVersion = 2;
+        const char* cSaveFile = "score20pyra.dat";
+        struct PyraState
+        {
+            bool isInHyper = false;
+            DWORD lastPyraAddr = 0;
+            bool isInPyra = false;
+            TH20PyramidType lastPyraSpellId = NOT_INITED;
+            bool isPyraFailed = false;
+            bool isPyraTimeout = false;
+            void Reset()
+            {
+                lastPyraAddr = 0;
+                isInPyra = false;
+                lastPyraSpellId = NOT_INITED;
+                isPyraFailed = false;
+                isPyraTimeout = false;
+                isInHyper = false;
+            }
+        }pyraState;
+    static TH20PyramidType GetPyraSpellId(int stage, int is_stage4_mid_1, int stone1)
+    {
+        if (is_stage4_mid_1)
+            return ST4P_1;
+        if (stage == 4)
+            switch (stone1)
+            {
+            case 0:
+                return ST4P_A;
+            case 1:
+                return ST4P_A;
+            case 2:
+                return ST4P_B;
+            case 3:
+                return ST4P_B;
+            case 4:
+                return ST4P_C;
+            case 5:
+                return ST4P_C;
+            case 6:
+                return ST4P_D;
+            case 7:
+                return ST4P_D;
+            default:
+                break;
+            }
+        return ST5P;
+    }
+    static int32_t GetPlayerType(int main_player_type, int stone1)
+    {
+        return main_player_type * 8 + stone1;
+    }
+
+
+    public:
+        struct PyramidTry
+        {
+            union {
+                struct
+                {
+                    uint8_t pyramid_type_isprac; // (py_type<<4) | isprac
+                    uint8_t diff_tryhresult; // diff<<4 | try_result
+                    uint16_t player_type; // 8*8*8*9*2*2
+                };
+                uint32_t data;
+            };
+            static uint32_t GetPyramidTryMask(bool py_type, bool is_prac, bool diff, bool try_result, int16_t player_mask)
+            {
+                uint8_t py_type_mask    = (py_type ? 0xF0 : 0);
+                uint8_t is_prac_mask    = (is_prac ? 0x0F : 0);
+                uint8_t diff_mask       = (diff ? 0xF0 : 0);
+                uint8_t try_result_mask = (try_result ? 0x0F : 0);
+                PyramidTry t;
+                t.pyramid_type_isprac = py_type_mask | is_prac_mask;
+                t.diff_tryhresult = diff_mask | try_result_mask;
+                t.player_type = player_mask;
+                return t.data;
+            }
+            static uint16_t GetPlayerTypeTotal(int main_player_type, int stone_main,int stone_uf,int stone_f,int stone_sub,int is_in_hyper)
+            {
+                //  15  14  13  12  11  10   9   8   7   6   5   4   3   2   1   0
+                //     +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+                //     |   stone_sub   |   stone_f |  stone_uf | stone_main| P | H |
+                //     +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+                //     |    (0-8)      |    (0-7)  |    (0-7)  |   (0-7)   |0/1|0/1|
+                //     |    4 bits     |    3 bits |    3 bits |   3 bits  |1bt|1bt|
+                //     +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+                stone_main = std::clamp(stone_main, 0, 7);
+                stone_uf = std::clamp(stone_uf, 0, 7);
+                stone_f = std::clamp(stone_f, 0, 7);
+                stone_sub = std::clamp(stone_sub, 0, 8);
+                main_player_type = std::clamp(main_player_type, 0, 1);
+                is_in_hyper = std::clamp(is_in_hyper, 0, 1);
+
+                return is_in_hyper | (main_player_type << 1) | (stone_main << 2) | (stone_uf << 5) | (stone_f << 8) | (stone_sub << 11);
+            }
+            static uint16_t GetPlayerTypeQueryMask(bool main_player_type, bool stone_main, bool stone_uf, bool stone_f, bool stone_sub, bool is_in_hyper)
+            {
+                uint16_t hyper_mask             = is_in_hyper ? 1 : 0;
+                uint16_t main_player_type_mask  = (main_player_type ? 1 : 0) << 1;
+                uint16_t stone_main_mask        = (stone_main ? 7 : 0) << 2;
+                uint16_t stone_uf_mask          = (stone_uf ? 7 : 0) << 5;
+                uint16_t stone_f_mask           = (stone_f ? 7 : 0) << 8;
+                uint16_t stone_sub_mask         = (stone_sub ? 15 : 0) << 11;
+
+                return hyper_mask | main_player_type_mask | stone_main_mask | stone_uf_mask | stone_f_mask | stone_sub_mask;
+            }
+            static void UnpackPlayerTypeTotal(uint16_t compressed,int& main_player_type,int& stone_main,int& stone_uf, int& stone_f,int& stone_sub,int& is_in_hyper)
+            {
+                is_in_hyper = compressed & 0x1;
+                main_player_type = (compressed >> 1) & 0x1;
+                stone_main = (compressed >> 2) & 0x7;
+                stone_uf = (compressed >> 5) & 0x7;
+                stone_f = (compressed >> 8) & 0x7;
+                stone_sub = (compressed >> 11) & 0xF;
+            }
+            static PyramidTry GenPyramidTry(TH20PyramidType py_type, int is_prac, int diff, TH20SpellResult try_result, int16_t pl_type)
+            {
+                PyramidTry t;
+                py_type = std::clamp(py_type, ST4P_1, ST5P);
+                is_prac = std::clamp(is_prac, 0, 1);
+                diff = std::clamp(diff, 0, 3);
+                try_result = std::clamp(try_result, Capture, Timeout);
+                t.pyramid_type_isprac = (py_type << 4) | is_prac;
+                t.diff_tryhresult = (diff << 4) | try_result;
+                t.player_type = pl_type;
+                return t;
+            }
+        };
+        struct Save {
+            int32_t ScHistory[6][5][16][3] = { 0 }; // (st4 0 A B C D /st5 pyra), diff, playertype, [capture/attempt/timeout]
+            int32_t ScHistoryPrac[6][5][16][3] = { 0 };
+
+            // int32_t ScHistoryTotal[6][5][2][8][8][8][9][3] = { 0 }; // (st4 0 A B C D /st5 pyra), diff, player,main,high,low,sub, is_in_hyper ,[capture/attempt/timeout]
+            // int32_t ScHistoryPracTotal[6][5][2][8][8][8][9][3] = { 0 };
+            // // it's 12 MB,,,
+            // // is it worth?
+
+            // why not save all trys...
+            int32_t try_count;
+            std::vector<PyramidTry> tries;
+        };
+        Save saveCurrent;
+        Save saveTotal;
+        bool isSaveLoaded;
+        TH20Save()
+        {
+            memset(saveCurrent.ScHistory, 0, sizeof(saveCurrent.ScHistory));
+            memset(saveCurrent.ScHistoryPrac, 0, sizeof(saveCurrent.ScHistoryPrac));
+            saveCurrent.try_count = 0;
+            memset(saveTotal.ScHistory, 0, sizeof(saveTotal.ScHistory));
+            memset(saveTotal.ScHistoryPrac, 0, sizeof(saveTotal.ScHistoryPrac));
+            saveTotal.try_count = 0;
+
+            isSaveLoaded = false;
+            LoadSave();
+        }
+
+    public:
+        void LoadSave()
+        {
+            if (isSaveLoaded)
+                return;
+            PushCurrentDirectory(L"%appdata%\\ShanghaiAlice\\th20");
+            auto fs_new = ::std::fstream(cSaveFile, ::std::ios::in | ::std::ios::binary);
+            if (fs_new.is_open()) {
+                isSaveLoaded = true;
+                int version = 1;
+                fs_new.read((char*)&version, sizeof(version));
+                switch (version) {
+                default:
+                case 1:
+                    fs_new.read((char*)(&(saveTotal.ScHistory)), sizeof(saveTotal.ScHistory));
+                    fs_new.read((char*)(&(saveTotal.ScHistoryPrac)), sizeof(saveTotal.ScHistoryPrac));
+                    saveTotal.try_count = 0;
+                    saveTotal.tries = {};
+                    break;
+                case 2:
+                    fs_new.read((char*)(&(saveTotal.ScHistory)), sizeof(saveTotal.ScHistory));
+                    fs_new.read((char*)(&(saveTotal.ScHistoryPrac)), sizeof(saveTotal.ScHistoryPrac));
+                    fs_new.read((char*)(&(saveTotal.try_count)), sizeof(saveTotal.try_count));
+                    if (saveTotal.try_count >= 4194304)//1048576 tries(4 MB) should be ok
+                        saveTotal.try_count = 4194304;
+                    saveTotal.tries.reserve(saveTotal.try_count);
+                    for (int32_t i = 0; i < saveTotal.try_count; i++)
+                    {
+                        PyramidTry s_try;
+                        if (!fs_new.read((char*)(&s_try), sizeof(s_try))) {
+                            saveTotal.try_count = i;
+                            break;
+                        }
+                        saveTotal.tries.push_back(s_try);
+                    }
+                    break;
+                }
+                fs_new.close();
+            }
+            PopCurrentDirectory();
+        }
+
+        void SaveSave()
+        {
+            PushCurrentDirectory(L"%appdata%\\ShanghaiAlice\\th20");
+            auto fs = ::std::fstream(cSaveFile, ::std::ios::out | ::std::ios::binary);
+            if (fs.is_open()) {
+                fs.write((char*)(&cSaveVersion), sizeof(cSaveVersion));
+                fs.write((char*)(&saveTotal.ScHistory), sizeof(saveTotal.ScHistory));
+                fs.write((char*)(&saveTotal.ScHistoryPrac), sizeof(saveTotal.ScHistoryPrac));
+                int count = saveTotal.tries.size();
+                fs.write((char*)(&count), sizeof(count));
+                fs.write((char*)(saveTotal.tries.data()), sizeof(PyramidTry) * count);
+                fs.close();
+            }
+            PopCurrentDirectory();
+        }
+
+        void AddTimeout(TH20PyramidType spell_id, bool isPrac, bool is_in_hyper)
+        {
+            uintptr_t player_stats = RVA(0x1BA5F0);
+            int32_t cur_player_type = (*(int32_t*)(player_stats + 0x8));
+            int32_t main_stone = (*(int32_t*)(player_stats + 0x1C));
+            int32_t substone_f = (*(int32_t*)(player_stats + 0x20));
+            int32_t substone_uf = (*(int32_t*)(player_stats + 0x24));
+            int32_t substone_s = (*(int32_t*)(player_stats + 0x28));
+            int32_t diff = *((int32_t*)(RVA(0x1BA7D0)));
+            int32_t player_type = GetPlayerType(cur_player_type, main_stone);
+
+            LoadSave();
+            if (isPrac)
+            {
+                saveTotal.ScHistoryPrac[spell_id][diff][player_type][2]++;
+                saveCurrent.ScHistoryPrac[spell_id][diff][player_type][2]++;
+            }
+            else
+            {
+                saveTotal.ScHistory[spell_id][diff][player_type][2]++;
+                saveCurrent.ScHistory[spell_id][diff][player_type][2]++;
+            }
+            auto t = PyramidTry::GenPyramidTry(spell_id, isPrac, diff, Timeout, PyramidTry::GetPlayerTypeTotal(cur_player_type, main_stone, substone_uf, substone_f, substone_s, is_in_hyper));
+            saveTotal.tries.push_back(t);
+            saveTotal.try_count = saveTotal.tries.size();
+            SaveSave();
+        }
+
+        void AddAttempt(TH20PyramidType spell_id, bool isPrac, bool is_in_hyper)
+        {
+            uintptr_t player_stats = RVA(0x1BA5F0);
+            int32_t cur_player_type = (*(int32_t*)(player_stats + 0x8));
+            int32_t main_stone = (*(int32_t*)(player_stats + 0x1C));
+            int32_t substone_f = (*(int32_t*)(player_stats + 0x20));
+            int32_t substone_uf = (*(int32_t*)(player_stats + 0x24));
+            int32_t substone_s = (*(int32_t*)(player_stats + 0x28));
+
+            int32_t diff = *((int32_t*)(RVA(0x1BA7D0)));
+            int32_t player_type = GetPlayerType(cur_player_type, main_stone);
+
+            LoadSave();
+            if (isPrac) {
+                saveTotal.ScHistoryPrac[spell_id][diff][player_type][1]++;
+                saveCurrent.ScHistoryPrac[spell_id][diff][player_type][1]++;
+            } else {
+                saveTotal.ScHistory[spell_id][diff][player_type][1]++;
+                saveCurrent.ScHistory[spell_id][diff][player_type][1]++;
+
+            }
+            auto t = PyramidTry::GenPyramidTry(spell_id, isPrac, diff, Attempt, PyramidTry::GetPlayerTypeTotal(cur_player_type, main_stone, substone_uf, substone_f, substone_s, is_in_hyper));
+            saveTotal.tries.push_back(t);
+            saveTotal.try_count = saveTotal.tries.size();
+            SaveSave();
+        }
+
+        void AddCapture(TH20PyramidType spell_id, bool isPrac, bool is_in_hyper)
+        {
+            uintptr_t player_stats = RVA(0x1BA5F0);
+            int32_t cur_player_type = (*(int32_t*)(player_stats + 0x8));
+            int32_t main_stone = (*(int32_t*)(player_stats + 0x1C));
+            int32_t substone_f = (*(int32_t*)(player_stats + 0x20));
+            int32_t substone_uf = (*(int32_t*)(player_stats + 0x24));
+            int32_t substone_s = (*(int32_t*)(player_stats + 0x28));
+            int32_t diff = *((int32_t*)(RVA(0x1BA7D0)));
+            int32_t player_type = GetPlayerType(cur_player_type, main_stone);
+
+            LoadSave();
+            if (isPrac) {
+                saveTotal.ScHistoryPrac[spell_id][diff][player_type][0]++;
+                saveCurrent.ScHistoryPrac[spell_id][diff][player_type][0]++;
+            } else {
+                saveTotal.ScHistory[spell_id][diff][player_type][0]++;
+                saveCurrent.ScHistory[spell_id][diff][player_type][0]++;
+            }
+            auto t = PyramidTry::GenPyramidTry(spell_id, isPrac, diff, Capture, PyramidTry::GetPlayerTypeTotal(cur_player_type, main_stone, substone_uf, substone_f, substone_s, is_in_hyper));
+            saveTotal.tries.push_back(t);
+            saveTotal.try_count = saveTotal.tries.size();
+            SaveSave();
+        }
+
+        int GetTotalSpellCardCount(int spell_id, int diff, int player_type, TH20SpellResult state)
+        {
+            return saveTotal.ScHistory[spell_id][diff][player_type][state];
+        }
+        int GetCurrentSpellCardCount(int spell_id, int diff, int player_type, TH20SpellResult state)
+        {
+            return saveCurrent.ScHistory[spell_id][diff][player_type][state];
+        }
+
+        void ShowDetail()
+        {
+            static bool is_comb = false;
+            static bool is_prac = false;
+            static bool is_total = true;
+            static int32_t schistory_tot[6][5][16][3];
+            static int32_t schistory_cur[6][5][16][3];
+
+            const char* players_strs[2] = { S(THPRAC_IGI_PL_Reimu), S(THPRAC_IGI_PL_Marisa) };
+            const char* spells_str[6] = {
+                S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID1),
+                S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2R),
+                S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2B),
+                S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2Y),
+                S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2G),
+                S(THPRAC_INGAMEINFO_20_PYRAMID_ST5_MID1),
+            };
+            const ImVec4 r = { 1.0f, 0.5f, 0.5f, 1.0f };
+            const ImVec4 g = { 0.5f, 1.0f, 0.5f, 1.0f };
+            const ImVec4 b = { 0.5f, 0.75f, 1.0f, 1.0f };
+            const ImVec4 y = { 1.0f, 1.0f, 0.3f, 1.0f };
+            const ImVec4 w = { 1.0f, 1.0f, 1.0f, 1.0f };
+            const ImVec4 p = { 1.0f, 0.5f, 1.0f, 1.0f };
+            const ImVec4 rk = { 0.9f, 0.2f, 0.2f, 1.0f };
+            const ImVec4 gk = { 0.2f, 0.7f, 0.2f, 1.0f };
+            const ImVec4 bk = { 0.1f, 0.5f, 1.0f, 1.0f };
+            const ImVec4 yk = { 0.8f, 0.8f, 0.2f, 1.0f };
+            const ImVec4 spells_colors[] = { p, r, b, y, g, w };
+            const ImVec4 stones_colors[] = { r, rk, b, bk, y, yk, g, gk, w };
+
+            ImVec4 chromatic_col = {1,1,1,1};
+            if (g_adv_igi_options.th12_chromatic_ufo) // st5 pyra
+            {
+                static float t = 0;
+                t += 0.003f;
+                if (t >= 1.0f)
+                    t = 0.0f;
+                float rr, gg, bb;
+                ImGui::ColorConvertHSVtoRGB(fmodf(t, 1.0f), 0.4f, 1.0f, rr, gg, bb);
+                chromatic_col = { rr, gg, bb, 1.0f };
+            }
+
+            ImGui::BeginTabBar("sort method");
+            if(ImGui::BeginTabItem(S(THPRAC_PYRAMID_20_QURTY))){
+
+                static std::string py_type_combo_str;
+                static std::string diff_combo_str;
+                static std::string game_mode_combo_str;
+                static std::string pl_type_combo_str;
+                static std::string main_f_uf_stone_combo_str;
+                static std::string s_stone_combo_str;
+                static std::string is_hyper_combo_str;
+                static int cur_py_type = 6;
+                static int cur_diff = 4;
+                static int cur_game_mode = 2;
+                static int cur_hyper = 2;
+                static int cur_pl_type = 2;
+                static int cur_main_stone = 8;
+                static int cur_f_stone = 8;
+                static int cur_uf_stone = 8;
+                static int cur_s_stone = 9;
+
+                if (py_type_combo_str == "") {
+                    py_type_combo_str = S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID1);py_type_combo_str.push_back('\0');
+                    py_type_combo_str += S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2R);py_type_combo_str.push_back('\0');
+                    py_type_combo_str += S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2B);py_type_combo_str.push_back('\0');
+                    py_type_combo_str += S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2Y);py_type_combo_str.push_back('\0');
+                    py_type_combo_str += S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2G);py_type_combo_str.push_back('\0');
+                    py_type_combo_str += S(THPRAC_INGAMEINFO_20_PYRAMID_ST5_MID1);py_type_combo_str.push_back('\0');
+                    py_type_combo_str += S(THPRAC_PYRAMID_20_IGNORE);py_type_combo_str.push_back('\0');
+                    py_type_combo_str.push_back('\0');
+                    diff_combo_str = S(THPRAC_IGI_DIFF_E);diff_combo_str.push_back('\0');
+                    diff_combo_str += S(THPRAC_IGI_DIFF_N);diff_combo_str.push_back('\0');
+                    diff_combo_str += S(THPRAC_IGI_DIFF_H);diff_combo_str.push_back('\0');
+                    diff_combo_str += S(THPRAC_IGI_DIFF_L);diff_combo_str.push_back('\0');
+                    diff_combo_str += S(THPRAC_PYRAMID_20_IGNORE);diff_combo_str.push_back('\0');
+                    diff_combo_str.push_back('\0');
+                    game_mode_combo_str = S(THPRAC_PYRAMID_20_COMBAT);game_mode_combo_str.push_back('\0');
+                    game_mode_combo_str += S(THPRAC_PYRAMID_20_PRAC);game_mode_combo_str.push_back('\0');
+                    game_mode_combo_str += S(THPRAC_PYRAMID_20_IGNORE);game_mode_combo_str.push_back('\0');
+                    diff_combo_str.push_back('\0');
+                    pl_type_combo_str = S(THPRAC_IGI_PL_Reimu);pl_type_combo_str.push_back('\0');
+                    pl_type_combo_str += S(THPRAC_IGI_PL_Marisa);pl_type_combo_str.push_back('\0');
+                    pl_type_combo_str += S(THPRAC_PYRAMID_20_IGNORE);pl_type_combo_str.push_back('\0');
+                    diff_combo_str.push_back('\0');
+                    is_hyper_combo_str = S(THPRAC_PYRAMID_20_HYPER_OFF);is_hyper_combo_str.push_back('\0');
+                    is_hyper_combo_str += S(THPRAC_PYRAMID_20_HYPER_ON);is_hyper_combo_str.push_back('\0');
+                    is_hyper_combo_str += S(THPRAC_PYRAMID_20_IGNORE);is_hyper_combo_str.push_back('\0');
+                    diff_combo_str.push_back('\0');
+                    for (int i = 0; i < 9; i++) {
+                        if (i < 8) {
+                            main_f_uf_stone_combo_str += S(IGI_PL_20_SUB[i]);
+                            main_f_uf_stone_combo_str.push_back('\0');
+                        }
+                        s_stone_combo_str += S(IGI_PL_20_SUB[i]);
+                        s_stone_combo_str.push_back('\0');
+                    }
+                    s_stone_combo_str += S(THPRAC_PYRAMID_20_IGNORE);s_stone_combo_str.push_back('\0');s_stone_combo_str.push_back('\0');
+                    main_f_uf_stone_combo_str += S(THPRAC_PYRAMID_20_IGNORE);main_f_uf_stone_combo_str.push_back('\0');main_f_uf_stone_combo_str.push_back('\0');
+                }
+                {
+                    ImGui::Columns(3);
+                    ImGui::Combo(S(THPRAC_PYRAMID_20_PY_TYPE), &cur_py_type, py_type_combo_str.c_str());
+                    ImGui::NextColumn();
+                    ImGui::Combo(S(TH_DIFFICULTY), &cur_diff, diff_combo_str.c_str());
+                    ImGui::NextColumn();
+                    ImGui::Combo(S(THPRAC_PYRAMID_20_GAME_MODE), &cur_game_mode, game_mode_combo_str.c_str());
+                    ImGui::NextColumn();
+                    ImGui::Combo(S(THPRAC_PYRAMID_20_IS_HYPER), &cur_hyper, is_hyper_combo_str.c_str());
+                    ImGui::NextColumn();
+                    ImGui::Combo(S(THPRAC_PYRAMID_20_PL_TYPE), &cur_pl_type, pl_type_combo_str.c_str());
+                    ImGui::NextColumn();
+                    ImGui::Combo(S(THPRAC_PYRAMID_20_MAIN_STONE), &cur_main_stone, main_f_uf_stone_combo_str.c_str());
+                    ImGui::NextColumn();
+                    ImGui::Combo(S(THPRAC_PYRAMID_20_FOCUS_STONE), &cur_f_stone, main_f_uf_stone_combo_str.c_str());
+                    ImGui::NextColumn();
+                    ImGui::Combo(S(THPRAC_PYRAMID_20_SUB_STONE), &cur_s_stone, s_stone_combo_str.c_str());
+                    ImGui::NextColumn();
+                    ImGui::Combo(S(THPRAC_PYRAMID_20_UNFOCUS_STONE), &cur_uf_stone, main_f_uf_stone_combo_str.c_str());
+                    ImGui::Columns(1);
+                }
+
+                static int query_res[6][3];
+                static std::vector<TH20Save::PyramidTry> tries_to_show;
+                if (ImGui::Button(S(THPRAC_PYRAMID_20_QUERY))) {
+                    memset(query_res, 0, sizeof(query_res));
+                    tries_to_show = {};
+                    uint16_t player_mask = PyramidTry::GetPlayerTypeQueryMask(cur_pl_type != 2, cur_main_stone != 8, cur_uf_stone != 8, cur_f_stone != 8, cur_s_stone != 9, cur_hyper != 2);
+                    uint32_t t_mask = PyramidTry::GetPyramidTryMask(cur_py_type != 6, cur_game_mode != 2, cur_diff != 4, true, player_mask);
+
+                    uint16_t player_type = PyramidTry ::GetPlayerTypeTotal(cur_pl_type, cur_main_stone, cur_uf_stone, cur_f_stone, cur_s_stone, cur_hyper);
+                    PyramidTry capture_situation = PyramidTry::GenPyramidTry((TH20PyramidType)cur_py_type, cur_game_mode, cur_diff, Capture, player_type);
+                    PyramidTry attempt_situation = PyramidTry::GenPyramidTry((TH20PyramidType)cur_py_type, cur_game_mode, cur_diff, Attempt, player_type);
+                    PyramidTry timeout_situation = PyramidTry::GenPyramidTry((TH20PyramidType)cur_py_type, cur_game_mode, cur_diff, Timeout, player_type);
+                    capture_situation.data &= t_mask;
+                    attempt_situation.data &= t_mask;
+                    timeout_situation.data &= t_mask;
+                    for (auto it = saveTotal.tries.rbegin(); it != saveTotal.tries.rend(); it++) {
+                        bool is_match = false;
+                        auto t = *it;
+                        auto t_py_type = t.pyramid_type_isprac >> 4;
+                        auto gamemode = t.pyramid_type_isprac & 0xF;
+                        uint32_t masked_data = t.data & t_mask;
+                        if (masked_data == capture_situation.data)
+                            query_res[t_py_type][Capture]++, is_match = true;
+                        else if (masked_data == attempt_situation.data)
+                            query_res[t_py_type][Attempt]++, is_match = true;
+                        else if (masked_data == timeout_situation.data)
+                            query_res[t_py_type][Timeout]++, is_match = true;
+                        if (is_match && tries_to_show.size() < 200) {
+                            tries_to_show.push_back(*it);
+                        }
+                    }
+                }
+                ImGui::BeginTabBar("Query Result");
+                if (ImGui::BeginTabItem(S(THPRAC_PYRAMID_20_QUERY_RES))) {
+                    ImGui::BeginTable("query_res_table", 3, ImGuiTableFlags_::ImGuiTableFlags_Resizable);
+                    ImGui::TableSetupColumn(S(THPRAC_INGAMEINFO_06_SPELL_NAME), 0, 45.0f);
+                    ImGui::TableSetupColumn(S(THPRAC_INGAMEINFO_20_PASS_TOT), 0, 30.0f);
+                    ImGui::TableSetupColumn(S(THPRAC_INGAMEINFO_06_TIMEOUT_TOT), 0, 24.0f);
+                    ImGui::TableHeadersRow();
+
+                    for (int spell = 0; spell < 6; spell++) {
+                        if (query_res[spell][TH20Save::Attempt] == 0) {
+                            continue;
+                        }
+                        ImVec4 spell_color = spells_colors[spell];
+                        ImVec4 stone_color = stones_colors[cur_main_stone];
+                        if (spell == 5 && g_adv_igi_options.th12_chromatic_ufo) // st5 pyra
+                        {
+                            spell_color = chromatic_col;
+                            stone_color.x = chromatic_col.x * 0.6f + stone_color.x * 0.4f;
+                            stone_color.y = chromatic_col.y * 0.6f + stone_color.y * 0.4f;
+                            stone_color.z = chromatic_col.z * 0.6f + stone_color.z * 0.4f;
+                        }
+
+                        ImGui::TableNextRow();
+                        ImGui::TableNextColumn();
+
+                        ImGui::TextColored(spell_color, "%s", spells_str[spell]);
+                        ImGui::TableNextColumn();
+
+                        // (st4 0 A B C D /st5 pyra), diff, playertype, [capture/attempt/timeout]
+                        ImGui::TextColored(stone_color, "%d/%d(%.1f%%)",
+                            query_res[spell][TH20Save::Capture] + query_res[spell][TH20Save::Timeout],
+                            query_res[spell][TH20Save::Attempt],
+                            ((float)(query_res[spell][TH20Save::Capture] + query_res[spell][TH20Save::Timeout]) / std::fmaxf(1.0f, ((float)query_res[spell][TH20Save::Attempt])) * 100.0f));
+                        ImGui::TableNextColumn();
+
+                        ImGui::TextColored(stone_color, "%d", query_res[spell][TH20Save::Timeout]);
+                        ImGui::TableNextColumn();
+                    }
+                    ImGui::EndTable();
+                    ImGui::EndTabItem();
+                }
+
+                if (ImGui::BeginTabItem(S(THPRAC_PYRAMID_20_LAST_200))) {
+                    ImGui::BeginTable("tries", 11, ImGuiTableFlags_::ImGuiTableFlags_Resizable);
+                    ImGui::TableSetupColumn(S(THPRAC_PYRAMID_20_ID), 0, 12.0f);
+                    ImGui::TableSetupColumn(S(THPRAC_PYRAMID_20_PY_TYPE), 0, 40.0f);
+                    ImGui::TableSetupColumn(S(TH_DIFFICULTY), 0, 30.0f);
+                    ImGui::TableSetupColumn(S(THPRAC_PYRAMID_20_GAME_MODE), 0, 30.0f);
+                    ImGui::TableSetupColumn(S(THPRAC_PYRAMID_20_RESULT), 0, 24.0f);
+                    ImGui::TableSetupColumn(S(THPRAC_PYRAMID_20_IS_HYPER), 0, 24.0f);
+                    ImGui::TableSetupColumn(S(THPRAC_PYRAMID_20_PL_TYPE), 0, 24.0f);
+
+                    ImGui::TableSetupColumn(S(THPRAC_PYRAMID_20_MAIN_STONE), 0, 24.0f);
+                    ImGui::TableSetupColumn(S(THPRAC_PYRAMID_20_FOCUS_STONE), 0, 24.0f);
+                    ImGui::TableSetupColumn(S(THPRAC_PYRAMID_20_SUB_STONE), 0, 24.0f);
+                    ImGui::TableSetupColumn(S(THPRAC_PYRAMID_20_UNFOCUS_STONE), 0, 24.0f);
+                    ImGui::TableHeadersRow();
+                    for (int i = 0; i < tries_to_show.size(); i++) {
+                        auto& t = tries_to_show[i];
+                        int py_type = t.pyramid_type_isprac >> 4;
+                        int is_prac = t.pyramid_type_isprac & 0xf;
+                        int diff = t.diff_tryhresult >> 4;
+                        int try_result = t.diff_tryhresult & 0xf;
+                        int16_t pltype_compressed = t.player_type;
+                        int main_player_type, stone_main, stone_uf, stone_f, stone_sub, is_in_hyper;
+                        PyramidTry::UnpackPlayerTypeTotal(pltype_compressed, main_player_type, stone_main, stone_uf, stone_f, stone_sub, is_in_hyper);
+
+                        ImVec4 spell_color = spells_colors[py_type];
+                        if (py_type == 5 && g_adv_igi_options.th12_chromatic_ufo)
+                            spell_color = chromatic_col;
+
+                        ImGui::TableNextRow();
+                        ImGui::TableNextColumn();
+                        ImGui::TextColored(spell_color, "%d", i);
+                        ImGui::TableNextColumn();
+                        ImGui::TextColored(spell_color, "%s", spells_str[py_type]);
+                        ImGui::TableNextColumn();
+                        const ImVec4 Ecolor = { 0.6f, 1.0f, 0.5f, 1.0f };
+                        const ImVec4 Ncolor = { 0.6f, 0.8f, 1.0f, 1.0f };
+                        const ImVec4 Hcolor = { 1.0f, 0.5f, 0.5f, 1.0f };
+                        const ImVec4 Lcolor = { 1.0f, 0.2f, 0.7f, 1.0f };
+                        const ImVec4 diff_color[] = { Ecolor, Ncolor, Hcolor, Lcolor };
+                        ImGui::TextColored(diff_color[diff], "%s", S(IGI_DIFF[diff]));
+                        ImGui::TableNextColumn();
+                        ImGui::TextColored(spell_color, "%s", is_prac ? S(THPRAC_PYRAMID_20_PRAC) : S(THPRAC_PYRAMID_20_COMBAT));
+                        ImGui::TableNextColumn();
+                        const char* result_str = "";
+                        ImVec4 res_color = { 1, 1, 1, 1 };
+                        switch (try_result) {
+                        case TH20Save::Capture:
+                            result_str = S(THPRAC_PYRAMID_20_CAPTURE);
+                            res_color = spell_color;
+                            break;
+                        case TH20Save::Attempt:
+                            result_str = S(THPRAC_PYRAMID_20_ATTEMPT);
+                            res_color = { chromatic_col.x * 0.6f + 1.0f * 0.4f, chromatic_col.y * 0.6f + 1.0f * 0.4f, chromatic_col.z * 0.6f + 1.0f * 0.4f, 1.0f };
+                            break;
+                        case TH20Save::Timeout:
+                            result_str = S(THPRAC_PYRAMID_20_TIMEOUT);
+                            res_color = spell_color;
+                            break;
+                        default:
+                            result_str = "Unknown";
+                            break;
+                        }
+                        ImGui::TextColored(res_color, "%s", result_str);
+                        ImGui::TableNextColumn();
+                        ImGui::TextColored(spell_color, "%s", is_in_hyper ? S(THPRAC_PYRAMID_20_HYPER_ON) : S(THPRAC_PYRAMID_20_HYPER_OFF));
+                        ImGui::TableNextColumn();
+                        ImVec4 pl_color = main_player_type == 0 ? ImVec4 { 1.0f, 0.3f, 0.3f, 1.0f } : ImVec4 { 0.4f, 0.4f, 0.4f, 1.0f };
+                        ImGui::TextColored(pl_color, "%s", players_strs[main_player_type]);
+                        ImGui::TableNextColumn();
+                        ImVec4 stone_color = stones_colors[stone_main];
+                        ImGui::TextColored(stone_color, "%s", S(IGI_PL_20_SUB[stone_main]));
+                        ImGui::TableNextColumn();
+                        stone_color = stones_colors[stone_f];
+                        ImGui::TextColored(stone_color, "%s", S(IGI_PL_20_SUB[stone_f]));
+                        ImGui::TableNextColumn();
+                        stone_color = stones_colors[stone_sub];
+                        ImGui::TextColored(stone_color, "%s", S(IGI_PL_20_SUB[stone_sub]));
+                        ImGui::TableNextColumn();
+                        stone_color = stones_colors[stone_uf];
+                        ImGui::TextColored(stone_color, "%s", S(IGI_PL_20_SUB[stone_uf]));
+                    }
+                    ImGui::EndTable();
+                    ImGui::EndTabItem();
+                }
+                ImGui::EndTabBar();
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem(S(THPRAC_PYRAMID_20_SORT_BY_MAIN_STONE)))
+            {
+
+                if (ImGui::Checkbox(S(THPRAC_INGAMEINFO_20_TOTAL_CAPTURE_RATE), &is_total)) {
+                    is_comb = is_prac = false;
+                }
+                ImGui::SameLine();
+                if (ImGui::Checkbox(S(THPRAC_INGAMEINFO_20_COMBAT_CAPTURE_RATE), &is_comb)) {
+                    is_prac = is_total = false;
+                }
+                ImGui::SameLine();
+                if (ImGui::Checkbox(S(THPRAC_INGAMEINFO_20_PRAC_CAPTURE_RATE), &is_prac)) {
+                    is_comb = is_total = false;
+                }
+                for (int i = 0; i < 6; i++)
+                    for (int j = 0; j < 5; j++)
+                        for (int k = 0; k < 16; k++)
+                            for (int l = 0; l < 3; l++) {
+                                if (is_comb) {
+                                    schistory_tot[i][j][k][l] = saveTotal.ScHistory[i][j][k][l];
+                                    schistory_cur[i][j][k][l] = saveCurrent.ScHistory[i][j][k][l];
+                                } else if (is_prac) {
+                                    schistory_tot[i][j][k][l] = saveTotal.ScHistoryPrac[i][j][k][l];
+                                    schistory_cur[i][j][k][l] = saveCurrent.ScHistoryPrac[i][j][k][l];
+                                } else {
+                                    schistory_tot[i][j][k][l] = saveTotal.ScHistory[i][j][k][l] + saveTotal.ScHistoryPrac[i][j][k][l];
+                                    schistory_cur[i][j][k][l] = saveCurrent.ScHistory[i][j][k][l] + saveCurrent.ScHistoryPrac[i][j][k][l];
+                                }
+                            }
+
+                ImGui::BeginTabBar("Detail Spell");
+                {
+                    const char* tabs_diff_strs[4] = { S(THPRAC_IGI_DIFF_E), S(THPRAC_IGI_DIFF_N), S(THPRAC_IGI_DIFF_H), S(THPRAC_IGI_DIFF_L) };
+                    for (int diff = 0; diff < 4; diff++) {
+                        if (ImGui::BeginTabItem(tabs_diff_strs[diff])) {
+                            ImGui::BeginTabBar("Player Type");
+                            for (int pl = 0; pl < 2; pl++) {
+                                if (ImGui::BeginTabItem(players_strs[pl])) {
+                                    // spell capture
+                                    ImGui::BeginTable(std::format("{}{}sptable", tabs_diff_strs[diff], players_strs[pl]).c_str(), 6, ImGuiTableFlags_::ImGuiTableFlags_Resizable);
+                                    ImGui::TableSetupColumn(S(THPRAC_INGAMEINFO_06_SPELL_NAME), 0, 45.0f);
+                                    ImGui::TableSetupColumn(S(THPRAC_PYRAMID_20_MAIN_STONE), 0, 50.0f);
+                                    ImGui::TableSetupColumn(S(THPRAC_INGAMEINFO_20_PASS_TOT), 0, 30.0f);
+                                    ImGui::TableSetupColumn(S(THPRAC_INGAMEINFO_06_TIMEOUT_TOT), 0, 24.0f);
+                                    ImGui::TableSetupColumn(S(THPRAC_INGAMEINFO_20_PASS_CUR), 0, 30.0f);
+                                    ImGui::TableSetupColumn(S(THPRAC_INGAMEINFO_06_TIMEOUT_CUR), 0, 24.0f);
+                                    ImGui::TableHeadersRow();
+
+                                    for (int stone = 0; stone < 8; stone++) {
+                                        for (int spell = 0; spell < 6; spell++) {
+                                            int plstone_type = GetPlayerType(pl, stone);
+                                            if (schistory_tot[spell][diff][plstone_type][TH20Save::Attempt] == 0) {
+                                                if ((spell >= 1 && spell <= 4) && (stone / 2 != spell - 1)) // mismatched spell/stone
+                                                    continue;
+                                            }
+                                            ImVec4 spell_color = spells_colors[spell];
+                                            ImVec4 stone_color = stones_colors[stone];
+                                            if (spell == 5 && g_adv_igi_options.th12_chromatic_ufo) // st5 pyra
+                                            {
+                                                spell_color = chromatic_col;
+                                                stone_color.x = chromatic_col.x * 0.6f + stone_color.x * 0.4f;
+                                                stone_color.y = chromatic_col.y * 0.6f + stone_color.y * 0.4f;
+                                                stone_color.z = chromatic_col.z * 0.6f + stone_color.z * 0.4f;
+                                            }
+
+                                            ImGui::TableNextRow();
+                                            ImGui::TableNextColumn();
+
+                                            ImGui::TextColored(spell_color, "%s", spells_str[spell]);
+                                            ImGui::TableNextColumn();
+
+                                            if (Gui::LocaleGet() == Gui::LOCALE_EN_US)
+                                                ImGui::TextColored(stone_color, "%s\"%s\"", S(IGI_PL_20_SUB[stone]), S(IGI_PL_20_SUB_FULL[stone]));
+                                            else
+                                                ImGui::TextColored(stone_color, "%s「%s」", S(IGI_PL_20_SUB[stone]), S(IGI_PL_20_SUB_FULL[stone]));
+                                            ImGui::TableNextColumn();
+
+                                            // (st4 0 A B C D /st5 pyra), diff, playertype, [capture/attempt/timeout]
+                                            ImGui::TextColored(stone_color, "%d/%d(%.1f%%)",
+                                                schistory_tot[spell][diff][plstone_type][TH20Save::Capture] + schistory_tot[spell][diff][plstone_type][TH20Save::Timeout],
+                                                schistory_tot[spell][diff][plstone_type][TH20Save::Attempt],
+                                                ((float)(schistory_tot[spell][diff][plstone_type][TH20Save::Capture] + schistory_tot[spell][diff][plstone_type][TH20Save::Timeout]) / std::fmaxf(1.0f, ((float)schistory_tot[spell][diff][plstone_type][TH20Save::Attempt])) * 100.0f));
+                                            ImGui::TableNextColumn();
+
+                                            ImGui::TextColored(stone_color, "%d", schistory_tot[spell][diff][plstone_type][TH20Save::Timeout]);
+                                            ImGui::TableNextColumn();
+
+                                            ImGui::TextColored(stone_color, "%d/%d(%.1f%%)",
+                                                schistory_cur[spell][diff][plstone_type][TH20Save::Capture] + schistory_cur[spell][diff][plstone_type][TH20Save::Timeout],
+                                                schistory_cur[spell][diff][plstone_type][TH20Save::Attempt],
+                                                ((float)(schistory_cur[spell][diff][plstone_type][TH20Save::Capture] + schistory_cur[spell][diff][plstone_type][TH20Save::Timeout]) / std::fmaxf(1.0f, ((float)schistory_cur[spell][diff][plstone_type][TH20Save::Attempt])) * 100.0f));
+                                            ImGui::TableNextColumn();
+
+                                            ImGui::TextColored(stone_color, "%d", schistory_cur[spell][diff][plstone_type][TH20Save::Timeout]);
+                                            ImGui::TableNextColumn();
+                                        }
+                                        ImGui::TableNextRow();
+                                        ImGui::TableNextColumn();
+                                        ImGui::NewLine();
+                                    }
+                                    ImGui::EndTable();
+                                    ImGui::EndTabItem();
+                                }
+                            }
+                            ImGui::EndTabBar();
+                            ImGui::EndTabItem();
+                        }
+                    }
+                }
+                ImGui::EndTabBar();
+                ImGui::EndTabItem();
+            }
+            ImGui::EndTabBar();
+
+
+
+
+        }
+    };
 
 
     enum rel_addrs {
@@ -324,10 +1052,6 @@ namespace TH20 {
 
                 ReturnJson();
             }
-
-            CreateJson();
-            jalloc; // Dummy usage to silence C4189
-            ReturnJson();
         }
 
         bool HasTransitionSyncData(int st = 0)
@@ -414,7 +1138,7 @@ namespace TH20 {
             SetStyle(ImGuiStyleVar_WindowBorderSize, 0.0f);
             OnLocaleChange();
         }
-        SINGLETON(THGuiPrac);
+        SINGLETON(THGuiPrac)
 
     public:
         __declspec(noinline) void State(int state)
@@ -663,7 +1387,7 @@ namespace TH20 {
             case 1: // Chapter
                 mChapter.SetBound(1, chapterCounts[0] + chapterCounts[1]);
 
-                if (chapterCounts[1] == 0 && chapterCounts[2] != 0) {
+                if (chapterCounts[1] == 0 && chapterCounts[0] != 0) {
                     sprintf_s(chapterStr, S(TH_STAGE_PORTION_N), *mChapter);
                 } else if (*mChapter <= chapterCounts[0]) {
                     sprintf_s(chapterStr, S(TH_STAGE_PORTION_1), *mChapter);
@@ -704,7 +1428,7 @@ namespace TH20 {
         Gui::GuiCheckBox mDlg { TH_DLG };
 
         Gui::GuiSlider<int, ImGuiDataType_S32> mChapter { TH_CHAPTER, 0, 0 };
-        Gui::GuiDrag<int64_t, ImGuiDataType_S64> mScore { TH_SCORE, 0, 9999999990, 10, 100000000 };
+        Gui::GuiDrag<int64_t, ImGuiDataType_S64> mScore { TH_SCORE, 0, 42949672950, 10, 10000000000 };
         Gui::GuiSlider<int, ImGuiDataType_S32> mLife { TH_LIFE, 0, 7 };
         Gui::GuiSlider<int, ImGuiDataType_S32> mLifeFragment { TH_LIFE_FRAGMENT, 0, 2 };
         Gui::GuiSlider<int, ImGuiDataType_S32> mBomb { TH_BOMB, 0, 7 };
@@ -746,7 +1470,7 @@ namespace TH20 {
             GetEnvironmentVariableW(L"APPDATA", appdata, MAX_PATH);
             mAppdataPath = appdata;
         }
-        SINGLETON(THGuiRep);
+        SINGLETON(THGuiRep)
 
     public:
         THPracParam mRepParam;
@@ -770,6 +1494,7 @@ namespace TH20 {
             if (mSelectedRepPath != repDir + repName) {
                 mSelectedRepPath = repDir + repName;
                 ResetFixToolsSharedState();
+                mSelectedRepPlaybackStartStage = 0;
             }
 
             std::string param;
@@ -781,7 +1506,7 @@ namespace TH20 {
             uint32_t* savedStones = GetMemAddr<uint32_t*>(main_menu_ptr + rep_offset, 0x1C, 0xDC);
             memcpy(replayStones, savedStones, sizeof(replayStones));
 
-            for (int st = 1; st <= 7; ++st) {
+            for (size_t st = 1; st <= 7; ++st) {
                 if (GetMemContent(main_menu_ptr + rep_offset, 0xf8 + 0x2c * st)) {
                     if (!mSelectedRepStartStage)
                         mSelectedRepStartStage = st;
@@ -850,7 +1575,7 @@ namespace TH20 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(THOverlay);
+        SINGLETON(THOverlay)
 
     public:
     protected:
@@ -1036,12 +1761,12 @@ namespace TH20 {
         {
             SetTitle("igi");
             SetFade(0.9f, 0.9f);
-            SetPosRel(920.0f / 1280.0f, 500.0f / 960.0f);
-            SetSizeRel(300.0f / 1280.0f, 0.0f);
+            SetPosRel(890.0f / 1280.0f, 450.0f / 960.0f);
+            SetSizeRel(360.0f / 1280.0f, 0.0f);
             SetWndFlag(ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(TH20InGameInfo);
+        SINGLETON(TH20InGameInfo)
 
     public:
         int32_t mMissCount;
@@ -1076,51 +1801,58 @@ namespace TH20 {
         virtual void OnContentUpdate() override
         {
             uintptr_t player_stats = RVA(0x1BA5F0);
+            ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(ImGui::GetStyle().ItemSpacing.x, 2.0f));
 
             int32_t cur_player_type = (*(int32_t*)(player_stats + 0x8));
             int32_t main_stone = (*(int32_t*)(player_stats + 0x1C));
-            int32_t substone_1 = (*(int32_t*)(player_stats + 0x20));
-            int32_t substone_2 = (*(int32_t*)(player_stats + 0x24));
-            int32_t substone_3 = (*(int32_t*)(player_stats + 0x28));
+            int32_t substone_f = (*(int32_t*)(player_stats + 0x20));
+            int32_t substone_uf = (*(int32_t*)(player_stats + 0x24));
+            int32_t substone_s = (*(int32_t*)(player_stats + 0x28));
 
             int32_t diff = *((int32_t*)(RVA(0x1BA7D0)));
             auto diff_pl = std::format("{} ({})", S(IGI_DIFF[diff]), S(IGI_PL_20[cur_player_type]));
             auto diff_pl_sz = ImGui::CalcTextSize(diff_pl.c_str());
-            ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5 - diff_pl_sz.x * 0.5);
+            ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5f - diff_pl_sz.x * 0.5f);
             ImGui::Text(diff_pl.c_str());
 
 
-            ImVec4 r = {1.0f,0.5f,0.5f,1.0f};
-            ImVec4 g = {0.5f,1.0f,0.5f,1.0f};
-            ImVec4 b = {0.5f,0.75f,1.0f,1.0f};
-            ImVec4 y = {1.0f,1.0f,0.3f,1.0f};
-            ImVec4 w = {1.0f,1.0f,1.0f,1.0f};
-            ImVec4 stone_colors[] = { r, r, b, b, y, y, g, g, w };
+            const ImVec4 r = { 1.0f, 0.5f, 0.5f, 1.0f };
+            const ImVec4 g = { 0.5f, 1.0f, 0.5f, 1.0f };
+            const ImVec4 b = { 0.5f, 0.75f, 1.0f, 1.0f };
+            const ImVec4 y = { 1.0f, 1.0f, 0.3f, 1.0f };
+            const ImVec4 w = { 1.0f, 1.0f, 1.0f, 1.0f };
+            const ImVec4 p = { 1.0f, 0.5f, 1.0f, 1.0f };
+            const ImVec4 rk = { 0.9f, 0.2f, 0.2f, 1.0f };
+            const ImVec4 gk = { 0.2f, 0.7f, 0.2f, 1.0f };
+            const ImVec4 bk = { 0.1f, 0.5f, 1.0f, 1.0f };
+            const ImVec4 yk = { 0.8f, 0.8f, 0.2f, 1.0f };
+            const ImVec4 spells_colors[] = { p, r, b, y, g, w };
+            const ImVec4 stones_colors[] = { r, rk, b, bk, y, yk, g, gk, w };
 
             // 異変石の装備
             // メイン異変石
             auto main_stone_pl = S(IGI_PL_20_SUB[main_stone]);
             auto main_stone_pl_sz = ImGui::CalcTextSize(main_stone_pl);
             ImGui::SetCursorPosX(std::max(0.0, ImGui::GetWindowSize().x * 0.5 - main_stone_pl_sz.x * 0.5));
-            ImGui::TextColored(stone_colors[main_stone], main_stone_pl);
+            ImGui::TextColored(stones_colors[main_stone], main_stone_pl);
 
             // 拡散・集中石
-            auto sub_stone1_pl = S(IGI_PL_20_SUB[substone_1]);
-            auto sub_stone2_pl = S(IGI_PL_20_SUB[substone_2]);
-            auto sub_stone1_sz = ImGui::CalcTextSize(sub_stone1_pl);
-            auto sub_stone2_sz = ImGui::CalcTextSize(sub_stone2_pl);
-            float sub_stone_gap = ImGui::CalcTextSize(main_stone_pl).x;
-            float sub_stone_total = sub_stone1_sz.x + sub_stone_gap + sub_stone2_sz.x;
-            ImGui::SetCursorPosX(std::max(0.0, ImGui::GetWindowSize().x * 0.5 - sub_stone_total * 0.5f));
-            ImGui::TextColored(stone_colors[substone_2], sub_stone2_pl);
-            ImGui::SameLine(0.0f, sub_stone_gap);
-            ImGui::TextColored(stone_colors[substone_1], sub_stone1_pl);
+            auto substone_f_pl = S(IGI_PL_20_SUB[substone_f]);
+            auto substone_uf_pl = S(IGI_PL_20_SUB[substone_uf]);
+            auto substone_f_sz = ImGui::CalcTextSize(substone_f_pl);
+            auto substone_uf_sz = ImGui::CalcTextSize(substone_uf_pl);
+            float substone_gap = ImGui::CalcTextSize(main_stone_pl).x;
+            float substone_total = substone_f_sz.x + substone_gap + substone_uf_sz.x;
+            ImGui::SetCursorPosX(std::max(0.0, ImGui::GetWindowSize().x * 0.5 - substone_total * 0.5f));
+            ImGui::TextColored(stones_colors[substone_uf], substone_uf_pl);
+            ImGui::SameLine(0.0f, substone_gap);
+            ImGui::TextColored(stones_colors[substone_f], substone_f_pl);
 
             // 支援石
-            auto sub_stone3_pl = S(IGI_PL_20_SUB[substone_3]);
-            auto sub_stone3_pl_sz = ImGui::CalcTextSize(sub_stone3_pl);
-            ImGui::SetCursorPosX(std::max(0.0, ImGui::GetWindowSize().x * 0.5 - sub_stone3_pl_sz.x * 0.5));
-            ImGui::TextColored(stone_colors[substone_3], sub_stone3_pl);
+            auto substone_s_pl = S(IGI_PL_20_SUB[substone_s]);
+            auto substone_s_pl_sz = ImGui::CalcTextSize(substone_s_pl);
+            ImGui::SetCursorPosX(std::max(0.0, ImGui::GetWindowSize().x * 0.5 - substone_s_pl_sz.x * 0.5));
+            ImGui::TextColored(stones_colors[substone_s], substone_s_pl);
 
 
             ImGui::Columns(2);
@@ -1167,20 +1899,104 @@ namespace TH20 {
             ImGui::NextColumn();
             ImGui::Text(S(THPRAC_INGAMEINFO_20_PYRAMID_LV));
             ImGui::NextColumn();
-            ImGui::TextColored(r, "%d", lvR + 1);
+            ImGui::TextColored(r, "%d", lvR+1);
             ImGui::SameLine(0.0f, 0.0f);
             ImGui::Text("/");
             ImGui::SameLine(0.0f, 0.0f);
-            ImGui::TextColored(b, "%d", lvB + 1);
+            ImGui::TextColored(b, "%d", lvB+1);
             ImGui::SameLine(0.0f, 0.0f);
             ImGui::Text("/");
             ImGui::SameLine(0.0f, 0.0f);
-            ImGui::TextColored(y, "%d", lvY + 1);
+            ImGui::TextColored(y, "%d", lvY+1);
             ImGui::SameLine(0.0f, 0.0f);
             ImGui::Text("/");
             ImGui::SameLine(0.0f, 0.0f);
-            ImGui::TextColored(g, "%d", lvG + 1);
+            ImGui::TextColored(g, "%d", lvG+1);
             ImGui::SameLine(0.0f, 0.0f);
+
+            int32_t stage = GetMemContent(RVA(STAGE_NUM));
+            if ((stage == 4 || stage == 5)
+                && TH20Save::singleton().pyraState.isInPyra) {
+                ImGui::Columns(1);
+                const char* spells_str[6] = {
+                    S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID1),
+                    S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2R),
+                    S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2B),
+                    S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2Y),
+                    S(THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2G),
+                    S(THPRAC_INGAMEINFO_20_PYRAMID_ST5_MID1),
+                };
+                int spid = TH20Save::singleton().pyraState.lastPyraSpellId;
+                int plstone_type = TH20Save::GetPlayerType(cur_player_type, main_stone);
+
+
+                ImVec4 spell_color = spells_colors[spid];
+                if (spid == 5 && g_adv_igi_options.th12_chromatic_ufo) // st5 pyra
+                {
+                    static float t = 0;
+                    t += 0.003f;
+                    if (t >= 1.0f)
+                        t = 0.0f;
+                    float rr, gg, bb;
+                    ImGui::ColorConvertHSVtoRGB(fmodf(t, 1.0f), 0.4f, 1.0f, rr, gg, bb);
+                    spell_color = { rr, gg, bb, 1.0f };
+                }
+                if (TH20Save::singleton().pyraState.isPyraFailed)
+                {
+                    float rr, gg, bb, hh, ss, vv;
+                    ImGui::ColorConvertRGBtoHSV(spell_color.x, spell_color.y, spell_color.z, hh, ss, vv);
+                    ImGui::ColorConvertHSVtoRGB(hh, ss * 0.5f, 0.5f, rr, gg, bb);
+                    spell_color = { rr, gg, bb, 1.0f };
+                }
+
+                ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5f - ImGui::CalcTextSize(spells_str[spid]).x * 0.5f);
+                auto cpos = ImGui::GetCursorScreenPos();
+                ImGui::TextColored(spell_color, spells_str[spid]);
+                auto cpos2 = ImGui::GetCursorScreenPos();
+                if (TH20Save::singleton().pyraState.isPyraFailed) {
+                    auto textsz = ImGui::CalcTextSize(spells_str[spid]);
+                    auto pl = ImGui::GetWindowDrawList();
+                    pl->AddLine({ cpos.x, (cpos.y + cpos2.y) * 0.5f }, { cpos.x + textsz.x, (cpos.y + cpos2.y) * 0.5f }, ImGui::ColorConvertFloat4ToU32(spell_color), 1.0f);
+                }
+                ImGui::Columns(2);
+                if (thPracParam.mode) {
+                    ImGui::TextColored(spell_color, S(THPRAC_INGAMEINFO_20_PASS_CUR));
+                    ImGui::NextColumn();
+                    ImGui::TextColored(spell_color, "%4d/%d(%.1f%%)",
+                        TH20Save::singleton().saveCurrent.ScHistoryPrac[spid][diff][plstone_type][TH20Save::Capture] + TH20Save::singleton().saveCurrent.ScHistoryPrac[spid][diff][plstone_type][TH20Save::Timeout],
+                        TH20Save::singleton().saveCurrent.ScHistoryPrac[spid][diff][plstone_type][TH20Save::Attempt],
+                        ((float)(TH20Save::singleton().saveCurrent.ScHistoryPrac[spid][diff][plstone_type][TH20Save::Capture] + TH20Save::singleton().saveCurrent.ScHistoryPrac[spid][diff][plstone_type][TH20Save::Timeout])
+                            / std::fmaxf(1.0f, ((float)TH20Save::singleton().saveCurrent.ScHistoryPrac[spid][diff][plstone_type][TH20Save::Attempt])) * 100.0f));
+                    ImGui::NextColumn();
+                    ImGui::TextColored(spell_color, S(THPRAC_INGAMEINFO_20_PASS_TOT));
+                    ImGui::NextColumn();
+                    ImGui::TextColored(spell_color, "%4d/%d(%.1f%%)",
+                        TH20Save::singleton().saveTotal.ScHistoryPrac[spid][diff][plstone_type][TH20Save::Capture] + TH20Save::singleton().saveTotal.ScHistoryPrac[spid][diff][plstone_type][TH20Save::Timeout],
+                        TH20Save::singleton().saveTotal.ScHistoryPrac[spid][diff][plstone_type][TH20Save::Attempt],
+                        ((float)(TH20Save::singleton().saveTotal.ScHistoryPrac[spid][diff][plstone_type][TH20Save::Capture] + TH20Save::singleton().saveTotal.ScHistoryPrac[spid][diff][plstone_type][TH20Save::Timeout])
+                            / std::fmaxf(1.0f, ((float)TH20Save::singleton().saveTotal.ScHistoryPrac[spid][diff][plstone_type][TH20Save::Attempt])) * 100.0f));
+                }
+                else
+                {
+                    ImGui::TextColored(spell_color, S(THPRAC_INGAMEINFO_20_PASS_CUR));
+                    ImGui::NextColumn();
+                    ImGui::TextColored(spell_color, "%4d/%d(%.1f%%)",
+                        TH20Save::singleton().saveCurrent.ScHistory[spid][diff][plstone_type][TH20Save::Capture] + TH20Save::singleton().saveCurrent.ScHistory[spid][diff][plstone_type][TH20Save::Timeout],
+                        TH20Save::singleton().saveCurrent.ScHistory[spid][diff][plstone_type][TH20Save::Attempt],
+                        ((float)(TH20Save::singleton().saveCurrent.ScHistory[spid][diff][plstone_type][TH20Save::Capture] + TH20Save::singleton().saveCurrent.ScHistory[spid][diff][plstone_type][TH20Save::Timeout])
+                            / std::fmaxf(1.0f, ((float)TH20Save::singleton().saveCurrent.ScHistory[spid][diff][plstone_type][TH20Save::Attempt])) * 100.0f));
+                    ImGui::NextColumn();
+                    ImGui::TextColored(spell_color, S(THPRAC_INGAMEINFO_20_PASS_TOT));
+                    ImGui::NextColumn();
+                    ImGui::TextColored(spell_color, "%4d/%d(%.1f%%)",
+                        TH20Save::singleton().saveTotal.ScHistory[spid][diff][plstone_type][TH20Save::Capture] + TH20Save::singleton().saveTotal.ScHistory[spid][diff][plstone_type][TH20Save::Timeout],
+                        TH20Save::singleton().saveTotal.ScHistory[spid][diff][plstone_type][TH20Save::Attempt],
+                        ((float)(TH20Save::singleton().saveTotal.ScHistory[spid][diff][plstone_type][TH20Save::Capture] + TH20Save::singleton().saveTotal.ScHistory[spid][diff][plstone_type][TH20Save::Timeout])
+                            / std::fmaxf(1.0f, ((float)TH20Save::singleton().saveTotal.ScHistory[spid][diff][plstone_type][TH20Save::Attempt])) * 100.0f));
+                }
+            }
+
+            ImGui::PopStyleVar();
         }
 
         virtual void OnPreUpdate() override
@@ -1190,8 +2006,8 @@ namespace TH20 {
             } else {
             }
             if (*(THOverlay::singleton().mInGameInfo) && *(DWORD*)(RVA(0x1ba56c))) {
-                SetPosRel(920.0f / 1280.0f, 500.0f / 960.0f);
-                SetSizeRel(300.0f / 1280.0f, 0.0f);
+                SetPosRel(890.0f / 1280.0f, 450.0f / 960.0f);
+                SetSizeRel(360.0f / 1280.0f, 0.0f);
                 Open();
             } else {
                 Close();
@@ -1202,7 +2018,7 @@ namespace TH20 {
     };
 
     class THAdvOptWnd : public Gui::PPGuiWnd {
-        SINGLETON(THAdvOptWnd);
+        SINGLETON(THAdvOptWnd)
 
     public:
         bool forceBossMoveDown = false;
@@ -1524,6 +2340,17 @@ namespace TH20 {
                 ImGui::SetNextItemWidth(180.0f);
                 EndOptGroup();
             }
+            {
+                ImGui::SetNextWindowCollapsed(false);
+                if (ImGui::CollapsingHeader(S(THPRAC_INGAMEINFO_06_SHOWDETAIL_COLLAPSE))) {
+                    TH20Save::singleton().ShowDetail();
+                    ImGui::NewLine();
+                    ImGui::Separator();
+                    ImGui::Separator();
+                    ImGui::Separator();
+                    ImGui::NewLine();
+                }
+            }
              if (BeginOptGroup<TH_REPLAY_FIX>()) {
 
                 // Main story replay fixes
@@ -1562,7 +2389,7 @@ namespace TH20 {
                         if (advFixTimerOffsets) {
                             ImGui::Columns(2, 0, false);
                             for (size_t s = 0; s < totalTransitions; s++) {
-                                ImGui::Text(S(TH20_RPYFIX_STAGE_NUM), s + 2);
+                                ImGui::Text(S(TH_STAGE_NUM), s + 2);
                                 ImGui::SameLine();
 
                                 bool disabled = ((int32_t)s < stage);
@@ -1611,14 +2438,11 @@ namespace TH20 {
                             }
                         }
 
-                        std::string buttonLabelStr; // storage for formatted string
-                        const char* buttonLabel = S(TH_REPFIX_SAVE);
+                        char buttonLabel[64];
+                        snprintf(buttonLabel, sizeof(buttonLabel), "%s", S(TH_REPFIX_SAVE));
 
-                        if (remainingTransitions && startedOnSt1) {
-                            buttonLabelStr = std::vformat(S(TH20_MAINRPYFIX_SAVE_PROGRESS),
-                                std::make_format_args(stage, totalTransitions));
-                            buttonLabel = buttonLabelStr.c_str();
-                        }
+                       if (remainingTransitions && startedOnSt1)
+                            snprintf(buttonLabel, sizeof(buttonLabel), S(TH_REPFIX_SAVE_PROGRESS), stage, totalTransitions);
 
                         ImGui::BeginDisabled(mainRpyFixDisableSave);
                         bool saveClicked = ImGui::Button(buttonLabel);
@@ -1734,7 +2558,7 @@ namespace TH20 {
                 ImGui::SameLine();
                 HelpMarker(S(TH20_EXPIRED_STONE_FIX_DESC));
                 ImGui::SameLine();
-                ImGui::Checkbox(S(TH20_EXPSTONEFIX_SHOW_TOGGLE), &showExpiredPyramidFixTool);
+                ImGui::Checkbox(S(TH_TOOL_SHOW_TOGGLE), &showExpiredPyramidFixTool);
 
                 if (showExpiredPyramidFixTool) {
                     if (THGuiRep::singleton().mRepSelected) {
@@ -1754,7 +2578,7 @@ namespace TH20 {
                             for (size_t s = THGuiRep::singleton().mSelectedRepStartStage;
                                 s <= THGuiRep::singleton().mSelectedRepEndStage; ++s) {
                                 ImGui::EndDisabled(disableChangingExpStoneData);
-                                ImGui::Text(S(s == 7 ? TH20_RPYFIX_EXTRA_STAGE : TH20_RPYFIX_STAGE_NUM), s);
+                                ImGui::Text(S(s == 7 ? TH_EXTRA_STAGE : TH_STAGE_NUM), s);
                                 ImGui::BeginDisabled(disableChangingExpStoneData);
                                 ImGui::SameLine();
 
@@ -1846,7 +2670,7 @@ namespace TH20 {
 
             AboutOpt(S(TH20_CREDITS));
             ImGui::EndChild();
-            if(wndFocus) ImGui::SetWindowFocus();
+            // if(wndFocus) ImGui::SetWindowFocus();
         }
 
         adv_opt_ctx mOptCtx;
@@ -2288,8 +3112,8 @@ namespace TH20 {
         case THPrac::TH20::TH20_ST1_BOSS3: {
             constexpr unsigned int st1bsNonSubCallOrd = 0x6dc + 0x18;
             constexpr unsigned int st1bsNon2InvulnCallVal = 0x133c + 0x10;
-            constexpr unsigned int st1bsNon2BossItemCallSomething = 0x1428 + 0x4; // 32th cringequit on me when
-            constexpr unsigned int st1bsNon2PlaySoundSomething = 0x1554 + 0x4; // I asked what these were so :shrug:
+            constexpr unsigned int st1bsNon2BossItemCallOp = 0x1428 + 0x4;
+            constexpr unsigned int st1bsNon2PlaySoundOp = 0x1554 + 0x4;
             constexpr unsigned int st1bsNon2PostLifeMarker = 0x16c0;
             constexpr unsigned int st1bsNon2PostWait = 0x17ac; // 0x1608 previously
 
@@ -2298,8 +3122,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st1bsNonSubCallOrd, (int8_t)0x32 }; // Set nonspell ID in sub call to '2'
             ecl << pair { st1bsNon2InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st1bsNon2BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st1bsNon2PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st1bsNon2BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st1bsNon2PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ECLJump(ecl, st1bsNon2PostLifeMarker, st1bsNon2PostWait, 0); // Skip wait
             break;
         }
@@ -2345,8 +3169,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST2_BOSS3: {
             constexpr unsigned int st2bsNon2InvulnCallVal = 0x12a8 + 0x10;
-            constexpr unsigned int st2bsNon2BossItemCallSomething = 0x1394 + 0x4;
-            constexpr unsigned int st2bsNon2PlaySoundSomething = 0x14c0 + 0x4;
+            constexpr unsigned int st2bsNon2BossItemCallOp = 0x1394 + 0x4;
+            constexpr unsigned int st2bsNon2PlaySoundOp = 0x14c0 + 0x4;
             constexpr unsigned int st2bsNon2PostLifeMarker = 0x162c;
             constexpr unsigned int st2bsNon2PostWait = 0x1718;
 
@@ -2355,8 +3179,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st2bsNonSubCallOrd, (int8_t)0x32 }; // Set nonspell ID in sub call to '2'
             ecl << pair { st2bsNon2InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st2bsNon2BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st2bsNon2PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st2bsNon2BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st2bsNon2PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ECLJump(ecl, st2bsNon2PostLifeMarker, st2bsNon2PostWait, 0); // Skip wait
             break;
         }
@@ -2397,8 +3221,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST3_BOSS3: {
             constexpr unsigned int st3bsNon2InvulnCallVal = 0x127c + 0x10;
-            constexpr unsigned int st3bsNon2BossItemCallSomething = 0x1368 + 0x4;
-            constexpr unsigned int st3bsNon2PlaySoundSomething = 0x1494 + 0x4;
+            constexpr unsigned int st3bsNon2BossItemCallOp = 0x1368 + 0x4;
+            constexpr unsigned int st3bsNon2PlaySoundOp = 0x1494 + 0x4;
             constexpr unsigned int st3bsNon2PostLifeMarker = 0x1600;
             constexpr unsigned int st3bsNon2PostWait = 0x172c;
 
@@ -2407,8 +3231,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st3bsNonSubCallOrd, (int8_t)0x32 }; // Set nonspell ID in sub call to '2'
             ecl << pair { st3bsNon2InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st3bsNon2BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st3bsNon2PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st3bsNon2BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st3bsNon2PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ECLJump(ecl, st3bsNon2PostLifeMarker, st3bsNon2PostWait, 0); // Skip wait
             break;
         }
@@ -2423,8 +3247,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST3_BOSS5: {
             constexpr unsigned int st3bsNon3InvulnCallVal = 0x1f28 + 0x10;
-            constexpr unsigned int st3bsNon3BossItemCallSomething = 0x2014 + 0x4;
-            constexpr unsigned int st3bsNon3PlaySoundSomething = 0x2140 + 0x4;
+            constexpr unsigned int st3bsNon3BossItemCallOp = 0x2014 + 0x4;
+            constexpr unsigned int st3bsNon3PlaySoundOp = 0x2140 + 0x4;
             constexpr unsigned int st3bsNon3PostLifeCount = 0x22c0; // is this right? life count = 0? zun...
             constexpr unsigned int st3bsNon3PostWait = 0x23ec;
 
@@ -2433,8 +3257,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st3bsNonSubCallOrd, (int8_t)0x33 }; // Set nonspell ID in sub call to '3'
             ecl << pair { st3bsNon3InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st3bsNon3BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st3bsNon3PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st3bsNon3BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st3bsNon3PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ECLJump(ecl, st3bsNon3PostLifeCount, st3bsNon3PostWait, 0); // Skip wait
             break;
         }
@@ -2467,8 +3291,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST4_MID2: {
             constexpr unsigned int st4mbsNonSubCallOrd = 0x4a4 + 0x19;
-            constexpr unsigned int st4mbsNon2BossItemCallSomething = 0xd40 + 0x4;
-            constexpr unsigned int st4mbsNon2PlaySoundSomething = 0xe6c + 0x4;
+            constexpr unsigned int st4mbsNon2BossItemCallOp = 0xd40 + 0x4;
+            constexpr unsigned int st4mbsNon2PlaySoundOp = 0xe6c + 0x4;
             constexpr unsigned int st4mbsNon2PreWait = 0x1028;
             constexpr unsigned int st4mbsNon2PostWait = 0x103c;
             constexpr unsigned int st4mbsNon2InvincTime = 0xc54 + 0x10;
@@ -2479,8 +3303,8 @@ namespace TH20 {
             ecl.SetFile(3);
             ECLJump(ecl, st4mbsPreChargeAnim, st4mbsPostChargeAnim, 0);
             ecl << pair { st4mbsNonSubCallOrd, (int8_t)0x32 }; // Set nonspell ID in sub call to '2'
-            ecl << pair { st4mbsNon2BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st4mbsNon2PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st4mbsNon2BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st4mbsNon2PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ecl << pair { st4mbsNon2BulletClear, (int16_t)0 }; // Disable bullet clear
             ECLJump(ecl, st4mbsNon2PreWait, st4mbsNon2PostWait, 0); // Skip wait (100f)
             ecl << pair { st4mbsNon2InvincTime, (int16_t)20 }; // Reduce invincible timer by time skipped (120f->20f)
@@ -2507,8 +3331,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST4_BOSS3: {
             constexpr unsigned int st4bsNon2InvulnCallVal = 0x1540 + 0x10;
-            constexpr unsigned int st4bsNon2BossItemCallSomething = 0x162c + 0x4;
-            constexpr unsigned int st4bsNon2PlaySoundSomething = 0x1758 + 0x4;
+            constexpr unsigned int st4bsNon2BossItemCallOp = 0x162c + 0x4;
+            constexpr unsigned int st4bsNon2PlaySoundOp = 0x1758 + 0x4;
             constexpr unsigned int st4bsNon2PostLifeMarker = 0x18c4;
             constexpr unsigned int st4bsNon2PostWait1 = 0x1970;
             constexpr unsigned int st4bsNon2PostInit = 0x19e8;
@@ -2519,8 +3343,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st4bsNonSubCallOrd, (int8_t)0x32 }; // Set nonspell ID in sub call to '2'
             ecl << pair { st4bsNon2InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st4bsNon2BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st4bsNon2PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st4bsNon2BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st4bsNon2PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ECLJump(ecl, st4bsNon2PostLifeMarker, st4bsNon2PostWait1, 0); // Skip wait 1
             ECLJump(ecl, st4bsNon2PostInit, st4bsNon2PostWait2, 0); // Skip wait 2
             break;
@@ -2535,8 +3359,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST4_BOSS5: {
             constexpr unsigned int st4bsNon3InvulnCallVal = 0x2584 + 0x10;
-            constexpr unsigned int st4bsNon3BossItemCallSomething = 0x2670 + 0x4;
-            constexpr unsigned int st4bsNon3PlaySoundSomething = 0x279c + 0x4;
+            constexpr unsigned int st4bsNon3BossItemCallOp = 0x2670 + 0x4;
+            constexpr unsigned int st4bsNon3PlaySoundOp = 0x279c + 0x4;
             constexpr unsigned int st4bsNon3PostLifeCount = 0x291c;
             constexpr unsigned int st4bsNon3PostWait1 = 0x29c8;
             constexpr unsigned int st4bsNon3PostInit = 0x2a40;
@@ -2547,8 +3371,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st4bsNonSubCallOrd, (int8_t)0x33 }; // Set nonspell ID in sub call to '3'
             ecl << pair { st4bsNon3InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st4bsNon3BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st4bsNon3PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st4bsNon3BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st4bsNon3PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ECLJump(ecl, st4bsNon3PostLifeCount, st4bsNon3PostWait1, 0); // Skip wait 1
             ECLJump(ecl, st4bsNon3PostInit, st4bsNon3PostWait2, 0); // Skip wait 2
             break;
@@ -2605,8 +3429,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST5_BOSS3: {
             constexpr unsigned int st5bsNon2InvulnCallVal = 0x1470 + 0x10;
-            constexpr unsigned int st5bsNon2BossItemCallSomething = 0x155c + 0x4;
-            constexpr unsigned int st5bsNon2PlaySoundSomething = 0x1688 + 0x4;
+            constexpr unsigned int st5bsNon2BossItemCallOp = 0x155c + 0x4;
+            constexpr unsigned int st5bsNon2PlaySoundOp = 0x1688 + 0x4;
             constexpr unsigned int st5bsNon2PostLifeMarker = 0x17f4;
             constexpr unsigned int st5bsNon2PostWait = 0x18a0;
 
@@ -2615,8 +3439,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st5bsNonSubCallOrd, (int8_t)0x32 }; // Set nonspell ID in sub call to '2'
             ecl << pair { st5bsNon2InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st5bsNon2BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st5bsNon2PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st5bsNon2BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st5bsNon2PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ECLJump(ecl, st5bsNon2PostLifeMarker, st5bsNon2PostWait, 0); // Skip wait
             break;
         }
@@ -2631,8 +3455,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST5_BOSS5: {
             constexpr unsigned int st5bsNon3InvulnCallVal = 0x2498 + 0x10;
-            constexpr unsigned int st5bsNon3BossItemCallSomething = 0x2584 + 0x4;
-            constexpr unsigned int st5bsNon3PlaySoundSomething = 0x26b0 + 0x4;
+            constexpr unsigned int st5bsNon3BossItemCallOp = 0x2584 + 0x4;
+            constexpr unsigned int st5bsNon3PlaySoundOp = 0x26b0 + 0x4;
             constexpr unsigned int st5bsNon3PostLifeCount = 0x2830;
             constexpr unsigned int st5bsNon3PostWait = 0x28c8;
 
@@ -2641,8 +3465,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st5bsNonSubCallOrd, (int8_t)0x33 }; // Set nonspell ID in sub call to '3'
             ecl << pair { st5bsNon3InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st5bsNon3BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st5bsNon3PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st5bsNon3BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st5bsNon3PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ECLJump(ecl, st5bsNon3PostLifeCount, st5bsNon3PostWait, 0); // Skip wait
             break;
         }
@@ -2682,8 +3506,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST6_BOSS3: {
             constexpr unsigned int st6bsNon2InvulnCallVal = 0x1448 + 0x10;
-            constexpr unsigned int st6bsNon2BossItemCallSomething = 0x1534 + 0x4;
-            constexpr unsigned int st6bsNon2PlaySoundSomething = 0x1660 + 0x4;
+            constexpr unsigned int st6bsNon2BossItemCallOp = 0x1534 + 0x4;
+            constexpr unsigned int st6bsNon2PlaySoundOp = 0x1660 + 0x4;
             constexpr unsigned int st6bsNon2PostProtectRange = 0x17e0;
             constexpr unsigned int st6bsNon2PostWait = 0x188c;
 
@@ -2692,8 +3516,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st6bsNonSubCallOrd, (int8_t)0x32 }; // Set nonspell ID in sub call to '2'
             ecl << pair { st6bsNon2InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st6bsNon2BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st6bsNon2PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st6bsNon2BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st6bsNon2PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ecl << pair { st6bsSetYPos, (float)128.0f }; // Fix boss starting too high
             ECLJump(ecl, st6bsNon2PostProtectRange, st6bsNon2PostWait, 0); // Skip wait
             break;
@@ -2708,8 +3532,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST6_BOSS5: {
             constexpr unsigned int st6bsNon3InvulnCallVal = 0x1ec8 + 0x10;
-            constexpr unsigned int st6bsNon3BossItemCallSomething = 0x21f8 + 0x4;
-            constexpr unsigned int st6bsNon3PlaySoundSomething = 0x1660 + 0x4;
+            constexpr unsigned int st6bsNon3BossItemCallOp = 0x21f8 + 0x4;
+            constexpr unsigned int st6bsNon3PlaySoundOp = 0x1660 + 0x4;
             constexpr unsigned int st6bsNon3PostLifeCount = 0x2300;
             constexpr unsigned int st6bsNon3PostWait = 0x2398;
 
@@ -2720,8 +3544,8 @@ namespace TH20 {
             ECLJump(ecl, st6PostMaple + stdInterruptSize, st6BossCreateCall, 60);
             ecl.SetFile(2);
             ecl << pair { st6bsNonSubCallOrd, (int8_t)0x33 }; // Set nonspell ID in sub call to '3'
-            ecl << pair { st6bsNon3BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st6bsNon3PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st6bsNon3BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st6bsNon3PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ecl << pair { st6bsSetYPos, (float)128.0f }; // Fix boss starting too high
             ECLJump(ecl, st6bsNon3PostLifeCount, st6bsNon3PostWait, 0); // Skip wait
             if (!thPracParam.dlg) {
@@ -2741,8 +3565,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST6_BOSS7: {
             constexpr unsigned int st6bsNon4InvulnCallVal = 0x2b78 + 0x10;
-            constexpr unsigned int st6bsNon4BossItemCallSomething = 0x2c64 + 0x4;
-            constexpr unsigned int st6bsNon4PlaySoundSomething = 0x2d90 + 0x4;
+            constexpr unsigned int st6bsNon4BossItemCallOp = 0x2c64 + 0x4;
+            constexpr unsigned int st6bsNon4PlaySoundOp = 0x2d90 + 0x4;
             constexpr unsigned int st6bsNon4PostProtectRange = 0x2f10;
             constexpr unsigned int st6bsNon4PostWait = 0x2fbc;
 
@@ -2751,8 +3575,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st6bsNonSubCallOrd, (int8_t)0x34 }; // Set nonspell ID in sub call to '4'
             ecl << pair { st6bsNon4InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st6bsNon4BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st6bsNon4PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st6bsNon4BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st6bsNon4PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ecl << pair { st6bsSetYPos, (float)144.0f }; // Fix boss starting too high
             ECLJump(ecl, st6bsNon4PostProtectRange, st6bsNon4PostWait, 0); // Skip wait
             break;
@@ -2768,8 +3592,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST6_BOSS9: {
             constexpr unsigned int st6bsNon5InvulnCallVal = 0x38a0 + 0x10;
-            constexpr unsigned int st6bsNon5BossItemCallSomething = 0x39a4 + 0x4;
-            constexpr unsigned int st6bsNon5PlaySoundSomething = 0x3ad0 + 0x4;
+            constexpr unsigned int st6bsNon5BossItemCallOp = 0x39a4 + 0x4;
+            constexpr unsigned int st6bsNon5PlaySoundOp = 0x3ad0 + 0x4;
             constexpr unsigned int st6bsNon5PostLifeMarker = 0x3cf8;
             constexpr unsigned int st6bsNon5PostWait = 0x3db8;
 
@@ -2780,8 +3604,8 @@ namespace TH20 {
             ECLJump(ecl, st6PostMaple + stdInterruptSize, st6BossCreateCall, 60);
             ecl.SetFile(2);
             ecl << pair { st6bsNonSubCallOrd, (int8_t)0x35 }; // Set nonspell ID in sub call to '5'
-            ecl << pair { st6bsNon5BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st6bsNon5PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st6bsNon5BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st6bsNon5PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ecl << pair { st6bsSetYPos, (float)192.0f }; // Fix boss starting too high
             ECLJump(ecl, st6bsNon5PostLifeMarker, st6bsNon5PostWait, 0); // Skip wait
             if (!thPracParam.dlg) {
@@ -2882,8 +3706,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST7_BOSS3: {
             constexpr unsigned int st7bsNon2InvulnCallVal = 0x1ba4 + 0x10;
-            constexpr unsigned int st7bsNon2BossItemCallSomething = 0x1c88 + 0x4;
-            constexpr unsigned int st7bsNon2PlaySoundSomething = 0x1db4 + 0x4;
+            constexpr unsigned int st7bsNon2BossItemCallOp = 0x1c88 + 0x4;
+            constexpr unsigned int st7bsNon2PlaySoundOp = 0x1db4 + 0x4;
             constexpr unsigned int st7bsNon2PostProtectRange = 0x1f74;
             constexpr unsigned int st7bsNon2PostWait = 0x2020;
 
@@ -2892,8 +3716,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st7bsNonSubCallOrd, (int8_t)0x32 }; // Set nonspell ID in sub call to '2'
             ecl << pair { st7bsNon2InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st7bsNon2BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st7bsNon2PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st7bsNon2BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st7bsNon2PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ecl << pair { st7bsSetYPos, (float)128.0f }; // Avoid boss move
             ECLJump(ecl, st7bsNon2PostProtectRange, st7bsNon2PostWait, 0); // Skip wait
             break;
@@ -2908,8 +3732,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST7_BOSS5: {
             constexpr unsigned int st7bsNon3InvulnCallVal = 0x2618 + 0x10;
-            constexpr unsigned int st7bsNon3BossItemCallSomething = 0x26fc + 0x4;
-            constexpr unsigned int st7bsNon3PlaySoundSomething = 0x2828 + 0x4;
+            constexpr unsigned int st7bsNon3BossItemCallOp = 0x26fc + 0x4;
+            constexpr unsigned int st7bsNon3PlaySoundOp = 0x2828 + 0x4;
             constexpr unsigned int st7bsNon3PostProtectRange = 0x29e8;
             constexpr unsigned int st7bsNon3PostWait = 0x2a94;
 
@@ -2918,8 +3742,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st7bsNonSubCallOrd, (int8_t)0x33 }; // Set nonspell ID in sub call to '3'
             ecl << pair { st7bsNon3InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st7bsNon3BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st7bsNon3PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st7bsNon3BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st7bsNon3PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ecl << pair { st7bsSetYPos, (float)128.0f }; // Avoid boss move
             ECLJump(ecl, st7bsNon3PostProtectRange, st7bsNon3PostWait, 0); // Skip wait
             break;
@@ -2934,8 +3758,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST7_BOSS7: {
             constexpr unsigned int st7bsNon4InvulnCallVal = 0x308c + 0x10;
-            constexpr unsigned int st7bsNon4BossItemCallSomething = 0x3170 + 0x4;
-            constexpr unsigned int st7bsNon4PlaySoundSomething = 0x329c + 0x4;
+            constexpr unsigned int st7bsNon4BossItemCallOp = 0x3170 + 0x4;
+            constexpr unsigned int st7bsNon4PlaySoundOp = 0x329c + 0x4;
             constexpr unsigned int st7bsNon4PostProtectRange = 0x345c;
             constexpr unsigned int st7bsNon4PostWait = 0x3508;
 
@@ -2944,8 +3768,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st7bsNonSubCallOrd, (int8_t)0x34 }; // Set nonspell ID in sub call to '4'
             ecl << pair { st7bsNon4InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st7bsNon4BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st7bsNon4PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st7bsNon4BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st7bsNon4PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ecl << pair { st7bsSetYPos, (float)128.0f }; // Avoid boss move
             ECLJump(ecl, st7bsNon4PostProtectRange, st7bsNon4PostWait, 0); // Skip wait
             break;
@@ -2960,8 +3784,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST7_BOSS9: {
             constexpr unsigned int st7bsNon5InvulnCallVal = 0x3b00 + 0x10;
-            constexpr unsigned int st7bsNon5BossItemCallSomething = 0x3be4 + 0x4;
-            constexpr unsigned int st7bsNon5PlaySoundSomething = 0x3d10 + 0x4;
+            constexpr unsigned int st7bsNon5BossItemCallOp = 0x3be4 + 0x4;
+            constexpr unsigned int st7bsNon5PlaySoundOp = 0x3d10 + 0x4;
             constexpr unsigned int st7bsNon5PostProtectRange = 0x3e90;
             constexpr unsigned int st7bsNon5PostWait = 0x3f7c;
 
@@ -2970,8 +3794,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st7bsNonSubCallOrd, (int8_t)0x35 }; // Set nonspell ID in sub call to '5'
             ecl << pair { st7bsNon5InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st7bsNon5BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st7bsNon5PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st7bsNon5BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st7bsNon5PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ecl << pair { st7bsSetYPos, (float)128.0f }; // Avoid boss move
             ECLJump(ecl, st7bsNon5PostProtectRange, st7bsNon5PostWait, 0); // Skip wait
             break;
@@ -2987,8 +3811,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST7_BOSS11: {
             constexpr unsigned int st7bsNon6InvulnCallVal = 0x4574 + 0x10;
-            constexpr unsigned int st7bsNon6BossItemCallSomething = 0x4658 + 0x4;
-            constexpr unsigned int st7bsNon6PlaySoundSomething = 0x4784 + 0x4;
+            constexpr unsigned int st7bsNon6BossItemCallOp = 0x4658 + 0x4;
+            constexpr unsigned int st7bsNon6PlaySoundOp = 0x4784 + 0x4;
             constexpr unsigned int st7bsNon6PostProtectRange = 0x4944;
             constexpr unsigned int st7bsNon6PostWait = 0x49f0;
 
@@ -2997,8 +3821,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st7bsNonSubCallOrd, (int8_t)0x36 }; // Set nonspell ID in sub call to '6'
             ecl << pair { st7bsNon6InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st7bsNon6BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st7bsNon6PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st7bsNon6BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st7bsNon6PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ecl << pair { st7bsSetYPos, (float)128.0f }; // Avoid boss move
             ECLJump(ecl, st7bsNon6PostProtectRange, st7bsNon6PostWait, 0); // Skip wait
             break;
@@ -3014,8 +3838,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST7_BOSS13: {
             constexpr unsigned int st7bsNon7InvulnCallVal = 0x4fe8 + 0x10;
-            constexpr unsigned int st7bsNon7BossItemCallSomething = 0x50cc + 0x4;
-            constexpr unsigned int st7bsNon7PlaySoundSomething = 0x51f8 + 0x4;
+            constexpr unsigned int st7bsNon7BossItemCallOp = 0x50cc + 0x4;
+            constexpr unsigned int st7bsNon7PlaySoundOp = 0x51f8 + 0x4;
             constexpr unsigned int st7bsNon7PostProtectRange = 0x53b8;
             constexpr unsigned int st7bsNon7PostWait = 0x5464;
 
@@ -3024,8 +3848,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st7bsNonSubCallOrd, (int8_t)0x37 }; // Set nonspell ID in sub call to '7'
             ecl << pair { st7bsNon7InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st7bsNon7BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st7bsNon7PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st7bsNon7BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st7bsNon7PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ecl << pair { st7bsSetYPos, (float)128.0f }; // Avoid boss move
             ECLJump(ecl, st7bsNon7PostProtectRange, st7bsNon7PostWait, 0); // Skip wait
             break;
@@ -3041,8 +3865,8 @@ namespace TH20 {
         }
         case THPrac::TH20::TH20_ST7_BOSS15: {
             constexpr unsigned int st7bsNon8InvulnCallVal = 0x5a5c + 0x10;
-            constexpr unsigned int st7bsNon8BossItemCallSomething = 0x5b40 + 0x4;
-            constexpr unsigned int st7bsNon8PlaySoundSomething = 0x5c6c + 0x4;
+            constexpr unsigned int st7bsNon8BossItemCallOp = 0x5b40 + 0x4;
+            constexpr unsigned int st7bsNon8PlaySoundOp = 0x5c6c + 0x4;
             constexpr unsigned int st7bsNon8PostProtectRange = 0x5e2c;
             constexpr unsigned int st7bsNon8PostWait = 0x5ef8;
 
@@ -3051,8 +3875,8 @@ namespace TH20 {
             ecl.SetFile(2);
             ecl << pair { st7bsNonSubCallOrd, (int8_t)0x38 }; // Set nonspell ID in sub call to '8'
             ecl << pair { st7bsNon8InvulnCallVal, (int16_t)0 }; // Disable Invincible
-            ecl << pair { st7bsNon8BossItemCallSomething, (int16_t)0 }; // Disable item drops
-            ecl << pair { st7bsNon8PlaySoundSomething, (int16_t)0 }; // Disable sound effect
+            ecl << pair { st7bsNon8BossItemCallOp, (int16_t)0 }; // Disable item drops
+            ecl << pair { st7bsNon8PlaySoundOp, (int16_t)0 }; // Disable sound effect
             ecl << pair { st7bsSetYPos, (float)128.0f }; // Avoid boss move
             ECLJump(ecl, st7bsNon8PostProtectRange, st7bsNon8PostWait, 0); // Skip wait
             break;
@@ -3173,7 +3997,7 @@ namespace TH20 {
         { .addr = 0xD4237, .data = PatchCode("e800000000") },
     };
 
-    static void RenderHits()
+    void RenderHits()
     {
         auto RotateVec = [](ImVec2 pt, ImVec2 mid, ImVec2 angle) -> ImVec2 {
             ImVec2 dif { pt.x - mid.x, pt.y - mid.y };
@@ -3252,6 +4076,7 @@ namespace TH20 {
             if (life_next >= *(int32_t*)(RVA(0x1BA6A8)))// life increased
                 return;
             TH20InGameInfo::singleton().mMissCount++;
+            TH20Save::singleton().pyraState.isPyraFailed = true;
             FastRetry(thPracParam.mode);
 
             if ((*(THOverlay::singleton().mInfLives))) {
@@ -3360,6 +4185,7 @@ namespace TH20 {
     })
     EHOOK_DY(th20_param_reset, 0x129EA6, 3, {
         thPracParam.Reset();
+        ResetFixToolsSharedState();
     })
     EHOOK_DY(th20_prac_menu_1, 0x1294A3, 3, {
         THGuiPrac::singleton().State(1);
@@ -3417,9 +4243,7 @@ namespace TH20 {
             }
             // y1 lingering hitbox desync fix
             // if there are active sources, delete them (they won't sync due to inconsistent stage loading time)
-            bool isTransition = false;
-
-             while (auto activeSrc = GetMemContent<PlayerDamageSource*>(dmgSrcManager + 0xc414 + 0x4))
+            while (auto activeSrc = GetMemContent<PlayerDamageSource*>(dmgSrcManager + 0xc414 + 0x4))
                 asm_call_rel<DELETE_DMG_SRC_FUNC, Fastcall>(activeSrc);
 
             const auto& stageSrcs = thPracParam.rogueDmgSrcs[stage];
@@ -3450,7 +4274,7 @@ namespace TH20 {
                 asm_call_rel<ADD_TIMER_FUNC, Thiscall>(reimuR2Timer, timer_offset);
             thPracParam.reimuR2Timer[stage] = reimuR2Timer->cur;
 
-               // passive summon gauge meter desync fix
+            // passive summon gauge meter desync fix
             thPracParam.passiveMeterTimer[stage] = GetMemContent<int32_t>(RVA(ENM_STONE_MGR_PTR), 0x28 + 4);
 
             // y2 option desync fix
@@ -3526,6 +4350,10 @@ namespace TH20 {
             sReplayPath = nullptr;
         }
     })
+    EHOOK_DY(th20_fix_rep_restart_stage, 0xdd8e3, 6, {
+        if (THGuiRep::singleton().mRepStatus)
+            pCtx->Eip = RVA(0xdd8e9);
+    })
     EHOOK_DY(th20_rep_get_path, 0x1098E1, 5, {
         sReplayPath = _strdup((char*)pCtx->Edx);
     })
@@ -3584,14 +4412,17 @@ namespace TH20 {
             TH20InGameInfo::singleton().mHyperBreakCount = 0;
             TH20InGameInfo::singleton().mHyperCount = 0;
             TH20InGameInfo::singleton().mPyramidShotDownCount = 0;
+            TH20Save::singleton().pyraState.Reset();
         })
     EHOOK_DY(th20_bomb_dec, 0xe1710, 1, // bomb dec
         {
             TH20InGameInfo::singleton().mBombCount++;
+            TH20Save::singleton().pyraState.isPyraFailed = true;
         })
     EHOOK_DY(th20_hyper_break, 0x132c10, 3,
         {
             TH20InGameInfo::singleton().mHyperBreakCount++;
+            TH20Save::singleton().pyraState.isPyraFailed = true;
         })
     EHOOK_DY(th20_hyper, 0x134d06, 3,
         {
@@ -3600,6 +4431,109 @@ namespace TH20 {
     EHOOK_DY(th20_stone, 0x112077, 2,
         {
             TH20InGameInfo::singleton().mPyramidShotDownCount++;
+        })
+
+    EHOOK_DY(th20_ins_534, 0x95780, 6,
+        {
+            int32_t stage = GetMemContent(RVA(STAGE_NUM));
+            if ((stage == 4 || stage == 5) &&(!THGuiRep::singleton().mRepStatus))
+            {
+                DWORD p_enmA = *(DWORD*)(pCtx->Ebp - 0x3F4);
+
+                int32_t p_ins = *(int32_t*)(pCtx->Ebp - 0x3F8);
+                std::pair<int32_t*, bool> ecl_addrs_s = GetMemAddr_s<int32_t*>(RVA(0x1BA570), 0x104, 0xc);
+                if (!ecl_addrs_s.second)
+                    return;
+                int32_t* ecl_addrs = ecl_addrs_s.first;
+
+                uintptr_t player_stats = RVA(0x1BA5F0);
+                int32_t main_stone = (*(int32_t*)(player_stats + 0x1C));
+
+                TH20Save::TH20PyramidType spellid = TH20Save::TH20PyramidType::NOT_INITED;
+                bool is_pyra = false;
+                if (stage == 4 && p_ins - ecl_addrs[3] == 0x5C0)
+                {
+                    spellid = TH20Save::GetPyraSpellId(stage, true, main_stone);
+                    is_pyra = true;
+                } else if (stage == 4 && p_ins - ecl_addrs[3] == 0x1014) {
+                    spellid = TH20Save::GetPyraSpellId(stage, false, main_stone);
+                    is_pyra = true;
+                } else if (stage == 5 && p_ins - ecl_addrs[3] == 0x5E0) {
+                    spellid = TH20Save::GetPyraSpellId(stage, false, main_stone);
+                    is_pyra = true;
+                }
+                if (is_pyra) {
+                    TH20Save::singleton().pyraState.lastPyraAddr = p_enmA;
+                    TH20Save::singleton().pyraState.isInPyra = true;
+                    TH20Save::singleton().pyraState.lastPyraSpellId = spellid;
+                    TH20Save::singleton().pyraState.isPyraFailed = false;
+                    TH20Save::singleton().pyraState.isInHyper = GetMemContent(RVA(GAME_SIDE0+0x2c),0x28,0x34)==1;
+                    TH20Save::singleton().AddAttempt(spellid, thPracParam.mode, TH20Save::singleton().pyraState.isInHyper);
+                }
+            }
+
+        })
+    EHOOK_DY(th20_hit_bullet, 0xF8805, 2,//set state=4
+        {
+            TH20Save::singleton().pyraState.isPyraFailed = true;
+        })
+    EHOOK_DY(th20_KilledCallback, 0xA6866, 3,
+        {
+            int32_t stage = GetMemContent(RVA(STAGE_NUM));
+            if ((stage == 4 || stage == 5)
+                && TH20Save::singleton().pyraState.isInPyra
+                && pCtx->Eax == TH20Save::singleton().pyraState.lastPyraAddr
+                && TH20Save::singleton().pyraState.lastPyraSpellId == 0 // st4 mid 1 pyra
+                && (!THGuiRep::singleton().mRepStatus)
+                ) {
+                if (TH20Save::singleton().pyraState.isPyraFailed == false) {
+                    TH20Save::singleton().AddCapture(TH20Save::singleton().pyraState.lastPyraSpellId, thPracParam.mode, TH20Save::singleton().pyraState.isInHyper);
+                    }
+                TH20Save::singleton().pyraState.Reset();
+                }
+        })
+    EHOOK_DY(th20_TimeoutCallback, 0xA624E, 3,
+        {
+            int32_t stage = GetMemContent(RVA(STAGE_NUM));
+            if ((stage == 4 || stage == 5)
+                && TH20Save::singleton().pyraState.isInPyra
+                && pCtx->Eax == TH20Save::singleton().pyraState.lastPyraAddr
+                && (!THGuiRep::singleton().mRepStatus)
+                ) {
+                if (TH20Save::singleton().pyraState.lastPyraSpellId == 0)
+                {
+                    if (TH20Save::singleton().pyraState.isPyraFailed == false) {
+                        TH20Save::singleton().AddTimeout(TH20Save::singleton().pyraState.lastPyraSpellId, thPracParam.mode, TH20Save::singleton().pyraState.isInHyper);
+                    }
+                    TH20Save::singleton().pyraState.Reset();
+                } else {
+                    TH20Save::singleton().pyraState.isPyraTimeout = true;
+                }
+            }
+        })
+    EHOOK_DY(th20_ins_517, 0x93F8E, 2, // shake screen effect
+        {
+            int32_t stage = GetMemContent(RVA(STAGE_NUM));
+            if ((stage == 4 || stage == 5) && (!THGuiRep::singleton().mRepStatus)) {
+                DWORD p_enmA = *(DWORD*)(pCtx->Ebp - 0x3F4);
+                if (p_enmA == TH20Save::singleton().pyraState.lastPyraAddr){
+                    int32_t p_ins = *(int32_t*)(pCtx->Ebp - 0x3F8);
+                    std::pair<int32_t*, bool> ecl_addrs_s = GetMemAddr_s<int32_t*>(RVA(0x1BA570), 0x104, 0xc);
+                    if (!ecl_addrs_s.second)
+                        return;
+                    int32_t* ecl_addrs = ecl_addrs_s.first;
+                    if ((stage == 4 && p_ins - ecl_addrs[3] == 0x2cb8) || (stage == 5 && p_ins - ecl_addrs[3] == 0x32d0)) {
+                        if (TH20Save::singleton().pyraState.isPyraFailed == false)
+                        {
+                            if (TH20Save::singleton().pyraState.isPyraTimeout)
+                                TH20Save::singleton().AddTimeout(TH20Save::singleton().pyraState.lastPyraSpellId, thPracParam.mode, TH20Save::singleton().pyraState.isInHyper);
+                            else
+                                TH20Save::singleton().AddCapture(TH20Save::singleton().pyraState.lastPyraSpellId, thPracParam.mode, TH20Save::singleton().pyraState.isInHyper);
+                        }
+                        TH20Save::singleton().pyraState.Reset();
+                    }
+                }
+            }
         })
     HOOKSET_ENDDEF()
 
@@ -3628,6 +4562,10 @@ namespace TH20 {
         // Hooks
         EnableAllHooks(THMainHook);
         EnableAllHooks(THInGameInfo);
+
+        TH20InGameInfo::singleton();
+        TH20Save::singleton();
+        TH20Save::singleton().LoadSave();
 
 
         // Replay menu string fixes

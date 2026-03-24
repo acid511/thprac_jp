@@ -5,6 +5,12 @@
 
 namespace THPrac {
 namespace TH16 {
+    enum addrs {
+        CHARA_ADDR = 0x4A57A4,
+        SEASON_ADDR = 0x4A57AC,
+        PLAYER_PTR = 0x4a6ef8,
+    };
+
     int g_lock_timer = 0;
     bool g_lock_timer_flag = false;
 
@@ -119,7 +125,7 @@ namespace TH16 {
             SetStyle(ImGuiStyleVar_WindowBorderSize, 0.0f);
             OnLocaleChange();
         }
-        SINGLETON(THGuiPrac);
+        SINGLETON(THGuiPrac)
     public:
 
         __declspec(noinline) void State(int state)
@@ -293,7 +299,7 @@ namespace TH16 {
             case 1: // Chapter
                 mChapter.SetBound(1, chapterCounts[0] + chapterCounts[1]);
 
-                if (chapterCounts[1] == 0 && chapterCounts[2] != 0) {
+                if (chapterCounts[1] == 0 && chapterCounts[0] != 0) {
                     sprintf_s(chapterStr, S(TH_STAGE_PORTION_N), *mChapter);
                 } else if (*mChapter <= chapterCounts[0]) {
                     sprintf_s(chapterStr, S(TH_STAGE_PORTION_1), *mChapter);
@@ -368,7 +374,7 @@ namespace TH16 {
             GetEnvironmentVariableW(L"APPDATA", appdata, MAX_PATH);
             mAppdataPath = appdata;
         }
-        SINGLETON(THGuiRep);
+        SINGLETON(THGuiRep)
     public:
 
         void CheckReplay()
@@ -424,7 +430,7 @@ namespace TH16 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(THOverlay);
+        SINGLETON(THOverlay)
     public:
 
     protected:
@@ -529,7 +535,7 @@ namespace TH16 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(TH16InGameInfo);
+        SINGLETON(TH16InGameInfo)
 
     public:
         int32_t mMissCount;
@@ -561,13 +567,13 @@ namespace TH16 {
 
         virtual void OnContentUpdate() override
         {
-            byte cur_player_type = (*(int32_t*)(0x4A57A4));
-            byte cur_player_type2 = (*(int32_t*)(0x4A57AC));
+            int32_t cur_player_type = (*(int32_t*)(0x4A57A4));
+            int32_t cur_player_type2 = (*(int32_t*)(0x4A57AC));
             int32_t diff = *((int32_t*)0x4A57B4);
             auto diff_pl = std::format("{} ({}+{})", S(IGI_DIFF[diff]), S(IGI_PL_16[cur_player_type]), S(IGI_PL_16S[cur_player_type2]));
             auto diff_pl_sz = ImGui::CalcTextSize(diff_pl.c_str());
 
-            ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5 - diff_pl_sz.x * 0.5);
+            ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5f - diff_pl_sz.x * 0.5f);
             ImGui::Text(diff_pl.c_str());
 
 
@@ -587,12 +593,12 @@ namespace TH16 {
 
         virtual void OnPreUpdate() override
         {
-            if (*(DWORD*)(0x004A6EF8)) {
+            if (GetMemContent(PLAYER_PTR)) {
                 GameUpdateInner(16);
             } else {
             }
 
-            if (*(THOverlay::singleton().mInGameInfo) && *(DWORD*)(0x004A6EF8)) {
+            if (*(THOverlay::singleton().mInGameInfo) && GetMemContent(PLAYER_PTR)) {
                 SetPosRel(900.0f / 1280.0f, 500.0f / 960.0f);
                 SetSizeRel(340.0f / 1280.0f, 0.0f);
                 Open();
@@ -615,7 +621,7 @@ namespace TH16 {
             SetStyle(ImGuiStyleVar_WindowBorderSize, 0.0f);
             OnLocaleChange();
         }
-        SINGLETON(THGuiSP);
+        SINGLETON(THGuiSP)
     public:
 
         __declspec(noinline) void State(int state)
@@ -767,7 +773,7 @@ namespace TH16 {
     });
 
     class THAdvOptWnd : public Gui::PPGuiWnd {
-        SINGLETON(THAdvOptWnd);
+        SINGLETON(THAdvOptWnd)
     public:
         bool forceBossMoveDown = false;
     private:
@@ -780,7 +786,7 @@ namespace TH16 {
         }
         void FpsInit()
         {
-            if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) {
+            if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) != NULL) {
                 OILPInit(mOptCtx);
             } else if (*(uint8_t*)0x4c12c9 == 3) {
                 mOptCtx.fps_status = 1;
@@ -2576,7 +2582,7 @@ namespace TH16 {
             }
         }
 
-        if (g_adv_igi_options.show_keyboard_monitor && *(DWORD*)(0x004A6EF8))
+        if (g_adv_igi_options.show_keyboard_monitor && GetMemContent(PLAYER_PTR))
             KeysHUD(16, { 1280.0f, 0.0f }, { 840.0f, 0.0f }, g_adv_igi_options.keyboard_style);
         
         RenderLockTimer(p);

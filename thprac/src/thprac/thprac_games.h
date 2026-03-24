@@ -42,6 +42,7 @@ namespace THPrac {
         bool th11_showHint = false;
         bool th13_showHits = false;
         bool th13_showHitBar = false;
+        bool th13_disable_miss_trance = false;
         bool th14_showBonus = false;
         bool th14_showItemsCount = false;
         bool th14_showDropBar = false;
@@ -541,6 +542,42 @@ template <typename R = uintptr_t, typename... OffsetArgs>
 inline R GetMemAddr(uintptr_t addr, size_t offset, OffsetArgs... remaining_offsets)
 {
     return GetMemAddr<R>(((uintptr_t) * (R*)addr) + offset, remaining_offsets...);
+}
+
+template <typename R = size_t>
+inline std::pair<R, bool> GetMemContent_s(uintptr_t addr)
+{
+    if (addr == 0)
+        return { R {}, false  };
+    return *(R*)addr;
+}
+template <typename R = size_t, typename... OffsetArgs>
+inline std::pair<R,bool> GetMemContent_s(uintptr_t addr, size_t offset, OffsetArgs... remaining_offsets)
+{
+    if (addr==0)
+        return { R {}, false };
+    uintptr_t next_ptr = (uintptr_t)*(R*)addr;
+    if (next_ptr == 0)
+        return { R {}, false };
+    return GetMemContent_s<R>(next_ptr + offset, remaining_offsets...);
+}
+
+template <typename R = uintptr_t>
+inline std::pair<R, bool> GetMemAddr_s(uintptr_t addr)
+{
+    if (addr == 0)
+        return { 0, false };
+    return { (R) addr, true };
+}
+template <typename R = uintptr_t, typename... OffsetArgs>
+inline std::pair<R,bool> GetMemAddr_s(uintptr_t addr, size_t offset, OffsetArgs... remaining_offsets)
+{
+    if (addr == 0)
+        return {0,false};
+    uintptr_t next_ptr = (uintptr_t)*(R*)addr;
+    if (next_ptr == 0)
+        return { 0, false };
+    return GetMemAddr_s<R>(next_ptr + offset, remaining_offsets...);
 }
 
 // Code by zero318 (https://github.com/zero318)

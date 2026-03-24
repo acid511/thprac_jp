@@ -4,6 +4,9 @@
 
 namespace THPrac {
 namespace Alcostg {
+    enum addrs {
+        PLAYER_PTR = 0x474194,
+    };
 
     static __forceinline void call_0x413ef0(uint16_t beer) {
 #ifndef __clang__
@@ -113,7 +116,7 @@ namespace Alcostg {
             SetStyle(ImGuiStyleVar_WindowBorderSize, 0.0f);
             OnLocaleChange();
         }
-        SINGLETON(THGuiPrac);
+        SINGLETON(THGuiPrac)
     public:
 
         int mState = 0;
@@ -315,7 +318,7 @@ namespace Alcostg {
         THGuiRep() noexcept
         {
         }
-        SINGLETON(THGuiRep);
+        SINGLETON(THGuiRep)
     public:
 
         void CheckReplay()
@@ -373,7 +376,7 @@ namespace Alcostg {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(THOverlay);
+        SINGLETON(THOverlay)
     public:
 
     protected:
@@ -476,7 +479,7 @@ namespace Alcostg {
             SetWndFlag(ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(AlcoInGameInfo);
+        SINGLETON(AlcoInGameInfo)
 
     public:
         int32_t mMissCount;

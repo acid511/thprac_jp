@@ -2,7 +2,7 @@
   "launcher": {
     "glossary": {
       "THPRAC_PR_ERROR": [ "错误", "Error", "エラー" ],
-      "THPRAC_PR_COMPLETE": [ "完成", "Complete", "完成" ],
+      "THPRAC_PR_COMPLETE": [ "完成", "Complete", "Complete" ],
       "THPRAC_PR_APPLY": [ "应用thprac？", "Apply thprac?", "thpracを適用しますか？" ],
       "THPRAC_PR_CONTINUE": [ "继续执行？", "Continue?", "続行しますか？" ],
 
@@ -266,7 +266,7 @@
 	"THPRAC_KEYBOARD_API":["键盘API设置","keyboard API setting","キーボードAPI設定"],
 	"THPRAC_KEYBOARD_API_SETTINGS":["默认\\0强制Win32 API\\0强制 Dinput8\\0强制RawInput\\0\\0","default\\0force Win32 API\\0force Dinput8\\0force RawInput\\0\\0","標準\\0Win32 APIの使用を強制\\0Dinput8の使用を強制\\0RawInputの使用を強制\\0\\0"],
   "THPRAC_KEYBOARD_API_USE_GET_DEVICE_DATA":["使用GetDeviceData","Use GetDeviceData","GetDeviceDataを使用"],
-	"THPRAC_KEYBOARD_API_USE_GET_DEVICE_DATA_DESC":["可能带来更好的单帧性能或延迟?","Might make delay less?","Might make delay less?"],
+	"THPRAC_KEYBOARD_API_USE_GET_DEVICE_DATA_DESC":["可能带来更好的单帧性能或延迟?","Might make delay less?","遅延が改善するかも？"],
 	"THPRAC_KEYBOARD_API_SETTINGS_DESC":[
     "默认情况下在地灵殿等游戏使用小键盘可能卡键, \n换用强制dinput8可修复(建议?), \n不建议强制win32模式",
     "By default, using numpad will cause bugs in games like SA,\n which can be fixed by forcing to use dinput8(which is recommended?),\n force win32 API is not recommended",
@@ -286,6 +286,8 @@
     "THPRAC_DISABLE_JOY":["禁用手柄","disable joystick","ジョイスティックの無効化"],
     "THPRAC_DISABLE_JOY_DESC":["对部分作有效, 禁用有关手柄的部分函数以减少掉帧","works for some games, disables functions for joystick to avoid lags","一部のゲームでは動作しますが、遅延を避けるためにジョイスティック機能を無効にします"],
 
+    "THPRAC_PAUSE_BGM_TH678":["红妖永在3036时暂停bgm","pause bgm when esc in EoSD/PCB/IN","紅魔郷～永夜抄: escキーを押した時にBGM再生を停止"],
+    "THPRAC_PAUSE_BGM_TH678_DESC":["红WAV/MIDI可暂停\n妖永MIDI可暂停，但是MIDI没法永续BGM","WAV/MIDI for EoSD\nMIDI for PCB/IN(but cannot use ElBGM for MIDI","紅魔郷: wav/midi共に一時停止可能\n妖々夢,永夜抄: midiの一時停止も可能 (ただしmidiのループ再生は不可能)"],
     "THPRAC_PAUSE_BGM_TH06":["红魔乡在3036时暂停bgm(仅wav)","pause bgm when esc in EoSD(wav only)","紅魔郷: escキーを押した時にBGM再生を停止(wavのみ)"],
     "THPRAC_AUTO_NAME_TH06":["红魔乡自动输入机签","auto input name for EoSD","紅魔郷: 名前を自動入力"],
     "THPRAC_AUTO_NAME_TH06_DESC":["使用~代替红斜杠","use ~ replace red slash","~は赤いスラッシュに置き換えられます。"],
@@ -1279,15 +1281,15 @@
 	  "THPRAC_IGI_PL_SanaeA":["苗 A","Sanae A","早苗A"],
 	  "THPRAC_IGI_PL_SanaeB":["苗 B","Sanae B","早苗B"],
 
-	  "THPRAC_IGI_PL_Reimu17A":["梦狼","Reimu W","霊夢(オオカミ)"],
-	  "THPRAC_IGI_PL_Reimu17B":["梦獭","Reimu O","霊夢(カワウソ)"],
-	  "THPRAC_IGI_PL_Reimu17C":["梦鹰","Reimu E","霊夢(オオワシ)"],
-	  "THPRAC_IGI_PL_Marisa17A":["魔狼","Marisa W","魔理沙(オオカミ)"],
-	  "THPRAC_IGI_PL_Marisa17B":["魔獭","Marisa O","魔理沙(カワウソ)"],
-	  "THPRAC_IGI_PL_Marisa17C":["魔鹰","Marisa E","魔理沙(オオワシ)"],
-	  "THPRAC_IGI_PL_Youmu17A"  : ["妖狼","Youmu W","妖夢(オオカミ)"],
-	  "THPRAC_IGI_PL_Youmu17B"  : ["妖獭","Youmu O","妖夢(カワウソ)"],
-	  "THPRAC_IGI_PL_Youmu17C"  : ["妖鹰","Youmu E","妖夢(オオワシ)"],
+	  "THPRAC_IGI_PL_Reimu17A":["梦狼","Reimu W","霊夢:オオカミ"],
+	  "THPRAC_IGI_PL_Reimu17B":["梦獭","Reimu O","霊夢:カワウソ"],
+	  "THPRAC_IGI_PL_Reimu17C":["梦鹰","Reimu E","霊夢:オオワシ"],
+	  "THPRAC_IGI_PL_Marisa17A":["魔狼","Marisa W","魔理沙:オオカミ"],
+	  "THPRAC_IGI_PL_Marisa17B":["魔獭","Marisa O","魔理沙:カワウソ"],
+	  "THPRAC_IGI_PL_Marisa17C":["魔鹰","Marisa E","魔理沙:オオワシ"],
+	  "THPRAC_IGI_PL_Youmu17A"  : ["妖狼","Youmu W","妖夢:オオカミ"],
+	  "THPRAC_IGI_PL_Youmu17B"  : ["妖獭","Youmu O","妖夢:カワウソ"],
+	  "THPRAC_IGI_PL_Youmu17C"  : ["妖鹰","Youmu E","妖夢:オオワシ"],
 
 	  "THPRAC_IGI_PL_Reimu"  : ["灵梦","Reimu","霊夢"],
 	  "THPRAC_IGI_PL_Yukari" : ["紫","Yukari","紫"],
@@ -1323,6 +1325,15 @@
 	  "THPRAC_IGI_PL_20G":["绿1","G1","G1"],
 	  "THPRAC_IGI_PL_20H":["绿2","G2","G2"],
 	  "THPRAC_IGI_PL_20I":["无", "N","N"],
+
+    "THPRAC_IGI_PL_20A_FULL":["绯红恶魔","Scarlet Devil"      ,"スカーレットデビル"       ],
+	  "THPRAC_IGI_PL_20B_FULL":["生物赤红","Creature Red"       ,"クリーチャーレッド"       ],
+	  "THPRAC_IGI_PL_20C_FULL":["冰雪花簇","Snow Blossom"       ,"スノーブロッサム"         ],
+	  "THPRAC_IGI_PL_20D_FULL":["蓝色季节","Blue Season"        ,"ブルーシーズン"           ],
+	  "THPRAC_IGI_PL_20E_FULL":["黄色地心","Yellow Subterranean","イエローサブタレイニアン" ],
+	  "THPRAC_IGI_PL_20F_FULL":["不朽明月","Imperishable Moon"  ,"インペリシャブルムーン"   ],
+	  "THPRAC_IGI_PL_20G_FULL":["兽之冷硬","Beast Heardness"    ,"ビーストハードネス"       ],
+	  "THPRAC_IGI_PL_20H_FULL":["神道之风","Shintoism Wind"     ,"シントイズムウィンド"     ],
 
 	  "THPRAC_CHG_STONE":["大变石","change stone","異変石を変更"],
 	  "THPRAC_CHG_STONE_DESC":["同时按z和左右键切换携带的高速/低速石","press z and left/right at the same time to switch between stones","zと左/右を同時に押すと石を切り替えることができます。"],
@@ -1362,7 +1373,7 @@
 	  "THPRAC_TH18_FORCE_CARD_DESC": [ "强制让商店内第一张卡牌为想要的卡牌", "force the first card in market", "1番目のカードを指定" ],
 	  "THPRAC_TH18_FORCE_CARD_DESC2": [ "作者认为作为一个游戏就不应该用一个纯随机要素限制打分玩家, 如果你觉得是作弊, 那你说得对.jpg",
       "the author believes that as a game, it shouldn't rely on a purely random element to restrict players' ability to rate the game. If you think that's cheating, then you're right.jpg",
-      "作者は、「ゲームである以上、評価を下すプレイヤーの能力を純粋なランダム要素によって制限するべきではない」と考えています。もしあなたがこれを「チートだ」と思うなら、その通りです。笑"
+      "作者は、「ゲームである以上、プレイヤーの技術力を純粋な運要素によって制限されるべきではない」と考えています。もしあなたがこれを「チートだ」と思うなら、その通りです。笑"
     ],
 	  "THPRAC_TH18_CARD": [ "想要的卡牌", "cards you want", "欲しいカード" ],
 	  "THPRAC_TH18_CARD_1": [ "stage1 卡牌", "card for stage 1", "stage1のカード" ],
@@ -1416,6 +1427,8 @@
 	  "THPRAC_INGAMEINFO_TH13_SHOW_HIT_BAR":["显示连击条","show hit bar","ヒットバーを表示"],
 	  "THPRAC_INGAMEINFO_TH13_SHOW_HIT_BAR2":["神灵庙显示连击条","TD show hit bar","神霊廟: ヒットバーを表示"],
 	  "THPRAC_INGAMEINFO_TH13_HITS":["连击","hits","ヒット数:"],
+    "THPRAC_TH13_DISABLE_TRANCE_AUTO": [ "神灵庙自动禁用MISS后灵界", "TD Disable trance after miss", "神霊廟: 被弾後の霊界突入を無効化" ],
+	  "THPRAC_TH13_DISABLE_TRANCE": [ "禁用MISS后灵界", "Disable trance after miss", "被弾後の霊界突入を無効化" ],
 
 	  "THPRAC_INGAMEINFO_TH14_MARISA_LASER_REP":["辉针城魔理沙自动开启激光修复的rep预防功能","DDC Marisa laser bug rep repair on","輝針城: 魔理沙のレーザーバグを修正"],
 	  "THPRAC_INGAMEINFO_TH14_SHOW_BONUS":["显示bonus数","show bonuses","ボーナスを表示"],
@@ -1492,11 +1505,49 @@
 	   "THPRAC_INGAMEINFO_06_GAMTIME_MICROSECOND":["微秒","us","ﾏｲｸﾛ秒"],
 	   "THPRAC_INGAMEINFO_06_GAMTIME_NANOSECOND":["纳秒","ns","ﾅﾉ秒"],
 
-       "THPRAC_INGAMEINFO_06_SPELL_NAME":["符卡","spell name","スペルカード名"],
-       "THPRAC_INGAMEINFO_06_CAPTURE_TOT":["收率(总)","capture(total)","取得(累計)"],
-       "THPRAC_INGAMEINFO_06_CAPTURE_CUR":["收率(本次)","capture(current)","取得(現在)"],
-       "THPRAC_INGAMEINFO_06_TIMEOUT_TOT":["超时(总)","timeout(total)","タイムアウト(累計)"],
-       "THPRAC_INGAMEINFO_06_TIMEOUT_CUR":["超时(本次)","timeout(current)","timeout(現在)"]
+       "THPRAC_INGAMEINFO_06_SPELL_NAME":["符卡", "spell name", "スペルカード名"],
+       "THPRAC_INGAMEINFO_06_CAPTURE_TOT":["收率(总)", "capture(total)","取得(累計)"],
+       "THPRAC_INGAMEINFO_06_CAPTURE_CUR":["收率(本次)", "capture(current)", "取得(現在)"],
+       "THPRAC_INGAMEINFO_06_TIMEOUT_TOT":["超时(总)", "timeout(total)", "時間切れ(累計)"],
+       "THPRAC_INGAMEINFO_06_TIMEOUT_CUR":["超时(本次)", "timeout(current)", "時間切れ(現在)"],
+
+       "THPRAC_INGAMEINFO_20_COMBAT_CAPTURE_RATE":["查看实战收率",   "view real combat capture rate", "本番での取得率を表示"],
+       "THPRAC_INGAMEINFO_20_PRAC_CAPTURE_RATE":["查看练习模式收率", "view prac mode capture rate",   "練習での取得率を表示"],
+       "THPRAC_INGAMEINFO_20_TOTAL_CAPTURE_RATE":["查看总收率",     "view total capture rate",        "総取得率を表示"     ],
+
+       "THPRAC_PYRAMID_20_COMBAT":["实战", "Combat", "本番"],
+       "THPRAC_PYRAMID_20_PRAC":  ["练习", "Prac", "練習"],
+       "THPRAC_PYRAMID_20_IGNORE":["忽略", "Ignore", "-"],
+       "THPRAC_PYRAMID_20_ID":["ID", "ID", "ID"],
+       "THPRAC_PYRAMID_20_PY_TYPE":["金字塔类型", "Δ type",   "敵の種類" ],
+       "THPRAC_PYRAMID_20_GAME_MODE":["游戏模式", "Game mode", "モード"  ],
+       "THPRAC_PYRAMID_20_RESULT":["结果", "Result", "結果"],
+       "THPRAC_PYRAMID_20_ATTEMPT":["尝试", "Attempt", "失敗"],
+       "THPRAC_PYRAMID_20_CAPTURE":["收取", "Capture", "取得"],
+       "THPRAC_PYRAMID_20_TIMEOUT":["全避", "Timeout", "時間切れ"],
+       "THPRAC_PYRAMID_20_IS_HYPER":["Hyper", "Hyper", "異変攻撃"],
+       "THPRAC_PYRAMID_20_HYPER_ON":["Hyper", "Hyper", "有"],
+       "THPRAC_PYRAMID_20_HYPER_OFF":["无Hyper", "No Hyper", "無"],
+       "THPRAC_PYRAMID_20_PL_TYPE":["机体", "pl type", "自機"],
+       "THPRAC_PYRAMID_20_SORT_BY_MAIN_STONE":["按主石分类", "Sort by main stone", "メイン石で分類"],
+       "THPRAC_PYRAMID_20_QURTY":["分类查询", "Calucate by query", "カテゴリ検索"],
+       "THPRAC_PYRAMID_20_MAIN_STONE":["主石", "M. Stone", "メイン石"],
+       "THPRAC_PYRAMID_20_FOCUS_STONE":["低速石", "F. Stone", "集中石"],
+       "THPRAC_PYRAMID_20_SUB_STONE":["辅助石", "S. Stone", "支援石"],
+       "THPRAC_PYRAMID_20_UNFOCUS_STONE":["高速石", "U. Stone", "拡散石"],
+
+       "THPRAC_PYRAMID_20_QUERY":["查询", "Query", "検索"],
+       "THPRAC_PYRAMID_20_LAST_200":["前200个", "Last 200", "直近200回"],
+       "THPRAC_PYRAMID_20_QUERY_RES":["查询情况", "Query Result", "検索結果"],
+
+       "THPRAC_INGAMEINFO_20_PASS_TOT":["通过率(总)",   "passed(total)",   "取得率(累計)"],
+       "THPRAC_INGAMEINFO_20_PASS_CUR":["通过率(本次)", "passed(current)", "取得率(現在)"],
+       "THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID1": ["原初金字塔", "PRIMITIVE Pyramid", "4面ピラミッド(通1)"],
+       "THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2R":["红金字塔"  , "RED Pyramid"      , "4面ピラミッド(赤)" ],
+       "THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2B":["蓝金字塔"  , "BLUE Pyramid"     , "4面ピラミッド(青)" ],
+       "THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2Y":["黄金字塔"  , "YELLOW Pyramid"   , "4面ピラミッド(黄)" ],
+       "THPRAC_INGAMEINFO_20_PYRAMID_ST4_MID2G":["绿金字塔"  , "GREEN Pyramid"    , "4面ピラミッド(緑)" ],
+       "THPRAC_INGAMEINFO_20_PYRAMID_ST5_MID1": ["大金字塔"  , "GREAT Pyramid"    , "5面ピラミッド"     ]
       },
 	  "groups": {
 		"IGI_DIFF": [
@@ -1625,6 +1676,17 @@
 		"THPRAC_IGI_PL_20G",
 		"THPRAC_IGI_PL_20H",
 		"THPRAC_IGI_PL_20I"
+      ],
+	  "IGI_PL_20_SUB_FULL": [
+        "THPRAC_IGI_PL_20A_FULL",
+		"THPRAC_IGI_PL_20B_FULL",
+		"THPRAC_IGI_PL_20C_FULL",
+		"THPRAC_IGI_PL_20D_FULL",
+		"THPRAC_IGI_PL_20E_FULL",
+		"THPRAC_IGI_PL_20F_FULL",
+		"THPRAC_IGI_PL_20G_FULL",
+		"THPRAC_IGI_PL_20H_FULL",
+		"THPRAC_IGI_PL_20I"
       ]
     }
   },
@@ -1666,10 +1728,10 @@
       "TH_BOSS": [ "Boss", "Boss", "ボス" ],
       "TH_ATTACK": [ "攻击", "Attack", "弾幕" ],
       "TH_PROGRESS": [ "进度", "Progress", "進行度" ],
-      "TH_BOTH_NORMAL": [ "都正常", "Both Normal", "両方とも正常" ],
+      "TH_BOTH_NORMAL": [ "都正常", "Both Normal", "両者正常" ],
       "TH_HECATIA_RAGE": [ "赫卡提亚狂暴", "Hecatia Rage", "ヘカーティア暴走" ],
       "TH_JUNKO_RAGE": [ "纯狐狂暴", "Junko Rage", "純子暴走" ],
-      "TH_BOTH_RAGE": [ "夫妻双打", "Both Rage", "両方暴走" ],
+      "TH_BOTH_RAGE": [ "夫妻双打", "Both Rage", "両者暴走" ],
       "TH15_ST3_NORMAL1_TYPE_NORMAL": [ "正常", "normal", "標準" ],
       "TH15_ST3_NORMAL1_TYPE_FORCE_WAVE_2": [ "强制第二波", "force wave2", "第2波を強制" ],
       "TH15_ST3_NORMAL1_TYPE_NORMAL_PHASE": [ "正常(强制相位)", "normal(force phase)", "標準(位相指定)" ],
@@ -1713,28 +1775,39 @@
 
 	  "TH_ERROR": [ "错误", "Error", "エラー" ],
 	  "TH_REPLAY_FIX": [ "Replay修复", "Replay Fixing", "リプレイ修復" ],
-      "TH_REPFIX_SELECTED": [ "已选择重放：%ls", "Replay selected: %ls", "選択したリプレイ: %ls" ],
-      "TH_REPFIX_SELECTED_NONE": [ "未选择重放。", "No replay selected.", "リプレイが選択されていません。" ],
-	  "TH_REPFIX_MAIN_SELECTED_NONE": [ "未选择主线剧情重放", "No main story replay selected.", "メインストーリーのリプレイが選択されていません。" ],
-      "TH_REPFIX_EXTRA_SELECTED_NONE": [ "未选择 Extra 关卡重放。", "No Extra Stage replay selected.", "Extraステージのリプレイが選択されていません。" ],
-      "TH_REPFIX_SELECTED_ALREADY_FIXED": [ "已修复所选重放。", "Selected replay is already fixed.", "選択したリプレイはすでに修正されています。" ],
-      "TH_REPFIX_SAVE": [ "保存修复副本", "Save fixed copy", "修正版を保存" ],
+     "TH_REPFIX_SELECTED": [ "已选择replay：%ls", "Replay selected: %ls", "選択したリプレイ: %ls" ],
+      "TH_REPFIX_SELECTED_NONE": [ "未选择replay。", "No replay selected.", "リプレイが選択されていません。" ],
+      "TH_REPFIX_MAIN_SELECTED_NONE": [ "未选择主线replay。", "No main story replay selected.", "メインストーリーのリプレイが選択されていません。" ],
+      "TH_REPFIX_EXTRA_SELECTED_NONE": [ "未选择extra面replay。", "No Extra Stage replay selected.", "Extraステージのリプレイが選択されていません。" ],
+      "TH_REPFIX_SELECTED_ALREADY_FIXED": [ "已修复所选replay。", "Selected replay is already fixed.", "選択したリプレイはすでに修正されています。" ],
+      "TH_REPFIX_SAVE": [ "保存修复后的副本", "Save fixed copy", "修正版を保存" ],
+	  "TH_REPFIX_SAVE_PROGRESS": [ "保存replay (%d/%d)", "Save replay (%d/%d)", "リプレイをセーブ (%d/%d)" ],
       "TH_REPFIX_RESET_DATA": [ "重置此同步数据", "Reset this sync data", "この同期データをリセット" ],
       "TH_REPFIX_RESET_DATA2": [ "重置此同步数据##2", "Reset this sync data##2", "この同期データをリセット##2" ],
       "TH_REPFIX_NEED_THPRAC": [ "(thprac)", "(thprac)", "(thprac)" ],
       "TH_REPFIX_NEED_THPRAC_DESC": [
-        "修复后的重放还需要 thprac 才能正常回放；没有它时将保持与之前相同的行为。\n使用 thprac 录制的重放无需修复。",
+        "修复后的replay还需要thprac才能正常回放；没有它时将保持与之前相同的行为。\n使用thprac录制的replay无需修复。",
         "Fixed replay also requires thprac to play back properly; will behave the same as before without it.\nReplays recorded with thprac applied do not need to be fixed.",
         "修正されたリプレイは、正しく再生するために thprac が必要です；それがない場合、以前と同じ動作になります。\nthprac を適用して録画されたリプレイは修正する必要はありません。"
       ],
+	  "TH_REPFIX_NO_THPRAC": [ "（原版）", "(vanilla)", "（原版）" ],
+      "TH_REPFIX_NO_THPRAC_DESC": [
+        "修复的replay可以使用原版游戏播放（不需要thprac）。",
+        "Fixed replays can be played with the original game (thprac is not needed).",
+        "修復されたリプレイは、オリジナルゲームで再生できます（thpracは必要ありません）。"
+      ],
       "TH_REPFIX_SAVE_SUCCESS": [ "保存成功", "Successfully saved", "保存しました" ],
-      "TH_REPFIX_SAVE_SUCCESS_DESC": [ "成功保存Replay至：", "Successfully saved replay to: ", "リプレイは正常に保存されました：" ],
-      "TH_REPFIX_SAVE_ERROR_SRC": [ "未能成功读取源Replay。", "Failed to access source replay.", "元のリプレイの読み取りに失敗しました。" ],
+      "TH_REPFIX_SAVE_SUCCESS_DESC": [ "成功保存replay至：", "Successfully saved replay to: ", "リプレイは正常に保存されました：" ],
+      "TH_REPFIX_SAVE_ERROR_SRC": [ "未能成功读取源replay。", "Failed to access source replay.", "元のリプレイの読み取りに失敗しました。" ],
       "TH_REPFIX_SAVE_ERROR_DEST": [ "未能写入目标文件。", "Failed to write to destination file.", "ターゲットファイルに書き込めませんでした。" ],
       "TH_REPFIX_SAVE_ERROR_CLEAR_PARAMS": [ "重置文件的 thprac 数据失败。", "Failed to reset file's thprac data.", "ファイルの thprac データのリセットに失敗しました。" ],
       "TH_REPFIX_SAVE_ERROR_PARAMS": [ "无法将 thprac 数据写入重放文件。", "Failed to add thprac data to replay file.", "thprac のデータをリプレイファイルに書き込めませんでした。" ],
 
-
+	  "TH_TOOL_SHOW_TOGGLE": [ "显示工具", "Show tool", "ツールを表示" ],
+	  "TH_BUGFIX": [ "可选Bug修复", "Optional Bug Fixes", "バグ修正(任意)" ],
+      "TH_BUGFIX_AUTO": [ "已自动应用关键Bug修复。", "Critical bug fixes have been applied automatically.", "重要なバグ修正は自動的に適用されています。" ],
+       "TH_STAGE_NUM": [ "第%d面", "Stage %d", "ステージ %d" ],
+      "TH_EXTRA_STAGE": [ "Extra面", "Extra Stage", "Extraステージ" ],
 
       "TH_ON": [ "开启", "On", "有効" ],
       "TH_OFF": [ "关闭", "Off", "無効" ],
@@ -1783,7 +1856,7 @@
       "TH_RAGE": [ "发狂", "Rage", "発狂" ],
       "TH_RAGE_PRO": [ "发狂Pro", "Rage Pro", "発狂 Pro" ],
       "TH_RAGE_PRO_MAX": [ "发狂ProMax", "Rage ProMax", "発狂 ProMax" ],
-	  "TH_FINALE": [ "终幕", "Finale", "終幕" ],
+	  "TH_FINALE": [ "终幕", "Finale", "最終段階" ],
 
       "TH_P1": [ "P1", "P1", "P1" ],
       "TH_P2": [ "P2", "P2", "P2" ],
@@ -1794,11 +1867,13 @@
       "TH_MID_STAGE": [ "道中Boss", "Mid Boss", "道中ボス" ],
       "TH_END_STAGE": [ "关底Boss", "End Boss", "ボス" ],
       "TH_CHAPTER": [ "章节", "Chapter", "チャプター" ],
+	  "TH_CYCLE": [ "循环", "Cycle", "サイクル" ],
       "TH_STAGE_PORTION": [ "道中", "Stage Portion", "道中" ],
       "TH_STAGE_PORTION_N": [ "#%d", "#%d", "#%d" ],
       "TH_STAGE_PORTION_1": [ "前半 #%d", "First Half #%d", "前半 #%d" ],
       "TH_STAGE_PORTION_2": [ "后半 #%d", "Second Half #%d", "後半 #%d" ],
       "TH_DLG": [ "对话", "Dialog", "ダイアログ" ],
+	  "TH_DROP_ITEMS": [ "掉落道具", "Drop items", "Pアイテム等を落とす" ],
 
       "TH_LEFT": [ "左", "Left", "左" ],
       "TH_RIGHT": [ "右", "Right", "右" ],
@@ -5025,6 +5100,34 @@
       "TH11_MARISAB_WOOD":  [ "木符", "Wood",  "木符" ],
       "TH11_MARISAB_METAL": [ "金符", "Metal", "金符" ],
       "TH11_MARISAB_EARTH": [ "土符", "Earth", "土符" ],
+    "TH11_SPELL_CATEGORY": [ "想起", "Spell Cat.", "スペカの種類" ],
+      "TH11_ALL": [ "全部符卡", "All Spells", "全てのスペカ" ],
+      "TH11_RA": [ "梦A", "Yakumo Yukari", "八雲 紫" ],
+      "TH11_RB": [ "梦B", "Ibuki Suika", "伊吹 萃香" ],
+      "TH11_RC": [ "梦C", "Shameimaru Aya", "射命丸 文" ],
+      "TH11_MA": [ "魔A", "Alice Margatroid", "アリス・マーガトロイド" ],
+      "TH11_MB": [ "魔B", "Patchouli Knowledge", "パチュリー・ノーレッジ" ],
+      "TH11_MC": [ "魔C", "Kawasiro Nitori", "河城 にとり" ],
+      "TH11_SATORI1": [ "回忆「恐怖的回忆」", "Recollection \"Terrible Souvenir\"", "想起「テリブルスーヴニール」" ],
+      "TH11_SATORI2": [ "回忆「恐怖催眠术」", "Recollection \"Terrifying Hypnotism\"", "想起「恐怖催眠術」" ],
+      "TH11_YUKARI1": [ "回忆「二重黑死蝶」", "Recollection \"Double Black Death Butterfly\"", "想起「二重黒死蝶」" ],
+      "TH11_YUKARI2": [ "回忆「飞行虫之巢」", "Recollection \"Flying Insect's Nest\"", "想起「飛行虫ネスト」" ],
+      "TH11_YUKARI3": [ "回忆「波与粒的境界」", "Recollection \"Border of Wave & Particle\"", "想起「波と粒の境界」" ],
+      "TH11_SUIKA1": [ "回忆「户隐山之投」", "Recollection \"Mt. Togakushi Toss\"", "想起「戸隠山投げ」" ],
+      "TH11_SUIKA2": [ "回忆「百万鬼夜行」", "Recollection \"Night Parade of a Million Demons\"", "想起「百万鬼夜行」" ],
+      "TH11_SUIKA3": [ "回忆「蒙蒙迷雾」", "Recollection \"Deep Fog Labyrinth\"", "想起「濛々迷霧」" ],
+      "TH11_AYA1": [ "回忆「风神木叶隐身术」", "Recollection \"Wind God's Leaf-Veiling\"", "想起「風神木の葉隠れ」" ],
+      "TH11_AYA2": [ "回忆「天狗巨暴流」", "Recollection \"Tengu's Macroburst\"", "想起「天狗のマクロバースト」" ],
+      "TH11_AYA3": [ "回忆「鸟居旋风」", "Recollection \"Torii Whorl-Wind\"", "想起「鳥居つむじ風」" ],
+      "TH11_ALICE1": [ "回忆「春之京都人偶」", "Recollection \"Spring Kyoto Dolls\"", "想起「春の京人形」" ],
+      "TH11_ALICE2": [ "回忆「稻草人偶敢死队」", "Recollection \"Straw Doll Kamikaze\"", "想起「ストロードールカミカゼ」" ],
+      "TH11_ALICE3": [ "回忆「回归虚无」", "Recollection \"Return Inanimateness\"", "想起「リターンイナニメトネス」" ],
+      "TH11_PATCHOULI1": [ "回忆「水银之毒」", "Recollection \"Mercury Poison\"", "想起「マーキュリポイズン」" ],
+      "TH11_PATCHOULI2": [ "回忆「水精公主」", "Recollection \"Princess Undine\"", "想起「プリンセスウンディネ」" ],
+      "TH11_PATCHOULI3": [ "回忆「贤者之石」", "Recollection \"Philosopher's Stone\"", "想起「賢者の石」" ],
+      "TH11_NITORI1": [ "回忆「延展手臂」", "Recollection \"Extending Arm\"", "想起「のびーるアーム」" ],
+      "TH11_NITORI2": [ "回忆「河童之河口浪潮」", "Recollection \"Kappa's Pororoca\"", "想起「河童のポロロッカ」" ],
+      "TH11_NITORI3": [ "回忆「粼粼水底之心伤」", "Recollection \"Trauma in the Glimmering Depths\"", "想起「光り輝く水底のトラウマ」" ],
 
 	  "TH_11_DEFAULT_START": [ "默认", "default start", "標準スタート" ],
 	  "TH_11_INIT_POS_CHANGE": [ "修改初始位置", "init pos change", "初期位置変更" ],
@@ -5595,6 +5698,301 @@
         "spell": 1,
         "appearance": [ 7, 2, 18 ],
         "!X": [ "「地底蔷薇」", "\"Subterranean Rose\"", "「サブタレイニアンローズ」" ]
+      },
+
+      "TH11_ST4_RA_MID1": {
+        "bgm": 0,
+        "spell": 0,
+        "appearance": [8, 1, 1],
+        "!ENHL": "TH_MID_NS1"
+      },
+      "TH11_ST4_RA_MID2": {
+        "bgm": 0,
+        "spell": 0,
+        "appearance": [8, 1, 2],
+        "!ENHL": "TH_MID_NS2"
+      },
+      "TH11_ST4_RA_BOSS1": {
+        "bgm": 1,
+        "spell": 0,
+        "appearance": [8, 2, 1],
+        "!ENHL": "TH_END_NS1"
+      },
+      "TH11_ST4_RA_BOSS2": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [8, 2, 2],
+        "!EN": "TH11_SATORI1",
+        "!HL": "TH11_SATORI2"
+      },
+      "TH11_ST4_RA_BOSS3": {
+        "bgm": 1,
+        "spell": 0,
+        "appearance": [8, 2, 3],
+        "!ENHL": "TH_END_NS2"
+      },
+      "TH11_ST4_RA_BOSS4": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [8, 2, 4],
+        "!ENHL": "TH11_YUKARI1"
+      },
+      "TH11_ST4_RA_BOSS5": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [8, 2, 5],
+        "!ENHL": "TH11_YUKARI2"
+      },
+      "TH11_ST4_RA_BOSS6": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [8, 2, 6],
+        "!ENHL": "TH11_YUKARI3"
+      },
+      "TH11_ST4_RB_MID1": {
+        "bgm": 0,
+        "spell": 0,
+        "appearance": [9, 1, 1],
+        "!ENHL": "TH_MID_NS1"
+      },
+      "TH11_ST4_RB_MID2": {
+        "bgm": 0,
+        "spell": 0,
+        "appearance": [9, 1, 2],
+        "!ENHL": "TH_MID_NS2"
+      },
+      "TH11_ST4_RB_BOSS1": {
+        "bgm": 1,
+        "spell": 0,
+        "appearance": [9, 2, 1],
+        "!ENHL": "TH_END_NS1"
+      },
+      "TH11_ST4_RB_BOSS2": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [9, 2, 2],
+        "!EN": "TH11_SATORI1",
+        "!HL": "TH11_SATORI2"
+      },
+      "TH11_ST4_RB_BOSS3": {
+        "bgm": 1,
+        "spell": 0,
+        "appearance": [9, 2, 3],
+        "!ENHL": "TH_END_NS2"
+      },
+      "TH11_ST4_RB_BOSS4": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [9, 2, 4],
+        "!ENHL": "TH11_SUIKA1"
+      },
+      "TH11_ST4_RB_BOSS5": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [9, 2, 5],
+        "!ENHL": "TH11_SUIKA2"
+      },
+      "TH11_ST4_RB_BOSS6": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [9, 2, 6],
+        "!ENHL": "TH11_SUIKA3"
+      },
+      "TH11_ST4_RC_MID1": {
+        "bgm": 0,
+        "spell": 0,
+        "appearance": [10, 1, 1],
+        "!ENHL": "TH_MID_NS1"
+      },
+      "TH11_ST4_RC_MID2": {
+        "bgm": 0,
+        "spell": 0,
+        "appearance": [10, 1, 2],
+        "!ENHL": "TH_MID_NS2"
+      },
+      "TH11_ST4_RC_BOSS1": {
+        "bgm": 1,
+        "spell": 0,
+        "appearance": [10, 2, 1],
+        "!ENHL": "TH_END_NS1"
+      },
+      "TH11_ST4_RC_BOSS2": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [10, 2, 2],
+        "!EN": "TH11_SATORI1",
+        "!HL": "TH11_SATORI2"
+      },
+      "TH11_ST4_RC_BOSS3": {
+        "bgm": 1,
+        "spell": 0,
+        "appearance": [10, 2, 3],
+        "!ENHL": "TH_END_NS2"
+      },
+      "TH11_ST4_RC_BOSS4": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [10, 2, 4],
+        "!ENHL": "TH11_AYA1"
+      },
+      "TH11_ST4_RC_BOSS5": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [10, 2, 5],
+        "!ENHL": "TH11_AYA2"
+      },
+      "TH11_ST4_RC_BOSS6": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [10, 2, 6],
+        "!ENHL": "TH11_AYA3"
+      },
+      "TH11_ST4_MA_MID1": {
+        "bgm": 0,
+        "spell": 0,
+        "appearance": [11, 1, 1],
+        "!ENHL": "TH_MID_NS1"
+      },
+      "TH11_ST4_MA_MID2": {
+        "bgm": 0,
+        "spell": 0,
+        "appearance": [11, 1, 2],
+        "!ENHL": "TH_MID_NS2"
+      },
+      "TH11_ST4_MA_BOSS1": {
+        "bgm": 1,
+        "spell": 0,
+        "appearance": [11, 2, 1],
+        "!ENHL": "TH_END_NS1"
+      },
+      "TH11_ST4_MA_BOSS2": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [11, 2, 2],
+        "!EN": "TH11_SATORI1",
+        "!HL": "TH11_SATORI2"
+      },
+      "TH11_ST4_MA_BOSS3": {
+        "bgm": 1,
+        "spell": 0,
+        "appearance": [11, 2, 3],
+        "!ENHL": "TH_END_NS2"
+      },
+      "TH11_ST4_MA_BOSS4": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [11, 2, 4],
+        "!ENHL": "TH11_ALICE1"
+      },
+      "TH11_ST4_MA_BOSS5": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [11, 2, 5],
+        "!ENHL": "TH11_ALICE2"
+      },
+      "TH11_ST4_MA_BOSS6": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [11, 2, 6],
+        "!ENHL": "TH11_ALICE3"
+      },
+      "TH11_ST4_MB_MID1": {
+        "bgm": 0,
+        "spell": 0,
+        "appearance": [12, 1, 1],
+        "!ENHL": "TH_MID_NS1"
+      },
+      "TH11_ST4_MB_MID2": {
+        "bgm": 0,
+        "spell": 0,
+        "appearance": [12, 1, 2],
+        "!ENHL": "TH_MID_NS2"
+      },
+      "TH11_ST4_MB_BOSS1": {
+        "bgm": 1,
+        "spell": 0,
+        "appearance": [12, 2, 1],
+        "!ENHL": "TH_END_NS1"
+      },
+      "TH11_ST4_MB_BOSS2": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [12, 2, 2],
+        "!EN": "TH11_SATORI1",
+        "!HL": "TH11_SATORI2"
+      },
+      "TH11_ST4_MB_BOSS3": {
+        "bgm": 1,
+        "spell": 0,
+        "appearance": [12, 2, 3],
+        "!ENHL": "TH_END_NS2"
+      },
+      "TH11_ST4_MB_BOSS4": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [12, 2, 4],
+        "!ENHL": "TH11_PATCHOULI1"
+      },
+      "TH11_ST4_MB_BOSS5": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [12, 2, 5],
+        "!ENHL": "TH11_PATCHOULI2"
+      },
+      "TH11_ST4_MB_BOSS6": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [12, 2, 6],
+        "!ENHL": "TH11_PATCHOULI3"
+      },
+      "TH11_ST4_MC_MID1": {
+        "bgm": 0,
+        "spell": 0,
+        "appearance": [13, 1, 1],
+        "!ENHL": "TH_MID_NS1"
+      },
+      "TH11_ST4_MC_MID2": {
+        "bgm": 0,
+        "spell": 0,
+        "appearance": [13, 1, 2],
+        "!ENHL": "TH_MID_NS2"
+      },
+      "TH11_ST4_MC_BOSS1": {
+        "bgm": 1,
+        "spell": 0,
+        "appearance": [13, 2, 1],
+        "!ENHL": "TH_END_NS1"
+      },
+      "TH11_ST4_MC_BOSS2": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [13, 2, 2],
+        "!EN": "TH11_SATORI1",
+        "!HL": "TH11_SATORI2"
+      },
+      "TH11_ST4_MC_BOSS3": {
+        "bgm": 1,
+        "spell": 0,
+        "appearance": [13, 2, 3],
+        "!ENHL": "TH_END_NS2"
+      },
+      "TH11_ST4_MC_BOSS4": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [13, 2, 4],
+        "!ENHL": "TH11_NITORI1"
+      },
+      "TH11_ST4_MC_BOSS5": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [13, 2, 5],
+        "!ENHL": "TH11_NITORI2"
+      },
+      "TH11_ST4_MC_BOSS6": {
+        "bgm": 1,
+        "spell": 1,
+        "appearance": [13, 2, 6],
+        "!ENHL": "TH11_NITORI3"
       }
     },
 
@@ -5625,7 +6023,16 @@
           "TH11_MARISAB_WOOD",
           "TH11_MARISAB_METAL",
           "TH11_MARISAB_EARTH"
-		]
+		],
+      "TH11_TYPE_SELECT": [
+        "TH11_ALL",
+        "TH11_RA",
+        "TH11_RB",
+        "TH11_RC",
+        "TH11_MA",
+        "TH11_MB",
+        "TH11_MC"
+      ]
     }
   },
 
@@ -8280,6 +8687,11 @@
         "TH_P4",
         "TH_P5"
       ],
+	  "TH14_SPELL_PHASE_TIMEOUT": [
+        "TH_P1",
+        "TH_P2",
+        "TH_FINALE"
+      ],
       "TH14_MODE_COMBO": [
         "TH14_MODE_NONE",
         "TH14_MODE_NORMAL",
@@ -8335,7 +8747,13 @@
       "TH15_ILT_3": [ "章节六（三吴克）", "Chapter 6", "チャプター 6" ],
       "TH15_ILT_4": [ "章节七（激光阵）", "Chapter 7", "チャプター 7" ],
       "TH15_ILT_5": [ "章节八（太田飞行阵）", "Chapter 8", "チャプター 8" ],
-      "TH15_ILT_6": [ "章节九", "Chapter 9", "チャプター 9" ]
+      "TH15_ILT_6": [ "章节九", "Chapter 9", "チャプター 9" ],
+      "TH15_HECATIA_RAGE": [ "赫卡提亚发狂", "Hecatia Rage", "ヘカーティア暴走" ],
+      "TH15_JUNKO_RAGE": [ "纯狐发狂", "Junko Rage", "純狐暴走" ],
+      "TH15_PH_BLUE": [ "蓝阶段", "Blue Phase", "第一段階(青)" ],
+      "TH15_PH_GREEN": [ "绿阶段", "Green Phase", "第二段階(緑)" ],
+      "TH15_PH_RED": [ "红阶段", "Red Phase", "第三段階(赤)" ],
+	  "TH15_REISEN_SHIELD": [ "护盾层数", "Shields", "鈴仙バリア" ]
     },
 
     "sections": {
@@ -8828,8 +9246,13 @@
       "TH15_SPELL_PHASE_EXTRA_LAST": [
         "TH_BOTH_NORMAL",
         "TH_BOTH_RAGE",
-        "TH_HECATIA_RAGE",
-        "TH_JUNKO_RAGE"
+        "TH15_HECATIA_RAGE",
+        "TH15_JUNKO_RAGE"
+      ],
+      "TH15_SPELL_PHASE_EXTRA_TIMEOUT": [
+        "TH15_PH_BLUE",
+        "TH15_PH_GREEN",
+        "TH15_PH_RED"
       ],
 	  "TH15_AB_5PHASE": [
         "TH_P1",
@@ -9367,12 +9790,13 @@
       "TH17_GOAST_HANIWA": [ "埴轮", "Haniwa", "埴輪" ],
       "TH17_GOAST_HORSE": [ "埴轮（马）", "Haniwa (Horse)", "埴輪（馬）" ],
       "TH17_GOAST_3CHICK": [ "三只小鸡", "3 Chicks", "三匹のひよこ" ],
-      "TH17_INF_ROARING": [ "无限咆哮", "Inf. Roaring", "無限のロアリング" ],
+      "TH17_INF_ROARING": [ "无限咆哮", "Inf. Roaring", "無限ロアリング" ],
       "TH17_NO_GOAST": [ "无动物灵", "No Goast", "動物霊を落とさない" ],
+      "TH17_NO_HYPER": [ "禁用HYPER", "No Hyper", "ロアリング無効" ],
 	  "TH17_GOAST_ANGLE": [ "角度", "Angle", "角度" ],
-      "TH17_SPAWN_A_GOAST": [ "生成一只动物灵", "Spawn a Goast", "動物霊アイテムを生成する" ],
-      "TH17_FORCE_ANGLE": [ "角度固定", "Force Angle", "固定角度で生成する" ],
-      "TH17_RANDOM_ANGLE": [ "角度随机", "Random Angle", "ランダムな角度で生成する" ],
+      "TH17_SPAWN_A_GOAST": [ "生成一只动物灵", "Spawn a Goast", "動物霊を生成" ],
+      "TH17_FORCE_ANGLE": [ "角度固定", "Force Angle", "固定角度で生成" ],
+      "TH17_RANDOM_ANGLE": [ "角度随机", "Random Angle", "ランダムな角度で生成" ],
       "TH17_ANGLE_PREVIEW": [ "--预览角度-->", "--angle-preview-->", "--プレビューのアングル-->"],
       "TH17_FORCE_ANGLE_HELP": [
         "动物灵在生成时或在墙上反弹时会试图远离彼此。这个选项会保证生成的动物灵总是朝指定的方向移动",
@@ -9873,8 +10297,13 @@
       "TH18_BUG_FIX": [ "Bug修复", "Bug fix", "バグ修正" ],
       "TH18_BUG_FIX_DESC": [
         "请在不需要使用以下选项的时候将其关闭。",
-        "Please turn the following options off when there's no need to utilizing them.",
+        "Please turn the following options off when there's no need for them.",
         "以下のオプションを利用する必要がない場合は、オフにしてください。"
+      ],
+	  "TH18_BUGFIX_AUTO_DESC": [
+        "包括：\n• 游戏崩溃：在符卡练习中全避「弹幕的庇护所」。\n• 游戏崩溃：持有「死秽回避之药」或「有钱能使鬼推磨」时切换关卡。\n• 回放不同步：蜈蚣卡牌在关卡切换后伤害倍率重置。\n• 回放不同步：卷轴卡牌在 Extra 商店后冷却倍率重置。\n• 录制不同步：「妖怪们的盾构法」存在非确定性行为。\n• 录制不同步：关卡切换时错误地将所选主动卡写入回放。\n• 功能异常：Esc+R 与 Esc+Q。",
+        "Includes:\n• Game Crash: Timing out \"Asylum of Danmaku\" in Spell Practice.\n• Game Crash: Stage transition with cards \"Death Avoidance Elixir\" and \"Money is the Best Lawyer in Hell\"\n• Playback Desync: Centipede damage multiplier resetting on stage transition.\n• Playback Desync: Scroll cooldown multipliers resetting after Extra shop.\n• Recording Desync: Non-deterministic behavior on \"Shield Method of the Youkai\".\n• Recording Desync: Incorrect selected active card written to replay on stage transition.\n• Broken Features: Esc+R and Esc+Q.",
+        "内容：\n- ゲームクラッシュ：スペルプラクティスで「弾幕のアジール」をタイムアウトした場合。\n- ゲームクラッシュ：「死穢回避の薬」または「地獄の沙汰も金次第」を所持した状態でのステージ移行。\n- 再生ズレ：ムカデカードのダメージ倍率がステージ移行後にリセットされる。\n- 再生ズレ：経典カードのクールダウン倍率がExtraショップ後にリセットされる。\n- 記録ズレ：「妖怪達のシールドメソッド」における非決定的挙動。\n- 記録ズレ：ステージ移行時に選択した使用カードがリプレイへ正しく記録されない。\n- 機能不具合：Esc+R と Esc+Q。"
       ],
       "TH18_FUNDS": [ "资金力", "Funds", "資金力" ],
       "TH18_CARD": [ "卡片", "Card", "カード" ],
@@ -9894,82 +10323,58 @@
       "TH18_MIKOFLASH_CD": [ "神子冷却", "Miko CD", "神子CD" ],
       "TH18_VAMPIRE_CD": [ "牙冷却", "Fang CD", "牙CD" ],
       "TH18_SUN_CD": [ "太阳冷却", "Sun CD", "太陽CD" ],
-      "TH18_LILY_COUNT": [ "莉莉使用数", "Lily Count", "リリー使用回数" ],
+      "TH18_LILY_COUNT": [ "莉莉等级", "Lily Level", "リリーレベル" ],
+	  "TH18_LILY_CYCLE": [ "莉莉循环", "Lily Cycle", "リリーサイクル" ],
       "TH18_LILY_CD": [ "莉莉冷却", "Lily CD", "リリーCD" ],
       "TH18_BASSDRUM_CD": [ "鼓冷却", "Drum CD", "低音鼓CD" ],
       "TH18_PSYCO_CD": [ "菫子冷却", "Sumi CD", "菫子CD" ],
       "TH18_CYLINDER_CD": [ "瓶子冷却", "Bottle CD", "瓶CD" ],
       "TH18_RICEBALL_CD": [ "饭团冷却", "Rice CD", "麦飯CD" ],
       "TH18_UNCAP": [ "移除分数限制", "Score uncap", "スコア上限解放" ],
-      "TH18_UNCAP_OVERWRITE": [ "...并写入replay中", "...and write into the replay", "リプレイに書き込み" ],
+      "TH18_UNCAP_DESC": [
+        "允许分数超过 9,999,999,990。\n请注意，即使得分超过了通常的显示上限，游戏仍会像往常一样将分数保存到replay文件中。",
+        "Allows the score counter to go past 9,999,999,990. Note that the game will naturally save score values into replays even if they go past their usual display limit.",
+        "スコアカウンターが 9,999,999,990 を超えるようになります。\nなお、得点が通常の表示上限を超えても、ゲームは自然に得点値をリプレイへ保存します。"
+      ],
+      "TH18_UNCAP_OVERRIDE": [ "不要将超出上限的分数写入replay文件", "Don't write uncapped score into replay", "上限解除スコアをリプレイに書き込まない" ],
       "TH18_REPLAY_BONUS": [ "播放replay时计算关卡/Clear Bonus", "Add stage/clear bonus when playing replay", "リプレイを再生するときにステージ/クリアボーナスを加算する" ],
       "TH18_STATIC_MALLET": [ "在播放replay时，将万宝槌的金币转换率固定为11/30", "Fix Mallet gold conversion ratio to 11/30 when playing replay", "リプレイ再生時の小槌の金変換率を11/30に変更" ],
       "TH18_STATIC_MALLET_DESC": [
         "启用后，在回放中，万宝槌的物品转换将不再受到RNG影响（每30颗子弹变为11个金钱道具和19个得分道具；接近原版游戏的比率）。",
         "When enabled, RNG will no longer play a part in the Miracle Mallet's item conversion during replays (11 gold items and 19 green items for every 30 bullets; close to vanilla rate).",
         "有効にすると、リプレイ中の打ち出の小槌のアイテム変換においてRNGは影響しません（30弾毎に11の金アイテムと19の緑アイテム ほぼバニラゲームのレートに近い）。" ],
-      "TH18_MUKADE_FIX": [ "蜈蚣卡牌修复", "Centipede card fix", "ムカデカード修復" ],
-      "TH18_MUKADE_FIX_DESC": [
-        "开启时，能够从一面开始正常播放含有蜈蚣卡牌的replay。",
-        "When enabled, allowing replays that contain the centipede card to play normally if start from stage one.",
-        "有効にすると、ムカデカードを含むリプレイを一面から再生した場合に正常に再生できるようになります。"
+      "TH18_AC_REPFIX": [ "主动卡选择不同步修复", "Active card selection desync fix", "使用カード選択の同期ズレ修正" ],
+      "TH18_AC_REPFIX_SHOW_INS": [ "显示说明##th18", "Show instructions##th18", "指示を表示##th18" ],
+      "TH18_AC_REPFIX_HIDE_INS": [ "隐藏说明##th18", "Hide instructions##th18", "指示を非表示##th18" ],
+      "TH18_AC_REPFIX_NOTHING": [ "所选回放未使用主动卡。", "Selected replay does not use Active cards.", "選択したリプレイでは使用カードが使われていません。" ],
+      "TH18_AC_REPFIX_LOCKED": [ "已锁定replay: %s", "Replay locked: %s", "ロックされたリプレイ: %s" ],
+      "TH18_AC_REPFIX_LOCK": [ "锁定", "Lock", "ロック" ],
+      "TH18_AC_REPFIX_UNLOCK": [ "解锁", "Unlock", "ロック解除" ],
+      "TH18_AC_REPFIX_MISMATCH": [ "目标不一致。", "Target mismatch.", "目標不一致。" ],
+      "TH18_AC_REPFIX_INITIAL_CARD": [ "选择的卡牌: ", "Selected card: ", "選択したカード: " ],
+      "TH18_AC_REPFIX_DESC": [
+        "你可以使用这个工具修复被“关卡间切换主动卡”bug影响的replay。你可以选择每一面开始时应选中的主动卡，并检查相关的不同步问题是否已被修复。每一面都同步后即可保存修复后的副本。\n\n警告：如果replay中含有“太古的勾玉”或“暴食的蜈蚣”，则每次播放replay都必须从1面开始，否则有极高概率爆炸。",
+        "This tool allows you to fix replays that were affected by the \"switching Active cards in-between stages\" desync. You can select which Active card is meant to be selected at the start of each stage and check if it fixes related desyncs. Once all stages sync, you can save a fixed copy.\n\nWarning: if the replay contains either \"Ancient Magatama\" or \"Gluttonous Centipede\", make sure you always start replaying from Stage 1, otherwise a desync is almost guaranteed to happen.",
+        "このセクションでは、「ステージ間で使用カードを切り替える」バグの影響を受けたリプレイを修正できます。各ステージ開始時に選択される使用カードを指定し、同期ズレが解消されるか確認できます。すべてのステージが同期した後、修正済みのコピーを保存できます。\n\n警告：リプレイに「太古の勾玉」または「暴食のムカデ」のいずれかが含まれている場合は、必ず一面からリプレイを再生開始してください。そうしないと、リプレイがほぼ確実にズレします。"
       ],
-      "TH18_SCROLL_FIX": [ "卷轴卡牌修复", "Scroll card fix", "経典カード修復" ],
-      "TH18_SCROLL_FIX_DESC": [
-        "开启时，能够正常播放含有卷轴卡牌的replay（仅限Extra）。",
-        "When enabled, allowing replays (Extra only) that contain the scroll card to play normally.",
-        "有効にすると、経典カードを含むリプレイ（Extraのみ）を再生した場合に正常に再生できるようになります。"
+      "TH18_CS_REPFIX": [ "分数上限修复", "Counterstop fix", "カンスト修正" ],
+      "TH18_CS_REPFIX_DESC": [
+        "Replay文件会因为达到分数上限而无法正确地记录真实分数。此问题可能发生在某一面或多面，且可被此工具修复。请启用“移除分数限制”选项，从第一个真实得分未知的关卡开始，播放replay直到结束，然后保存修复后的副本。\n\n注意：此工具不会影响回放是否同步。请确保在启用相关修复选项的情况下播放replay。",
+        "This tool allows you to fix replays whose true score was not recorded in one or more stages due to the score cap. Enable the \"Remove score cap\" option, play back the replay from the first stage with an unknwon score to the end of the replay, then save a fixed copy.\n\nNote that this tool does not affect whether the replay syncs. Please make sure to play back the replay with the relevant fixes enabled.",
+        "このツールでは、スコアキャップにより1つ以上のステージで本来の得点が記録されなかったリプレイを修正できます。「スコアキャップ解放」オプションを有効にし、実際の得点が不明な最初のステージからリプレイ終了まで再生した後、修正済みのコピーを保存してください。\n\nなお、このツールはリプレイの同期には影響しません。必ず関連する修正を有効にした状態で再生してください。"
       ],
-      "TH18_ST6FINAL_FIX": [ "修复「弹幕的庇护所」", "Fix \"Asylum of Danmaku\"", "「弾幕のアジール」を修復" ],
-      "TH18_ST6FINAL_FIX_DESC": [
-        "开启时，在符卡练习中全避「弹幕的庇护所」将不再使游戏崩溃。",
-        "When enabled, timeouting \"Asylum of Danmaku\" in spell practice no longer crashes the game.",
-        "有効にすると、スペルプラクティスで「弾幕のアジール」をタイムアウトしても、ゲームがクラッシュしなくなります。 "
-      ],
-      "TH18_RESTART_FIX": [ "重开游戏时重置商店", "Reset market on restart", "ゲームを再開するときに市場をリセットする" ],
-      "TH18_RESTART_FIX_DESC": [
-        "",
-        "",
-        ""
-      ],
-      "TH18_AC_FIX": [ "正确记录关卡开始时所选择的主动卡片", "Correctly record the selected active card on stage beginning.", "ステージ開始時に選択した使用カードを正しく記録します" ],
-      "TH18_AC_FIX_DESC": [
-        "如果要使这个选项生效，你必须在游戏时保持此选项开启。",
-        "This option needs to be enabled for the entire gaming session for it to work.",
-        "このオプションを機能させるには、プレイ中に常にこのオプションを有効にする必要があります。 "
-      ],
-      "TH18_EIRIN_EIKI_FIX": [ "修复「死秽回避之药」和「有钱能使鬼推磨」", "Fix \"Death Avoidance Elixir\" and \"Money is the Best Lawyer in Hell\"", "「死穢回避の薬」と「地獄の沙汰も金次第」の修正" ],
-      "TH18_EIRIN_EIKI_FIX_DESC": [
-        "启用时，购买这些卡片不再会导致切换关卡时可能出现的崩溃现象",
-        "When enabled, buying those cards no longer randomly crashes the game during the stage transition.",
-        "有効化すると、これらのカードを購入しても、ステージ移行時にたまに発生していたクラッシュが起こらなくなります。"
-      ],
-      "TH18_FUNC_CALL_FIX": [ "修复「妖怪们的盾构法」", "Fix \"Shield Method of the Youkai\"", "「妖怪達のシールドメソッド」の修正" ],
-      "TH18_FUNC_CALL_FIX_DESC": [
-        "启用时，「妖怪们的盾构法」不会再不时因为生成错子弹的位置而引发 rep 文件损坏。",
-        "When enabled, \"Shield Method of the Youkai\" will no longer randomly desync by spawning bullets in the wrong position.",
-        "有効化すると、「妖怪達のシールドメソッド」が弾の生成位置の誤りによるリプレイバグを引き起こすことはなくなります。"
-      ],
-      "TH18_REPFIX_SHOW_INS": [ "显示说明##th18", "Show instruction##th18", "指示を表示##th18" ],
-      "TH18_REPFIX_HIDE_INS": [ "隐藏说明##th18", "Hide instruction##th18", "指示を非表示##th18" ],
-      "TH18_REPFIX_NOTHING": [ "没有选择或锁定任何replay。", "No replay is selected nor locked.", "リプレイは選択もロックもされていません。" ],
-      "TH18_REPFIX_SELECTED": [ "已选择Replay: %s", "Replay selected: %s", "選択したリプレイ: %s" ],
-      "TH18_REPFIX_LOCKED": [ "已锁定Replay: %s", "Replay locked: %s", "ロックされたリプレイ: %s" ],
-      "TH18_REPFIX_LOCK": [ "锁定", "Lock", "ロック" ],
-      "TH18_REPFIX_UNLOCK": [ "解锁", "Unlock", "ロック解除" ],
-      "TH18_REPFIX_SAVEAS": [ "另存为...", "Save as...", "名前を付けて保存..." ],
-      "TH18_REPFIX_MISMATCH": [ "目标不一致。", "Target mismatch.", "目標不一致。" ],
-      "TH18_REPFIX_INITIAL_CARD": [ "选择的卡牌: ", "Selected card: ", "選択したカード: " ],
-      "TH18_REPFIX_DESC": [
-        "你可以使用这个区域中的功能修复被“关卡间切换主动卡”bug影响的replay。\n修复的replay可以使用原版游戏播放（不需要thprac）。",
-        "This section allows you to fix replays that were affected by the \"switching active cards in-between stages\" bug.\nRepaired replays can be played with the original game (thprac is not needed).",
-        "このセクションでは、「ステージ間で使用カードを切り替える」バグの影響を受けたリプレイを修正できます。\n修復されたリプレイは、オリジナルゲームで再生できます（thpracは必要ありません）。"
-      ],
-      "TH18_REPFIX_INS": [
-        "1．在游戏内选择目标replay并打开高级选项菜单，点击出现的“锁定”按钮。\n2．每关的初始选择的主动卡将被列出。根据必要调整数值并开始播放replay。重复直到没有错误发生。\n3．点击“另存为”按钮以保存replay。一切完成后，点击“解除锁定”按钮。\n警告：如果replay中含有“太古的勾玉”或“暴食的蜈蚣”，则每次播放replay都必须从1面开始，否则有极高概率爆炸。",
-        "1. Select the target replay in the game and open the advance options menu. Click the appeared \"Lock\" button.\n2. The initially selected card of each stage will be listed. Adjust the value as needed and start replaying. Repeat until no desync occurs.\n3. Click the \"Save as\" button to save the repaired replay. After everything's done, click the \"Unlock\" button.\nWarning: if the replay contains either \"Ancient Magatama\" or \"Gluttonous Centipede\", make sure you always start replaying from stage one, otherwise desync will almost be guaranteed to happen.",
-        "1．ゲームで目標のリプレイを選択し、拡張オプションメニューを開きます。表示された「ロック」ボタンをクリックします。\n2．各ステージで最初に選択されたカードが一覧表示されます。必要に応じて値を調整し、再生を開始します。ズレが発生しなくなるまで繰り返します。\n3．[名前を付けて保存]ボタンをクリックして、修復されたリプレイを保存します。すべてが完了したら、[ロック解除]ボタンをクリックします。 \n警告：リプレイに「太古の勾玉」または「暴食のムカデ」のいずれかが含まれている場合は、必ず一面からリプレイを再生開始してください。そうしないと、リプレイがほぼ確実にズレします。"
-      ],
+      "TH18_CS_REPFIX_NO_UNCAP": [ "“移除分数限制”选项未启用。", "\"Remove score cap\" option disabled.", "「スコアキャップ解放」オプションが無効です。" ],
+      "TH18_CS_REPFIX_SELECTED_NO_CS": [ "所选回放未达到分数上限。", "Selected replay does not hit the score cap.", "選択したリプレイはカンストしていません。" ],
+       "TH18_CS_REPFIX_STAGE": [ "第%d面分数：", "Stage %d Score:", "ステージ %d得点：" ],
+      "TH18_CS_REPFIX_EXTRA": [ "Extra面分数：", "Extra Stage Score:", "Extraステージ得点：" ],
+      "TH18_CS_REPFIX_READY_HINT": [ "修复后的分数已记录，可保存。", "Fixed score recorded & ready to save.", "修正済みの得点が記録され、保存可能です。" ],
+      "TH18_CS_REPFIX_RECORDING_HINT": [ "正在记录分数……请喝杯茶慢慢等等吧。", "Recording score... Please wait warmly and have some tea.", "得点を記録中です...どうぞ温かいお茶でも飲んでお待ちください。" ],
+      "TH18_CS_REPFIX_FIRST_UNKNOWN_HINT": [ "真实分数未知；请从此关开始播放replay直到结束。", "Real score unknown; please play back replay from this stage to the end of the run.", "実際の得点が不明です。このステージから最後まで再生してください。" ],
+      "TH18_CS_REPFIX_UNKNOWN_HINT": [ "真实分数未知；请从第 %d 面开始播放回放直到结束。", "Real score unknown; please play back replay from Stage %d to the end of the run.", "実際の得点が不明です。ステージ%dから最後まで再生してください。" ],
+      "TH18_CS_REPFIX_SAVE_PROGRESS_HINT": [
+        "仍有 %d 个分数未知。\n请从第 %d 面开始播放回放直到结束。",
+        "%d scores still unknown.\nPlease play back replay from Stage %d to the end of the run.",
+        "まだ %d 件の得点が不明です。\nステージ%dから最後まで再生してください。"],
       "TH18_CARD_00": [ "空白卡牌", "Blank", "空白のカード" ],
       "TH18_CARD_01": [ "生命卡牌", "Life", "命のカード" ],
       "TH18_CARD_02": [ "符咒卡牌", "Spell", "スペルのカード" ],
@@ -10447,6 +10852,11 @@
     },
 
     "groups": {
+	  "TH18_LILY_CYCLE_LIST": [
+        "TH14_CYCLE_1",
+        "TH14_CYCLE_2",
+        "TH20_CYCLE_3"
+      ],
       "TH18_CARD_LIST": [
         "TH18_CARD_00",
         "TH18_CARD_01",
@@ -10518,7 +10928,7 @@
           "TH185_ADDITIONAL_CARDS": [ "额外卡牌", "Additional Cards", "追加カード" ],
           "TH185_FORCE_WAVE": [ "指定波次", "Force Wave", "強行突破 " ],
           "TH185_WAVE_FORMAT": [ "第%d波", "Wave %d", "Wave %d" ],
-          "TH185_NONE_RANDOM": [ "传送", "None (Random)", "なし (ランダム)" ],
+          "TH185_NONE_RANDOM": [ "无（随机）", "None (Random)", "なし (ランダム)" ],
 
           "TH185_WAVE_1":  [ "第1波",  "Wave 1",  "Wave 1"  ],
           "TH185_WAVE_2":  [ "第2波",  "Wave 2",  "Wave 2"  ],
@@ -10535,8 +10945,8 @@
 
           "TH185_CARD_01": [ "无", "None", "なし" ],
           "TH185_CARD_02": [ "空白卡牌", "Blank Card", "空白のカード" ],
-          "TH185_CARD_03": [ "财富流至门前来", "Money Comes and Goes on its Own", "勝手に天下の回り物" ],
-          "TH185_CARD_04": [ "财富流至门前来", "Money Comes and Goes on its Own", "勝手に天下の回り物" ],
+          "TH185_CARD_03": [ "财富流至门前来（资金力）", "Money Comes and Goes on its Own (Funds)", "勝手に天下の回り物" ],
+          "TH185_CARD_04": [ "财富流至门前来（弹币）", "Money Comes and Goes on its Own (BMoney)", "勝手に天下の回り物" ],
           "TH185_CARD_05": [ "生命卡牌", "Life Card", "命のカード" ],
           "TH185_CARD_06": [ "铃瑚团子", "Ringo Brand Dumplings", "鈴瑚印の団子" ],
           "TH185_CARD_07": [ "不死鸟之尾", "Phoenix's Tail", "不死鳥の尾" ],
@@ -10863,10 +11273,7 @@
         "• Y1 aura desync: You only need to find a working offset within a 3-frame cycle (i.e. all stage transitions can be made to work with an offset of 0, 1 or 2 frames).\n• ReimuR2 desync: You need to find a working offset wihin a 120-frame cycle, which means you'll effectively have to find the correct value.\n• Reimu bomb aura desync: You must find the exact correct offset value. Note that the desync usually only becomes noticeable around halfway through bossfights (when the aura stops being active).\n\n* Note: Stage 4 requires loading more resources, so you may see a spike in the correct value there (e.g. +[10f, 40f]; not guaranteed). If the runner used thcrap, loading lag can be significantly higher depending on the patches used (e.g. +[90f, 120f] for a language patch), and variations from stage to stage can be larger. It's worth noting that like thprac, thcrap prevents the ANM reuse bug.",
          "- Y1オーラの同期ズレ: 3フレーム周期内で有効なオフセットを見つければ十分です（つまり、すべてのステージトランジションは0、1、2フレームのいずれかのオフセットで調整可能です）。\n- 霊夢R2の同期ズレ: 120フレーム周期内で動作するオフセットを見つける必要があります。\n- 霊夢ボムオーラの同期ズレ: 正確なオフセット値を見つける必要があります。なお、この同期ズレは通常、ボス戦の中盤あたりで目立つようになります（オーラが停止するタイミング）。\n\n* 注意: ステージ4ではより多くのリソースをロードする必要があるため、正しい値にピークが生じることがあります（例: +[10f, 40f]、保証なし）。もしランナーが thcrap を使用した場合、ロードラグは使用したパッチによって大きく変化する可能性があります（例: 言語パッチ +[90f, 120f]）、ステージ間の差も大きくなることがあります。元のランナーに、thcrap を使用したかどうか尋ねてみる価値があるかもしれません。 thprac と同様に、thcrap では ANM 再利用バグを防止する。"
       ],
-      "TH20_RPYFIX_STAGE_NUM": [ "关卡 %d", "Stage %d", "ステージ %d" ],
-      "TH20_RPYFIX_EXTRA_STAGE": [ "Extra关卡", "Extra Stage", "Extraステージ" ],
       "TH20_MAINRPYFIX_STAGE_TIMER_DISABLE_HINT": [ "播放重放时无法修改已过去关卡的计时器偏移。", "Can't change past stage timer offset during playback.", "再生中は過去ステージのタイマーオフセットを変更できません。" ],
-      "TH20_MAINRPYFIX_SAVE_PROGRESS": [ "保存Replay ({}/{})", "Save replay ({}/{})", "リプレイをセーブ ({}/{})" ],
       "TH20_MAINRPYFIX_SAVE_PROGRESS_HINT": [ "剩余 %d 次关卡切换。", "%d stage transition%s remaining.", "残り %d ステージのトランジション" ],
       "TH20_MAINRPYFIX_SAVE_NO_ST1_HINT": [ "重放未从第 1 关开始。", "Replay was not started from stage 1.", "リプレイはステージ1から開始されていません。" ],
       "TH20_MAINRPYFIX_SAVE_SKIPPED_STAGE_HINT": [ "重放中至少有一个关卡缺少同步数据。", "Replay is missing sync data on at least one stage.", "リプレイに少なくとも1つのステージで同期データが欠けています。" ],
@@ -10896,7 +11303,6 @@
         "If you kill a summoned Wonder Stone enemy after the summon gauge fully depletes and the visual aura around it disappears, one of 5 scenarios can happen at random. While this situation is surprisingly rare, the related desync is particularly subtle as the replay will often sync on the original runner's computer but may not for others.\n\nYou can use this tool to check whether a replay is impacted by this issue, and if so, save a fixed copy. A counter will show you how many times it happens on a given stage (though this counter is only accurate for as long as the replay syncs). Controls allow you to specify what the outcome of each kill was, and you can add them manually or automatically by playing the replay. The most common outcome is raising the level of the correct Wonder Stone color. If the replay desyncs due to this bug (often directly after another summon starts), you can test other outcomes (the most common being \"None\" and \"+Red\").\n\nThis tool can be used alongside the above two tools, and their save buttons will save its data too.",
         "召喚ゲージが完全に減少し、周囲のオーラが消えた後に異変石の敵を撃破すると、ランダムで5つのシナリオのいずれかが発生します。この状況は意外と稀ですが、関連する同期ずれは特に微妙で、元のランナーの環境ではリプレイが同期しても、他の環境では同期しないことがあります。\n\nこのツールを使用すると、リプレイがこの問題の影響を受けているかどうかを確認でき、影響がある場合は修正版を保存できます。カウンターは、特定のステージで何回発生したかを表示します（ただし、このカウンターはリプレイが同期している間のみ正確です）。操作により、各撃破の結果を指定でき、手動で追加することも、リプレイを再生して自動で追加することも可能です。最も一般的な結果は、正しい異変石の色のレベルを上げることです。このバグによってリプレイが同期ずれした場合（多くは別の召喚が始まった直後）、他の結果をテストできます（最も一般的なのは「なし」と「+赤」）。\n\nこのツールは上記2つのツールと併用でき、それらの保存ボタンでもこのツールのデータを保存できます。"
       ],
-      "TH20_EXPSTONEFIX_SHOW_TOGGLE": [ "显示工具", "Show tool", "ツールを表示" ],
       "TH20_EXPSTONEFIX_PLUS_RED": [ "+红", "+Red", "+赤" ],
       "TH20_EXPSTONEFIX_PLUS_BLUE": [ "+蓝", "+Blue", "+青" ],
       "TH20_EXPSTONEFIX_PLUS_YELLOW": [ "+黄", "+Yellow", "+黄" ],

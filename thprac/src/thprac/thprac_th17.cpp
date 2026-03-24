@@ -2,20 +2,79 @@
 #include "thprac_utils.h"
 #include <numbers>
 #include <format>
-#define M_PI 3.14159265358979323846f
-
-struct vec2f {
-    float x;
-    float y;
-};
 
 namespace THPrac {
 namespace TH17 {
     int g_lock_timer = 0;
     bool g_lock_timer_flag = false;
+    bool g_th17_goast_disable = false;
+
+    struct __declspec(align(4)) GlobalsReplay {
+        int32_t stage;
+        int32_t stage_start;
+        int32_t chapter;
+        int32_t time_in_stage;
+        int32_t time_in_chapter;
+        int32_t time_in_music;
+        int32_t chara;
+        int32_t goast;
+        int32_t score;
+        int32_t difficulty;
+        int32_t continues;
+        int32_t rank;
+        int32_t graze;
+        int32_t graze_in_chapter;
+        int32_t spell_id;
+        int32_t misses;
+        int32_t continues_2;
+        int32_t num_point_items_collected;
+        int32_t piv;
+        int32_t piv_min;
+        int32_t piv_max;
+        int32_t power;
+        int32_t maximum_power;
+        int32_t power_per_level;
+        int32_t field_60;
+        int32_t lives;
+        int32_t life_pieces;
+        int32_t field_6C;
+        int32_t bombs;
+        int32_t bomb_pieces;
+        int32_t field_70;
+        int32_t field_74;
+        int32_t field_78;
+        int32_t hyper_fill;
+        int32_t tokens[5];
+        int32_t field_9C;
+        int32_t field_A0;
+        int32_t field_A4;
+        int32_t field_A8;
+        int32_t field_AC;
+        int32_t field_B0;
+        Timer field_B4;
+        Timer hyper_time;
+        int32_t field_DC;
+        uint32_t current_hyper;
+        int32_t field_E4;
+        uint32_t hyper_flags;
+    };
+
+    struct Globals {
+        int32_t high_score;
+        int32_t field_4;
+        uint32_t flags;
+        int32_t field_C;
+        int32_t field_10;
+        int32_t demoplay_timer;
+        int32_t field_18;
+        GlobalsReplay rpy;
+    };
+
+    Globals* globals = (Globals*)0x4b59c0;
 
     enum addrs {
         GOAST_MANAGER_PTR = 0x4B7684,
+        PLAYER_PTR = 0x4b77d0,
     };
 
     #define SpawnToken(goast, pos, ang) asm_call<0x00410380, Vectorcall>(GetMemContent<uintptr_t>(GOAST_MANAGER_PTR), UNUSED_DWORD, &pos, goast, UNUSED_FLOAT, UNUSED_FLOAT, ang)
@@ -44,6 +103,7 @@ namespace TH17 {
         int32_t graze;
 
         bool dlg;
+        bool keepSpellDrops;
 
         bool _playLock = false;
         void Reset()
@@ -60,6 +120,7 @@ namespace TH17 {
             GetJsonValue(section);
             GetJsonValue(phase);
             GetJsonValueEx(dlg, Bool);
+            GetJsonValueEx(keepSpellDrops, Bool);
 
             GetJsonValue(score);
             GetJsonValue(life);
@@ -92,6 +153,8 @@ namespace TH17 {
                     AddJsonValue(phase);
                 if (dlg)
                     AddJsonValue(dlg);
+                if (keepSpellDrops)
+                    AddJsonValue(keepSpellDrops)
 
                 AddJsonValue(score);
                 AddJsonValue(life);
@@ -152,7 +215,7 @@ namespace TH17 {
             SetStyle(ImGuiStyleVar_WindowBorderSize, 0.0f);
             OnLocaleChange();
         }
-        SINGLETON(THGuiPrac);
+        SINGLETON(THGuiPrac)
     public:
 
         __declspec(noinline) void State(int state)
@@ -178,6 +241,8 @@ namespace TH17 {
                 thPracParam.phase = SpellPhase() ? *mPhase : 0;
                 if (SectionHasDlg(thPracParam.section))
                     thPracParam.dlg = *mDlg;
+                if (SectionHasSpellDrops(thPracParam.section))
+                    thPracParam.keepSpellDrops = *mKeepSpellDrops;
 
                 thPracParam.score = *mScore;
                 thPracParam.life = *mLife;
@@ -266,10 +331,8 @@ namespace TH17 {
             if (*mMode == 1) {
                 if (mWarp())
                     *mSection = *mChapter = *mPhase = 0;
-                if (*mWarp) {
+                if (*mWarp) 
                     SectionWidget();
-                    mPhase(TH_PHASE, SpellPhase());
-                }
 
                 mLife();
                 mLifeFragment();
@@ -340,6 +403,39 @@ namespace TH17 {
                 return false;
             }
         }
+        bool SectionHasSpellDrops(int32_t section)
+        {
+            if (section >= TH17_ST1_BOSS2 && section <= TH17_ST1_BOSS4)
+                return true;
+            if (section >= TH17_ST2_BOSS2 && section <= TH17_ST2_BOSS5)
+                return true;
+            if (section >= TH17_ST3_BOSS2 && section <= TH17_ST3_BOSS6)
+                return true;
+            if (section >= TH17_ST4_BOSS2 && section <= TH17_ST4_BOSS6)
+                return true;
+            if (section >= TH17_ST5_BOSS2 && section <= TH17_ST5_BOSS7)
+                return true;
+            if (section >= TH17_ST6_BOSS2 && section <= TH17_ST6_BOSS11)
+                return true;
+
+            switch (section) {
+            case TH17_ST7_MID2:
+            case TH17_ST7_MID3:
+            case TH17_ST7_END_S1:
+            case TH17_ST7_END_NS2:
+            case TH17_ST7_END_NS3:
+            case TH17_ST7_END_NS4:
+            case TH17_ST7_END_NS5:
+            case TH17_ST7_END_NS6:
+            case TH17_ST7_END_NS7:
+            case TH17_ST7_END_NS8:
+            case TH17_ST7_END_S9:
+            case TH17_ST7_END_S10:
+                return true;
+            default:
+                return false;
+            }
+        }
         void SectionWidget()
         {
             static char chapterStr[256] {};
@@ -349,7 +445,7 @@ namespace TH17 {
             case 1: // Chapter
                 mChapter.SetBound(1, chapterCounts[0] + chapterCounts[1]);
 
-                if (chapterCounts[1] == 0 && chapterCounts[2] != 0) {
+                if (chapterCounts[1] == 0 && chapterCounts[0] != 0) {
                     sprintf_s(chapterStr, S(TH_STAGE_PORTION_N), *mChapter);
                 } else if (*mChapter <= chapterCounts[0]) {
                     sprintf_s(chapterStr, S(TH_STAGE_PORTION_1), *mChapter);
@@ -360,23 +456,41 @@ namespace TH17 {
                 mChapter(chapterStr);
                 break;
             case 2:
-            case 3: // Mid boss & End boss
-                if (mSection(TH_WARP_SELECT[*mWarp],
-                        th_sections_cba[*mStage][*mWarp - 2],
+            case 3: { // Mid boss & End boss
+                const th_sections_t* sections = th_sections_cba[*mStage][*mWarp - 2];
+                if (mSection(TH_WARP_SELECT[*mWarp], sections,
                         th_sections_str[::THPrac::Gui::LocaleGet()][mDiffculty]))
                     *mPhase = 0;
-                if (SectionHasDlg(th_sections_cba[*mStage][*mWarp - 2][*mSection]))
+                const bool hasDlg = SectionHasDlg(sections[*mSection]);
+                if (hasDlg)
                     mDlg();
+                mPhase(TH_PHASE, SpellPhase());
+
+                if (SectionHasSpellDrops(sections[*mSection])) {
+                    if (hasDlg)
+                        ImGui::SameLine();
+                    mKeepSpellDrops();
+                }
                 break;
+            }
             case 4:
-            case 5: // Non-spell & Spellcard
-                if (mSection(TH_WARP_SELECT[*mWarp],
-                        th_sections_cbt[*mStage][*mWarp - 4],
+            case 5: {// Non-spell & Spellcard
+                const th_sections_t* sections = th_sections_cbt[*mStage][*mWarp - 4];
+                if (mSection(TH_WARP_SELECT[*mWarp], sections,
                         th_sections_str[::THPrac::Gui::LocaleGet()][mDiffculty]))
                     *mPhase = 0;
-                if (SectionHasDlg(th_sections_cbt[*mStage][*mWarp - 4][*mSection]))
+                const bool hasDlg = SectionHasDlg(sections[*mSection]);
+                if (hasDlg)
                     mDlg();
+                mPhase(TH_PHASE, SpellPhase());
+
+                if (SectionHasSpellDrops(sections[*mSection])) {
+                    if (hasDlg)
+                        ImGui::SameLine();
+                    mKeepSpellDrops();
+                }
                 break;
+            }
             default:
                 break;
             }
@@ -388,6 +502,7 @@ namespace TH17 {
         Gui::GuiCombo mSection { TH_MODE };
         Gui::GuiCombo mPhase { TH_PHASE };
         Gui::GuiCheckBox mDlg { TH_DLG };
+        Gui::GuiCheckBox mKeepSpellDrops { TH_DROP_ITEMS };
 
         Gui::GuiSlider<int, ImGuiDataType_S32> mChapter { TH_CHAPTER, 0, 0 };
         Gui::GuiDrag<int64_t, ImGuiDataType_S64> mScore { TH_SCORE, 0, 9999999990, 10, 100000000 };
@@ -429,7 +544,7 @@ namespace TH17 {
             GetEnvironmentVariableW(L"APPDATA", appdata, MAX_PATH);
             mAppdataPath = appdata;
         }
-        SINGLETON(THGuiRep);
+        SINGLETON(THGuiRep)
     public:
         void CheckReplay()
         {
@@ -484,7 +599,7 @@ namespace TH17 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(THOverlay);
+        SINGLETON(THOverlay)
     protected:
         virtual void OnLocaleChange() override
         {
@@ -526,7 +641,7 @@ namespace TH17 {
             mTimeLock();
             mAutoBomb();
             mInfRoaring();
-            mNoGoast();
+            mNoHyper();
             mElBgm();
             mInGameInfo();
         }
@@ -571,8 +686,11 @@ namespace TH17 {
         })
         HOTKEY_ENDDEF();
 
-        HOTKEY_DEFINE(mNoGoast, TH17_NO_GOAST, "F8", VK_F8)
-        PATCH_HK(0x4347af, "e903010000")
+        HOTKEY_DEFINE(mNoHyper, TH17_NO_HYPER, "F8", VK_F8)
+        EHOOK_HK(0x40FDD4, 5,
+        {
+            globals->rpy.current_hyper = 4;
+        })
         HOTKEY_ENDDEF();
 
     public:
@@ -592,13 +710,13 @@ namespace TH17 {
         {
             SetTitle("igi");
             SetFade(0.9f, 0.9f);
-            SetPosRel(900.0f / 1280.0f, 500.0f / 960.0f);
-            SetSizeRel(340.0f / 1280.0f, 0.0f);
+            SetPosRel(880.0f / 1280.0f, 500.0f / 960.0f);
+            SetSizeRel(380.0f / 1280.0f, 0.0f);
             SetWndFlag(ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | 
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(TH17InGameInfo);
+        SINGLETON(TH17InGameInfo)
 
     public:
         int32_t mMissCount;
@@ -635,59 +753,59 @@ namespace TH17 {
 
         virtual void OnContentUpdate() override
         {
-            byte cur_player_type = (*(int32_t*)(0x4B59F4)) * 3 + (*(int32_t*)(0x4B59F8));
+            int32_t cur_player_type = (*(int32_t*)(0x4B59F4)) * 3 + (*(int32_t*)(0x4B59F8));
             int32_t diff = *((int32_t*)0x4B5A00);
             auto diff_pl = std::format("{} ({})", S(IGI_DIFF[diff]), S(IGI_PL_17[cur_player_type]));
             auto diff_pl_sz = ImGui::CalcTextSize(diff_pl.c_str());
 
-            ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5 - diff_pl_sz.x * 0.5);
+            ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5f - diff_pl_sz.x * 0.5f);
             ImGui::Text(diff_pl.c_str());
 
             ImGui::Columns(2);
             ImGui::Text(S(THPRAC_INGAMEINFO_MISS_COUNT));
             ImGui::NextColumn();
-            ImGui::Text("%8d", mMissCount);
+            ImGui::Text("%7d", mMissCount);
             ImGui::NextColumn();
             ImGui::Text(S(THPRAC_INGAMEINFO_BOMB_COUNT));
             ImGui::NextColumn();
-            ImGui::Text("%8d", mBombCount);
+            ImGui::Text("%7d", mBombCount);
             ImGui::NextColumn();
             ImGui::Text(S(THPRAC_INGAMEINFO_17_SPECIAL_GOAST_COUNT));
             ImGui::NextColumn();
-            ImGui::Text("%8d", mSpecialGoastCount);
+            ImGui::Text("%7d", mSpecialGoastCount);
             ImGui::NextColumn();
             ImGui::Text(S(THPRAC_INGAMEINFO_17_ROAR_COUNT));
             ImGui::NextColumn();
-            ImGui::Text("%8d", mRoarCount);
+
+            ImGui::Text("%7d(", mRoarCount);
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::TextColored({ 0.9f, 0.4f, 0.4f, 1.0f }, "%d", mWolfCount);
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text("/");
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::TextColored({ 0.6f, 0.9f, 0.6f, 1.0f }, "%d", mOtterCount);
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text("/");
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::TextColored({ 0.8f, 0.6f, 1.0f, 1.0f }, "%d", mEagerCount);
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text(")");
+
             ImGui::NextColumn();
             ImGui::Text(S(THPRAC_INGAMEINFO_17_ROAR_BREAK_COUNT));
             ImGui::NextColumn();
-            ImGui::Text("%8d", mRoarBreakCount);
-            ImGui::NextColumn();
-            ImGui::Text(S(THPRAC_INGAMEINFO_17_WOLF_COUNT));
-            ImGui::NextColumn();
-            ImGui::Text("%8d", mWolfCount);
-            ImGui::NextColumn();
-            ImGui::Text(S(THPRAC_INGAMEINFO_17_OTTER_COUNT));
-            ImGui::NextColumn();
-            ImGui::Text("%8d", mOtterCount);
-            ImGui::NextColumn();
-            ImGui::Text(S(THPRAC_INGAMEINFO_17_EAGLE_COUNT));
-            ImGui::NextColumn();
-            ImGui::Text("%8d", mEagerCount);
-            ImGui::NextColumn();
-            
+            ImGui::Text("%7d", mRoarBreakCount);
         }
 
         virtual void OnPreUpdate() override
         {
-            if (*(DWORD*)(0x004B77D0)) {
+            if (GetMemContent(PLAYER_PTR)) {
                 GameUpdateInner(17);
             } else {
             }
-            if (*(THOverlay::singleton().mInGameInfo) && *(DWORD*)(0x004B77D0)) {
-                SetPosRel(900.0f / 1280.0f, 500.0f / 960.0f);
-                SetSizeRel(340.0f / 1280.0f, 0.0f);
+            if (*(THOverlay::singleton().mInGameInfo) && GetMemContent(PLAYER_PTR)) {
+                SetPosRel(880.0f / 1280.0f, 500.0f / 960.0f);
+                SetSizeRel(380.0f / 1280.0f, 0.0f);
                 Open();
             } else {
                 Close();
@@ -707,7 +825,7 @@ namespace TH17 {
             SetStyle(ImGuiStyleVar_WindowBorderSize, 0.0f);
             OnLocaleChange();
         }
-        SINGLETON(THGuiSP);
+        SINGLETON(THGuiSP)
     public:
         int mState = 0;
         __declspec(noinline) int State()
@@ -846,6 +964,8 @@ namespace TH17 {
     PATCH_DY(th17_master_disable1c, 0x41AB96, "00")
     HOOKSET_ENDDEF()
 
+    PATCH_ST(th17_goast_disable, 0x4347af, "e903010000");
+
     float g_bossMoveDownRange = BOSS_MOVE_DOWN_RANGE_INIT;
     EHOOK_ST(th17_bossmovedown, 0x0423606, 5,{
         float* y_pos = (float*)(pCtx->Edi + 0x3F64);
@@ -858,7 +978,7 @@ namespace TH17 {
 
 
     class THAdvOptWnd : public Gui::PPGuiWnd {
-        SINGLETON(THAdvOptWnd);
+        SINGLETON(THAdvOptWnd)
     public:
         bool forceBossMoveDown = false;
     private:
@@ -872,7 +992,7 @@ namespace TH17 {
         }
         void FpsInit()
         {
-            if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) {
+            if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) != NULL) {
                 OILPInit(mOptCtx);
             } else if (*(uint8_t*)0x4b5cd9 == 3) {
                 mOptCtx.fps_status = 1;
@@ -923,6 +1043,7 @@ namespace TH17 {
             FpsInit();
             GameplayInit();
             MasterDisableInit();
+            th17_goast_disable.Setup();
             th17_bossmovedown.Setup();
         }
         
@@ -986,7 +1107,7 @@ namespace TH17 {
             if (mGoastAngleRandom)
                 ImGui::BeginDisabled();
 
-            ImGui::SliderFloat(S(TH17_GOAST_ANGLE), &mGoastAng, -M_PI, M_PI);
+            ImGui::SliderFloat(S(TH17_GOAST_ANGLE), &mGoastAng, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
             ImGui::Checkbox(S(TH17_FORCE_ANGLE), &mForceGoastAngle);
             ImGui::SameLine();
             HelpMarker(S(TH17_FORCE_ANGLE_HELP));
@@ -1046,13 +1167,17 @@ namespace TH17 {
                 if (ImGui::DragFloat(S(TH_BOSS_FORCE_MOVE_DOWN_RANGE), &g_bossMoveDownRange, 0.002f, 0.0f, 1.0f))
                     g_bossMoveDownRange = std::clamp(g_bossMoveDownRange, 0.0f, 1.0f);
 
+                if (ImGui::Checkbox(S(TH17_NO_GOAST), &g_th17_goast_disable))
+                    th17_goast_disable.Toggle(g_th17_goast_disable);
+
+                ImGui::Checkbox(S(TH_ENABLE_LOCK_TIMER), &g_adv_igi_options.enable_lock_timer_autoly);
+
                 if (ImGui::Checkbox(S(TH_DISABLE_MASTER), &g_adv_igi_options.disable_master_autoly)) {
                     for (int i = 0; i < 3; i++)
                         th17_master_disable[i].Toggle(g_adv_igi_options.disable_master_autoly);
                 }
                 ImGui::SameLine();
                 HelpMarker(S(TH_DISABLE_MASTER_DESC));
-                ImGui::Checkbox(S(TH_ENABLE_LOCK_TIMER), &g_adv_igi_options.enable_lock_timer_autoly);
 
                 if (GameplayOpt(mOptCtx))
                     GameplaySet();
@@ -1300,15 +1425,18 @@ namespace TH17 {
             ECLJump(ecl, 0x39c, 0x484, 1); // Utilize Spell Practice Jump
             ecl << pair{0x494, 2400}; // Set Health
             ecl << pair{0x4b4, (int8_t)0x31}; // Set Spell Ordinal
-            ecl << pair{0x1a44, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x1a44, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST1_BOSS3:
             ECLStdExec(ecl, 0x78c4, 1, 1);
             ECLJump(ecl, 0, 0x7d84, 60);
             ecl.SetFile(2);
             ecl << pair{0x5d4, (int8_t)0x32}; // Change Nonspell
-            ecl << pair{0xf7c, (int16_t)0} << pair{0xfb4, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x10e0, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0xf7c, (int16_t)0 } << pair { 0xfb4, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x10e0, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ECLJump(ecl, 0x1234, 0x12b4, 0);
             ecl << pair{0xe9c, 0};
             break;
@@ -1319,7 +1447,8 @@ namespace TH17 {
             ECLJump(ecl, 0x39c, 0x484, 1); // Utilize Spell Practice Jump
             ecl << pair{0x494, 2400}; // Set Health
             ecl << pair{0x4b4, (int8_t)0x32}; // Set Spell Ordinal
-            ecl << pair{0x2b2c, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x2b2c, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST2_MID1:
             ECLStdExec(ecl, 0x99fc, 1, 1);
@@ -1339,15 +1468,18 @@ namespace TH17 {
             ECLJump(ecl, 0x3fc, 0x4e4, 1); // Utilize Spell Practice Jump
             ecl << pair{0x4f4, 2200}; // Set Health
             ecl << pair{0x514, (int8_t)0x31}; // Set Spell Ordinal
-            ecl << pair{0x26e4, (int16_t)0} << pair{0x271c, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x26e4, (int16_t)0 } << pair { 0x271c, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST2_BOSS3:
             ECLStdExec(ecl, 0x99fc, 1, 1);
             ECLJump(ecl, 0, 0x9ef4, 60);
             ecl.SetFile(2);
             ecl << pair{0x738, (int8_t)0x32}; // Change Nonspell
-            ecl << pair{0x1360, (int16_t)0} << pair{0x1398, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x14c4, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x1360, (int16_t)0 } << pair { 0x1398, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x14c4, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x1654, 60} << pair{0x1280, 90};
             break;
         case THPrac::TH17::TH17_ST2_BOSS4:
@@ -1357,16 +1489,21 @@ namespace TH17 {
             ECLJump(ecl, 0x3fc, 0x4e4, 1); // Utilize Spell Practice Jump
             ecl << pair{0x4f4, 2200}; // Set Health
             ecl << pair{0x514, (int8_t)0x32}; // Set Spell Ordinal
-            ecl << pair{0x3058, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x3058, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST2_BOSS5:
             ECLStdExec(ecl, 0x99fc, 1, 1);
             ECLJump(ecl, 0, 0x9ef4, 60);
             ecl.SetFile(2);
-            ECLJump(ecl, 0x3fc, 0x4e4, 1); // Utilize Spell Practice Jump
-            ecl << pair{0x4f4, 3000}; // Set Health
-            ecl << pair{0x514, (int8_t)0x33}; // Set Spell Ordinal
-            ecl << pair{0x4b04, (int16_t)0}; // Disable Item Drops
+            if (thPracParam.keepSpellDrops) {
+                ecl << pair { 0x738, (int8_t)0x33 }; // Change Nonspell
+
+            } else {
+                ECLJump(ecl, 0x3fc, 0x4e4, 1); // Utilize Spell Practice Jump
+                ecl << pair { 0x4f4, 3000 }; // Set Health
+                ecl << pair { 0x514, (int8_t)0x33 }; // Set Spell Ordinal
+            }
             break;
         case THPrac::TH17::TH17_ST3_MID1:
             ECLStdExec(ecl, 0x8cec, 1, 1);
@@ -1386,15 +1523,18 @@ namespace TH17 {
             ECLJump(ecl, 0x470, 0x558, 1); // Utilize Spell Practice Jump
             ecl << pair{0x568, 2700}; // Set Health
             ecl << pair{0x588, (int8_t)0x31}; // Set Spell Ordinal
-            ecl << pair{0x2d70, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x2d70, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST3_BOSS3:
             ECLStdExec(ecl, 0x8cec, 1, 1);
             ECLJump(ecl, 0, 0x9140, 60);
             ecl.SetFile(2);
             ecl << pair{0x7cc, (int8_t)0x32}; // Change Nonspell
-            ecl << pair{0x1330, (int16_t)0} << pair{0x1368, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x1494, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x1330, (int16_t)0 } << pair { 0x1368, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x1494, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x15f8, 0} << pair{0x1250, 30};
             break;
         case THPrac::TH17::TH17_ST3_BOSS4:
@@ -1404,15 +1544,18 @@ namespace TH17 {
             ECLJump(ecl, 0x470, 0x558, 1); // Utilize Spell Practice Jump
             ecl << pair{0x568, 2700}; // Set Health
             ecl << pair{0x588, (int8_t)0x32}; // Set Spell Ordinal
-            ecl << pair{0x3b2c, (int16_t)0} << pair{0x3b64, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x3b2c, (int16_t)0 } << pair { 0x3b64, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST3_BOSS5:
             ECLStdExec(ecl, 0x8cec, 1, 1);
             ECLJump(ecl, 0, 0x9140, 60);
             ecl.SetFile(2);
             ecl << pair{0x7cc, (int8_t)0x33}; // Change Nonspell
-            ecl << pair{0x2070, (int16_t)0} << pair{0x20a8, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x21d4, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x2070, (int16_t)0 } << pair { 0x20a8, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x21d4, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x2338, 0} << pair{0x1f90, 30};
             break;
         case THPrac::TH17::TH17_ST3_BOSS6:
@@ -1422,7 +1565,8 @@ namespace TH17 {
             ECLJump(ecl, 0x470, 0x558, 1); // Utilize Spell Practice Jump
             ecl << pair{0x568, 2600}; // Set Health
             ecl << pair{0x588, (int8_t)0x33}; // Set Spell Ordinal
-            ecl << pair{0x4ff0, (int16_t)0} << pair{0x5028, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x4ff0, (int16_t)0 } << pair { 0x5028, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST4_MID1:
             ECLStdExec(ecl, 0xc374, 1, 1);
@@ -1442,15 +1586,18 @@ namespace TH17 {
             ECLJump(ecl, 0x3d4, 0x4bc, 1); // Utilize Spell Practice Jump
             ecl << pair{0x4cc, 2400}; // Set Health
             ecl << pair{0x4ec, (int8_t)0x31}; // Set Spell Ordinal
-            ecl << pair{0x33dc, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x33dc, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST4_BOSS3:
             ECLStdExec(ecl, 0xc374, 1, 1);
             ECLJump(ecl, 0, 0xc7c8, 60);
             ecl.SetFile(2);
             ecl << pair{0x730, (int8_t)0x32}; // Change Nonspell
-            ecl << pair{0x1454, (int16_t)0} << pair{0x148c, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x15b8, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x1454, (int16_t)0 } << pair { 0x148c, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x15b8, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x171c, 0} << pair{0x1374, 30};
             break;
         case THPrac::TH17::TH17_ST4_BOSS4:
@@ -1460,15 +1607,18 @@ namespace TH17 {
             ECLJump(ecl, 0x3d4, 0x4bc, 1); // Utilize Spell Practice Jump
             ecl << pair{0x4cc, 2400}; // Set Health
             ecl << pair{0x4ec, (int8_t)0x32}; // Set Spell Ordinal
-            ecl << pair{0x44f0, (int16_t)0} << pair{0x4528, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x44f0, (int16_t)0 } << pair { 0x4528, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST4_BOSS5:
             ECLStdExec(ecl, 0xc374, 1, 1);
             ECLJump(ecl, 0, 0xc7c8, 60);
             ecl.SetFile(2);
             ecl << pair{0x730, (int8_t)0x33}; // Change Nonspell
-            ecl << pair{0x24a0, (int16_t)0} << pair{0x24d8, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x2604, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x24a0, (int16_t)0 } << pair { 0x24d8, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x2604, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x2768, 0} << pair{0x23c0, 30};
             break;
         case THPrac::TH17::TH17_ST4_BOSS6:
@@ -1478,7 +1628,8 @@ namespace TH17 {
             ECLJump(ecl, 0x3d4, 0x4bc, 1); // Utilize Spell Practice Jump
             ecl << pair{0x4cc, 4000}; // Set Health
             ecl << pair{0x4ec, (int8_t)0x33}; // Set Spell Ordinal
-            ecl << pair{0x5264, (int16_t)0} << pair{0x529c, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x5264, (int16_t)0 } << pair { 0x529c, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST5_MID1:
             ECLStdExec(ecl, 0xae0c, 1, 1);
@@ -1498,15 +1649,18 @@ namespace TH17 {
             ECLJump(ecl, 0x484, 0x56c, 1); // Utilize Spell Practice Jump
             ecl << pair{0x57c, 2500}; // Set Health
             ecl << pair{0x59c, (int8_t)0x31}; // Set Spell Ordinal
-            ecl << pair{0x3854, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x3854, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST5_BOSS3:
             ECLStdExec(ecl, 0xae0c, 1, 1);
             ECLJump(ecl, 0, 0xb270, 60);
             ecl.SetFile(2);
             ecl << pair{0x8e4, (int8_t)0x32}; // Change Nonspell
-            ecl << pair{0x1508, (int16_t)0} << pair{0x1540, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x166c, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x1508, (int16_t)0 } << pair { 0x1540, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x166c, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x17d0, 0} << pair{0x1428, 30};
             break;
         case THPrac::TH17::TH17_ST5_BOSS4:
@@ -1516,15 +1670,18 @@ namespace TH17 {
             ECLJump(ecl, 0x484, 0x56c, 1); // Utilize Spell Practice Jump
             ecl << pair{0x57c, 2300}; // Set Health
             ecl << pair{0x59c, (int8_t)0x32}; // Set Spell Ordinal
-            ecl << pair{0x5260, (int16_t)0} << pair{0x5298, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x5260, (int16_t)0 } << pair { 0x5298, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST5_BOSS5:
             ECLStdExec(ecl, 0xae0c, 1, 1);
             ECLJump(ecl, 0, 0xb270, 60);
             ecl.SetFile(2);
             ecl << pair{0x8e4, (int8_t)0x33}; // Change Nonspell
-            ecl << pair{0x2408, (int16_t)0} << pair{0x2440, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x256c, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x2408, (int16_t)0 } << pair { 0x2440, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x256c, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x26d0, 0} << pair{0x2328, 30};
             break;
         case THPrac::TH17::TH17_ST5_BOSS6:
@@ -1534,15 +1691,21 @@ namespace TH17 {
             ECLJump(ecl, 0x484, 0x56c, 1); // Utilize Spell Practice Jump
             ecl << pair{0x57c, 2300}; // Set Health
             ecl << pair{0x59c, (int8_t)0x33}; // Set Spell Ordinal
-            ecl << pair{0x70ac, (int16_t)0} << pair{0x70e4, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x70ac, (int16_t)0 } << pair { 0x70e4, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST5_BOSS7:
             ECLStdExec(ecl, 0xae0c, 1, 1);
             ECLJump(ecl, 0, 0xb270, 60);
             ecl.SetFile(2);
-            ECLJump(ecl, 0x484, 0x56c, 1); // Utilize Spell Practice Jump
-            ecl << pair{0x57c, 3000}; // Set Health
-            ecl << pair{0x59c, (int8_t)0x34}; // Set Spell Ordinal
+            if (thPracParam.keepSpellDrops) {
+                ecl << pair { 0x8e4, (int8_t)0x34 }; // Change Nonspell
+
+            } else {
+                ECLJump(ecl, 0x484, 0x56c, 1); // Utilize Spell Practice Jump
+                ecl << pair { 0x57c, 3000 }; // Set Health
+                ecl << pair { 0x59c, (int8_t)0x34 }; // Set Spell Ordinal
+            }
             break;
         case THPrac::TH17::TH17_ST6_MID1:
             ECLStdExec(ecl, 0x71bc, 1, 1);
@@ -1567,7 +1730,8 @@ namespace TH17 {
             ECLJump(ecl, 0x548, 0x630, 2); // Utilize Spell Practice Jump
             ecl << pair{0x640, 2600}; // Set Health
             ecl << pair{0x660, (int8_t)0x31}; // Set Spell Ordinal
-            ecl << pair{0x66c4, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x66c4, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST6_BOSS3:
             ECLStdExec(ecl, 0x71bc, 3, 1);
@@ -1575,8 +1739,10 @@ namespace TH17 {
             ecl.SetFile(2);
             ecl << pair{0x454, (int16_t)0};
             ecl << pair{0xda4, (int8_t)0x32}; // Change Nonspell
-            ecl << pair{0x2038, (int16_t)0} << pair{0x2070, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x219c, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x2038, (int16_t)0 } << pair { 0x2070, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x219c, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x2300, 0} << pair{0x1f44, 30};
             ecl << pair{0x2004, (int16_t)0};
             break;
@@ -1588,7 +1754,8 @@ namespace TH17 {
             ECLJump(ecl, 0x548, 0x630, 2); // Utilize Spell Practice Jump
             ecl << pair{0x640, 3800}; // Set Health
             ecl << pair{0x660, (int8_t)0x32}; // Set Spell Ordinal
-            ecl << pair{0x78d8, (int16_t)0} << pair{0x7910, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x78d8, (int16_t)0 } << pair { 0x7910, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST6_BOSS5:
             ECLStdExec(ecl, 0x71bc, 5, 1);
@@ -1596,8 +1763,10 @@ namespace TH17 {
             ecl.SetFile(2);
             ecl << pair{0x454, (int16_t)0};
             ecl << pair{0xda4, (int8_t)0x33}; // Change Nonspell
-            ecl << pair{0x32c8, (int16_t)0} << pair{0x3300, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x3444, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x32c8, (int16_t)0 } << pair { 0x3300, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x3444, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x31d4, 0};
             ECLJump(ecl, 0x3598, 0x35e8, 0);
             ecl << pair{0x3294, (int16_t)0};
@@ -1610,7 +1779,8 @@ namespace TH17 {
             ECLJump(ecl, 0x548, 0x630, 2); // Utilize Spell Practice Jump
             ecl << pair{0x640, 3000}; // Set Health
             ecl << pair{0x660, (int8_t)0x33}; // Set Spell Ordinal
-            ecl << pair{0x9bc0, (int16_t)0} << pair{0x9bf8, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x9bc0, (int16_t)0 } << pair { 0x9bf8, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST6_BOSS7:
             ECLStdExec(ecl, 0x71bc, 5, 1);
@@ -1618,8 +1788,10 @@ namespace TH17 {
             ecl.SetFile(2);
             ecl << pair{0x454, (int16_t)0};
             ecl << pair{0xda4, (int8_t)0x34}; // Change Nonspell
-            ecl << pair{0x4888, (int16_t)0} << pair{0x48c0, (int16_t)0} << pair{0x48f8, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x4a3c, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x4888, (int16_t)0 } << pair { 0x48c0, (int16_t)0 } << pair { 0x48f8, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x4a3c, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x4ba0, 0} << pair{0x4794, 30};
             ecl << pair{0x4854, (int16_t)0};
             break;
@@ -1631,16 +1803,22 @@ namespace TH17 {
             ECLJump(ecl, 0x548, 0x630, 2); // Utilize Spell Practice Jump
             ecl << pair{0x640, 2700}; // Set Health
             ecl << pair{0x660, (int8_t)0x34}; // Set Spell Ordinal
-            ecl << pair{0xac30, (int16_t)0} << pair{0xac68, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0xac30, (int16_t)0 } << pair { 0xac68, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST6_BOSS9:
             ECLStdExec(ecl, 0x71bc, 5, 1);
             ECLJump(ecl, 0, 0x7634, 60);
             ecl.SetFile(2);
             ecl << pair{0x454, (int16_t)0};
-            ECLJump(ecl, 0x548, 0x630, 2); // Utilize Spell Practice Jump
-            ecl << pair{0x640, 3500}; // Set Health
-            ecl << pair{0x660, (int8_t)0x35}; // Set Spell Ordinal
+            if (thPracParam.keepSpellDrops) {
+                ecl << pair { 0xda4, (int8_t)0x35 }; // Change Nonspell
+
+            } else {
+                ECLJump(ecl, 0x548, 0x630, 2); // Utilize Spell Practice Jump
+                ecl << pair { 0x640, 3500 }; // Set Health
+                ecl << pair { 0x660, (int8_t)0x35 }; // Set Spell Ordinal
+            }
             break;
         case THPrac::TH17::TH17_ST6_BOSS10: {
             constexpr unsigned int st6BossCall = 0x7634;
@@ -1656,20 +1834,28 @@ namespace TH17 {
             constexpr unsigned int st6BossNon6ItemDrop1Enable = 0x5d14 + 0x4;
             constexpr unsigned int st6BossNon6ItemDrop2Enable = 0x5d4c + 0x4;
             constexpr unsigned int st6BossNon6ItemDropSFXEnable = 0x5e8c + 0x4;
-            constexpr unsigned int st6BossNon6MainWaitEnable = 0x5fec + 0x4;
+            constexpr unsigned int st6BossNon6DialogWaitEnable = 0x5fec + 0x4;
+            constexpr unsigned int st6BossNon6DialogStart = 0x6000;
+            constexpr unsigned int st6BossNon6PostDialog = 0x6024;
 
             ECLStdExec(ecl, 0x71bc, 5, 1);
             ECLJump(ecl, 0, st6BossCall, 60);
             ecl.SetFile(2);
             ecl << pair { st6BossSTDCall, (int16_t)0 };
 
-            if (thPracParam.dlg) {
+            if (thPracParam.dlg || thPracParam.keepSpellDrops) {
                 ecl << pair { st6BossNonSubCallOrd, (int8_t)0x36 } // Change Nonspell (6)
                     << pair { st6BossNon6InvulnVal, 180 - 120 } // Invuln timer: account for waits (60f)
-                    << pair { st6BossNon6ItemDrop1Enable, (int16_t)0 }
-                    << pair { st6BossNon6ItemDrop2Enable, (int16_t)0 } // Disable Item Drops
-                    << pair { st6BossNon6ItemDropSFXEnable, (int16_t)0 } // Disable Item Drops SFX
-                    << pair { st6BossNon6MainWaitEnable, (int16_t)0 }; // Disable main wait (120f)
+                    << pair { st6BossNon6DialogWaitEnable, (int16_t)0 }; // Disable main wait (120f)
+
+                if (!thPracParam.dlg)
+                    ECLJump(ecl, st6BossNon6DialogStart, st6BossNon6PostDialog, 0);
+
+                if (!thPracParam.keepSpellDrops) {
+                    ecl << pair { st6BossNon6ItemDrop1Enable, (int16_t)0 }
+                        << pair { st6BossNon6ItemDrop2Enable, (int16_t)0 } // Disable Item Drops
+                        << pair { st6BossNon6ItemDropSFXEnable, (int16_t)0 }; // Disable Item Drops SFX
+                }
             } else {
                 ECLJump(ecl, st6BossPostFog, st6BossLifeSet, 2); // Utilize Spell Practice Jump
                 ecl << pair { st6BossInvulnVal, 180 - 120 - 40 } // Invuln timer: account for waits (20f)
@@ -1683,9 +1869,15 @@ namespace TH17 {
             ECLJump(ecl, 0, 0x7634, 60);
             ecl.SetFile(2);
             ecl << pair{0x454, (int16_t)0};
-            ECLJump(ecl, 0x548, 0x630, 2); // Utilize Spell Practice Jump
-            ecl << pair{0x640, 10000}; // Set Health
-            ecl << pair{0x660, (int8_t)0x37}; // Set Spell Ordinal
+           
+            if (thPracParam.keepSpellDrops) {
+                ecl << pair { 0xda4, (int8_t)0x37 }; // Change Nonspell (7)
+
+            } else {
+                ECLJump(ecl, 0x548, 0x630, 2); // Utilize Spell Practice Jump
+                ecl << pair { 0x640, 10000 }; // Set Health
+                ecl << pair { 0x660, (int8_t)0x37 }; // Set Spell Ordinal
+            }
 
             switch (thPracParam.phase) {
             case 1:
@@ -1728,8 +1920,13 @@ namespace TH17 {
             ecl.SetPos(0x410);
             ecl << 0 << 0x00140203 << 0x01ff0000 << 0 << 100;
             ECLJump(ecl, 0, 0x55c, 0);
-            ecl << pair{0x5a4, 100};
-            ECLJump(ecl, 0x5d8, 0x714, 0);
+            ecl << pair { 0x5a4, 100 };
+
+            if (thPracParam.keepSpellDrops) {
+                ecl << pair { 0x7fd, (int8_t)0x32 }; // Change Nonspell (2)
+            } else {
+                ECLJump(ecl, 0x5d8, 0x714, 0);
+            }
             break;
         case THPrac::TH17::TH17_ST7_MID3:
             ECLStdExec(ecl, 0xa208, 1, 1);
@@ -1739,7 +1936,11 @@ namespace TH17 {
             ecl << 0 << 0x00140203 << 0x01ff0000 << 0 << 100;
             ECLJump(ecl, 0, 0x55c, 0);
             ecl << pair{0x5a4, 100};
-            ECLJump(ecl, 0x5d8, 0x7b0, 0);
+            if (thPracParam.keepSpellDrops) {
+                ecl << pair { 0x7fd, (int8_t)0x33 }; // Change Nonspell (3)
+            } else {
+                ECLJump(ecl, 0x5d8, 0x7b0, 0);
+            }
             break;
         case THPrac::TH17::TH17_ST7_END_NS1:
             ECLStdExec(ecl, 0xa208, 1, 1);
@@ -1753,7 +1954,8 @@ namespace TH17 {
             ECLJump(ecl, 0, 0xa7d8, 60);
             ecl.SetFile(2);
             ECLJump(ecl, 0x800, 0x8a0, 3); // Utilize Spell Practice Jump
-            ecl << pair{0x6354, (int16_t)0}; // Disable Item Drops
+            if (!thPracParam.keepSpellDrops)
+                ecl << pair { 0x6354, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH17::TH17_ST7_END_NS2: {
             constexpr unsigned int st7BossCall = 0xa7d8;
@@ -1761,25 +1963,31 @@ namespace TH17 {
             constexpr unsigned int st7BossSpell1MoveLimit = 0x6600;
             constexpr unsigned int st7BossSpell1PostMoveLimit = 0x6620;
 
-            constexpr unsigned int st7BossNon2ItemDrop1 = 0x1cec;
-            constexpr unsigned int st7BossNon2ItemDrop2 = 0x1d24;
+            constexpr unsigned int st7BossNon2ItemDrop1Enable = 0x1cec + 0x4;
+            constexpr unsigned int st7BossNon2ItemDrop2Enable = 0x1d24 + 0x4;
             constexpr unsigned int st7BossNon2ItemDrop3Enable = 0x1d5c + 0x4;
             constexpr unsigned int st7BossNon2ItemDrop4Enable = 0x1d94 + 0x4;
             constexpr unsigned int st7BossNon2ItemDrop5Enable = 0x1dcc + 0x4;
             constexpr unsigned int st7BossNon2ItemDropSFXEnable = 0x1ef8 + 0x4;
+            constexpr unsigned int st7BossNon2PreKillAll = 0x1e14;
+            constexpr unsigned int st7BossNon2PostKillAll = 0x1e34;
 
             ECLStdExec(ecl, 0xa208, 1, 1);
             ECLJump(ecl, 0, st7BossCall, 60);
             ecl.SetFile(2);
-            ecl << pair { st7BossNonSubCallOrd, (int8_t)0x32 } // Change Nonspell
-                << pair { st7BossNon2ItemDrop1 + 0x4, (int16_t)0 }
-                << pair { st7BossNon2ItemDrop2 + 0x4, (int16_t)0 }
-                << pair { st7BossNon2ItemDrop3Enable, (int16_t)0 }
-                << pair { st7BossNon2ItemDrop4Enable, (int16_t)0 }
-                << pair { st7BossNon2ItemDrop5Enable, (int16_t)0 } // Disable Item Drops
-                << pair { st7BossNon2ItemDropSFXEnable, (int16_t)0 }; // Disable Item Drops & SE
-            ECLJump(ecl, st7BossNon2ItemDrop1, st7BossSpell1MoveLimit, 0);
-            ECLJump(ecl, st7BossSpell1PostMoveLimit, st7BossNon2ItemDrop2, 0);
+            ecl << pair { st7BossNonSubCallOrd, (int8_t)0x32 }; // Change Nonspell
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { st7BossNon2ItemDrop1Enable, (int16_t)0 }
+                    << pair { st7BossNon2ItemDrop2Enable, (int16_t)0 }
+                    << pair { st7BossNon2ItemDrop3Enable, (int16_t)0 }
+                    << pair { st7BossNon2ItemDrop4Enable, (int16_t)0 }
+                    << pair { st7BossNon2ItemDrop5Enable, (int16_t)0 } // Disable Item Drops
+                    << pair { st7BossNon2ItemDropSFXEnable, (int16_t)0 }; // Disable Item Drops & SE
+            }
+
+            // skipping kill all isnt necessary but it allows this jump pattern
+            ECLJump(ecl, st7BossNon2PreKillAll, st7BossSpell1MoveLimit, 0);
+            ECLJump(ecl, st7BossSpell1PostMoveLimit, st7BossNon2PostKillAll, 0);
             break;
         }
         case THPrac::TH17::TH17_ST7_END_S2:
@@ -1793,9 +2001,11 @@ namespace TH17 {
             ECLJump(ecl, 0, 0xa7d8, 60);
             ecl.SetFile(2);
             ecl << pair{0x1180, (int8_t)0x33}; // Change Nonspell
-            ecl << pair{0x25b0, (int16_t)0} << pair{0x25e8, (int16_t)0} << pair{0x2620, (int16_t)0}
-                << pair{0x2658, (int16_t)0} << pair{0x2690, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x27bc, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x25b0, (int16_t)0 } << pair { 0x25e8, (int16_t)0 } << pair { 0x2620, (int16_t)0 }
+                    << pair { 0x2658, (int16_t)0 } << pair { 0x2690, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x27bc, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x24d8, 0} << pair{0x2954, 0};
             break;
         case THPrac::TH17::TH17_ST7_END_S3:
@@ -1809,9 +2019,11 @@ namespace TH17 {
             ECLJump(ecl, 0, 0xa7d8, 60);
             ecl.SetFile(2);
             ecl << pair{0x1180, (int8_t)0x34}; // Change Nonspell
-            ecl << pair{0x2eac, (int16_t)0} << pair{0x2ee4, (int16_t)0} << pair{0x2f1c, (int16_t)0}
-                << pair{0x2f54, (int16_t)0} << pair{0x2f8c, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x30b8, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x2eac, (int16_t)0 } << pair { 0x2ee4, (int16_t)0 } << pair { 0x2f1c, (int16_t)0 }
+                    << pair { 0x2f54, (int16_t)0 } << pair { 0x2f8c, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x30b8, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x2dd4, 0} << pair{0x3260, 0};
             break;
         case THPrac::TH17::TH17_ST7_END_S4:
@@ -1825,9 +2037,11 @@ namespace TH17 {
             ECLJump(ecl, 0, 0xa7d8, 60);
             ecl.SetFile(2);
             ecl << pair{0x1180, (int8_t)0x35}; // Change Nonspell
-            ecl << pair{0x37e4, (int16_t)0} << pair{0x381c, (int16_t)0} << pair{0x3854, (int16_t)0}
-                << pair{0x388c, (int16_t)0} << pair{0x38c4, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x39f0, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x37e4, (int16_t)0 } << pair { 0x381c, (int16_t)0 } << pair { 0x3854, (int16_t)0 }
+                    << pair { 0x388c, (int16_t)0 } << pair { 0x38c4, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x39f0, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x370c, 0} << pair{0x3b88, 0};
             break;
         case THPrac::TH17::TH17_ST7_END_S5:
@@ -1841,9 +2055,11 @@ namespace TH17 {
             ECLJump(ecl, 0, 0xa7d8, 60);
             ecl.SetFile(2);
             ecl << pair{0x1180, (int8_t)0x36}; // Change Nonspell
-            ecl << pair{0x4110, (int16_t)0} << pair{0x4148, (int16_t)0} << pair{0x4180, (int16_t)0}
-                << pair{0x41b8, (int16_t)0} << pair{0x41f0, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x431c, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x4110, (int16_t)0 } << pair { 0x4148, (int16_t)0 } << pair { 0x4180, (int16_t)0 }
+                    << pair { 0x41b8, (int16_t)0 } << pair { 0x41f0, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x431c, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x4008, 0} << pair{0x44c4, 0};
             break;
         case THPrac::TH17::TH17_ST7_END_S6:
@@ -1857,9 +2073,11 @@ namespace TH17 {
             ECLJump(ecl, 0, 0xa7d8, 60);
             ecl.SetFile(2);
             ecl << pair{0x1180, (int8_t)0x37}; // Change Nonspell
-            ecl << pair{0x4a48, (int16_t)0} << pair{0x4a80, (int16_t)0} << pair{0x4ab8, (int16_t)0}
-                << pair{0x4af0, (int16_t)0} << pair{0x4b28, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x4c54, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x4a48, (int16_t)0 } << pair { 0x4a80, (int16_t)0 } << pair { 0x4ab8, (int16_t)0 }
+                    << pair { 0x4af0, (int16_t)0 } << pair { 0x4b28, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x4c54, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x4970, 0} << pair{0x4dfc, 0};
             break;
         case THPrac::TH17::TH17_ST7_END_S7:
@@ -1873,9 +2091,11 @@ namespace TH17 {
             ECLJump(ecl, 0, 0xa7d8, 60);
             ecl.SetFile(2);
             ecl << pair{0x1180, (int8_t)0x38}; // Change Nonspell
-            ecl << pair{0x5380, (int16_t)0} << pair{0x53b8, (int16_t)0} << pair{0x53f0, (int16_t)0}
-                << pair{0x5428, (int16_t)0} << pair{0x5460, (int16_t)0}; // Disable Item Drops
-            ecl << pair{0x558c, (int16_t)0}; // Disable Item Drops & SE
+            if (!thPracParam.keepSpellDrops) {
+                ecl << pair { 0x5380, (int16_t)0 } << pair { 0x53b8, (int16_t)0 } << pair { 0x53f0, (int16_t)0 }
+                    << pair { 0x5428, (int16_t)0 } << pair { 0x5460, (int16_t)0 }; // Disable Item Drops
+                ecl << pair { 0x558c, (int16_t)0 }; // Disable Item Drops & SE
+            }
             ecl << pair{0x52a8, 0} << pair{0x5734, 0};
             break;
         case THPrac::TH17::TH17_ST7_END_S8:
@@ -1888,13 +2108,21 @@ namespace TH17 {
             ECLStdExec(ecl, 0xa208, 1, 1);
             ECLJump(ecl, 0, 0xa7d8, 60);
             ecl.SetFile(2);
-            ECLJump(ecl, 0x800, 0xd80, 3); // Utilize Spell Practice Jump
+            if (thPracParam.keepSpellDrops) {
+                ecl << pair { 0x1180, (int8_t)0x39 }; // Change Nonspell (9)
+            } else {
+                ECLJump(ecl, 0x800, 0xd80, 3); // Utilize Spell Practice Jump
+            }
             break;
         case THPrac::TH17::TH17_ST7_END_S10:
             ECLStdExec(ecl, 0xa208, 1, 1);
             ECLJump(ecl, 0, 0xa7d8, 60);
             ecl.SetFile(2);
-            ECLJump(ecl, 0x800, 0xe1c, 3); // Utilize Spell Practice Jump
+            if (thPracParam.keepSpellDrops) {
+                ecl << pair { 0x1180, (int8_t)0x31 } << (int8_t)0x30; // Change Nonspell (10)
+            } else {
+                ECLJump(ecl, 0x800, 0xe1c, 3); // Utilize Spell Practice Jump
+            }
 
             switch (thPracParam.phase) {
             case 1:
@@ -2061,12 +2289,12 @@ namespace TH17 {
             if (adv_opt.mForceGoastAngle && !adv_opt.mGoastAngleRandom) {
                 th17_force_goast_angle.Enable();
             }
-            vec2f stgFramePos { gameX - 224.0f, gameY - 16.0f };
+            Float2 stgFramePos { gameX - 224.0f, gameY - 16.0f };
             if (stgFramePos.y > 128 && stgFramePos.y < 448
                 && abs(stgFramePos.x) < 192) {
                 float ang = adv_opt.mGoastAng;
                 if (adv_opt.mGoastAngleRandom) {
-                    ang = asm_call<0x402880, Thiscall, float>(0x4B7668) * M_PI;
+                    ang = asm_call<0x402880, Thiscall, float>(0x4B7668) * std::numbers::pi_v<float>;
                 }
 
                 SpawnToken(adv_opt.mSelectedGoast, stgFramePos, ang);
@@ -2135,14 +2363,14 @@ namespace TH17 {
     })
     EHOOK_DY(th17_patch_main, 0x430cb3, 1, {
         if (thPracParam.mode == 1) {
-            *(int32_t*)(0x4b59fc) = (int32_t)(thPracParam.score / 10);
-            *(int32_t*)(0x4b5a40) = thPracParam.life;
-            *(int32_t*)(0x4b5a44) = thPracParam.life_fragment;
-            *(int32_t*)(0x4b5a4c) = thPracParam.bomb;
-            *(int32_t*)(0x4b5a50) = thPracParam.bomb_fragment;
-            *(int32_t*)(0x4b5a30) = thPracParam.power;
-            *(int32_t*)(0x4b5a24) = thPracParam.value * 100;
-            *(int32_t*)(0x4b5a0c) = thPracParam.graze;
+            globals->rpy.score = (int32_t)(thPracParam.score / 10);
+            globals->rpy.lives = thPracParam.life;
+            globals->rpy.life_pieces = thPracParam.life_fragment;
+            globals->rpy.bombs = thPracParam.bomb;
+            globals->rpy.bomb_pieces = thPracParam.bomb_fragment;
+            globals->rpy.power = thPracParam.power;
+            globals->rpy.piv = thPracParam.value * 100;
+            globals->rpy.graze = thPracParam.graze;
 
             if (thPracParam.goast_1) {
                 AddGoast(thPracParam.goast_1);
@@ -2242,7 +2470,7 @@ namespace TH17 {
             }
         }
 
-        if (g_adv_igi_options.show_keyboard_monitor && *(DWORD*)(0x004B77D0))
+        if (g_adv_igi_options.show_keyboard_monitor && GetMemContent(PLAYER_PTR))
             KeysHUD(17, { 1280.0f, 0.0f }, { 840.0f, 0.0f }, g_adv_igi_options.keyboard_style);
         
         RenderLockTimer(p);
@@ -2281,19 +2509,23 @@ namespace TH17 {
     {
         int32_t cur_roar = *(DWORD*)0x004B5ABC;
         TH17InGameInfo::singleton().mRoarCount++;
-        switch (cur_roar) {
-        case 1:
-            TH17InGameInfo::singleton().mWolfCount++;
-            break;
-        case 2:
-            TH17InGameInfo::singleton().mOtterCount++;
-            break;
-        case 3:
-            TH17InGameInfo::singleton().mEagerCount++;
-            break;
-        default:
-            break;
+        if ((globals->rpy.current_hyper && globals->rpy.current_hyper <= 3))
+        {
+            switch (globals->rpy.current_hyper) {
+            case 1:
+                TH17InGameInfo::singleton().mWolfCount++;
+                break;
+            case 2:
+                TH17InGameInfo::singleton().mOtterCount++;
+                break;
+            case 3:
+                TH17InGameInfo::singleton().mEagerCount++;
+                break;
+            default:
+                break;
+            }
         }
+        
         for (int32_t i = 0; i < 5; i++) {
             int32_t type = *(int32_t*)(0x004B5A64 + 4 * i);
             if (type >= 8 && type <= 0xE) {

@@ -4,6 +4,10 @@
 
 namespace THPrac {
 namespace TH128 {
+    enum addr {
+        PLAYER_PTR = 0x4B8A80,
+    };
+
     using std::pair;
     struct THPracParam {
         int32_t mode;
@@ -88,7 +92,7 @@ namespace TH128 {
             SetStyle(ImGuiStyleVar_WindowBorderSize, 0.0f);
             OnLocaleChange();
         }
-        SINGLETON(THGuiPrac);
+        SINGLETON(THGuiPrac)
     public:
 
         __declspec(noinline) void State(int state)
@@ -366,7 +370,7 @@ namespace TH128 {
             GetEnvironmentVariableW(L"APPDATA", appdata, MAX_PATH);
             mAppdataPath = appdata;
         }
-        SINGLETON(THGuiRep);
+        SINGLETON(THGuiRep)
     public:
 
         void CheckReplay()
@@ -424,7 +428,7 @@ namespace TH128 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(THOverlay);
+        SINGLETON(THOverlay)
     public:
 
     protected:
@@ -529,7 +533,7 @@ namespace TH128 {
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
         }
-        SINGLETON(TH128InGameInfo);
+        SINGLETON(TH128InGameInfo)
 
     public:
         int32_t mMissCount;
@@ -572,11 +576,11 @@ namespace TH128 {
 
         virtual void OnPreUpdate() override
         {
-            if (*(DWORD*)(0x004B8A80)) {
+            if (GetMemContent(PLAYER_PTR)) {
                 GameUpdateInner(128);
             } else {
             }
-            if (*(THOverlay::singleton().mInGameInfo) && *(DWORD*)(0x004B8A80)) {
+            if (*(THOverlay::singleton().mInGameInfo) && GetMemContent(PLAYER_PTR)) {
                 SetPos(516.0f, 226.0f);
                 SetSize(120.0f, 0.0f);
                 Open();
@@ -594,9 +598,9 @@ namespace TH128 {
     private:
         void FpsInit()
         {
-            if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) {
+            if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"openinputlagpatch.dll")) != NULL) {
                 OILPInit(mOptCtx);
-            } else if (mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"vpatch_th128.dll")) {
+            } else if ((mOptCtx.vpatch_base = (uintptr_t)GetModuleHandleW(L"vpatch_th128.dll")) != NULL) {
                 uint64_t hash[2];
                 CalcFileHash(L"vpatch_th128.dll", hash);
                 if (hash[0] != 14796143656184423751ll || hash[1] != 15800222838538749590ll)
@@ -651,7 +655,7 @@ namespace TH128 {
             FpsInit();
             GameplayInit();
         }
-        SINGLETON(THAdvOptWnd);
+        SINGLETON(THAdvOptWnd)
 
     public:
         __declspec(noinline) static bool StaticUpdate()
@@ -2371,7 +2375,7 @@ namespace TH128 {
         GameUpdateOuter(p, 128);
 
         bool drawCursor = THAdvOptWnd::StaticUpdate() || THGuiPrac::singleton().IsOpen();
-        if (g_adv_igi_options.show_keyboard_monitor && *(DWORD*)(0x004B8A80))
+        if (g_adv_igi_options.show_keyboard_monitor && GetMemContent(PLAYER_PTR))
             KeysHUD(128, { 256.0f, 0.0f }, { 0.0f, 0.0f }, g_adv_igi_options.keyboard_style);
         GameGuiEnd(drawCursor);
     })
