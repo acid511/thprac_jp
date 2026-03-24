@@ -1373,7 +1373,7 @@
 	  "THPRAC_TH18_FORCE_CARD_DESC": [ "强制让商店内第一张卡牌为想要的卡牌", "force the first card in market", "1番目のカードを指定" ],
 	  "THPRAC_TH18_FORCE_CARD_DESC2": [ "作者认为作为一个游戏就不应该用一个纯随机要素限制打分玩家, 如果你觉得是作弊, 那你说得对.jpg",
       "the author believes that as a game, it shouldn't rely on a purely random element to restrict players' ability to rate the game. If you think that's cheating, then you're right.jpg",
-      "作者は、「ゲームである以上、評価を下すプレイヤーの能力を純粋なランダム要素によって制限するべきではない」と考えています。もしあなたがこれを「チートだ」と思うなら、その通りです。笑"
+      "作者は、「ゲームである以上、プレイヤーの技術力を純粋な運要素によって制限されるべきではない」と考えています。もしあなたがこれを「チートだ」と思うなら、その通りです。笑"
     ],
 	  "THPRAC_TH18_CARD": [ "想要的卡牌", "cards you want", "欲しいカード" ],
 	  "THPRAC_TH18_CARD_1": [ "stage1 卡牌", "card for stage 1", "stage1のカード" ],
@@ -1427,8 +1427,8 @@
 	  "THPRAC_INGAMEINFO_TH13_SHOW_HIT_BAR":["显示连击条","show hit bar","ヒットバーを表示"],
 	  "THPRAC_INGAMEINFO_TH13_SHOW_HIT_BAR2":["神灵庙显示连击条","TD show hit bar","神霊廟: ヒットバーを表示"],
 	  "THPRAC_INGAMEINFO_TH13_HITS":["连击","hits","ヒット数:"],
-    "THPRAC_TH13_DISABLE_TRANCE_AUTO": [ "神灵庙自动禁用MISS后灵界", "TD Disable trance after miss", "神霊廟: ミス後の自動トランスを無効化" ],
-	  "THPRAC_TH13_DISABLE_TRANCE": [ "禁用MISS后灵界", "Disable trance after miss", "ミス後のトランスを無効化" ],
+    "THPRAC_TH13_DISABLE_TRANCE_AUTO": [ "神灵庙自动禁用MISS后灵界", "TD Disable trance after miss", "神霊廟: 被弾後の霊界突入を無効化" ],
+	  "THPRAC_TH13_DISABLE_TRANCE": [ "禁用MISS后灵界", "Disable trance after miss", "被弾後の霊界突入を無効化" ],
 
 	  "THPRAC_INGAMEINFO_TH14_MARISA_LASER_REP":["辉针城魔理沙自动开启激光修复的rep预防功能","DDC Marisa laser bug rep repair on","輝針城: 魔理沙のレーザーバグを修正"],
 	  "THPRAC_INGAMEINFO_TH14_SHOW_BONUS":["显示bonus数","show bonuses","ボーナスを表示"],
@@ -1856,7 +1856,7 @@
       "TH_RAGE": [ "发狂", "Rage", "発狂" ],
       "TH_RAGE_PRO": [ "发狂Pro", "Rage Pro", "発狂 Pro" ],
       "TH_RAGE_PRO_MAX": [ "发狂ProMax", "Rage ProMax", "発狂 ProMax" ],
-	  "TH_FINALE": [ "终幕", "Finale", "終幕" ],
+	  "TH_FINALE": [ "终幕", "Finale", "最終段階" ],
 
       "TH_P1": [ "P1", "P1", "P1" ],
       "TH_P2": [ "P2", "P2", "P2" ],
@@ -1873,7 +1873,7 @@
       "TH_STAGE_PORTION_1": [ "前半 #%d", "First Half #%d", "前半 #%d" ],
       "TH_STAGE_PORTION_2": [ "后半 #%d", "Second Half #%d", "後半 #%d" ],
       "TH_DLG": [ "对话", "Dialog", "ダイアログ" ],
-	  "TH_DROP_ITEMS": [ "掉落道具", "Drop items", "道具掉落" ],
+	  "TH_DROP_ITEMS": [ "掉落道具", "Drop items", "Pアイテム等を落とす" ],
 
       "TH_LEFT": [ "左", "Left", "左" ],
       "TH_RIGHT": [ "右", "Right", "右" ],
