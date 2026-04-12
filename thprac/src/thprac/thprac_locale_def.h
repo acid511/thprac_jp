@@ -314,6 +314,7 @@ enum th_glossary_t
     TH16_DOGDAYS,
     TH16_SEASON_GAUGE,
     TH16_SEASON_GAUGE_ALT,
+    TH16_SEASON_GAUGE_PERCENT,
     TH16_SPRING,
     TH16_SUBSEASON,
     TH16_SUMMER,
@@ -347,10 +348,23 @@ enum th_glossary_t
     TH17_GOAST_TURTLE,
     TH17_GOAST_WOLF,
     TH17_GOAST_WOLF_STATIC,
+    TH17_ID_CFG_CODE_COPIED,
+    TH17_ID_CFG_CODE_DESC,
+    TH17_ID_CFG_PASTE_ERROR,
+    TH17_ID_CFG_PASTE_ERROR_TITLE,
+    TH17_ID_P2_OPT,
+    TH17_ID_P3_OPT,
+    TH17_ID_P4_OPT,
+    TH17_ID_TD_CFG,
+    TH17_ID_TD_CFG_HINT,
     TH17_INF_ROARING,
+    TH17_KEIKI_FINAL_PHASETRACK,
+    TH17_KEIKI_FINAL_PHASETRACK_DESC,
+    TH17_KEIKI_FINAL_PHASETRACK_NONE_HINT,
     TH17_NO_GOAST,
     TH17_NO_HYPER,
     TH17_RANDOM_ANGLE,
+    TH17_SHOW_ID_OPT,
     TH17_SPAWN_A_GOAST,
     TH17_TITLE,
     TH185_ADDITIONAL_CARDS,
@@ -612,6 +626,8 @@ enum th_glossary_t
     TH18_CS_REPFIX_UNKNOWN_HINT,
     TH18_CYLINDER_CD,
     TH18_FUNDS,
+    TH18_HK_REPFIX,
+    TH18_HK_REPFIX_DESC,
     TH18_INFFUNDS,
     TH18_KANAME_CD,
     TH18_KOZUCHI_CD,
@@ -629,6 +645,8 @@ enum th_glossary_t
     TH18_OPEN_MARKET,
     TH18_PSYCO_CD,
     TH18_REPLAY_BONUS,
+    TH18_RESTART_RESET_KOISHI,
+    TH18_RESTART_RESET_KOISHI_DESC,
     TH18_RICEBALL_CD,
     TH18_STATIC_MALLET,
     TH18_STATIC_MALLET_DESC,
@@ -1430,10 +1448,12 @@ enum th_glossary_t
     THPRAC_TH18_FORCE_CARD,
     THPRAC_TH18_FORCE_CARD_DESC,
     THPRAC_TH18_FORCE_CARD_DESC2,
+    THPRAC_TH18_SHOW_CARD_ACTIVATED_CNT,
     THPRAC_TH20_DECREASE_EFF,
     THPRAC_TH20_FAKE_UNLOCK_STONES,
     THPRAC_TH20_FIX_BULLETHITBOX,
     THPRAC_TH20_FIX_BULLETHITBOX_DESC,
+    THPRAC_TH20_LV_LOCK,
     THPRAC_TH20_PIV_OVERFLOW_FIX,
     THPRAC_TH20_UNCAP_PIV,
     THPRAC_TH20_UNCAP_SCORE,
@@ -1634,6 +1654,8 @@ enum th_glossary_t
     TH_CHAPTER_MIDBOSS,
     TH_CHAPTER_STAGE,
     TH_COERCIVE,
+    TH_COPY_CFG_CODE,
+    TH_COPY_CFG_CODE_HINT,
     TH_CYCLE,
     TH_DATANLY,
     TH_DATANLY_BUTTON,
@@ -1701,6 +1723,7 @@ enum th_glossary_t
     TH_FPS_LOWERING,
     TH_FPS_UNSUPPORTED,
     TH_FRAME,
+    TH_FULL,
     TH_GAMEPLAY,
     TH_GAME_SPEED,
     TH_GAME_SPEED_PLSPD_KEEP,
@@ -1748,6 +1771,8 @@ enum th_glossary_t
     TH_P4,
     TH_P5,
     TH_P5_LOCK,
+    TH_PASTE_CFG_CODE,
+    TH_PASTE_CFG_CODE_HINT,
     TH_PERFORMANCE,
     TH_PHASE,
     TH_POINT,
@@ -1765,6 +1790,7 @@ enum th_glossary_t
     TH_REPFIX_NEED_THPRAC_DESC,
     TH_REPFIX_NO_THPRAC,
     TH_REPFIX_NO_THPRAC_DESC,
+    TH_REPFIX_REAL_SELECTED_NONE,
     TH_REPFIX_RESET_DATA,
     TH_REPFIX_RESET_DATA2,
     TH_REPFIX_SAVE,
@@ -1835,7 +1861,7 @@ enum th_glossary_t
     TH_WARP,
 };
 
-extern const char* th_glossary_str[3][1823];
+extern const char* th_glossary_str[3][1844];
 
 extern const th_glossary_t TH_TYPE_SELECT[13];
 
@@ -1920,6 +1946,12 @@ extern const th_glossary_t TH_SPELL_PHASE2[5];
 extern const th_glossary_t TH_SPELL_PHASE3[6];
 
 extern const th_glossary_t TH_SPELL_PHASE4[7];
+
+extern const th_glossary_t TH_SPELL_PHASE_FINALE[3];
+
+extern const th_glossary_t TH_SPELL_PHASE_RAGEFUL[4];
+
+extern const th_glossary_t TH_SPELL_PHASE_RAGEFIN[4];
 
 extern const th_glossary_t TH_SIDE_SELECT[3];
 
@@ -3611,9 +3643,7 @@ extern const uint8_t th_sections_bgm[70];
 
 extern const th_sections_t th_sections_cba[7][2][19];
 
-extern const th_sections_t th_sections_cbt[7][2][14];
-
-extern const th_glossary_t TH20_SPELL_PHASE_TIMEOUT[3];
+    extern const th_sections_t th_sections_cbt[7][2][14];
 
 extern const th_glossary_t TH20_RAGE[3];
 
@@ -3625,10 +3655,10 @@ extern const th_glossary_t TH20_EXPIRED_PYRAMID_FIX_OPT[6];
 
 }
 
-extern const wchar_t __thprac_loc_range_zh[2937];
+extern const wchar_t __thprac_loc_range_zh[3575];
 
 extern const wchar_t __thprac_loc_range_en[57];
 
-extern const wchar_t __thprac_loc_range_ja[2393];
+extern const wchar_t __thprac_loc_range_ja[2897];
 
 }

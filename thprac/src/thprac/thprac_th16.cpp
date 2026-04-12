@@ -6,8 +6,10 @@
 namespace THPrac {
 namespace TH16 {
     enum addrs {
-        CHARA_ADDR = 0x4A57A4,
-        SEASON_ADDR = 0x4A57AC,
+        STAGE_NUM = 0x4a5790,
+        CHARACTER = 0x4a57a4,
+        SUBSHOT = 0x4a57ac,
+        ENEMY_MANAGER_PTR = 0x4a6dc0,
         PLAYER_PTR = 0x4a6ef8,
     };
 
@@ -31,6 +33,8 @@ namespace TH16 {
         int32_t graze;
         bool dlg;
         bool bug_fix;
+
+        float season_gauge_percent;
 
         bool _playLock = false;
         void Reset()
@@ -56,6 +60,7 @@ namespace TH16 {
             GetJsonValue(power);
             GetJsonValue(value);
             GetJsonValue(graze);
+            GetJsonValue(season_gauge_percent);
             GetJsonValueEx(bug_fix, Bool);
 
             return true;
@@ -84,6 +89,7 @@ namespace TH16 {
                 AddJsonValue(power);
                 AddJsonValue(value);
                 AddJsonValue(graze);
+                AddJsonValue(season_gauge_percent);
 
                 ReturnJson();
             } else if (mode == 2) {
@@ -117,6 +123,7 @@ namespace TH16 {
             *mLife = 8;
             *mBomb = 8;
             *mSeasonGauge = 6;
+            *mSeasonGaugePercent = 0;
             *mPower = 400;
             *mValue = 10000;
 
@@ -157,6 +164,7 @@ namespace TH16 {
                 thPracParam.bomb = *mBomb;
                 thPracParam.bomb_fragment = *mBombFragment;
                 thPracParam.season_gauge = *mSeasonGauge;
+                thPracParam.season_gauge_percent = *mSeasonGaugePercent;
                 thPracParam.power = *mPower;
                 thPracParam.value = *mValue;
                 thPracParam.graze = *mGraze;
@@ -239,6 +247,8 @@ namespace TH16 {
                 mBomb();
                 mBombFragment();
                 mSeasonGauge();
+                auto s = std::format("{:.1f}%%", *mSeasonGaugePercent * 100);
+                mSeasonGaugePercent(s.c_str());
                 auto power_str = std::to_string((float)(*mPower) / 100.0f).substr(0, 4);
                 mPower(power_str.c_str());
                 mValue();
@@ -349,9 +359,11 @@ namespace TH16 {
         Gui::GuiDrag<int, ImGuiDataType_S32> mValue { TH_VALUE, 0, 999990, 10, 100000 };
         Gui::GuiDrag<int, ImGuiDataType_S32> mGraze { TH_GRAZE, 0, 999999, 1, 100000 };
 
+        Gui::GuiSlider<float, ImGuiDataType_Float> mSeasonGaugePercent { TH16_SEASON_GAUGE_PERCENT, 0, 1.0,0.001,0.1};
+
         Gui::GuiNavFocus mNavFocus { TH_STAGE, TH_MODE, TH_WARP, TH_DLG,
             TH_MID_STAGE, TH_END_STAGE, TH_NONSPELL, TH_SPELL, TH_PHASE, TH_CHAPTER,
-            TH_SCORE, TH_LIFE, TH_BOMB, TH_BOMB_FRAGMENT, TH16_SEASON_GAUGE,
+            TH_SCORE, TH_LIFE, TH_BOMB, TH_BOMB_FRAGMENT, TH16_SEASON_GAUGE, TH16_SEASON_GAUGE_PERCENT,
             TH_POWER, TH_VALUE, TH_GRAZE };
 
         int mChapterSetup[7][2] {
@@ -517,7 +529,19 @@ namespace TH16 {
 
         HOTKEY_DEFINE(mTimeLock, TH_TIMELOCK, "F6", VK_F6)
         PATCH_HK(0x417965, "eb"),
-        PATCH_HK(0x41d4ef, "058d")
+        PATCH_HK(0x41d4ef, "058d"),
+        EHOOK_HK(0x473995, 4, { // freeze ECL sub time for stage's MainLatter
+            const uint32_t subID = *(uint32_t*)(pCtx->Edi+0x4);
+            const uint32_t stage = GetMemContent(STAGE_NUM) - 1;
+            constexpr uint8_t mainLatterIDs[7] = { 0, 0, 0, 92, 122, 0, 0 };
+
+            if (mainLatterIDs[stage] && subID == mainLatterIDs[stage]) {
+                const bool bossExists = (bool)GetMemContent(ENEMY_MANAGER_PTR, 0xc + 0x3c);
+
+                if (bossExists) // skip increasing sub time
+                    pCtx->Eip = 0x473999;
+            }
+        })
         HOTKEY_ENDDEF();
 
         Gui::GuiHotKey mElBgm { TH_EL_BGM, "F8", VK_F8 };
@@ -652,6 +676,7 @@ namespace TH16 {
                 // Fill Param
                 thPracParam.mode = 2;
                 thPracParam.season_gauge = *mSeasonGauge;
+                thPracParam.season_gauge_percent = 0;
                 thPracParam.phase = *mPhase;
 
                 if (mSpellId >= 46 && mSpellId <= 69)
@@ -2424,21 +2449,17 @@ namespace TH16 {
             *(int32_t*)(0x4a57e4) = thPracParam.power;
             *(int32_t*)(0x4a57d8) = thPracParam.value * 100;
             *(int32_t*)(0x4a57c0) = thPracParam.graze;
+            int seasons[] = { 0, 100, 230, 390, 590, 840, 1140,0 };
             switch (thPracParam.season_gauge) {
+            case 0:
             case 1:
-                *(int32_t*)(0x4a5808) = 100;
-                break;
             case 2:
-                *(int32_t*)(0x4a5808) = 230;
-                break;
             case 3:
-                *(int32_t*)(0x4a5808) = 390;
-                break;
             case 4:
-                *(int32_t*)(0x4a5808) = 590;
-                break;
             case 5:
-                *(int32_t*)(0x4a5808) = 840;
+                *(int32_t*)(0x4a5808) = std::clamp(static_cast<int>(seasons[thPracParam.season_gauge] + floorf(thPracParam.season_gauge_percent * (seasons[thPracParam.season_gauge + 1] - seasons[thPracParam.season_gauge]))),
+                    seasons[thPracParam.season_gauge],
+                    seasons[thPracParam.season_gauge + 1] - 1);
                 break;
             case 6:
                 *(int32_t*)(0x4a5808) = 1140;
