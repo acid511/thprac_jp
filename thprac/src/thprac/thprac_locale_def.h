@@ -1869,7 +1869,7 @@ enum th_glossary_t
     TH_WARP,
 };
 
-extern const char* th_glossary_str[3][1852];
+extern const char* th_glossary_str[3][1857];
 
 extern const th_glossary_t TH_TYPE_SELECT[13];
 
@@ -3651,7 +3651,7 @@ extern const uint8_t th_sections_bgm[70];
 
 extern const th_sections_t th_sections_cba[7][2][19];
 
-    extern const th_sections_t th_sections_cbt[7][2][14];
+extern const th_sections_t th_sections_cbt[7][2][14];
 
 extern const th_glossary_t TH20_RAGE[3];
 
@@ -3663,10 +3663,10 @@ extern const th_glossary_t TH20_EXPIRED_PYRAMID_FIX_OPT[6];
 
 }
 
-extern const wchar_t __thprac_loc_range_zh[3579];
+extern const wchar_t __thprac_loc_range_zh[2951];
 
 extern const wchar_t __thprac_loc_range_en[57];
 
-extern const wchar_t __thprac_loc_range_ja[2897];
+extern const wchar_t __thprac_loc_range_ja[2399];
 
 }

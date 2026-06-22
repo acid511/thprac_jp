@@ -1376,7 +1376,7 @@
       "the author believes that as a game, it shouldn't rely on a purely random element to restrict players' ability to rate the game. If you think that's cheating, then you're right.jpg",
       "作者は、「ゲームである以上、プレイヤーの技術力を純粋な運要素によって制限されるべきではない」と考えています。もしあなたがこれを「チートだ」と思うなら、その通りです。笑"
     ],
-    "THPRAC_TH18_SHOW_CARD_ACTIVATED_CNT": [ "虹龙洞显示卡牌使用数", "UM show card activated count", "UM show card activated count" ],
+    "THPRAC_TH18_SHOW_CARD_ACTIVATED_CNT": [ "虹龙洞显示卡牌使用数", "UM show card activated count", "虹龍洞: 使用したカード数を表示" ],
 
 	  "THPRAC_TH18_CARD": [ "想要的卡牌", "cards you want", "欲しいカード" ],
 	  "THPRAC_TH18_CARD_1": [ "stage1 卡牌", "card for stage 1", "stage1のカード" ],
@@ -1408,10 +1408,14 @@
 
 	  "THPRAC_TH06_RANKLOCK_DOWN": [ "红魔乡自动miss/bomb后不掉rank", "EoSD no rank drop after miss/bomb", "紅魔郷: ミス/ボム時のランク低下を無くす" ],
 
-    "THPRAC_INGAMEINFO_TH06_POINT":["灰点","Grey Item","Grey Item"],
-	  "THPRAC_INGAMEINFO_TH06_SHOW_POINT":["红魔乡显示灰点","EoSD Show grey item","EoSD Show grey item"],
-	  "THPRAC_INGAMEINFO_TH06_SHOW_THRESHOLD":["红魔乡显示阶段血量阈值","Grey Item","Grey Item"],
-	  "THPRAC_INGAMEINFO_TH06_SHOW_THRESHOLD_DESC":["尽管有人觉得是作弊，但是显示这个阈值理论上和将鼠标移动到对应位置或画一根线是等价的...所以我保留了让它在实战中起作用的设定","Though some might consider it cheating, displaying this threshold is theoretically equivalent to moving the mouse to the corresponding position or drawing a line on the screen... so I kept the setting that makes it work in normal play.","Though some might consider it cheating, displaying this threshold is theoretically equivalent to moving the mouse to the corresponding position or drawing a line on the screen... so I kept the setting that makes it work in normal play."],
+    "THPRAC_INGAMEINFO_TH06_POINT":["灰点","Grey Item","ボーナス点"],
+	  "THPRAC_INGAMEINFO_TH06_SHOW_POINT":["红魔乡显示灰点","EoSD Show grey item","紅魔郷: ボーナス点を表示"],
+	  "THPRAC_INGAMEINFO_TH06_SHOW_THRESHOLD":["红魔乡显示阶段血量阈值","Grey Item","体力のしきい値を表示"],
+	  "THPRAC_INGAMEINFO_TH06_SHOW_THRESHOLD_DESC":[
+      "尽管有人觉得是作弊，但是显示这个阈值理论上和将鼠标移动到对应位置或画一根线是等价的...所以我保留了让它在实战中起作用的设定",
+      "Though some might consider it cheating, displaying this threshold is theoretically equivalent to moving the mouse to the corresponding position or drawing a line on the screen... so I kept the setting that makes it work in normal play.",
+      "ズルだと考える人もいるかもしれませんが、この境界線を表示することは、理論上はマウスを該当する位置に動かしたり、画面上に線を引いたりするのと同じことなので、通常のプレイでも機能する設定のままにしました。 (by RUEEE)"
+    ],
 
 	  "THPRAC_INFLIVES_MAP": [ "将锁残修改为不疮", "map inf.lives to no continue", "「残基が減らない」オプションを「満身創痍にならない」オプションに置き換え" ],
       "THPRAC_DISABLE_MASTER_AUTO": [ "自动禁用MASTER", "automatically disable master", "masterを自動的に無効化" ],
@@ -1428,8 +1432,8 @@
 	  "THPRAC_INGAMEINFO_TH06_SHOW_HITBOX_RELOAD":["重载","reload","再読み込み"],
 	  "THPRAC_INGAMEINFO_TH06_RANK":["rank","rank","ランク:"],
 
-    "THPRAC_INGAMEINFO_TH10_POINT":["蓝点","Point","Point"],
-	  "THPRAC_INGAMEINFO_TH10_SHOW_POINT":["风神录显示蓝点","MoF Show white/yellow point item","MoF show white/yellow point item"],
+    "THPRAC_INGAMEINFO_TH10_POINT":["蓝点","Point","得点アイテム"],
+	  "THPRAC_INGAMEINFO_TH10_SHOW_POINT":["风神录显示蓝点","MoF Show white/yellow point item","風神録: 白/黄得点アイテムを表示"],
 
 	  "THPRAC_INGAMEINFO_TH11_SHOW_HINT":["显示hint","show hint","ヒントを表示"],
 	  "THPRAC_INGAMEINFO_TH11_SHOW_HINT2":["地灵殿显示hint","SA show hint","地霊殿: ヒントを表示"],
@@ -1465,7 +1469,7 @@
 	  "THPRAC_INGAMEINFO_TH15_SHOOTING_DOWN_RATE":["击破数","shoot down","撃破率:"],
 	  "THPRAC_INGAMEINFO_TH15_PRODUCT":["乘积","product","ｸﾞﾚｲｽﾞx撃破率:"],
 
-	  "THPRAC_TH20_LV_LOCK": [ "锦上京miss/bomb后不掉石头等级", "FW no lv drop after miss/bomb", "FW no lv drop after miss/bomb" ],
+	  "THPRAC_TH20_LV_LOCK": [ "锦上京miss/bomb后不掉石头等级", "FW no lv drop after miss/bomb", "錦上京: 被弾後の異変敵レベル低下を無効化" ],
 
        "THPRAC_INGAMEINFO":["更多游戏信息","in game info","ゲーム内情報"],
        "THPRAC_INGAMEINFO_MISS_COUNT":["miss:","miss:","ミス:"],

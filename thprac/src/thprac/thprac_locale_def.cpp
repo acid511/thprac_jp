@@ -7,7 +7,8 @@
 
 namespace THPrac {
 
-const char* th_glossary_str[3][1852] {
+const char* th_glossary_str[3][1857]
+{
     {
         "",
         "啤酒",
@@ -4064,7 +4065,7 @@ const char* th_glossary_str[3][1852] {
         "バグのあるリプレイがある場合は、このオプションを有効にしてみてください。\n普通のリプレイを再生するときは、このオプションを有効にしないでください。",
         "亀",
         "オオカミ",
-        "オオカミ (色変わりしない)",
+        "オオカミ (固定)",
         "（有効なコードがクリップボードにあります！）",
         "オフセット値はゲーム内トラッカーで確認でき、関連する詳細設定オプションからコピーできます。",
         "クリップボードに有効なイドラディアボルス段階オフセット設定コード（24桁の16進文字列）がありません。確認して再試行してください。",
@@ -4074,15 +4075,15 @@ const char* th_glossary_str[3][1852] {
         "P4 オフセット",
         "耐久設定を適用",
         "段階が自動で移行するのを待った場合と同じオフセットになります。",
-        "無限のロアリング",
+        "無限ロアリング",
         "でイドラディアボルスの段階移行オフセットを表示",
         "これらの値は、練習メニューの高度なパラメータスライダーを使って特定のイドラディアボルス戦略を練習するのに使用できます。オフセットはイドラディアボルスを練習モードでプレイ中のみ表示されますが、モードに関係なくコピー可能です。",
         "イドラディアボルスの段階2〜4でない場合、オフセット設定はコピーできません。",
         "動物霊を落とさない",
-        "ノーハイパー",
-        "ランダムな角度で生成する",
+        "ロアリング無効",
+        "ランダムな角度で生成",
         "高度なパラメータを表示",
-        "動物霊アイテムを生成する",
+        "動物霊を生成",
         "TH17 東方鬼形獣　～ Wily Beast and Weakest Creature.",
         "追加カード",
         "秋　穣子",
@@ -4798,13 +4799,19 @@ const char* th_glossary_str[3][1852] {
         "【免責事項】不正行為とみなされる可能性があります。",
         "ボム:",
         "ミス:",
+        "ボーナス点",
         "ランク:",
         "低速移動時に当たり判定を表示",
         "紅魔郷: 低速移動時に当たり判定を表示",
         "カスタムヒットボックス: hitbox.pngを東方紅魔郷.exeが存在するフォルダに配置",
         "再読み込み",
+        "紅魔郷: ボーナス点を表示",
         "ランクを表示",
         "紅魔郷: ランクを表示",
+        "体力のしきい値を表示",
+        "ズルだと考える人もいるかもしれませんが、この境界線を表示することは、理論上はマウスを該当する位置に動かしたり、画面上に線を引いたりするのと同じことなので、通常のプレイでも機能する設定のままにしました。 (by RUEEE)",
+        "得点アイテム",
+        "風神録: 白/黄得点アイテムを表示",
         "ヒントを表示",
         "地霊殿: ヒントを表示",
         "ヒット数:",
@@ -4818,6 +4825,7 @@ const char* th_glossary_str[3][1852] {
         "次のボーナス:",
         "通常ボーナス:",
         "累計ボーナス:",
+        "エクステンド数:",
         "アイテム:",
         "輝針城: 魔理沙のレーザーバグを修正",
         "ボーナスを表示",
@@ -5142,39 +5150,39 @@ const char* th_glossary_str[3][1852] {
         "thpracに追加したいゲームにチェックを入れ、「適用する」をクリックします。",
         "Steamゲーム - 手動選択",
         "または",
-        "test keyboard input latency(from Input to Present)",
-        "EoSD background fix",
-        "let Remilia not be blue when disables bullet shadow\nMight make bg or UI strange",
-        "fix EoSD rand seed when begin",
-        "rand seed",
-        "EoSD no rank drop after miss/bomb",
-        "rand seed for current rep",
-        "show rep marker in EoSD",
-        "always save score/spell history in PCB",
-        "e.g. retry in practice",
-        "force LS in IN",
-        "Disable trance after miss",
-        "TD Disable trance after miss",
-        "cards you want",
-        "card for stage 1",
-        "card for stage 2",
-        "card for stage 3",
-        "card for stage 4",
-        "card for stage 5",
-        "card for stage EX",
-        "UM force card",
-        "force the first card in market",
-        "the author believes that as a game, it shouldn't rely on a purely random element to restrict players' ability to rate the game. If you think that's cheating, then you're right.jpg",
-        "UM show card activated count",
-        "FW decrease graze effect",
-        "FW 未解放ストーン使用",
-        "FW 弾幕判定を修復します",
-        "FW Game",
-        "FW no lv drop after miss/bomb",
-        "FW PIVオーバーフロー修正",
-        "FW PIVキャップ解放",
-        "FW スコアキャップ解放",
-        "未解放ストーンをサイドスロットに設定可能。",
+        "キーボード入力の遅延((入力から描画まで)をテスト",
+        "紅魔郷: 背景を修正",
+        "弾丸の影を無効化した際、レミリアが青くならないようにします。\n背景やUIに不具合が生じる場合があります。",
+        "紅魔郷: 開始時にシード値を固定",
+        "シード値",
+        "紅魔郷: ミス/ボム時のランク低下を無くす",
+        "現在のリプレイのシード値",
+        "紅魔郷: repマーカーを表示",
+        "妖々夢: スコア/スペル履歴を常に保存",
+        "例: Practiceモードでリトライした時など",
+        "永夜抄: ラストスペルを強制的に発動",
+        "被弾後の霊界突入を無効化",
+        "神霊廟: 被弾後の霊界突入を無効化",
+        "欲しいカード",
+        "stage1のカード",
+        "stage2のカード",
+        "stage3のカード",
+        "stage4のカード",
+        "stage5のカード",
+        "stageEXのカード",
+        "虹龍洞: 販売カード強制",
+        "1番目のカードを指定",
+        "作者は、「ゲームである以上、プレイヤーの技術力を純粋な運要素によって制限されるべきではない」と考えています。もしあなたがこれを「チートだ」と思うなら、その通りです。笑",
+        "虹龍洞: 使用したカード数を表示",
+        "錦上京: グレイズのエフェクトを減らす",
+        "錦上京: 未解放の異変石の使用",
+        "錦上京: 弾幕判定を修正",
+        "錦上京",
+        "錦上京: 被弾後の異変敵レベル低下を無効化",
+        "錦上京: PIVオーバーフロー修正",
+        "錦上京: PIV上限解放",
+        "錦上京: スコア上限解放",
+        "未解放の異変石をサブスロットに設定できるようになります。",
         "thcrap",
         "thcrapコンフィグを追加...",
         "thcrapのコンフィグが見つかりませんでした！",
@@ -5308,6 +5316,7 @@ const char* th_glossary_str[3][1852] {
         "ノーボム用 (shift+Dで切り替え)",
         "Zキーを無効化",
         "正気か？ (shift+Sで切り替え)",
+        "Shiftキーを常に押す",
         "拡張オプション",
         "変更を適用",
         "弾幕",
@@ -5487,7 +5496,7 @@ const char* th_glossary_str[3][1852] {
         "P3",
         "P4",
         "P5",
-        "P5 lock",
+        "P5で固定",
         "設定を貼り付け",
         "クリップボードから設定を適用します。",
         "タースピード",
@@ -6010,24 +6019,28 @@ const th_glossary_t TH_SPELL_PHASE4[7]
     TH_RAGE,
 };
 
-const th_glossary_t TH_SPELL_PHASE_FINALE[3] {
+const th_glossary_t TH_SPELL_PHASE_FINALE[3]
+{
     TH_NORMAL,
     TH_FINALE,
 };
 
-const th_glossary_t TH_SPELL_PHASE_RAGEFUL[4] {
+const th_glossary_t TH_SPELL_PHASE_RAGEFUL[4]
+{
     TH_NORMAL,
     TH_FULL,
     TH_RAGE,
 };
 
-const th_glossary_t TH_SPELL_PHASE_RAGEFIN[4] {
+const th_glossary_t TH_SPELL_PHASE_RAGEFIN[4]
+{
     TH_NORMAL,
     TH_FINALE,
     TH_RAGE,
 };
 
-const th_glossary_t TH_SIDE_SELECT[3] {
+const th_glossary_t TH_SIDE_SELECT[3]
+{
     TH_LEFT,
     TH_RIGHT,
 };
@@ -25460,119 +25473,37 @@ const th_sections_t th_sections_cba[7][2][19]
     },
 };
 
-    const th_sections_t th_sections_cbt[7][2][14] {
-        {
-            {
-                TH20_ST1_MID1,
-                TH20_ST1_BOSS1,
-                TH20_ST1_BOSS3,
-            },
-            {
-                TH20_ST1_BOSS2,
-                TH20_ST1_BOSS4,
-                TH20_ST1_BOSS5,
-            },
-        },
-        {
-            {
-                TH20_ST2_MID1,
-                TH20_ST2_BOSS1,
-                TH20_ST2_BOSS3,
-            },
-            {
-                TH20_ST2_BOSS2,
-                TH20_ST2_BOSS4,
-                TH20_ST2_BOSS5,
-            },
-        },
-        {
-            {
-                TH20_ST3_BOSS1,
-                TH20_ST3_BOSS3,
-                TH20_ST3_BOSS5,
-            },
-            {
-                TH20_ST3_BOSS2,
-                TH20_ST3_BOSS4,
-                TH20_ST3_BOSS6,
-                TH20_ST3_BOSS7,
-            },
-        },
-        {
-            {
-                TH20_ST4_MID1,
-                TH20_ST4_MID2,
-                TH20_ST4_BOSS1,
-                TH20_ST4_BOSS3,
-                TH20_ST4_BOSS5,
-            },
-            {
-                TH20_ST4_BOSS2,
-                TH20_ST4_BOSS4,
-                TH20_ST4_BOSS6,
-                TH20_ST4_BOSS7,
-            },
-        },
-        {
-            {
-                TH20_ST5_MID1,
-                TH20_ST5_BOSS1,
-                TH20_ST5_BOSS3,
-                TH20_ST5_BOSS5,
-            },
-            {
-                TH20_ST5_BOSS2,
-                TH20_ST5_BOSS4,
-                TH20_ST5_BOSS6,
-                TH20_ST5_BOSS7,
-            },
-        },
-        {
-            {
-                TH20_ST6_BOSS1,
-                TH20_ST6_BOSS3,
-                TH20_ST6_BOSS5,
-                TH20_ST6_BOSS7,
-                TH20_ST6_BOSS9,
-            },
-            {
-                TH20_ST6_BOSS2,
-                TH20_ST6_BOSS4,
-                TH20_ST6_BOSS6,
-                TH20_ST6_BOSS8,
-                TH20_ST6_BOSS10,
-                TH20_ST6_BOSS11,
-                TH20_ST6_BOSS12,
-            },
-        },
-        {
-            {
-                TH20_ST7_BOSS1,
-                TH20_ST7_BOSS3,
-                TH20_ST7_BOSS5,
-                TH20_ST7_BOSS7,
-                TH20_ST7_BOSS9,
-                TH20_ST7_BOSS11,
-                TH20_ST7_BOSS13,
-                TH20_ST7_BOSS15,
-            },
-            {
-                TH20_ST7_MID1,
-                TH20_ST7_MID2,
-                TH20_ST7_MID3,
-                TH20_ST7_BOSS2,
-                TH20_ST7_BOSS4,
-                TH20_ST7_BOSS6,
-                TH20_ST7_BOSS8,
-                TH20_ST7_BOSS10,
-                TH20_ST7_BOSS12,
-                TH20_ST7_BOSS14,
-                TH20_ST7_BOSS16,
-                TH20_ST7_BOSS17,
-                TH20_ST7_BOSS18,
-            },
-        },
-    };
+const th_sections_t th_sections_cbt[7][2][14]
+{
+    {
+        { TH20_ST1_MID1, TH20_ST1_BOSS1, TH20_ST1_BOSS3, },
+        { TH20_ST1_BOSS2, TH20_ST1_BOSS4, TH20_ST1_BOSS5, },
+    },
+    {
+        { TH20_ST2_MID1, TH20_ST2_BOSS1, TH20_ST2_BOSS3, },
+        { TH20_ST2_BOSS2, TH20_ST2_BOSS4, TH20_ST2_BOSS5, },
+    },
+    {
+        { TH20_ST3_BOSS1, TH20_ST3_BOSS3, TH20_ST3_BOSS5, },
+        { TH20_ST3_BOSS2, TH20_ST3_BOSS4, TH20_ST3_BOSS6, TH20_ST3_BOSS7, },
+    },
+    {
+        { TH20_ST4_MID1, TH20_ST4_MID2, TH20_ST4_BOSS1, TH20_ST4_BOSS3, TH20_ST4_BOSS5, },
+        { TH20_ST4_BOSS2, TH20_ST4_BOSS4, TH20_ST4_BOSS6, TH20_ST4_BOSS7, },
+    },
+    {
+        { TH20_ST5_MID1, TH20_ST5_BOSS1, TH20_ST5_BOSS3, TH20_ST5_BOSS5, },
+        { TH20_ST5_BOSS2, TH20_ST5_BOSS4, TH20_ST5_BOSS6, TH20_ST5_BOSS7, },
+    },
+    {
+        { TH20_ST6_BOSS1, TH20_ST6_BOSS3, TH20_ST6_BOSS5, TH20_ST6_BOSS7, TH20_ST6_BOSS9, },
+        { TH20_ST6_BOSS2, TH20_ST6_BOSS4, TH20_ST6_BOSS6, TH20_ST6_BOSS8, TH20_ST6_BOSS10, TH20_ST6_BOSS11, TH20_ST6_BOSS12, },
+    },
+    {
+        { TH20_ST7_BOSS1, TH20_ST7_BOSS3, TH20_ST7_BOSS5, TH20_ST7_BOSS7, TH20_ST7_BOSS9, TH20_ST7_BOSS11, TH20_ST7_BOSS13, TH20_ST7_BOSS15, },
+        { TH20_ST7_MID1, TH20_ST7_MID2, TH20_ST7_MID3, TH20_ST7_BOSS2, TH20_ST7_BOSS4, TH20_ST7_BOSS6, TH20_ST7_BOSS8, TH20_ST7_BOSS10, TH20_ST7_BOSS12, TH20_ST7_BOSS14, TH20_ST7_BOSS16, TH20_ST7_BOSS17, TH20_ST7_BOSS18, },
+    },
+};
 
 const th_glossary_t TH20_RAGE[3]
 {
@@ -25606,7 +25537,7 @@ const th_glossary_t TH20_EXPIRED_PYRAMID_FIX_OPT[6]
 
 }
 
-const wchar_t __thprac_loc_range_zh[3579] {
+const wchar_t __thprac_loc_range_zh[2951] {
     0x0020, 0x00FF,
     0x394, 0x394,
     0x2014, 0x2014,
@@ -25674,8 +25605,7 @@ const wchar_t __thprac_loc_range_zh[3579] {
     0x4eea, 0x4eea,
     0x4eec, 0x4eec,
     0x4ef0, 0x4ef0,
-    0x4ef6, 0x4ef6,
-    0x4ef7, 0x4ef7,
+    0x4ef6, 0x4ef7,
     0x4efb, 0x4efb,
     0x4efd, 0x4efd,
     0x4f0a, 0x4f0a,
@@ -26161,11 +26091,9 @@ const wchar_t __thprac_loc_range_zh[3579] {
     0x62cd, 0x62cd,
     0x62d2, 0x62d2,
     0x62d6, 0x62d6,
-    0x62db, 0x62db,
-    0x62dc, 0x62dc,
+    0x62db, 0x62dc,
     0x62e5, 0x62e5,
-    0x62e8, 0x62e8,
-    0x62e9, 0x62e9,
+    0x62e8, 0x62e9,
     0x62ec, 0x62ec,
     0x62f3, 0x62f3,
     0x6301, 0x6301,
@@ -27120,7 +27048,7 @@ const wchar_t __thprac_loc_range_en[57] {
     0
 };
 
-const wchar_t __thprac_loc_range_ja[2897] {
+const wchar_t __thprac_loc_range_ja[2399] {
     0x0020, 0x00FF,
     0x394, 0x394,
     0x2026, 0x2026,
@@ -27183,8 +27111,7 @@ const wchar_t __thprac_loc_range_ja[2897] {
     0x4eca, 0x4eca,
     0x4ecf, 0x4ecf,
     0x4ed6, 0x4ed6,
-    0x4ed8, 0x4ed8,
-    0x4ed9, 0x4ed9,
+    0x4ed8, 0x4ed9,
     0x4ee3, 0x4ee3,
     0x4ee5, 0x4ee5,
     0x4ef0, 0x4ef0,
@@ -28094,8 +28021,7 @@ const wchar_t __thprac_loc_range_ja[2897] {
     0x8a5b, 0x8a5b,
     0x8a60, 0x8a60,
     0x8a66, 0x8a66,
-    0x8a70, 0x8a71,
-    0x8a73, 0x8a73,
+    0x8a70, 0x8a73,
     0x8a89, 0x8a89,
     0x8a8d, 0x8a8d,
     0x8a95, 0x8a95,
@@ -28108,6 +28034,7 @@ const wchar_t __thprac_loc_range_ja[2897] {
     0x8abf, 0x8abf,
     0x8ac7, 0x8ac7,
     0x8acf, 0x8acf,
+    0x8ad6, 0x8ad6,
     0x8ae6, 0x8ae6,
     0x8af1, 0x8af1,
     0x8af8, 0x8af8,
