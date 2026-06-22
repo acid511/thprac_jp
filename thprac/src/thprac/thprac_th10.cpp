@@ -12,12 +12,14 @@ namespace TH10 {
 
     int g_rep_page = 0;
     const char chars_supported[] = "!\"#$%&' ()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_abcdefghijklmnopqrstuvwxyz{|}~";
-    enum ADDRS {
-        SOUND_MANAGER_ADDR = 0x492590,
-        DIFF_ADDR = 0x474C74,
-        CHARA_ADDR = 0x474C68,
-        SUBSHOT_ADDR = 0x474C6C,
+    enum addrs {
+        CHARA_ADDR = 0x474c68,
+        SUBSHOT_ADDR = 0x474c6c,
+        DIFF_ADDR = 0x474c74,
+        STAGE_NUM = 0x474c7c,
+        ENEMY_MANAGER_PTR = 0x477704,
         PLAYER_PTR = 0x477834,
+        SOUND_MANAGER_ADDR = 0x492590,
     };
     // Workaround for TH10's calling conventions
     // ecx: SOUND_MANAGER_PTR
@@ -535,7 +537,28 @@ namespace TH10 {
         Gui::GuiHotKey mInfLives { TH_INFLIVES2, "F2", VK_F2 };
         HOTKEY_DEFINE(mTimeLock, TH_TIMELOCK, "F4", VK_F4)
         PATCH_HK(0x408D93, "eb"),
-        PATCH_HK(0x40E5B0, "90")
+        PATCH_HK(0x40E5B0, "90"),
+        EHOOK_HK(0x44fb9f, 2, { // freeze ECL sub time for st1/2/4 main during midboss
+            const uint32_t stage = GetMemContent(STAGE_NUM) - 1;
+            if (stage >= 2 && stage != 3) return;
+
+            const uint32_t enmFlags = GetMemContent(pCtx->Esi + 0x1014, 0x103c + 0x1444);
+            if (enmFlags != 1296) return; // only main
+
+            const bool bossExists = (bool)GetMemContent(ENEMY_MANAGER_PTR, 0x10);
+            const float curTime = *(float*)pCtx->Esi;
+
+            if (bossExists && curTime) { // skip increasing sub time
+                pCtx->Eip = 0x44fba1;
+
+                // skip post-midboss main sub wait
+                constexpr float mainTimeMid[4] = { 2200.0f, 2200.0f, 0.0f, 3600.0f };
+                constexpr float mainTimePostMid[4] = { 2600.0f, 2900.0f, 0.0f, 4100.0f };
+
+                if (curTime >= mainTimeMid[stage] && curTime < mainTimePostMid[stage])
+                    *(float*)pCtx->Esi = mainTimePostMid[stage];
+            }
+        })
         HOTKEY_ENDDEF();
         Gui::GuiHotKey mElBgm { TH_EL_BGM, "F7", VK_F7 };
         Gui::GuiHotKey mInGameInfo { THPRAC_INGAMEINFO, "F8", VK_F8 };
@@ -558,7 +581,8 @@ namespace TH10 {
     public:
         int32_t mMissCount;
         int32_t mBombCount;
-
+        int32_t mWhiteCount;
+        int32_t mYellowCount;
     protected:
         virtual void OnLocaleChange() override
         {
@@ -600,6 +624,16 @@ namespace TH10 {
             ImGui::Text(S(THPRAC_INGAMEINFO_BOMB_COUNT));
             ImGui::NextColumn();
             ImGui::Text("%8d", mBombCount);
+
+            if (g_adv_igi_options.th10_show_point_item)
+            {
+                ImGui::NextColumn();
+                ImGui::Text(S(THPRAC_INGAMEINFO_TH10_POINT));
+                ImGui::NextColumn();
+                ImGui::TextColored(ImVec4(1, 1, 1, 1), "%5d / ", mWhiteCount);
+                ImGui::SameLine(0.0f, 0.0f);
+                ImGui::TextColored(ImVec4(1, 1, 0.5, 1), "%d", mYellowCount);
+            }
         }
 
         virtual void OnPreUpdate() override
@@ -683,6 +717,14 @@ namespace TH10 {
             + *(DWORD*)(0x47783C) + 17276 * (*(DWORD*)(0x474C68) + *(DWORD*)(0x474C6C) + 2 * *(DWORD*)(0x474C68)) + 1576);
         master_disable_render_capture(capture_tot, capture_cur,thiz);
     });
+    EHOOK_ST(th10_white, 0x41B4D5, 6,
+        {
+            TH10InGameInfo::singleton().mWhiteCount++;
+        });
+    EHOOK_ST(th10_yellow, 0x41B4BD, 5,
+        {
+            TH10InGameInfo::singleton().mYellowCount++;
+        });
 
     class THAdvOptWnd : public Gui::PPGuiWnd {
         SINGLETON(THAdvOptWnd)
@@ -760,6 +802,10 @@ namespace TH10 {
             GameplayInit();
             MasterDisableInit();
             th10_bossmovedown.Setup();
+            th10_yellow.Setup();
+            th10_white.Setup();
+            th10_yellow.Toggle(g_adv_igi_options.th10_show_point_item);
+            th10_white.Toggle(g_adv_igi_options.th10_show_point_item);
         }
 
     public:
@@ -947,6 +993,13 @@ namespace TH10 {
                 ImGui::SameLine();
                 HelpMarker(S(TH_DISABLE_MASTER_DESC));
                 ImGui::Checkbox(S(TH_ENABLE_LOCK_TIMER), &g_adv_igi_options.enable_lock_timer_autoly);
+
+                if (ImGui::Checkbox(S(THPRAC_INGAMEINFO_TH10_SHOW_POINT), &g_adv_igi_options.th10_show_point_item)) {
+                    th10_yellow.Toggle(g_adv_igi_options.th10_show_point_item);
+                    th10_white.Toggle(g_adv_igi_options.th10_show_point_item);
+                    TH10InGameInfo::singleton().mWhiteCount = 0;
+                    TH10InGameInfo::singleton().mYellowCount = 0;
+                }
 
                 if (GameplayOpt(mOptCtx))
                     GameplaySet();
@@ -2645,7 +2698,7 @@ namespace TH10 {
         if (transition_stage_ptr)
             return;
 
-        uint32_t stage_num = *(uint32_t*)0x474c7c;
+        uint32_t stage_num = *(uint32_t*)STAGE_NUM;
         if (stage_num != 4)
             return;
 
@@ -2870,6 +2923,8 @@ namespace TH10 {
     {
         TH10InGameInfo::singleton().mBombCount = 0;
         TH10InGameInfo::singleton().mMissCount = 0;
+        TH10InGameInfo::singleton().mWhiteCount = 0;
+        TH10InGameInfo::singleton().mYellowCount = 0;
     })
     EHOOK_DY(th10_bomb_dec, 0x4259CF,5, // bomb dec
     {

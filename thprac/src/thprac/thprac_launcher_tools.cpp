@@ -1546,7 +1546,7 @@ public:
         if (ImGui::Button(S(THPRAC_TOOLS_ROLLF_CSV)))
             LoadRoll();
         ImGui::SameLine();
-        GuiHelpMarker(S(THPRAC_TOOLS_ROLLF_CSV_DESC));
+        HelpMarker(S(THPRAC_TOOLS_ROLLF_CSV_DESC));
         ImGui::SameLine();
         if (ImGui::Button("俺の嫁"))
             LoadRollWaifu();

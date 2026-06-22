@@ -14,6 +14,8 @@
 #include "utils/utils.h"
 
 namespace THPrac {
+void HelpMarker(const char* desc);
+void CustomMarker(const char* text, const char* desc);
 void ImRotateStart();
 ImVec2 ImRotationCenter();
 void ImRotateEnd(float rad, ImVec2 center = ImRotationCenter());
@@ -284,17 +286,31 @@ namespace Gui {
                     }
                 }
 
+                // when step==1, set it to loop logic to make it easier to use for keyboard
                 if (InGameInputGet(VK_LEFT)) {
                     T oldValue = mValue;
                     mValue -= mStep;
-                    if (mValue < mValueMin)
-                        mValue = mValueMin;
+                    if (mStep != 1)
+                    {
+                        if (mValue < mValueMin)
+                            mValue = mValueMin;
+                    }else{
+                        if (mValue < mValueMin)
+                            mValue = mValueMax;
+                    }
                     hasChanged |= (mValue != oldValue);
                 } else if (InGameInputGet(VK_RIGHT)) {
                     T oldValue = mValue;
                     mValue += mStep;
-                    if (mValue > mValueMax)
-                        mValue = mValueMax;
+                    if (mStep != 1)
+                    {
+                        if (mValue > mValueMax)
+                            mValue = mValueMax;
+                    }else{
+
+                        if (mValue > mValueMax)
+                            mValue = mValueMin;
+                    }
                     hasChanged |= (mValue != oldValue);
                 }
             }

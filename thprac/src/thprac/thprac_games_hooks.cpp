@@ -1360,6 +1360,11 @@ HRESULT STDMETHODCALLTYPE GetDeviceState_Changed(LPDIRECTINPUTDEVICE8 thiz, DWOR
         ((BYTE*)state)[DIK_LSHIFT] = 0x0;
         ((BYTE*)state)[DIK_RSHIFT] = 0x0;
     }
+    if (g_input_opt.force_shiftkey)
+    {
+        ((BYTE*)state)[DIK_LSHIFT] = 0x80;
+        ((BYTE*)state)[DIK_RSHIFT] = 0x80;
+    }
     if (g_input_opt.disable_zkey) {
         ((BYTE*)state)[DIK_Z] = 0x0;
     }
@@ -1466,6 +1471,8 @@ BOOL WINAPI GetKeyboardState_Changed(PBYTE keyBoardState)
                 keyBoardState[VK_CONTROL] = 0x80;
             if ((keyboardState[DIK_LMENU] & 0x80) || (keyboardState[DIK_RMENU] & 0x80))
                 keyBoardState[VK_MENU] = 0x80;
+            if ((keyboardState[DIK_RETURN] & 0x80) || (keyboardState[DIK_NUMPADENTER] & 0x80))
+                keyBoardState[VK_RETURN] = 0x80;
             return TRUE;
         }
     }
@@ -1521,6 +1528,9 @@ LB_FINAL:
     }
     if (g_input_opt.disable_shiftkey) {
         keyBoardState[VK_LSHIFT] = keyBoardState[VK_LSHIFT] = keyBoardState[VK_SHIFT] = 0x0;
+    }
+    if (g_input_opt.force_shiftkey) {
+        keyBoardState[VK_LSHIFT] = keyBoardState[VK_LSHIFT] = keyBoardState[VK_SHIFT] = 0x80;
     }
     if (g_input_opt.disable_zkey) {
         keyBoardState['Z'] = 0x0;

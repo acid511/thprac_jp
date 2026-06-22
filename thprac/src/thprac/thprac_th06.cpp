@@ -29,6 +29,8 @@ namespace TH06 {
     static const GameManager* const GAME_MANAGER = (const GameManager* const)0x69bca0;
 
     enum ADDRS {
+        ENEMY_MANAGER = 0x4b79c8,
+        GUI = 0x69bc30,
         INPUT_ADDR = 0x69D904,
         INPUT_PREV_ADDR = 0x69D908,
     };
@@ -43,6 +45,12 @@ namespace TH06 {
     float g_last_boss_x, g_last_boss_y;
 
     int g_lock_timer = 0;
+
+    struct TH06BossIndicator{
+        int totLife;
+        int curLife;
+        int lifeThreshold;
+    } g_boss_indicator;
 
     bool THBGMTest();
     using std::pair;
@@ -468,7 +476,25 @@ namespace TH06 {
         HOTKEY_ENDDEF();
         
         HOTKEY_DEFINE(mTimeLock, TH_TIMELOCK, "F5", VK_F5)
-        PATCH_HK(0x412DD1, "eb")
+        PATCH_HK(0x412DD1, "eb"),
+        EHOOK_HK(0x412e31, 5, { // freeze timeline progress during st1/2/4/5 mid (missing boss_wait)
+            const uint32_t st = GAME_MANAGER->currentStage - 1;
+            if (st >= 5 || st == 2) return;
+
+            constexpr uint32_t midStart[5] = { 2008, 2588, 0, 4132, 3374 };
+            constexpr uint32_t midLength[5] = { (24+24)*60, 32*60, 0, 40*60, (40+30)*60 };
+            constexpr uint32_t midExtraWait[5] = { 4*60, 15*60, 0, 12*60, 5*60 };
+
+            const bool bossExists = GetMemContent<bool>(GUI + 0x20);
+            const uint32_t curTime = pCtx->Edx;
+
+            if (bossExists && curTime >= midStart[st] && curTime < midStart[st] + midLength[st]) {
+                pCtx->Eip = 0x412e36; // don't tick timeline
+
+                if (curTime < midStart[st] + midExtraWait[st]) // remove unnecessary wait
+                    *(int32_t*)(ENEMY_MANAGER + 0xee5e0 + 0x8) = midStart[st] + midExtraWait[st];
+            }
+        })
         HOTKEY_ENDDEF();
 
         Gui::GuiHotKey mElBgm { TH_EL_BGM, "F7", VK_F7 };
@@ -1273,7 +1299,7 @@ namespace TH06 {
         {
             SetTitle("igi");
             SetFade(0.9f, 0.9f);
-            SetSizeRel(180.0f / 640.0f, 0.0f);
+            SetSizeRel(190.0f / 640.0f, 0.0f);
             SetPosRel(433.0f / 640.0f, 245.0f / 480.0f);
             SetWndFlag(ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | 0);
             OnLocaleChange();
@@ -1282,6 +1308,8 @@ namespace TH06 {
 
     public:
         int32_t mMissCount;
+        int32_t mGreyCount;
+        int32_t mGreyInBombCount;
         struct BooksInfo {
             bool is_books;
             int32_t time_books;
@@ -1298,6 +1326,8 @@ namespace TH06 {
             booksInfo.is_died = false;
             booksInfo.miss_count = 0;
             booksInfo.bomb_count = 0;
+            mGreyInBombCount = 0;
+            mGreyCount = 0;
         }
 
     protected:
@@ -1339,6 +1369,13 @@ namespace TH06 {
             ImGui::Text(diff_pl.c_str());
 
             ImGui::Columns(2);
+            if (mGreyInBombCount || mGreyCount){
+                int sz = ImGui::CalcTextSize(std::format(" {} / {}  ",mGreyInBombCount,mGreyCount).c_str()).x;
+                if (ImGui::GetColumnWidth(1) < sz) {
+                    ImGui::SetColumnWidth(0, ImGui::GetWindowContentRegionWidth() - sz);
+                    ImGui::SetColumnWidth(1, sz);
+                }
+            }
             ImGui::Text(S(THPRAC_INGAMEINFO_MISS_COUNT));
             ImGui::NextColumn();
             ImGui::Text("%8d", mMissCount);
@@ -1347,11 +1384,21 @@ namespace TH06 {
             ImGui::NextColumn();
             ImGui::Text("%8d", mBombCount);
 
+            if (g_adv_igi_options.th06_show_grey_item)
+            {
+                ImGui::NextColumn();
+                ImGui::Text(S(THPRAC_INGAMEINFO_TH06_POINT));
+                ImGui::NextColumn();
+                ImGui::TextColored(ImVec4(1, 1, 1, 1), "%5d / ", mGreyInBombCount);
+                ImGui::SameLine(0.0f, 0.0f);
+                ImGui::TextColored(ImVec4(1, 1, 0.5, 1), "%d", mGreyCount);
+            }
+
             if (g_adv_igi_options.th06_showRank) {
                 ImGui::NextColumn();
                 ImGui::Text(S(THPRAC_INGAMEINFO_TH06_RANK));
                 ImGui::NextColumn();
-                ImGui::Text("%8d.%02d", *(int32_t*)(0x69d710), *(int32_t*)(0x69d71C));
+                ImGui::Text("%6d.%02d", *(int32_t*)(0x69d710), *(int32_t*)(0x69d71C));
             }
 
             ImGui::Columns(1);
@@ -1378,13 +1425,13 @@ namespace TH06 {
         }
         virtual void OnPreUpdate() override
         {
-            if (GAME_MANAGER->isInGame)
+            if (GAME_MANAGER->isInGame || GAME_MANAGER->isInGameMenu || GAME_MANAGER->isInRetryMenu)
             {
                 GameUpdateInner(6);
             }
             if (*THOverlay::singleton().mShowSpellCapture && ((GAME_MANAGER->isInGame || GAME_MANAGER->isInGameMenu || GAME_MANAGER->isInRetryMenu))) {
                 SetPosRel(433.0f / 640.0f, 245.0f / 480.0f);
-                SetSizeRel(180.0f / 640.0f, 0.0f);
+                SetSizeRel(190.0f / 640.0f, 0.0f);
                 Open();
             } else {
                 Close();
@@ -1419,7 +1466,45 @@ namespace TH06 {
             pCtx->Edx = 0x00000000;
         })
     HOOKSET_ENDDEF()
+    EHOOK_ST(th06_grey, 0x420059, 6,
+    {
+        if (*(DWORD*)(0x6D1BF0))
+            TH06InGameInfo::singleton().mGreyInBombCount++;
+        else
+            TH06InGameInfo::singleton().mGreyCount++;
+    });
 
+    
+    EHOOK_ST(th06_set_boss_lifebar, 0x412D2B, 5,
+        {
+            g_boss_indicator.curLife = *(int*)(pCtx->Edx + 0xCE4);
+            g_boss_indicator.totLife= *(int*)(pCtx->Edx + 0xCE8);
+            g_boss_indicator.lifeThreshold = *(int*)(pCtx->Edx + 0xEA8);
+    });
+
+     EHOOK_ST(th06_render_life_threshold, 0x419D7B, 6,
+        {
+            if (g_boss_indicator.totLife > 0) {
+                int panmvm = *(DWORD*)(pCtx->Ebp-0x10);
+                float cur_life = 0; 
+                if (g_boss_indicator.lifeThreshold>0){
+                    cur_life = std::min(g_boss_indicator.curLife, g_boss_indicator.lifeThreshold);
+                }else{
+                    cur_life = g_boss_indicator.curLife;
+                }
+                float bar_ratio = cur_life / (float)g_boss_indicator.totLife;
+
+                
+                DWORD thiz = *(DWORD*)(pCtx->Ebp - 0x1E0);
+                float bar_ratio1 = *(float*)(thiz + 0x28);
+
+                bar_ratio = std::min(bar_ratio, bar_ratio1);
+                *(float*)(panmvm + 0x1C) = bar_ratio * 288.0 / 14.0; // X scale
+                *(DWORD*)(panmvm + 0x7C) = 0xFFFFAAAA; // color
+                asm_call<0x432AD0, Thiscall>(*(DWORD*)(0x6D4588), panmvm);
+                *(DWORD*)(panmvm + 0x7C) = 0xFFFFFFFF; // color
+            }
+     });
 
     class THAdvOptWnd : public Gui::PPGuiWnd {
         SINGLETON(THAdvOptWnd)
@@ -1492,6 +1577,12 @@ namespace TH06 {
                 th06_rankdown_disable[i].Toggle(g_adv_igi_options.th06_disable_drop_rank);
             th06_bossmovedown.Setup();
             th06_bossmovedown.Toggle(false);
+            th06_grey.Setup();
+            th06_grey.Toggle(g_adv_igi_options.th06_show_grey_item);
+            th06_set_boss_lifebar.Setup();
+            th06_render_life_threshold.Setup();
+            th06_set_boss_lifebar.Toggle(g_adv_igi_options.th06_showBossLifeThreshold);
+            th06_render_life_threshold.Toggle(g_adv_igi_options.th06_showBossLifeThreshold);
             GameplayInit();
         }
 
@@ -1720,6 +1811,20 @@ namespace TH06 {
                 g_adv_igi_options.th06_seed = std::clamp(g_adv_igi_options.th06_seed, 0, 65535);
             }
             ImGui::Text("%s: %d",S(THPRAC_TH06_REP_RAND_SEED),g_last_rep_seed);
+
+            if (ImGui::Checkbox(S(THPRAC_INGAMEINFO_TH06_SHOW_POINT), &g_adv_igi_options.th06_show_grey_item)) {
+                th06_grey.Toggle(g_adv_igi_options.th06_show_grey_item);
+                TH06InGameInfo::singleton().mGreyInBombCount = 0;
+                TH06InGameInfo::singleton().mGreyCount = 0;
+            }
+
+            ImGui::SameLine();
+            if (ImGui::Checkbox(S(THPRAC_INGAMEINFO_TH06_SHOW_THRESHOLD), &g_adv_igi_options.th06_showBossLifeThreshold)) {
+                th06_set_boss_lifebar.Toggle(g_adv_igi_options.th06_showBossLifeThreshold);
+                th06_render_life_threshold.Toggle(g_adv_igi_options.th06_showBossLifeThreshold);
+            }
+            ImGui::SameLine();
+            HelpMarker(S(THPRAC_INGAMEINFO_TH06_SHOW_THRESHOLD_DESC));
 
             if (ImGui::Checkbox(S(THPRAC_TH06_BACKGROUND_FIX), &g_adv_igi_options.th06_bg_fix))
             {
