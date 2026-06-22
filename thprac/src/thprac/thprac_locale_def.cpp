@@ -7,7 +7,7 @@
 
 namespace THPrac {
 
-const char* th_glossary_str[3][1844] {
+const char* th_glossary_str[3][1852] {
     {
         "",
         "啤酒",
@@ -1080,13 +1080,19 @@ const char* th_glossary_str[3][1844] {
         "免责声明: 部分功能可能会被认为是作弊",
         "bomb:",
         "miss:",
+        "灰点",
         "rank",
         "显示低速判定",
         "红魔乡显示低速判定",
         "自定义判定: 将判定点图片hitbox.png放入红魔乡游戏所在文件夹",
         "重载",
+        "红魔乡显示灰点",
         "显示rank",
         "红魔乡显示rank",
+        "红魔乡显示阶段血量阈值",
+        "尽管有人觉得是作弊，但是显示这个阈值理论上和将鼠标移动到对应位置或画一根线是等价的...所以我保留了让它在实战中起作用的设定",
+        "蓝点",
+        "风神录显示蓝点",
         "显示hint",
         "地灵殿显示hint",
         "连击",
@@ -1100,6 +1106,7 @@ const char* th_glossary_str[3][1844] {
         "下一奖励",
         "普通收点",
         "总奖励",
+        "残数",
         "道具量",
         "辉针城魔理沙自动开启激光修复的rep预防功能",
         "显示bonus数",
@@ -1590,6 +1597,7 @@ const char* th_glossary_str[3][1844] {
         "给打nb的人准备(快捷键 shift+D)",
         "禁用Z键",
         "真假...(快捷键 shift+S)",
+        "始终按住Shift键",
         "高级选项",
         "应用",
         "攻击",
@@ -2931,13 +2939,19 @@ const char* th_glossary_str[3][1844] {
         "disclaimer: might be considered as cheating",
         "bomb:",
         "miss:",
+        "Grey Item",
         "rank",
         "show hitbox when focused",
         "EoSD show hitbox when focused",
         "custom hitbox: put hitbox.png file in EoSD .exe folder",
         "reload",
+        "EoSD Show grey item",
         "show rank",
         "EoSD show rank",
+        "Grey Item",
+        "Though some might consider it cheating, displaying this threshold is theoretically equivalent to moving the mouse to the corresponding position or drawing a line on the screen... so I kept the setting that makes it work in normal play.",
+        "Point",
+        "MoF Show white/yellow point item",
         "show hint",
         "SA show hint",
         "hits",
@@ -2951,6 +2965,7 @@ const char* th_glossary_str[3][1844] {
         "next bonus",
         "normal bonus",
         "total bonus",
+        "extend count",
         "items",
         "DDC Marisa laser bug rep repair on",
         "show bonuses",
@@ -3441,6 +3456,7 @@ const char* th_glossary_str[3][1844] {
         "for who want to play nb neta(hotkey shift+D)",
         "disable Z key",
         "really?(hotkey shift+S)",
+        "force press shift key",
         "Advanced Options",
         "Apply",
         "Attack",
@@ -25590,7 +25606,7 @@ const th_glossary_t TH20_EXPIRED_PYRAMID_FIX_OPT[6]
 
 }
 
-const wchar_t __thprac_loc_range_zh[3575] {
+const wchar_t __thprac_loc_range_zh[3579] {
     0x0020, 0x00FF,
     0x394, 0x394,
     0x2014, 0x2014,
@@ -25659,6 +25675,7 @@ const wchar_t __thprac_loc_range_zh[3575] {
     0x4eec, 0x4eec,
     0x4ef0, 0x4ef0,
     0x4ef6, 0x4ef6,
+    0x4ef7, 0x4ef7,
     0x4efb, 0x4efb,
     0x4efd, 0x4efd,
     0x4f0a, 0x4f0a,
@@ -26959,6 +26976,7 @@ const wchar_t __thprac_loc_range_zh[3575] {
     0x95ed, 0x95ee,
     0x95f4, 0x95f4,
     0x95fb, 0x95fb,
+    0x9608, 0x9608,
     0x961f, 0x961f,
     0x9631, 0x9636,
     0x963b, 0x963b,
