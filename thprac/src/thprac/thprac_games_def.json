@@ -1395,8 +1395,8 @@
 	  "THPRAC_TH20_FIX_BULLETHITBOX_DESC": [ "锦上京游戏", "FW Game", "錦上京" ],
 	  "THPRAC_TH20_DECREASE_EFF": [ "锦上京减少擦弹特效","FW decrease graze effect","錦上京: グレイズのエフェクトを減らす"],
 
-    "THPRAC_FAST_RETRY": [ "练习模式快速re", "fast retry for prac mode", "Practiceモードで高速リトライ" ],
-	  "THPRAC_FAST_RETRY_DESC": [ "需要启用键盘Hook与强制dinput8/RawInput输入", "need enable keyboard hook & force dinput8/RawInput", "入力制御機能とdinput8/RawInputの強制有効化が必要" ],
+    "THPRAC_FAST_RETRY": [ "练习模式快速re", "fast retry for prac mode", "Practiceモードで被弾時に自動リトライ" ],
+	  "THPRAC_FAST_RETRY_DESC": [ "需要启用键盘Hook与强制dinput8/RawInput输入", "need enable keyboard hook & force dinput8/RawInput", "「入力制御機能の有効化」と「dinput8/RawInputの使用を強制」が必要" ],
 	  "THPRAC_FAST_RETRY_DESC2": [ "快捷键: shift+F", "hotkey shift+F", "shift+Fで切り替え" ],
 
 	  "THPRAC_TH06_BACKGROUND_FIX": [ "红魔乡背景修复", "EoSD background fix", "紅魔郷: 背景を修正" ],
@@ -1410,7 +1410,7 @@
 
     "THPRAC_INGAMEINFO_TH06_POINT":["灰点","Grey Item","ボーナス点"],
 	  "THPRAC_INGAMEINFO_TH06_SHOW_POINT":["红魔乡显示灰点","EoSD Show grey item","紅魔郷: ボーナス点を表示"],
-	  "THPRAC_INGAMEINFO_TH06_SHOW_THRESHOLD":["红魔乡显示阶段血量阈值","Grey Item","体力のしきい値を表示"],
+	  "THPRAC_INGAMEINFO_TH06_SHOW_THRESHOLD":["红魔乡显示阶段血量阈值","Grey Item","紅魔郷: 体力のしきい値を表示"],
 	  "THPRAC_INGAMEINFO_TH06_SHOW_THRESHOLD_DESC":[
       "尽管有人觉得是作弊，但是显示这个阈值理论上和将鼠标移动到对应位置或画一根线是等价的...所以我保留了让它在实战中起作用的设定",
       "Though some might consider it cheating, displaying this threshold is theoretically equivalent to moving the mouse to the corresponding position or drawing a line on the screen... so I kept the setting that makes it work in normal play.",
@@ -1418,7 +1418,7 @@
     ],
 
 	  "THPRAC_INFLIVES_MAP": [ "将锁残修改为不疮", "map inf.lives to no continue", "「残基が減らない」オプションを「満身創痍にならない」オプションに置き換え" ],
-      "THPRAC_DISABLE_MASTER_AUTO": [ "自动禁用MASTER", "automatically disable master", "masterを自動的に無効化" ],
+      "THPRAC_DISABLE_MASTER_AUTO": [ "自动禁用MASTER", "automatically disable master", "master表記を自動的に無効化" ],
       "THPRAC_ENABLE_LOCK_TIMER_AUTO": [ "自动启用锁时计时", "automatically enable lock timer", "タイマーロックを自動的に有効化" ],
 	  "THPRAC_INGAMEINFO_ADV":["高级IGI功能","advanced igi","拡張igi"],
 	  "THPRAC_INGAMEINFO_ADV_DESC1":["部分功能需要打开更多游戏信息(backspace菜单)中的选项开启","need to enable ingameinfo(in backspace menu) to show","表示するには、ゲーム内情報（BackSpaceメニュー内）を有効にする必要があります。"],
@@ -1492,8 +1492,8 @@
        "THPRAC_INGAMEINFO_17_WOLF_COUNT":["狼:","wolf:","オオカミ"],
        "THPRAC_INGAMEINFO_17_OTTER_COUNT":["獭:","otter:","カワウソ"],
        "THPRAC_INGAMEINFO_17_EAGLE_COUNT":["鹰:","eagle:","オオワシ"],
-       "THPRAC_INGAMEINFO_08_LSC_COUNT":["LSC:","LS:","ラストスペル取得"],
-       "THPRAC_INGAMEINFO_08_SC_COUNT":["SC:","SC:","スペルカード取得"],
+       "THPRAC_INGAMEINFO_08_LSC_COUNT":["LSC:","LS:","ラストスペル"],
+       "THPRAC_INGAMEINFO_08_SC_COUNT":["SC:","SC:","スペカ取得"],
        "THPRAC_INGAMEINFO_16_RELEASE_COUNT":["季节解放:","release:","季節解放"],
        "THPRAC_INGAMEINFO_15_RE_TIMES_STAGE":["第%d面Re数:","stage %d Re:","%d面 リトライ"],
        "THPRAC_INGAMEINFO_15_RE_TIMES":["Re数:","Retry:","リトライ"],
