@@ -666,7 +666,16 @@ namespace TH12 {
             ImGui::SetCursorPosX(ImGui::GetWindowSize().x * 0.5f - diff_pl_sz.x * 0.5f);
             ImGui::Text(diff_pl.c_str());
 
-            auto ufo_cnt = std::format("{}/{}/{}/{}", mRUFOCount, mGUFOCount, mBUFOCount, mCUFOCount);
+            int32_t mVentraCount_Drop = mRVentraCount_Drop + mGVentraCount_Drop + mBVentraCount_Drop + mCVentraCount_Drop;
+            auto ventra_drop_cnt = std::format("{} ({}/{}/{}/{})", mVentraCount_Drop, mRVentraCount_Drop, mGVentraCount_Drop, mBVentraCount_Drop, mCVentraCount_Drop);
+            auto ventra_drop_cnt_sz = ImGui::CalcTextSize(ventra_drop_cnt.c_str()).x;
+
+            int32_t mVentraCount_Get = mRVentraCount_Get + mGVentraCount_Get + mBVentraCount_Get;
+            auto ventra_get_cnt = std::format("{} ({}/{}/{})", mVentraCount_Get, mRVentraCount_Get, mGVentraCount_Get, mBVentraCount_Get);
+            auto ventra_get_cnt_sz = ImGui::CalcTextSize(ventra_get_cnt.c_str()).x;
+
+            int32_t mUFOCount = mRUFOCount + mGUFOCount + mBUFOCount + mCUFOCount;
+            auto ufo_cnt = std::format("{} ({}/{}/{}/{})", mUFOCount, mRUFOCount, mGUFOCount, mBUFOCount, mCUFOCount);
             auto ufo_cnt_sz = ImGui::CalcTextSize(ufo_cnt.c_str()).x;
 
             ImGui::Columns(2);
@@ -682,22 +691,73 @@ namespace TH12 {
             ImGui::NextColumn();
             ImGui::Text("%8d", mBombCount);
 
+            auto last_item_width = ImGui::GetItemRectSize().x;
+
             ImGui::NextColumn();
             ImGui::Text(S(THPRAC_INGAMEINFO_12_UFO_COUNT3));
             ImGui::NextColumn();
-            ImGui::Text("%8d", mRVentraCount_Drop + mGVentraCount_Drop + mBVentraCount_Drop + mCVentraCount_Drop);
+            if (ventra_drop_cnt_sz * 0.5 < last_item_width)
+                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + last_item_width - ventra_drop_cnt_sz * 0.5f);
+            ImGui::Text("%d", mVentraCount_Drop);
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text("(");
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::TextColored({ 1.0f, 0.5f, 0.5f, 1.0f }, "%d", mRVentraCount_Drop);
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text("/");
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::TextColored({ 0.5f, 1.0f, 0.5f, 1.0f }, "%d", mGVentraCount_Drop);
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text("/");
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::TextColored({ 0.5f, 0.75f, 1.0f, 1.0f }, "%d", mBVentraCount_Drop);
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text("/");
+            ImGui::SameLine(0.0f, 0.0f);
+            if (g_adv_igi_options.th12_chromatic_ufo) {
+                float r, g, b;
+                static float h = 0.0f;
+                h += 0.016f;
+                ImGui::ColorConvertHSVtoRGB(h, 0.5f, 1.0f, r, g, b);
+                ImGui::TextColored({ r, g, b, 1.0f }, "%d", mCVentraCount_Drop);
+            }else{
+                ImGui::Text("%d", mCVentraCount_Drop);
+            }
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text(")");
+
             ImGui::NextColumn();
             ImGui::Text(S(THPRAC_INGAMEINFO_12_UFO_COUNT2));
             ImGui::NextColumn();
-            ImGui::Text("%8d", mRVentraCount_Get + mGVentraCount_Get + mBVentraCount_Get);
-
-            auto last_item_width = ImGui::GetItemRectSize().x;
+            if (ventra_get_cnt_sz * 0.5 < last_item_width)
+                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + last_item_width - ventra_get_cnt_sz * 0.5f);
+            ImGui::Text("%d", mVentraCount_Get);
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text("(");
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text("/");
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::TextColored({ 1.0f, 0.5f, 0.5f, 1.0f }, "%d", mRVentraCount_Get);
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text("/");
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::TextColored({ 0.5f, 1.0f, 0.5f, 1.0f }, "%d", mGVentraCount_Get);
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text("/");
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::TextColored({ 0.5f, 0.75f, 1.0f, 1.0f }, "%d", mBVentraCount_Get);
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text(")");
 
             ImGui::NextColumn();
             ImGui::Text(S(THPRAC_INGAMEINFO_12_UFO_COUNT1));
             ImGui::NextColumn();
             if (ufo_cnt_sz * 0.5 < last_item_width)
                 ImGui::SetCursorPosX(ImGui::GetCursorPosX() + last_item_width - ufo_cnt_sz * 0.5f);
+            ImGui::Text("%d", mUFOCount);
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text("(");
+            ImGui::SameLine(0.0f, 0.0f);
             ImGui::TextColored({ 1.0f, 0.5f, 0.5f, 1.0f }, "%d", mRUFOCount);
             ImGui::SameLine(0.0f,0.0f);
             ImGui::Text("/");
@@ -719,6 +779,8 @@ namespace TH12 {
             }else{
                 ImGui::Text("%d", mCUFOCount);
             }
+            ImGui::SameLine(0.0f, 0.0f);
+            ImGui::Text(")");
         }
 
         virtual void OnPreUpdate() override
