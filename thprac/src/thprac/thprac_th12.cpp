@@ -700,7 +700,7 @@ namespace TH12 {
                 ImGui::SetCursorPosX(ImGui::GetCursorPosX() + last_item_width - ventra_drop_cnt_sz * 0.5f);
             ImGui::Text("%d", mVentraCount_Drop);
             ImGui::SameLine(0.0f, 0.0f);
-            ImGui::Text("(");
+            ImGui::Text(" (");
             ImGui::SameLine(0.0f, 0.0f);
             ImGui::TextColored({ 1.0f, 0.5f, 0.5f, 1.0f }, "%d", mRVentraCount_Drop);
             ImGui::SameLine(0.0f, 0.0f);
@@ -729,13 +729,11 @@ namespace TH12 {
             ImGui::NextColumn();
             ImGui::Text(S(THPRAC_INGAMEINFO_12_UFO_COUNT2));
             ImGui::NextColumn();
-            if (ventra_get_cnt_sz * 0.5 < last_item_width)
-                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + last_item_width - ventra_get_cnt_sz * 0.5f);
+            if (ventra_drop_cnt_sz * 0.5 < last_item_width)
+                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + last_item_width - ventra_drop_cnt_sz * 0.5f);
             ImGui::Text("%d", mVentraCount_Get);
             ImGui::SameLine(0.0f, 0.0f);
-            ImGui::Text("(");
-            ImGui::SameLine(0.0f, 0.0f);
-            ImGui::Text("/");
+            ImGui::Text(" (");
             ImGui::SameLine(0.0f, 0.0f);
             ImGui::TextColored({ 1.0f, 0.5f, 0.5f, 1.0f }, "%d", mRVentraCount_Get);
             ImGui::SameLine(0.0f, 0.0f);
@@ -752,11 +750,11 @@ namespace TH12 {
             ImGui::NextColumn();
             ImGui::Text(S(THPRAC_INGAMEINFO_12_UFO_COUNT1));
             ImGui::NextColumn();
-            if (ufo_cnt_sz * 0.5 < last_item_width)
-                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + last_item_width - ufo_cnt_sz * 0.5f);
+            if (ventra_drop_cnt_sz * 0.5 < last_item_width)
+                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + last_item_width - ventra_drop_cnt_sz * 0.5f);
             ImGui::Text("%d", mUFOCount);
             ImGui::SameLine(0.0f, 0.0f);
-            ImGui::Text("(");
+            ImGui::Text(" (");
             ImGui::SameLine(0.0f, 0.0f);
             ImGui::TextColored({ 1.0f, 0.5f, 0.5f, 1.0f }, "%d", mRUFOCount);
             ImGui::SameLine(0.0f,0.0f);
