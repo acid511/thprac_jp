@@ -32,8 +32,8 @@ struct ThpracVersion {
 // literal macros needed for thprac.rc
 #define THPRAC_VERSION_0 1
 #define THPRAC_VERSION_1 0
-#define THPRAC_VERSION_2 4
-#define THPRAC_VERSION_3 1
+#define THPRAC_VERSION_2 5
+#define THPRAC_VERSION_3 0
 inline constexpr ThpracVersion currentVersion = { THPRAC_VERSION_0, THPRAC_VERSION_1, THPRAC_VERSION_2, THPRAC_VERSION_3 };
 
 #define STRR(X) #X
