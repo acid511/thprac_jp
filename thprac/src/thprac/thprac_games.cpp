@@ -102,7 +102,7 @@ LRESULT CALLBACK GameExternWndProc([[maybe_unused]] HWND hWnd, UINT uMsg, WPARAM
         }
     } break;
     case WM_MOUSEMOVE:
-    case WM_NCMOUSEMOVE: 
+    case WM_NCMOUSEMOVE:
         if (dragging) {
             POINT p;
             GetCursorPos(&p);
@@ -111,10 +111,15 @@ LRESULT CALLBACK GameExternWndProc([[maybe_unused]] HWND hWnd, UINT uMsg, WPARAM
         }
         break;
     case WM_LBUTTONUP:
-    case WM_NCLBUTTONUP: 
+    case WM_NCLBUTTONUP:
         if (dragging) {
             ReleaseCapture();
             dragging = false;
+            RECT rect;
+            GetWindowRect(hWnd, &rect);
+            if (rect.top < 0) {
+                SetWindowPos(hWnd, nullptr, rect.left, 0, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+            }
             return 1;
         }
         break;
@@ -1070,7 +1075,7 @@ void DisableKeyOpt()
         ImGui::Checkbox(S(TH_ADV_DISABLE_Z_KEY), &g_input_opt.disable_zkey);
         ImGui::SameLine();
         HelpMarker(S(TH_ADV_DISABLE_Z_KEY_DESC));
-        
+
         ImGui::Checkbox(S(TH_ADV_DISABLE_C_KEY_SAMETIME), &g_input_opt.disable_Ckey_at_same_time);
         ImGui::SameLine();
         ImGui::Checkbox(S(TH_ADV_FORCE_SHIFT_KEY), &g_input_opt.force_shiftkey);
