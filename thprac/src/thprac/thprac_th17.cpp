@@ -707,6 +707,7 @@ namespace TH17 {
             mAutoBomb.SetTextOffsetRel(x_offset_1, x_offset_2);
             mElBgm.SetTextOffsetRel(x_offset_1, x_offset_2);
             mInGameInfo.SetTextOffsetRel(x_offset_1, x_offset_2);
+            mEnemyMuteki.SetTextOffsetRel(x_offset_1, x_offset_2);
         }
         virtual void OnContentUpdate() override
         {
@@ -720,6 +721,7 @@ namespace TH17 {
             mNoHyper();
             mElBgm();
             mInGameInfo();
+            mEnemyMuteki();
         }
         virtual void OnPreUpdate() override
         {
@@ -791,6 +793,11 @@ namespace TH17 {
 
         Gui::GuiHotKey mElBgm { TH_EL_BGM, "F9", VK_F9 };
         Gui::GuiHotKey mInGameInfo { THPRAC_INGAMEINFO, "F10", VK_F10 };
+
+        HOTKEY_DEFINE(mEnemyMuteki, TH_ENEMY_MUTEKI, "U", 'U')
+        PATCH_HK(0x41FB7B, "909090909090"),
+        PATCH_HK(0x41FBB5, "909090909090")
+        HOTKEY_ENDDEF();
     };
 
     class TH17InGameInfo : public Gui::GameGuiWnd {
@@ -1077,6 +1084,30 @@ namespace TH17 {
         *y_range = (y_max - y_min2);
     });
 
+    constinit HookCtx scoreUncapHooks[] = {
+        { .addr = 0x41b1d3, .data = PatchCode("ffffffff") },
+        { .addr = 0x41b1d8, .data = PatchCode("ffffffff") },
+        { .addr = 0x4212a9, .data = PatchCode("ffffffff") },
+        { .addr = 0x4212ae, .data = PatchCode("ffffffff") },
+        { .addr = 0x432160, .data = PatchCode("ffffffff") },
+        { .addr = 0x432166, .data = PatchCode("ffffffff") },
+        { .addr = 0x4323b2, .data = PatchCode("ffffffff") },
+        { .addr = 0x4323b8, .data = PatchCode("ffffffff") },
+        { .addr = 0x4324e0, .data = PatchCode("ffffffff") },
+        { .addr = 0x4324e5, .data = PatchCode("ffffffff") },
+        { .addr = 0x433c5e, .data = PatchCode("ffffffff") },
+        { .addr = 0x433c75, .data = PatchCode("ffffffff") },
+        { .addr = 0x433d50, .data = PatchCode("ffffffff") },
+        { .addr = 0x433d60, .data = PatchCode("ffffffff") },
+        { .addr = 0x433f6d, .data = PatchCode("ffffffff") },
+        { .addr = 0x433f73, .data = PatchCode("ffffffff") },
+        { .addr = 0x4343e1, .data = PatchCode("ffffffff") },
+        { .addr = 0x4343e7, .data = PatchCode("ffffffff") },
+        { .addr = 0x43454f, .data = PatchCode("ffffffff") },
+        { .addr = 0x434555, .data = PatchCode("ffffffff") },
+        { .addr = 0x44b261, .data = PatchCode("ffffffff") },
+        { .addr = 0x44b279, .data = PatchCode("ffffffff") },
+    };
 
     class THAdvOptWnd : public Gui::PPGuiWnd {
         SINGLETON(THAdvOptWnd)
@@ -1121,6 +1152,21 @@ namespace TH17 {
             th17_all_clear_bonus_2.Setup();
             th17_all_clear_bonus_3.Setup();
         }
+
+        void ScoreUncapInit()
+        {
+            for (size_t i = 0; i < elementsof(scoreUncapHooks); i++) {
+                scoreUncapHooks[i].Setup();
+            }
+        }
+
+        void ScoreUncapSet()
+        {
+
+            for (auto& hook : scoreUncapHooks)
+                hook.Toggle(g_adv_igi_options.th17_uncap_score);
+        }
+
         void GameplaySet()
         {
             th17_all_clear_bonus_1.Toggle(mOptCtx.all_clear_bonus);
@@ -1144,6 +1190,8 @@ namespace TH17 {
             FpsInit();
             GameplayInit();
             MasterDisableInit();
+            ScoreUncapInit();
+            ScoreUncapSet();
             th17_goast_disable.Setup();
             th17_bossmovedown.Setup();
         }
@@ -1270,6 +1318,10 @@ namespace TH17 {
 
                 if (ImGui::Checkbox(S(TH17_NO_GOAST), &g_th17_goast_disable))
                     th17_goast_disable.Toggle(g_th17_goast_disable);
+
+                if (ImGui::Checkbox(S(TH18_UNCAP), &g_adv_igi_options.th17_uncap_score)) {
+                    ScoreUncapSet();
+                }
 
                 ImGui::Checkbox(S(TH_ENABLE_LOCK_TIMER), &g_adv_igi_options.enable_lock_timer_autoly);
 

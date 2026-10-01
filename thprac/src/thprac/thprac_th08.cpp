@@ -1,15 +1,18 @@
 ﻿#include "thprac_games.h"
 #include "thprac_utils.h"
 #include <format>
+#include "thprac_th08_rsqrt.h"
+
+#include <xmmintrin.h>
 
 namespace THPrac {
     
 
 namespace TH08 {
-    int g_gamefence = 0;
-    bool g_show_bullet_hitbox=false;
-    int g_lock_timer = 0;
-    bool g_autobomb_trigger = false;
+     int g_gamefence = 0;
+     bool g_show_bullet_hitbox=false;
+     int g_lock_timer = 0;
+     bool g_autobomb_trigger = false;
 
      enum ADDRS {
         SHOTTYPE_ADDR = 0x164d0b1,
@@ -25,6 +28,287 @@ namespace TH08 {
         GAMEMODE_NEXT_ADDR = 0x17CE8B4,
         GAMEMODE_PREV_ADDR = 0x17CE8B8,
     };
+
+     enum ECL_OFFSETS {
+         ECL_TL_TIME = 0x0,
+         ECL_TL_OPCODE = 0x4,
+         ECL_TL_OFFNEXT = 0x6,
+         ECL_INS_TIME = 0x0,
+         ECL_INS_OPCODE = 0x4,
+         ECL_INS_ARG1 = 0xc,
+         ECL_INS_ARG2 = 0x10,
+     };
+
+     bool use_custom_rsqrt = false;
+     int custom_rsqrt_type = 0;
+     char custom_rsqrt_type_char[3] = { 'i', 'a','c'};
+
+     class RsqrtssCompatiable {
+        static const uint32_t RSQ_COUNT = 1u << 21;
+        static const uint32_t RSQ_SIZE_BYTES = RSQ_COUNT * 4u;
+        static const uint32_t RSQ_MANT_COUNT = 1u << 12;
+        static const uint32_t RSQ_INTEL_MANT_COUNT = 1u << 10;
+        static const uint32_t RSQ_PACK_BITS = 21;
+
+        static std::vector<char> buffer_i;
+        static std::vector<char> buffer_a;
+        static std::vector<char> buffer_custom;
+
+        class BitReader {
+        public:
+            BitReader(const uint8_t* data, size_t size)   : data_(data) , size_(size){ }
+
+            uint32_t Read(uint32_t bits) {
+                while (bitcount_ < bits) {
+                    if (pos_ >= size_) {
+                        throw std::runtime_error("truncated rsqrtss data");
+                    }
+                    bitbuf_ |= ((uint64_t)data_[pos_++]) << bitcount_;
+                    bitcount_ += 8;
+                }
+                const uint32_t mask = (1u << bits) - 1u;
+                const uint32_t value = (uint32_t)(bitbuf_ & mask);
+                bitbuf_ >>= bits;
+                bitcount_ -= bits;
+                return value;
+            }
+        private:
+            const uint8_t* data_;
+            size_t size_;
+            size_t pos_ = 0;
+            uint64_t bitbuf_ = 0;
+            uint32_t bitcount_ = 0;
+        };
+
+        static uint32_t ReadU32LE(const void* p)
+        {
+            const uint8_t* b = (const uint8_t*)p;
+            return (uint32_t)b[0]
+                | ((uint32_t)b[1] << 8)
+                | ((uint32_t)b[2] << 16)
+                | ((uint32_t)b[3] << 24);
+        }
+
+        static void WriteU32LE(char* p, uint32_t value)
+        {
+            p[0] = (char)(value & 0xffu);
+            p[1] = (char)((value >> 8) & 0xffu);
+            p[2] = (char)((value >> 16) & 0xffu);
+            p[3] = (char)((value >> 24) & 0xffu);
+        }
+
+        static uint32_t MakeSpecial(uint32_t sign, uint32_t exp, uint32_t mant12)
+        {
+            if (exp == 0) {
+                return sign ? 0xff800000u : 0x7f800000u;
+            }
+            if (exp == 255) {
+                if (!sign && mant12 == 0) {
+                    return 0x00000000u;
+                }
+                return (sign ? 0xffc00000u : 0x7fc00000u) | (mant12 << 11);
+            }
+            return 0xffc00000u;
+        }
+
+        template <uint32_t MANT_COUNT>
+        static void ReconstructOne(std::vector<char>& out, const uint32_t refs[2][MANT_COUNT])
+        {
+            out.assign(RSQ_SIZE_BYTES, 0);
+            for (uint32_t hi21 = 0; hi21 < RSQ_COUNT; ++hi21) {
+                const uint32_t sign = hi21 >> 20;
+                const uint32_t exp = (hi21 >> 12) & 0xffu;
+                const uint32_t mant12 = hi21 & 0xfffu;
+                uint32_t value;
+
+                if (sign || exp == 0 || exp == 255) {
+                    value = MakeSpecial(sign, exp, mant12);
+                } else {
+                    const uint32_t parity = exp & 1u;
+                    const uint32_t ref_exp = parity ? 127u : 126u;
+                    const uint32_t ref_index = (MANT_COUNT == RSQ_INTEL_MANT_COUNT) ? (mant12 >> 2) : mant12;
+                    const uint32_t ref = refs[parity][ref_index];
+                    const int ref_out_exp = (int)((ref >> 23) & 0xffu);
+                    const int out_exp = ref_out_exp - (((int)exp - (int)ref_exp) / 2);
+                    value = (ref & 0x807fffffu) | ((uint32_t)out_exp << 23);
+                }
+
+                WriteU32LE(out.data() + (size_t)hi21 * 4u, value);
+            }
+        }
+
+        static void Decompress(const uint8_t* rsqrtss_comp, size_t rsqrtss_comp_size)
+        {
+            if (rsqrtss_comp_size < 16
+                || rsqrtss_comp[0] != 'R'
+                || rsqrtss_comp[1] != 'S'
+                || rsqrtss_comp[2] != 'Q'
+                || rsqrtss_comp[3] != '2') {
+                throw std::runtime_error("bad rsqrtss data header");
+            }
+            if (ReadU32LE(rsqrtss_comp + 4) != RSQ_INTEL_MANT_COUNT
+                || ReadU32LE(rsqrtss_comp + 8) != RSQ_MANT_COUNT
+                || ReadU32LE(rsqrtss_comp + 12) != RSQ_PACK_BITS) {
+                throw std::runtime_error("unsupported rsqrtss data version");
+            }
+
+            uint32_t intel_refs[2][RSQ_INTEL_MANT_COUNT];
+            uint32_t amd_refs[2][RSQ_MANT_COUNT];
+            BitReader br(rsqrtss_comp + 16, rsqrtss_comp_size - 16);
+
+            for (uint32_t t = 0; t < 2; ++t) {
+                for (uint32_t mant10 = 0; mant10 < RSQ_INTEL_MANT_COUNT; ++mant10) {
+                    intel_refs[t][mant10] = br.Read(RSQ_PACK_BITS) << 11;
+                }
+            }
+            for (uint32_t t = 0; t < 2; ++t) {
+                for (uint32_t mant12 = 0; mant12 < RSQ_MANT_COUNT; ++mant12) {
+                    amd_refs[t][mant12] = br.Read(RSQ_PACK_BITS) << 11;
+                }
+            }
+
+            ReconstructOne(buffer_i, intel_refs);
+            ReconstructOne(buffer_a, amd_refs);
+        }
+
+        static void GetCustomBuffer()
+        {
+            buffer_custom.assign(RSQ_SIZE_BYTES, 0);
+            for (uint32_t hi21 = 0; hi21 < RSQ_COUNT; ++hi21) {
+                const uint32_t input_bits = hi21 << 11;
+                float res = CurrentRsqrt(*(float*)&input_bits);
+                const uint32_t output_bits = *(uint32_t*)&res;
+                WriteU32LE(buffer_custom.data() + (size_t)hi21 * 4u, output_bits);
+            }
+        }
+
+        static float CurrentRsqrt(float input)
+        {
+            __m128 v = _mm_set_ss(input);
+            v = _mm_rsqrt_ss(v);
+            return _mm_cvtss_f32(v);
+        }
+
+    public:
+        static void Init()
+        {
+            Decompress(th08_rsqrt_data, sizeof(th08_rsqrt_data));
+            GetCustomBuffer();
+        }
+
+        static bool SetCustomBuffer(char* filename)
+        {
+            FILE* fp = nullptr;
+            if (fopen_s(&fp, filename, "rb") != 0 || !fp) {
+                return false;
+            }
+
+            std::vector<char> data(RSQ_SIZE_BYTES);
+            const size_t n = std::fread(data.data(), 1, data.size(), fp);
+            std::fclose(fp);
+            if (n != data.size()) {
+                return false;
+            }
+
+            buffer_custom.swap(data);
+        }
+
+        static bool ExportCustomBuffer(char* filename)
+        {
+            if (buffer_custom.size() != RSQ_SIZE_BYTES) {
+                GetCustomBuffer();
+            }
+            FILE* fp = nullptr;
+            if (fopen_s(&fp, filename, "wb") != 0 || !fp) {
+                return false;
+            }
+            const size_t n = std::fwrite(buffer_custom.data(), 1, buffer_custom.size(), fp);
+            std::fclose(fp);
+            if (n != buffer_custom.size()) {
+                return false;
+            }
+        }
+
+        static float Rsqrt_CPU(const char* buffer_i_arg, const char* buffer_a_arg, float input, char CPU_type)
+        {
+            if (CPU_type == 'd' || CPU_type == 'D') {
+                return CurrentRsqrt(input);
+            }
+            const char* table;
+            if (CPU_type == 'a' || CPU_type == 'A') {
+                if (!buffer_a_arg) {
+                    buffer_a_arg = buffer_a.data();
+                }
+                table = buffer_a_arg;
+            } else if (CPU_type == 'c' || CPU_type == 'C') {
+                if (buffer_custom.size() != RSQ_SIZE_BYTES) {
+                    GetCustomBuffer();
+                }
+                table = buffer_custom.data();
+            } else {
+                if (!buffer_i_arg) {
+                    buffer_i_arg = buffer_i.data();
+                }
+                table = buffer_i_arg;
+            }
+
+            const uint32_t input_bits = *(uint32_t*)(&input);
+            const uint32_t hi21 = input_bits >> 11;
+            const uint32_t output_bits = ReadU32LE(table + (size_t)hi21 * 4u);
+            return *(float*)(&output_bits);
+        }
+    };
+
+    std::vector<char> RsqrtssCompatiable::buffer_i;
+    std::vector<char> RsqrtssCompatiable::buffer_a;
+    std::vector<char> RsqrtssCompatiable::buffer_custom;
+
+    static uint8_t* GetXmmPtr32(PCONTEXT pCtx, int xmmIndex)
+    {
+        return (uint8_t*)pCtx->ExtendedRegisters + 160 + xmmIndex * 16;
+    }
+
+    static void EmulateRsqrtssXmmXmm(PCONTEXT pCtx, char cpuType, int a, int b)
+    {
+        uint8_t* xmmA = GetXmmPtr32(pCtx, a);
+        uint8_t* xmmB = GetXmmPtr32(pCtx, b);
+
+        uint32_t inputBits;
+        std::memcpy(&inputBits, xmmB, sizeof(inputBits));
+
+        const float input = *(float*)(&inputBits);
+        const float output = RsqrtssCompatiable::Rsqrt_CPU(
+            nullptr,
+            nullptr,
+            input,
+            cpuType);
+
+        const uint32_t outputBits = *(uint32_t*)(&output);
+        std::memcpy(xmmA, &outputBits, sizeof(outputBits));
+        pCtx->Eip += 4;
+    }
+
+    #define HOOK_RSQRTSS(TARGET, XMMA, XMMB) \
+    EHOOK_DY(rsqrt, TARGET, 4, { \
+        EmulateRsqrtssXmmXmm(pCtx, custom_rsqrt_type_char[custom_rsqrt_type], XMMA, XMMB);\
+    })
+
+    HOOKSET_DEFINE(RSQRT_HOOKS)
+    HOOK_RSQRTSS(0x48D452, 3, 3)
+    HOOK_RSQRTSS(0x48D527, 3, 3)
+    HOOK_RSQRTSS(0x48DA95, 5, 4)
+    HOOK_RSQRTSS(0x48E324, 0, 0)
+    HOOK_RSQRTSS(0x48E424, 5, 5)
+    HOOK_RSQRTSS(0x48E56C, 0, 0)
+    HOOK_RSQRTSS(0x48E6C8, 5, 4)
+    HOOK_RSQRTSS(0x48F032, 3, 3)
+    HOOK_RSQRTSS(0x48F107, 3, 3)
+    HOOK_RSQRTSS(0x48F3B4, 0, 0)
+    HOOK_RSQRTSS(0x48F4B4, 5, 5)
+    HOOK_RSQRTSS(0x48F5FC, 0, 0)
+    HOOKSET_ENDDEF()
+
+    #undef HOOK_RSQRTSS
 
     using std::pair;
     struct THPracParam {
@@ -297,7 +581,8 @@ namespace TH08 {
             auto section = CalcSection();
             if (section == TH08_ST6A_LS) {
                 return TH08_SPELL_5PHASE;
-            }
+            } else if (section == TH08_ST7_END_LS)
+                return TH08_SPELL_PHASE_IMPERISHABLE_SHOOTING;
             return nullptr;
         }
         void PracticeMenu()
@@ -629,6 +914,7 @@ namespace TH08 {
             mAutoBomb.SetTextOffsetRel(x_offset_1, x_offset_2);
             mElBgm.SetTextOffsetRel(x_offset_1, x_offset_2);
             mInGameInfo.SetTextOffsetRel(x_offset_1, x_offset_2);
+            mEnemyMuteki.SetTextOffsetRel(x_offset_1, x_offset_2);
         }
         virtual void OnContentUpdate() override
         {
@@ -640,6 +926,7 @@ namespace TH08 {
             mAutoBomb();
             mElBgm();
             mInGameInfo();
+            mEnemyMuteki();
         }
         virtual void OnPreUpdate() override
         {
@@ -704,6 +991,11 @@ namespace TH08 {
     public:
         Gui::GuiHotKey mElBgm { TH_EL_BGM, "F7", VK_F7 };
         Gui::GuiHotKey mInGameInfo { THPRAC_INGAMEINFO, "F8", VK_F8 };
+
+        HOTKEY_DEFINE(mEnemyMuteki, TH_ENEMY_MUTEKI, "U", 'U')
+        PATCH_HK(0x42D349, "909090909090"),
+        PATCH_HK(0x42B452, "909090")
+        HOTKEY_ENDDEF();
     };
 
     
@@ -1008,6 +1300,36 @@ namespace TH08 {
                 ImGui::SameLine();
                 HelpMarker(S(TH_ONE_KEY_DIE_DESC));
 
+                if (ImGui::Checkbox(S(THPRAC_FIX_RSQRT), &use_custom_rsqrt)) {
+                    if (use_custom_rsqrt) {
+                        EnableAllHooks(RSQRT_HOOKS);
+                    }else{
+                        DisableAllHooks(RSQRT_HOOKS);
+                    }
+                }
+                ImGui::SameLine();
+                HelpMarker(S(THPRAC_FIX_RSQRT_DESC));
+                if (use_custom_rsqrt){
+                    
+                    ImGui::SetNextItemWidth(200.0f);
+                    ImGui::Combo(S(THPRAC_SELECT_CPU), &custom_rsqrt_type, S(THPRAC_SELECT_CPU_COMBO));
+                    
+                    if (ImGui::Button(S(THPRAC_EXPORT_CUSTOM))) {
+                        RsqrtssCompatiable::ExportCustomBuffer("custom_bin.bin");
+                    }
+
+                    ImGui::SameLine();
+                    HelpMarker(S(THPRAC_EXPORT_CUSTOM_DESC));
+                    ImGui::SameLine();
+                    if (ImGui::Button(S(THPRAC_IMPORT_CUSTOM))) {
+                        RsqrtssCompatiable::SetCustomBuffer("custom_bin.bin");
+                    }
+
+                    ImGui::SameLine();
+                    HelpMarker(S(THPRAC_IMPORT_CUSTOM_DESC));
+
+                }
+
                 if (ImGui::Checkbox(S(TH_DISABLE_MASTER), &g_adv_igi_options.disable_master_autoly)) {
                     th08_master_disable1.Toggle(g_adv_igi_options.disable_master_autoly);
                     th08_master_disable2.Toggle(g_adv_igi_options.disable_master_autoly);
@@ -1032,7 +1354,7 @@ namespace TH08 {
             InGameReactionTestOpt();
             AboutOpt();
             ImGui::EndChild();
-            ImGui::SetWindowFocus();
+            // ImGui::SetWindowFocus();
         }
 
         adv_opt_ctx mOptCtx;
@@ -2434,12 +2756,68 @@ namespace TH08 {
             ECLCallSub(ecl, 0x67c4, 83, 60);
             ecl << pair{0x8408, (int16_t)0};
             break;
-        case THPrac::TH08::TH08_ST7_END_LS:
+        case THPrac::TH08::TH08_ST7_END_LS: { // Imperishable Shooting
+            constexpr unsigned int st7TLPreLSTime = 9678;
+            constexpr unsigned int st7TLPreLS = 0x1530c;
+            constexpr unsigned int st7BossSp11PreTimeCheck = 0x851c;
+            constexpr unsigned int st7BossSp11PostTimeCheck = 0x8544;
+
+            constexpr unsigned int st7BossSp11TimerThreshold = 0x0fc88;
+            constexpr unsigned int st7BossSp11Wave1Particles = 0x0fe74;
+            constexpr unsigned int st7BossSp11Wave1ShotColor = 0x0fec0;
+            constexpr unsigned int st7BossSp11Wave1PostColor = 0x0fed4;
+
+            constexpr unsigned int st7BossSp11Wave2Start = 0xff0c;
+            constexpr unsigned int st7BossSp11Wave3Start = 0x10050;
+            constexpr unsigned int st7BossSp11Wave4Start = 0x101f0;
+            constexpr unsigned int st7BossSp11Wave5Start = 0x104fc;
+            constexpr unsigned int st7BossSp11Wave6Start = 0x10a10;
+            constexpr unsigned int st7BossSp11Wave7Start = 0x10d1c;
+
             MSGNameFix();
-            ECLWarp(9678, 0x1530c, 0, -1);
-            ECLJump(ecl, 0x851c, 0x8544);
-            ECLCheckTime(10);
+            ECLWarp(st7TLPreLSTime, st7TLPreLS, 0, -1);
+            ECLJump(ecl, st7BossSp11PreTimeCheck, st7BossSp11PostTimeCheck);
+            if (!thPracParam.phase)
+                break;
+            ecl << pair { st7BossSp11Wave1Particles + ECL_INS_OPCODE, (int16_t)0 }; // NOP wave1 particles
+            // Note: each particles call (sub152) is 32f counted for seconds timer but not ECL time; we deduct skipped ones from threshold
+
+            switch (thPracParam.phase) {
+            case 1: // two circles (69s left)
+                ECLJump(ecl, st7BossSp11Wave1PostColor, st7BossSp11Wave2Start, 540, 90); // (skip 540-90 = 450f)
+                ecl << pair { st7BossSp11TimerThreshold + ECL_INS_ARG1, (int16_t)4258 }; // (base 4740f - 450f - 1 * 32f)
+                break;
+
+            case 2: // triangular circles (61s left)
+                ECLJump(ecl, st7BossSp11Wave1PostColor, st7BossSp11Wave3Start, 1000, 90); // (skip 1000-90 = 910f)
+                ecl << pair { st7BossSp11TimerThreshold + ECL_INS_ARG1, (int16_t)3798 } // (base 4740f - 910f - 1 * 32f)
+                    << pair { st7BossSp11Wave1ShotColor + ECL_INS_ARG2, 2 }; // (red)
+                break;
+
+            case 3: // line of circles (52s left)
+                ECLJump(ecl, st7BossSp11Wave1PostColor, st7BossSp11Wave4Start, 1460, 90); // (skip 1460-90 = 1370f)
+                ecl << pair { st7BossSp11TimerThreshold + ECL_INS_ARG1, (int16_t)3306 }; // (base 4740f - 1370f - 2 * 32f)
+                break;
+
+            case 4: // thick circles (36s left)
+                ECLJump(ecl, st7BossSp11Wave1PostColor, st7BossSp11Wave5Start, 2280, 90); // (skip 2280-90 = 2190f)
+                ecl << pair { st7BossSp11TimerThreshold + ECL_INS_ARG1, (int16_t)2326 } // (base 4740f - 2190f - 7 * 32f)
+                    << pair { st7BossSp11Wave1ShotColor + ECL_INS_ARG2, 2 }; // (red)
+                break;
+
+            case 5: // green rice circle (22s left)
+                ECLJump(ecl, st7BossSp11Wave1PostColor, st7BossSp11Wave6Start, 3040, 90); // (skip 3040-90 = 2950f)
+                ecl << pair { st7BossSp11TimerThreshold + ECL_INS_ARG1, (int16_t)1502 }; // (base 4740f - 2950f - 9 * 32f)
+                break;
+
+            case 6: // finale (14s left)
+                ECLJump(ecl, st7BossSp11Wave1PostColor, st7BossSp11Wave7Start, 3410, 90); // (skip 3410-90 = 3320f)
+                ecl << pair { st7BossSp11TimerThreshold + ECL_INS_ARG1, (int16_t)1020 }; // (base 4740f - 3320f - 10 * 32f - 5 * 16f) (phase 6 green shooter subs cost 16f)
+                break;
+            }
+
             break;
+        }
 
         case THPrac::TH08::TH08_LW_1:
         case THPrac::TH08::TH08_LW_2:
@@ -3021,6 +3399,10 @@ namespace TH08 {
         th08_name_fix.Setup();
         // Reset thPracParam
         thPracParam.Reset();
+
+        RsqrtssCompatiable::Init();
+        EnableAllHooks(RSQRT_HOOKS);
+        DisableAllHooks(RSQRT_HOOKS);// default turn off
     }
 
     HOOKSET_DEFINE(THInitHook)

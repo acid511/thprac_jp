@@ -477,6 +477,7 @@ namespace TH16 {
             mAutoBomb.SetTextOffsetRel(x_offset_1, x_offset_2);
             mElBgm.SetTextOffsetRel(x_offset_1, x_offset_2);
             mInGameInfo.SetTextOffsetRel(x_offset_1, x_offset_2);
+            mEnemyMuteki.SetTextOffsetRel(x_offset_1, x_offset_2);
         }
         virtual void OnContentUpdate() override
         {
@@ -489,6 +490,7 @@ namespace TH16 {
             mAutoBomb();
             mElBgm();
             mInGameInfo();
+            mEnemyMuteki();
         }
         virtual void OnPreUpdate() override
         {
@@ -546,6 +548,11 @@ namespace TH16 {
 
         Gui::GuiHotKey mElBgm { TH_EL_BGM, "F8", VK_F8 };
         Gui::GuiHotKey mInGameInfo { THPRAC_INGAMEINFO, "F9", VK_F9 };
+
+        HOTKEY_DEFINE(mEnemyMuteki, TH_ENEMY_MUTEKI, "U", 'U')
+        PATCH_HK(0x41A716, "9090"),
+        PATCH_HK(0x41A6E2, "909090")
+        HOTKEY_ENDDEF();
     };
 
     class TH16InGameInfo : public Gui::GameGuiWnd {
@@ -772,6 +779,8 @@ namespace TH16 {
             pCtx->Eip = 0x42e245;
         }
     });
+    constinit HookCtx scoreUncapHook = { .addr = 0x43E124, .data = PatchCode("81FAFFFFFFFFB8FFFFFFFF") };
+
     EHOOK_ST(th16_all_clear_bonus_3, 0x42e39b, 7, {
         *(int32_t*)(GetMemAddr(0x4a6dcc, 0x170)) = *(int32_t*)(0x4a57b0);
         if (GetMemContent(0x4a5bec) & 0x10) {
@@ -786,6 +795,89 @@ namespace TH16 {
     PATCH_DY(th16_master_disable1b, 0x417E81, "eb")
     PATCH_DY(th16_master_disable1c, 0x417DC6, "00")
     HOOKSET_ENDDEF()
+
+    // EHOOK_ST(th16_fix, 0x46E750, 1, {
+    //     DWORD mgr; //[4C0F48]
+    //     DWORD ret_addr;
+    //     int target_layer;
+    //     int vm_layer;
+    //
+    //     mgr = pCtx->Ecx;
+    //     ret_addr = *(DWORD*)(pCtx->Esp);
+    //     target_layer = *(DWORD*)(pCtx->Esp + 4);
+    //
+    //     DWORD node;
+    //     DWORD next;
+    //     DWORD vm;
+    //     // ui/world ANM list
+    //     for (node = *(DWORD*)(mgr + 0xDC); node; node = next) {
+    //         next = *(DWORD*)(node + 4);
+    //         vm = *(DWORD*)(node + 0);
+    //
+    //         if (vm) {
+    //             vm_layer = *(DWORD*)(vm + 0x18);
+    //             if (vm_layer >= 36 && vm_layer <= 42)
+    //                 vm_layer -= 12;
+    //
+    //             if (vm_layer == target_layer) {
+    //                 if ((*(BYTE*)(vm + 0x534) & 0x60) == 0) {
+    //                     asm_call<0x468490, Thiscall>(mgr, vm);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     for (node = *(DWORD*)(mgr + 0xE4); node; node = next) {
+    //         next = *(DWORD*)(node + 4);
+    //         vm = *(DWORD*)(node + 0);
+    //         if (vm) {
+    //             vm_layer = *(DWORD*)(vm + 0x18);
+    //             if (vm_layer == target_layer) {
+    //                 if ((*(BYTE*)(vm + 0x534) & 0x60) == 0) {
+    //                     asm_call<0x468490, Thiscall>(mgr, vm);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     pCtx->Eax = 1;
+    //     pCtx->Esp += 8;
+    //     pCtx->Eip = ret_addr;
+    // })
+
+    EHOOK_ST(th16_crash_fix, 0x46E6E8, 10, {
+        DWORD thiz = pCtx->Edi;
+        DWORD next = *(DWORD*)(thiz + 0x57C);
+        DWORD prev = *(DWORD*)(thiz + 0x580);
+
+        if (next)
+            *(DWORD*)(next + 8) = prev;
+
+        if (prev)
+            *(DWORD*)(prev + 4) = next;
+
+        *(DWORD*)(thiz + 0x57C) = 0;
+        *(DWORD*)(thiz + 0x580) = 0;
+
+        {
+            DWORD mgr;
+            int layer;
+            DWORD* pp;
+            DWORD cur;
+
+            mgr = *(DWORD*)(0x4C0F48);
+            for (layer = 0; layer < 43; ++layer) {
+                pp = (DWORD*)(mgr + 0x1C701D8 + 0x5FC * layer);
+                while (*pp) {
+                    cur = *pp;
+                    if (cur == thiz) {
+                        *pp = *(DWORD*)(thiz + 0x5A8);
+                        *(DWORD*)(thiz + 0x5A8) = 0;
+                        break;
+                    }
+                    pp = (DWORD*)(cur + 0x5A8);
+                }
+            }
+        }
+    });
 
     float g_bossMoveDownRange = BOSS_MOVE_DOWN_RANGE_INIT;
     EHOOK_ST(th16_bossmovedown, 0x0041FF49, 5, {
@@ -845,6 +937,14 @@ namespace TH16 {
             th16_all_clear_bonus_2.Toggle(mOptCtx.all_clear_bonus);
             th16_all_clear_bonus_3.Toggle(mOptCtx.all_clear_bonus);
         }
+        void ScoreUncapInit()
+        {
+            scoreUncapHook.Setup();
+        }
+        void ScoreUncapSet()
+        {
+            scoreUncapHook.Toggle(g_adv_igi_options.th16_uncap_score);
+        }
 
         THAdvOptWnd() noexcept
         {
@@ -861,6 +961,11 @@ namespace TH16 {
             OnLocaleChange();
             FpsInit();
             GameplayInit();
+            ScoreUncapInit();
+            ScoreUncapSet();
+            th16_crash_fix.Setup();
+            if (g_adv_igi_options.th16_fix_crash)
+                th16_crash_fix.Toggle(g_adv_igi_options.th16_fix_crash);
             MasterDisableInit();
             th16_bossmovedown.Setup();
         }
@@ -934,6 +1039,14 @@ namespace TH16 {
                 if (ImGui::DragFloat(S(TH_BOSS_FORCE_MOVE_DOWN_RANGE), &g_bossMoveDownRange, 0.002f, 0.0f, 1.0f))
                     g_bossMoveDownRange = std::clamp(g_bossMoveDownRange, 0.0f, 1.0f);
 
+                if (ImGui::Checkbox(S(TH18_UNCAP), &g_adv_igi_options.th16_uncap_score)) {
+                    ScoreUncapSet();
+                }
+                if (ImGui::Checkbox(S(THPRAC_INGAMEINFO_TH16_CRASH_BUGFIX), &g_adv_igi_options.th16_fix_crash)) {
+                    th16_crash_fix.Toggle(g_adv_igi_options.th16_fix_crash);
+                }
+                ImGui::SameLine();
+                HelpMarker(S(THPRAC_INGAMEINFO_TH16_CRASH_BUGFIX_DESC));
 
                 if (ImGui::Checkbox(S(TH_DISABLE_MASTER), &g_adv_igi_options.disable_master_autoly)) {
                     for (int i = 0; i < 3; i++)
@@ -2583,7 +2696,7 @@ namespace TH16 {
         THGuiSP::singleton().State(5);
     })
 
-     EHOOK_DY(th16_update, 0x40156f, 1, {
+    EHOOK_DY(th16_update, 0x40156f, 1, {
         GameGuiBegin(IMPL_WIN32_DX9, !THAdvOptWnd::singleton().IsOpen());
 
         // Gui components update
@@ -2605,21 +2718,21 @@ namespace TH16 {
 
         if (g_adv_igi_options.show_keyboard_monitor && GetMemContent(PLAYER_PTR))
             KeysHUD(16, { 1280.0f, 0.0f }, { 840.0f, 0.0f }, g_adv_igi_options.keyboard_style);
-        
+
         RenderLockTimer(p);
         GameUpdateOuter(p, 16);
 
         bool drawCursor = THAdvOptWnd::StaticUpdate() || THGuiPrac::singleton().IsOpen() || THGuiSP::singleton().IsOpen();
         GameGuiEnd(drawCursor);
     })
-    EHOOK_DY(th16_player_state, 0x442560,1,
-    {
-        if (g_adv_igi_options.show_keyboard_monitor)
-            RecordKey(16, *(DWORD*)(0x4A52C8));
+    EHOOK_DY(th16_player_state, 0x442560, 1,
+        {
+            if (g_adv_igi_options.show_keyboard_monitor)
+                RecordKey(16, *(DWORD*)(0x4A52C8));
+        })
+    EHOOK_DY(th16_render, 0x40168a, 1, {
+        GameGuiRender(IMPL_WIN32_DX9);
     })
-     EHOOK_DY(th16_render, 0x40168a, 1, {
-         GameGuiRender(IMPL_WIN32_DX9);
-     })
     HOOKSET_ENDDEF()
 
     HOOKSET_DEFINE(THInGameInfo)

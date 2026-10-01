@@ -227,8 +227,7 @@ namespace TH14 {
                 return TH14_SPELL_4PHASE;
             } else if (section == TH14_ST7_END_S9) {
                 return TH14_SPELL_PHASE_TIMEOUT;
-            } else if (section == TH14_ST7_END_S10)
-                {
+            } else if (section == TH14_ST7_END_S10){
                 return TH14_SPELL_5PHASE;
             } else if (section == TH14_ST3_MID2_HL){
                 return TH_TIMEOUT_SETTING;
@@ -534,6 +533,7 @@ namespace TH14 {
             mAutoBomb.SetTextOffsetRel(x_offset_1, x_offset_2);
             mElBgm.SetTextOffsetRel(x_offset_1, x_offset_2);
             mInGameInfo.SetTextOffsetRel(x_offset_1, x_offset_2);
+            mEnemyMuteki.SetTextOffsetRel(x_offset_1, x_offset_2);
         }
         virtual void OnContentUpdate() override
         {
@@ -545,6 +545,7 @@ namespace TH14 {
             mAutoBomb();
             mElBgm();
             mInGameInfo();
+            mEnemyMuteki();
         }
         virtual void OnPreUpdate() override
         {
@@ -609,6 +610,12 @@ namespace TH14 {
 
         Gui::GuiHotKey mElBgm { TH_EL_BGM, "F7", VK_F7 };
         Gui::GuiHotKey mInGameInfo {  THPRAC_INGAMEINFO, "F8",  VK_F8, };
+
+        
+        HOTKEY_DEFINE(mEnemyMuteki, TH_ENEMY_MUTEKI, "U", 'U')
+        PATCH_HK(0x4214C6, "9090"),
+        PATCH_HK(0x4214BD, "9090")
+        HOTKEY_ENDDEF();
     };
 
     class TH14InGameInfo : public Gui::GameGuiWnd {
@@ -1111,6 +1118,9 @@ namespace TH14 {
     };
 
     EHOOK_ST(th14_marisa_laser, 0x45286f, 6, {
+        if (g_adv_igi_options.th14_fixMarisaBug) {
+            *(uint32_t*)(pCtx->Esp + 0x2c) = 0;
+        }
         *(uint32_t*)(pCtx->Esp + 0x2c) = THMarisaLaser::singleton().Access(*(uint32_t*)(pCtx->Esp + 0x2c));
     });
     PATCH_ST(th14_all_clear_bonus_1, 0x43708a, "EB0CCCCCCC");
@@ -1593,6 +1603,10 @@ namespace TH14 {
                 DisableKeyOpt();
                 KeyHUDOpt();
                 InfLifeOpt();
+                ImGui::Checkbox(S(THPRAC_TH14_FORCE_FIX_BUG), &(g_adv_igi_options.th14_fixMarisaBug));
+                ImGui::SameLine();
+                HelpMarker(S(THPRAC_TH14_FORCE_FIX_BUG_DESC));
+
                 ImGui::Checkbox(S(THPRAC_INGAMEINFO_TH14_SHOW_BONUS), &(g_adv_igi_options.th14_showBonus));
                 ImGui::Checkbox(S(THPRAC_INGAMEINFO_TH14_SHOW_ITEMS), &(g_adv_igi_options.th14_showItemsCount));
                 ImGui::Checkbox(S(THPRAC_INGAMEINFO_TH14_SHOW_DROP_BAR), &(g_adv_igi_options.th14_showDropBar));
@@ -2415,122 +2429,122 @@ namespace TH14 {
         case THPrac::TH14::TH14_ST7_END_S1:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ECLJump(ecl, 0x790, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
-            ecl << pair{st7bsSpellHealthVal, 2100}; // Set Health
-            ecl << pair {st7bsSpellHealthVal, (int8_t)0x31 }; // Set Spell Ordinal
-            ecl << pair{0x691c, (int16_t)0}; // Disable Item Drops
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
+            ecl << pair { st7bsSpellHealthVal, 2100 }; // Set Health
+            ecl << pair { st7bsSpellSubCallOrd, (int8_t)0x31 }; // Set Spell Ordinal
+            ecl << pair { 0x691c, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH14::TH14_ST7_END_NS2:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ecl << pair{0xf08, (int8_t)0x32}; // Change Nonspell
+            ecl << pair { 0xf08, (int8_t)0x32 }; // Change Nonspell
             if (!thPracParam.keepSpellDrops)
                 ecl << pair { 0x190c, (int16_t)0 } << pair { 0x1ab0, (int16_t)0 } << pair { 0x1c48, (int16_t)0 }; // Disable Item Drops & SE
-            ecl << pair{0x1ba0, 59} << pair{0x1c68, 0} << pair{0x1c40, 60}; // Change Move Time, Wait Time & Inv. Time
+            ecl << pair { 0x1ba0, 59 } << pair { 0x1c68, 0 } << pair { 0x1c40, 60 }; // Change Move Time, Wait Time & Inv. Time
             break;
         case THPrac::TH14::TH14_ST7_END_S2:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ECLJump(ecl, 0x790, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
-            ecl << pair{st7bsSpellHealthVal, 3000}; // Set Health
-            ecl << pair{st7bsSpellHealthVal, (int8_t)0x32}; // Set Spell Ordinal
-            ecl << pair{0x9520, (int16_t)0}; // Disable Item Drops
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
+            ecl << pair { st7bsSpellHealthVal, 3000 }; // Set Health
+            ecl << pair { st7bsSpellSubCallOrd, (int8_t)0x32 }; // Set Spell Ordinal
+            ecl << pair { 0x9520, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH14::TH14_ST7_END_NS3:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ecl << pair{0xf08, (int8_t)0x33}; // Change Nonspell
+            ecl << pair { 0xf08, (int8_t)0x33 }; // Change Nonspell
             if (!thPracParam.keepSpellDrops)
                 ecl << pair { 0x22b4, (int16_t)0 } << pair { 0x2460, (int16_t)0 } << pair { 0x25f8, (int16_t)0 }; // Disable Item Drops & SE
-            ecl << pair{0x2550, 59} << pair{0x2618, 0} << pair{0x25f0, 60}; // Change Move Time, Wait Time & Inv. Time
+            ecl << pair { 0x2550, 59 } << pair { 0x2618, 0 } << pair { 0x25f0, 60 }; // Change Move Time, Wait Time & Inv. Time
             break;
         case THPrac::TH14::TH14_ST7_END_S3:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ECLJump(ecl, 0x790, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
-            ecl << pair{st7bsSpellHealthVal, 2300}; // Set Health
-            ecl << pair{st7bsSpellHealthVal, (int8_t)0x33}; // Set Spell Ordinal
-            ecl << pair{0xa670, (int16_t)0}; // Disable Item Drops
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
+            ecl << pair { st7bsSpellHealthVal, 2300 }; // Set Health
+            ecl << pair { st7bsSpellSubCallOrd, (int8_t)0x33 }; // Set Spell Ordinal
+            ecl << pair { 0xa670, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH14::TH14_ST7_END_NS4:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ecl << pair{0xf08, (int8_t)0x34}; // Change Nonspell
+            ecl << pair { 0xf08, (int8_t)0x34 }; // Change Nonspell
             if (!thPracParam.keepSpellDrops)
                 ecl << pair { 0x2c00, (int16_t)0 } << pair { 0x2da4, (int16_t)0 } << pair { 0x2f3c, (int16_t)0 }; // Disable Item Drops & SE
-            ecl << pair{0x2e94, 59} << pair{0x2f5c, 0} << pair{0x2f34, 60}; // Change Move Time, Wait Time & Inv. Time
+            ecl << pair { 0x2e94, 59 } << pair { 0x2f5c, 0 } << pair { 0x2f34, 60 }; // Change Move Time, Wait Time & Inv. Time
             break;
         case THPrac::TH14::TH14_ST7_END_S4:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ECLJump(ecl, 0x790, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
-            ecl << pair{st7bsSpellHealthVal, 3500}; // Set Health
-            ecl << pair{st7bsSpellHealthVal, (int8_t)0x34}; // Set Spell Ordinal
-            ecl << pair{0xae74, (int16_t)0}; // Disable Item Drops
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
+            ecl << pair { st7bsSpellHealthVal, 3500 }; // Set Health
+            ecl << pair { st7bsSpellSubCallOrd, (int8_t)0x34 }; // Set Spell Ordinal
+            ecl << pair { 0xae74, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH14::TH14_ST7_END_NS5:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ecl << pair{0xf08, (int8_t)0x35}; // Change Nonspell
+            ecl << pair { 0xf08, (int8_t)0x35 }; // Change Nonspell
             if (!thPracParam.keepSpellDrops)
                 ecl << pair { 0x34ec, (int16_t)0 } << pair { 0x3690, (int16_t)0 } << pair { 0x3828, (int16_t)0 }; // Disable Item Drops & SE
-            ecl << pair{0x3780, 59} << pair{0x3848, 0} << pair{0x3820, 60}; // Change Move Time, Wait Time & Inv. Time
+            ecl << pair { 0x3780, 59 } << pair { 0x3848, 0 } << pair { 0x3820, 60 }; // Change Move Time, Wait Time & Inv. Time
             break;
         case THPrac::TH14::TH14_ST7_END_S5:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ECLJump(ecl, 0x790, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
-            ecl << pair{st7bsSpellHealthVal, 3300}; // Set Health
-            ecl << pair{st7bsSpellHealthVal, (int8_t)0x35}; // Set Spell Ordinal
-            ecl << pair{0xb558, (int16_t)0}; // Disable Item Drops
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
+            ecl << pair { st7bsSpellHealthVal, 3300 }; // Set Health
+            ecl << pair { st7bsSpellSubCallOrd, (int8_t)0x35 }; // Set Spell Ordinal
+            ecl << pair { 0xb558, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH14::TH14_ST7_END_NS6:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ecl << pair{0xf08, (int8_t)0x36}; // Change Nonspell
+            ecl << pair { 0xf08, (int8_t)0x36 }; // Change Nonspell
             if (!thPracParam.keepSpellDrops)
                 ecl << pair { 0x4300, (int16_t)0 } << pair { 0x44ac, (int16_t)0 } << pair { 0x4644, (int16_t)0 }; // Disable Item Drops & SE
-            ecl << pair{0x459c, 59} << pair{0x4664, 0} << pair{0x463c, 60}; // Change Move Time, Wait Time & Inv. Time
+            ecl << pair { 0x459c, 59 } << pair { 0x4664, 0 } << pair { 0x463c, 60 }; // Change Move Time, Wait Time & Inv. Time
             break;
         case THPrac::TH14::TH14_ST7_END_S6:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ECLJump(ecl, 0x790, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
-            ecl << pair{st7bsSpellHealthVal, 3000}; // Set Health
-            ecl << pair{st7bsSpellHealthVal, (int8_t)0x36}; // Set Spell Ordinal
-            ecl << pair{0xc5f0, (int16_t)0}; // Disable Item Drops
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
+            ecl << pair { st7bsSpellHealthVal, 3000 }; // Set Health
+            ecl << pair { st7bsSpellSubCallOrd, (int8_t)0x36 }; // Set Spell Ordinal
+            ecl << pair { 0xc5f0, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH14::TH14_ST7_END_NS7:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ecl << pair{0xf08, (int8_t)0x37}; // Change Nonspell
+            ecl << pair { 0xf08, (int8_t)0x37 }; // Change Nonspell
             if (!thPracParam.keepSpellDrops)
                 ecl << pair { 0x4c3c, (int16_t)0 } << pair { 0x4de0, (int16_t)0 } << pair { 0x4f78, (int16_t)0 }; // Disable Item Drops & SE
-            ecl << pair{0x4ed0, 59} << pair{0x4f98, 0} << pair{0x4f70, 60}; // Change Move Time, Wait Time & Inv. Time
+            ecl << pair { 0x4ed0, 59 } << pair { 0x4f98, 0 } << pair { 0x4f70, 60 }; // Change Move Time, Wait Time & Inv. Time
             break;
         case THPrac::TH14::TH14_ST7_END_S7:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ECLJump(ecl, 0x790, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
-            ecl << pair{st7bsSpellHealthVal, 3500}; // Set Health
-            ecl << pair{st7bsSpellHealthVal, (int8_t)0x37}; // Set Spell Ordinal
-            ecl << pair{0xd538, (int16_t)0}; // Disable Item Drops
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
+            ecl << pair { st7bsSpellHealthVal, 3500 }; // Set Health
+            ecl << pair { st7bsSpellSubCallOrd, (int8_t)0x37 }; // Set Spell Ordinal
+            ecl << pair { 0xd538, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH14::TH14_ST7_END_NS8:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ecl << pair{0xf08, (int8_t)0x38}; // Change Nonspell
+            ecl << pair { 0xf08, (int8_t)0x38 }; // Change Nonspell
             if (!thPracParam.keepSpellDrops)
                 ecl << pair { 0x5938, (int16_t)0 } << pair { 0x5ae4, (int16_t)0 } << pair { 0x5c7c, (int16_t)0 }; // Disable Item Drops & SE
-            ecl << pair{0x5bd4, 59} << pair{0x5c9c, 0} << pair{0x5c74, 60}; // Change Move Time, Wait Time & Inv. Time
+            ecl << pair { 0x5bd4, 59 } << pair { 0x5c9c, 0 } << pair { 0x5c74, 60 }; // Change Move Time, Wait Time & Inv. Time
             break;
         case THPrac::TH14::TH14_ST7_END_S8:
             ECLJump(ecl, st7PostMaple, st7BossCreateCall, 60);
             ecl.SetFile(3);
-            ECLJump(ecl, 0x790, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
-            ecl << pair{st7bsSpellHealthVal, 3500}; // Set Health
-            ecl << pair{st7bsSpellHealthVal, (int8_t)0x38}; // Set Spell Ordinal
-            ecl << pair{0xe638, (int16_t)0}; // Disable Item Drops
+            ECLJump(ecl, st7bsPrePushSpellID, st7bsPostNotSpellPracCheck, 0); // Utilize Spell Practice Jump
+            ecl << pair { st7bsSpellHealthVal, 3500 }; // Set Health
+            ecl << pair { st7bsSpellSubCallOrd, (int8_t)0x38 }; // Set Spell Ordinal
+            ecl << pair { 0xe638, (int16_t)0 }; // Disable Item Drops
             break;
         case THPrac::TH14::TH14_ST7_END_S9:
         {
@@ -2840,18 +2854,23 @@ namespace TH14 {
                                 if (pTex)
                                 {
                                     ImVec2 sz = *(ImVec2*)(pTex + 0x60);
+                                    float angle = *(float*)(pTex + 0x50);
+
                                     sz.x *= 32.0f;
                                     sz.y *= 192.0f;
 
                                     ImVec2 pos2 = { pos.x, pos.y + 24.0f };
-                                    ImVec2 p1 { pos2.x - sz.y * 0.5f, pos2.y - sz.x * 0.5f };
-                                    ImVec2 p2 { pos2.x + sz.y * 0.5f, pos2.y - sz.x * 0.5f };
-                                    ImVec2 p3 { pos2.x + sz.y * 0.5f, pos2.y + sz.x * 0.5f };
-                                    ImVec2 p4 { pos2.x - sz.y * 0.5f, pos2.y + sz.x * 0.5f };
-                                    p1 = GetClientFromStage(p1);
-                                    p2 = GetClientFromStage(p2);
-                                    p3 = GetClientFromStage(p3);
-                                    p4 = GetClientFromStage(p4);
+                                    ImVec2 p1 {- sz.y * 0.5f, - sz.x * 0.5f };
+                                    ImVec2 p2 {+ sz.y * 0.5f, - sz.x * 0.5f };
+                                    ImVec2 p3 {+ sz.y * 0.5f, + sz.x * 0.5f };
+                                    ImVec2 p4 {- sz.y * 0.5f, + sz.x * 0.5f };
+
+                                    ImVec2 A { cosf(angle), sinf(angle) };
+                                    p1 = GetClientFromStage(Add(Multiply(p1, A), pos2));
+                                    p2 = GetClientFromStage(Add(Multiply(p2, A), pos2));
+                                    p3 = GetClientFromStage(Add(Multiply(p3, A), pos2));
+                                    p4 = GetClientFromStage(Add(Multiply(p4, A), pos2));
+
                                     p->AddQuad(p1, p2, p3, p4, 0xFF00FF00);
                                     p->AddQuadFilled(p1, p2, p3, p4, 0x44FF00FF);
 

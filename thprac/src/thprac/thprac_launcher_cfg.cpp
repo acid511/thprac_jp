@@ -2341,10 +2341,13 @@ private:
             mFixEscLag.Gui(S(THPRAC_GAMES_FIX_ESC_LAG), S(THPRAC_GAMES_FIX_ESC_LAG_DESC));
             mDisableJoy.Gui(S(THPRAC_DISABLE_JOY), S(THPRAC_DISABLE_JOY_DESC));
             mCfgUnlockRefreshRate.Gui(S(THPRAC_UNLOCK_REFRESH_RATE), S(THPRAC_UNLOCK_REFRESH_RATE_DESC));
+            mCfgEnableTH16_CrashFix_autoly.Gui(S(THPRAC_INGAMEINFO_TH16_CRASH_BUGFIX), S(THPRAC_INGAMEINFO_TH16_CRASH_BUGFIX_DESC));
+            mCfgEnableTH14_MarisaFix_autoly.Gui(S(THPRAC_TH14_FORCE_FIX_BUG), S(THPRAC_TH14_FORCE_FIX_BUG_DESC));
             ImGui::Separator();
             mInitWindowPos.Gui(S(THPRAC_INIT_WINDOW_POS), S(THPRAC_INIT_WINDOW_POS_DESC));
             mDisableMaximizeBtn.Gui(S(THPRAC_DISABLE_MAXIMIZE_BTN));
             mDisableF10_11_13.Gui(S(THPRAC_DISABLE_F10_11_13), S(THPRAC_DISABLE_F10_11_13_DESC));
+            mDisableAltEnter.Gui(S(THPRAC_DISABLE_ALT_ENTER));
             ImGui::Separator();
             mForceRenderCursor.Gui(S(THPRAC_FORCE_RENDER_CURSOR), S(THPRAC_FORCE_RENDER_CURSOR_DESC));
             if (mForceRenderCursor.Get()) {
@@ -2485,6 +2488,10 @@ private:
             HelpMarker(S(TH14_MODE_NORMAL_DESC));
 
             mCfgEnableTH15_ShowShootingDownRate_autoly.Gui(S(THPRAC_INGAMEINFO_TH15_SHOW_SHOOTING_DOWN_RATE2));
+
+            mCfgEnableTH16_UncapScore_autoly.Gui(S(THPRAC_INGAMEINFO_TH16_UNCAP_SCORE));
+            mCfgEnableTH17_UncapScore_autoly.Gui(S(THPRAC_INGAMEINFO_TH17_UNCAP_SCORE));
+
             mCfgTH18EnableCardActivatedCount.Gui(S(THPRAC_TH18_SHOW_CARD_ACTIVATED_CNT));
 
             mCfgTH18ForceCard.Gui(S(THPRAC_TH18_FORCE_CARD), S(THPRAC_TH18_FORCE_CARD_DESC));
@@ -2730,6 +2737,8 @@ private:
     THCfgCheckbox mCfgEnableTH14_ShowDropBar_autoly { "auto_th14_show_drop_bar", false };
     THCfgCheckbox mCfgEnableTH14_LaserRepRepair_autoly { "auto_th14_laser_rep_repair", false };
     THCfgCheckbox mCfgEnableTH15_ShowShootingDownRate_autoly { "auto_th15_show_rate", false };
+    THCfgCheckbox mCfgEnableTH16_UncapScore_autoly { "auto_th16_uncap_score", false };
+    THCfgCheckbox mCfgEnableTH17_UncapScore_autoly { "auto_th17_uncap_score", false };
     THCfgCheckbox mCfgEnableMasterDisable_autoly { "auto_disable_master", false };
 
     THCfgCheckbox mCfgEnableLockTimer_autoly { "auto_lock_timer", false };
@@ -2773,6 +2782,8 @@ private:
     THCfgCheckbox mDisableMaximizeBtn { "disableMax_btn", false };
     THCfgCheckbox mInitWindowPos { "init_window_pos", true };
     THCfgCheckbox mDisableLocaleChangeHotkey { "disable_locale_change_hotkey", true };
+    THCfgCheckbox mCfgEnableTH16_CrashFix_autoly { "auto_th16_crash_fix", false };
+    THCfgCheckbox mCfgEnableTH14_MarisaFix_autoly { "auto_th14_fix_marisa_bug_using_0", false };
 
     THCfgCheckbox mWindowSizeChangeWhenOpen { "change_window_size_when_open", false };
     THCfgInt2 mWindowSize { "changed_window_size", {1920,1440},1,8192 };
@@ -2786,6 +2797,7 @@ private:
     THCfgCheckbox mDinputUseGetDeviceData { "use_get_device_data", false };
 
     THCfgCheckbox mDisableF10_11_13 { "disable_F10_11_13", false };
+    THCfgCheckbox mDisableAltEnter { "disable_alt_enter", false };
     THCfgCheckbox mUD_Replay_10 { "th10_ud_Replay", true };
     // THCfgCheckbox mDisableWinKey { "disable_win_key", false };
     THCfgCheckbox mSpeedupBGM { "fast_BGM_when_spdup", false };
