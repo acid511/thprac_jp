@@ -1355,9 +1355,9 @@ enum th_glossary_t
     THPRAC_OTHER_LUCK_VD,
     THPRAC_OTHER_LUCK_VDA,
     THPRAC_OTHER_LUCK_VDB,
-    THPRAC_OTHER_LUCK_WBABC,
-    THPRAC_OTHER_LUCK_WBABCA,
-    THPRAC_OTHER_LUCK_WBABCB,
+    THPRAC_OTHER_LUCK_WBaWC,
+    THPRAC_OTHER_LUCK_WBaWCA,
+    THPRAC_OTHER_LUCK_WBaWCB,
     THPRAC_OTHER_NAME,
     THPRAC_OTHER_TODAY,
     THPRAC_OVERWRTITE_DATA,
@@ -3702,6 +3702,6 @@ extern const wchar_t __thprac_loc_range_zh[2955];
 
 extern const wchar_t __thprac_loc_range_en[61];
 
-extern const wchar_t __thprac_loc_range_ja[2403];
+extern const wchar_t __thprac_loc_range_ja[2405];
 
 }

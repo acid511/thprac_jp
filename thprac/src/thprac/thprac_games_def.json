@@ -1053,9 +1053,9 @@
       "THPRAC_OTHER_LUCK_HSIFSA": [ "四季如春",  "Play HSIFS", "Play HSIFS"],
       "THPRAC_OTHER_LUCK_HSIFSB": [ "瞎几把躲",  "Play HSIFS", "Play HSIFS"],
 
-      "THPRAC_OTHER_LUCK_WBABC":  [ "打鬼形兽",  "Play WBABC", "Play WBABC"],
-      "THPRAC_OTHER_LUCK_WBABCA": [ "跳脱三界",  "Play WBABC", "Play WBABC"],
-      "THPRAC_OTHER_LUCK_WBABCB": [ "狼狈逃窜",  "Play WBABC", "Play WBABC"],
+      "THPRAC_OTHER_LUCK_WBaWC":  [ "打鬼形兽",  "Play WBaWC", "Play WBaWC"],
+      "THPRAC_OTHER_LUCK_WBaWCA": [ "跳脱三界",  "Play WBaWC", "Play WBaWC"],
+      "THPRAC_OTHER_LUCK_WBaWCB": [ "狼狈逃窜",  "Play WBaWC", "Play WBaWC"],
 
       "THPRAC_OTHER_LUCK_UM":     [ "打虹龙洞",  "Play UM",    "Play UM"],
       "THPRAC_OTHER_LUCK_UMA":    [ "零元购",  "Play UM",    "Play UM"],
@@ -1130,7 +1130,7 @@
         "THPRAC_OTHER_LUCK_DDC",
         "THPRAC_OTHER_LUCK_LOLK",
         "THPRAC_OTHER_LUCK_HSIFS",
-        "THPRAC_OTHER_LUCK_WBABC",
+        "THPRAC_OTHER_LUCK_WBaWC",
         "THPRAC_OTHER_LUCK_UM",
         "THPRAC_OTHER_LUCK_FW"
       ],
@@ -1145,7 +1145,7 @@
         "THPRAC_OTHER_LUCK_DDCA",
         "THPRAC_OTHER_LUCK_LOLKA",
         "THPRAC_OTHER_LUCK_HSIFSA",
-        "THPRAC_OTHER_LUCK_WBABCA",
+        "THPRAC_OTHER_LUCK_WBaWCA",
         "THPRAC_OTHER_LUCK_UMA",
         "THPRAC_OTHER_LUCK_FWA"
       ],
@@ -1160,7 +1160,7 @@
         "THPRAC_OTHER_LUCK_DDCB",
         "THPRAC_OTHER_LUCK_LOLKB",
         "THPRAC_OTHER_LUCK_HSIFSB",
-        "THPRAC_OTHER_LUCK_WBABCB",
+        "THPRAC_OTHER_LUCK_WBaWCB",
         "THPRAC_OTHER_LUCK_UMB",
         "THPRAC_OTHER_LUCK_FWB"
       ],
@@ -5215,11 +5215,11 @@
 	  "TH_11_DEFAULT_START_FAST": [ "初始第一波(光速)", "wave 1 start(fast)", "第1波スタート(高速)" ],
 	  "TH_11_WAVE2_START_FAST": [ "初始第二波(光速)", "wave 2 start(fast)", "第2波スタート(高速)" ],
 
-    "TH_11_WAVE_PASSED": [ "经过的波数", "waves passed", "スペカの一部をスキップ" ],
+    "TH_11_WAVE_PASSED": [ "经过的波数", "waves passed", "開始時間" ],
 	  "TH_11_WAVE_PASSED_DESC": [
       "全避道中一非约%d，\n全避一二非约%d，\n全避一非猫步一波约%d，\n全避一二非猫步一波约%d",
       "Timing out mid NS 1:~%d;\n Timing out mid NS 1 2:~%d;\nTiming out mid NS 1, 1 wave cat walk:%d;\nTiming out mid NS 1 2, 1 wave cat walk:%d\n",
-      "Timing out mid NS 1:~%d;\n Timing out mid NS 1 2:~%d;\nTiming out mid NS 1, 1 wave cat walk:%d;\nTiming out mid NS 1 2, 1 wave cat walk:%d\n"
+      "数字が大きいほど怨霊地帯が短くなります。(以下目安)\n中ボス通常1で時間切れ:~%d;\n 中ボス通常2で時間切れ:~%d;\n中ボス通常1遅回し+乱歩1波:%d;\n中ボス通常1,2遅回し+乱歩1波:%d\n"
     ],
 
       "TH_11_SS_RAGE4": [ "P4狂暴", "Rage(P4)", "暴走(P4)" ],
@@ -11082,18 +11082,18 @@
           "TH185_WAVE_FORMAT": [ "第%d波", "Wave %d", "Wave %d" ],
           "TH185_NONE_RANDOM": [ "无（随机）", "None (Random)", "なし (ランダム)" ],
 
-          "TH185_WAVE_1":  [ "第1波",  "Wave 1",  "Wave 1"  ],
-          "TH185_WAVE_2":  [ "第2波",  "Wave 2",  "Wave 2"  ],
-          "TH185_WAVE_3":  [ "第3波",  "Wave 3",  "Wave 3"  ],
-          "TH185_WAVE_4":  [ "第4波",  "Wave 4",  "Wave 4"  ],
-          "TH185_WAVE_5":  [ "第5波",  "Wave 5",  "Wave 5"  ],
-          "TH185_WAVE_6":  [ "第6波",  "Wave 6",  "Wave 6"  ],
-          "TH185_WAVE_7":  [ "第7波",  "Wave 7",  "Wave 7"  ],
-          "TH185_WAVE_8":  [ "第8波",  "Wave 8",  "Wave 8"  ],
-          "TH185_WAVE_9":  [ "第9波",  "Wave 9",  "Wave 9"  ],
-          "TH185_WAVE_10": [ "第10波", "Wave 10", "Wave 10" ],
-          "TH185_WAVE_11": [ "第11波", "Wave 11", "Wave 11" ],
-          "TH185_WAVE_12": [ "第12波", "Wave 12", "Wave 12" ],
+          "TH185_WAVE_1":  [ "第1波",  "Wave 1",  "第1波"  ],
+          "TH185_WAVE_2":  [ "第2波",  "Wave 2",  "第2波"  ],
+          "TH185_WAVE_3":  [ "第3波",  "Wave 3",  "第3波"  ],
+          "TH185_WAVE_4":  [ "第4波",  "Wave 4",  "第4波"  ],
+          "TH185_WAVE_5":  [ "第5波",  "Wave 5",  "第5波"  ],
+          "TH185_WAVE_6":  [ "第6波",  "Wave 6",  "第6波"  ],
+          "TH185_WAVE_7":  [ "第7波",  "Wave 7",  "第7波"  ],
+          "TH185_WAVE_8":  [ "第8波",  "Wave 8",  "第8波"  ],
+          "TH185_WAVE_9":  [ "第9波",  "Wave 9",  "第9波"  ],
+          "TH185_WAVE_10": [ "第10波", "Wave 10", "第10波" ],
+          "TH185_WAVE_11": [ "第11波", "Wave 11", "第11波" ],
+          "TH185_WAVE_12": [ "第12波", "Wave 12", "第12波" ],
 
           "TH185_CARD_01": [ "无", "None", "なし" ],
           "TH185_CARD_02": [ "空白卡牌", "Blank Card", "空白のカード" ],
