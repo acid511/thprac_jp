@@ -521,11 +521,11 @@ namespace TH12 {
         Gui::GuiDrag<int, ImGuiDataType_S32> mGraze { TH_GRAZE, 0, 999999, 1, 100000 };
 
         Gui::GuiCheckBox mSpPhaseA { TH12_CUSTOM_DROP };
-        Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase1 { "phase1", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
-        Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase2 { "delta1", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
+        Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase1 { "菱:初期角度", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
+        Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase2 { "菱:角度差分", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
         Gui::GuiCheckBox mSpPhaseB { TH12_CUSTOM_FLAME };
-        Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase3 { "phase2", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
-        Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase4 { "delta2", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
+        Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase3 { "紫:初期角度", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
+        Gui::GuiSlider<float, ImGuiDataType_Float> mSpPhase4 { "紫:角度差分", -3.1415926f, 3.1415926f, 0.001f, 1.0f };
 
         Gui::GuiNavFocus mNavFocus { TH_STAGE, TH_MODE, TH_WARP,
             TH_MID_STAGE, TH_END_STAGE, TH_NONSPELL, TH_SPELL, TH_PHASE, TH_CHAPTER,
@@ -1172,12 +1172,12 @@ namespace TH12 {
                 }
                 if (g_st6sp1_testargs)
                 {
-                    ImGui::Text("%3.2f %3.2f %3.2f %3.2f", 
-                        g_st6sp1_args[0], g_st6sp1_args[1] - g_st6sp1_args[0], 
+                    ImGui::Text("%3.2f %3.2f %3.2f %3.2f",
+                        g_st6sp1_args[0], g_st6sp1_args[1] - g_st6sp1_args[0],
                         g_st6sp1_args[2], g_st6sp1_args[3] - g_st6sp1_args[2]);
                     if (ImGui::Button(S(TH12_COPY_PHASE))) {
                         ImGui::SetClipboardText(
-                            std::format("({},{},{},{})", 
+                            std::format("({},{},{},{})",
                                 g_st6sp1_args[0], g_st6sp1_args[1] - g_st6sp1_args[0],
                                 g_st6sp1_args[2], g_st6sp1_args[3] - g_st6sp1_args[2]).c_str());
                     }
