@@ -7,8 +7,7 @@
 
 namespace THPrac {
 
-const char* th_glossary_str[3][1857]
-{
+const char* th_glossary_str[3][1882] {
     {
         "",
         "啤酒",
@@ -208,6 +207,14 @@ const char* th_glossary_str[3][1857]
         "C (春之小径)",
         "Extra (夜樱怪道)",
         "TH12.8 妖精大战争　～ 东方三月精",
+        "复制相位到剪贴板",
+        "滴弹自定义",
+        "炎弹自定义",
+        "粘贴相位",
+        "查看紫云相位",
+        "强制第一波",
+        "强制第二波",
+        "正常",
         "TH12 东方星莲船　～ Undefined Fantastic Object.",
         "碎片方向",
         "飞碟1",
@@ -788,6 +795,7 @@ const char* th_glossary_str[3][1857]
         "数据目录##modal",
         "全局目录",
         "本地目录",
+        "靳止alt+enter全屏切换",
         "在th11到th13靳用F10键",
         "该按键用于切换全屏",
         "禁用手柄",
@@ -811,6 +819,8 @@ const char* th_glossary_str[3][1857]
         "操作确认",
         "现存全局数据",
         "现存本地数据",
+        "导出自定义CPU表",
+        "会在th08.exe对应目录导出custom_bin.bin",
         "练习模式快速re",
         "需要启用键盘Hook与强制dinput8/RawInput输入",
         "快捷键: shift+F",
@@ -820,6 +830,8 @@ const char* th_glossary_str[3][1857]
         "用于设置“链接”选项卡中筛选器的默认状态。",
         "之前的状态\0打开\0关闭\0\0",
         "完成",
+        "修复CPU导致的问题",
+        "RSQRTSS指令会在不同CPU下有不同效果，导致REP不对",
         "只渲染用到的字体",
         "游戏启动时如果爆显存，导致字体显示全为白块或透明等错误，则需要设置此项",
         "强制渲染鼠标",
@@ -1015,6 +1027,8 @@ const char* th_glossary_str[3][1857]
         "幽幽子",
         "无视##global_data",
         "无视##local_data",
+        "导入自定义CPU表",
+        "将custom_bin.bin放入th08.exe对应目录",
         "将锁残修改为不疮",
         "更多游戏信息",
         "收率(本次)",
@@ -1120,6 +1134,10 @@ const char* th_glossary_str[3][1857]
         "击破数",
         "显示击破数",
         "绀珠传显示击破数",
+        "天空璋尝试修复消弹崩溃bug",
+        "不确定能不能用以及rep支持情况...",
+        "天空璋取消分数上限",
+        "鬼形兽取消分数上限",
         "初始化窗口位置",
         "如果遇到游戏启动后没窗口可尝试开启此选项",
         "按键显示设置",
@@ -1313,6 +1331,8 @@ const char* th_glossary_str[3][1857]
         "打花映冢",
         "无限连击",
         "花容失色",
+        "§区§",
+        "§大区§",
         "打地灵殿",
         "永不下压",
         "七星连珠",
@@ -1416,6 +1436,8 @@ const char* th_glossary_str[3][1857]
         "选择文件夹",
         "Steam",
         "thcrap（快捷方式）",
+        "CPU选择",
+        "Intel\0AMD\0自定义\0\0",
         "设置",
         "关于",
         "thprac - 重新绑定快捷键",
@@ -1445,6 +1467,8 @@ const char* th_glossary_str[3][1857]
         "永夜抄强制总是开启LSC",
         "禁用MISS后灵界",
         "神灵庙自动禁用MISS后灵界",
+        "强制修复魔理沙激光BUG",
+        "开启该选项后原本的未初始化变量会当成0",
         "想要的卡牌",
         "stage1 卡牌",
         "stage2 卡牌",
@@ -1583,6 +1607,8 @@ const char* th_glossary_str[3][1857]
         "P4狂暴",
         "初始第二波",
         "初始第二波(光速)",
+        "经过的波数",
+        "全避道中一非约%d，\n全避一二非约%d，\n全避一非猫步一波约%d，\n全避一二非猫步一波约%d",
         "作者：Ack",
         "基于touhouworldcup/thprac, RUEEE/thprac",
         "隐藏许可信息",
@@ -1686,6 +1712,7 @@ const char* th_glossary_str[3][1857]
         "延迟",
         "难度",
         "符卡收率完整显示",
+        "由于代码原因，风神录暂时无法从游戏内开关禁用MASTER(风神录为99/99)",
         "不显示master 0/99+等",
         "对话",
         "掉落道具",
@@ -1710,6 +1737,7 @@ const char* th_glossary_str[3][1857]
         "关底八符",
         "关底九符",
         "关底Boss",
+        "敌人无敌",
         "自定义练习",
         "增强程度",
         "五五开",
@@ -1750,6 +1778,7 @@ const char* th_glossary_str[3][1857]
         "纯狐狂暴",
         "左",
         "残机",
+        "控血终幕",
         "残机碎片",
         "莉莉",
         "练习选项",
@@ -2067,6 +2096,14 @@ const char* th_glossary_str[3][1857]
         "C (Spring Path)",
         "Extra \n(Mysterious Night Cherry Blossom Path)",
         "TH12.8 Great Fairy Wars",
+        "copy phase to clipboard",
+        "custom drop",
+        "custom flame",
+        "paste phase",
+        "show st6sp1 phase",
+        "force wave1",
+        "force wave2",
+        "normal",
         "TH12 Undefined Fantastic Object",
         "UFO Side",
         "Ventra 1",
@@ -2647,6 +2684,7 @@ const char* th_glossary_str[3][1857]
         "Data directory##modal",
         "Global directory",
         "Local directory",
+        "disable alt+enter toggle full screen",
         "disable f10 for th11-13",
         "which is used for toggle fullscreen",
         "disable joystick",
@@ -2670,6 +2708,8 @@ const char* th_glossary_str[3][1857]
         "Action confirmation",
         "Existing global data",
         "Existing local data",
+        "export custom CPU table",
+        "will export custom_bin.bin in path of th08.exe",
         "fast retry for prac mode",
         "need enable keyboard hook & force dinput8/RawInput",
         "hotkey shift+F",
@@ -2679,6 +2719,8 @@ const char* th_glossary_str[3][1857]
         "Used to set the default state of the filters in the \"Links\" tab.",
         "Previous state\0Open\0Close\0\0",
         "Finish",
+        "Fix rep problem caused by CPU",
+        "asm code RSQRTSS have different effect in different CPU, which will cause problem",
         "only render used font",
         "if the VRAM is overflow, the text might shown as a white rectangle(or transparent and so on), use this setting to avoid it",
         "force render cursor",
@@ -2874,6 +2916,8 @@ const char* th_glossary_str[3][1857]
         "Yuyuko",
         "Ignore##global_data",
         "Ignore##local_data",
+        "import custom CPU table",
+        "place custom_bin.bin in path of th08.exe",
         "map inf.lives to no continue",
         "in game info",
         "capture(current)",
@@ -2979,6 +3023,10 @@ const char* th_glossary_str[3][1857]
         "shoot down",
         "show shooting down",
         "LoLK show shooting down",
+        "HSiFS try fix season release crash bug",
+        "not sure about if it able to use or replay support",
+        "HSiFS uncap score",
+        "WBaWC uncap score",
         "init window pos",
         "try this option when game is invisible after opened",
         "key monitor setting",
@@ -3114,8 +3162,8 @@ const char* th_glossary_str[3][1857]
         "Clock in",
         "%d days",
         "TODAY LUCK",
-        "GOOD JI",
-        "MID JI",
+        "§大吉§",
+        "§中吉§",
         "BETTER",
         "ALL BETTER",
         "BETTER NOT",
@@ -3123,19 +3171,19 @@ const char* th_glossary_str[3][1857]
         "Play BM",
         "Play BM",
         "Play BM",
-        "SMALL JI",
-        "MID",
+        "§小吉§",
+        "§中平§",
         "Play DDC",
         "Play DDC",
         "Play DDC",
         "Play DS",
         "Play STB",
         "Play STB",
-        "CHEST",
+        "§凶§",
         "Play EOSD",
         "Play EOSD",
         "Play EOSD",
-        "BIG CUP",
+        "§大凶§",
         "Play Some Fan Game",
         "Play Some Fan Game",
         "Play Some Fan Game",
@@ -3172,6 +3220,8 @@ const char* th_glossary_str[3][1857]
         "Play POFV",
         "Play POFV",
         "Play POFV",
+        "§区§",
+        "§大区§",
         "Play SA",
         "Play SA",
         "Play SA",
@@ -3193,9 +3243,9 @@ const char* th_glossary_str[3][1857]
         "Play VD",
         "Play VD",
         "Play VD",
-        "Play WBABC",
-        "Play WBABC",
-        "Play WBABC",
+        "Play WBaWC",
+        "Play WBaWC",
+        "Play WBaWC",
         "name",
         "%d-%d-%d",
         "Overwrite",
@@ -3275,6 +3325,8 @@ const char* th_glossary_str[3][1857]
         "Selected folder",
         "Steam",
         "thcrap (shortcuts)",
+        "Select CPU",
+        "Intel\0AMD\0Custom\0\0",
         "Settings",
         "About",
         "thprac - Rebind Hotkeys",
@@ -3304,6 +3356,8 @@ const char* th_glossary_str[3][1857]
         "force LS in IN",
         "Disable trance after miss",
         "TD Disable trance after miss",
+        "Force fix Marisa laser Bug in DDC",
+        "After enabling this option, the originally uninitialized variables will be treated as 0",
         "cards you want",
         "card for stage 1",
         "card for stage 2",
@@ -3442,6 +3496,8 @@ const char* th_glossary_str[3][1857]
         "Rage(P4)",
         "wave 2 start",
         "wave 2 start(fast)",
+        "waves passed",
+        "Timing out mid NS 1:~%d;\n Timing out mid NS 1 2:~%d;\nTiming out mid NS 1, 1 wave cat walk:%d;\nTiming out mid NS 1 2, 1 wave cat walk:%d\n",
         "Author: Ack",
         "based on touhouworldcup/thprac, RUEEE/thprac",
         "Hide license info",
@@ -3545,6 +3601,7 @@ const char* th_glossary_str[3][1857]
         "Delay",
         "Difficulty",
         "show complete spellcard capture rate",
+        "Due to code problem, cannot turn on/off Disable Master(\"99/99\") in MoF",
         "no master, 0/99+, etc",
         "Dialog",
         "Drop items",
@@ -3569,6 +3626,7 @@ const char* th_glossary_str[3][1857]
         "Boss Spell 8",
         "Boss Spell 9",
         "End Boss",
+        "Enemy Invincible",
         "Custom",
         "enhancement degree",
         "half half",
@@ -3609,6 +3667,7 @@ const char* th_glossary_str[3][1857]
         "Junko Rage",
         "Left",
         "Life",
+        "Life controlled finale",
         "Life Frag.",
         "Lily",
         "Option",
@@ -3926,6 +3985,14 @@ const char* th_glossary_str[3][1857]
         "C (春の小径)",
         "Extra (夜桜怪道)",
         "TH12.8 妖精大戦争　～ 東方三月精",
+        "copy phase to clipboard",
+        "custom drop",
+        "custom flame",
+        "paste phase",
+        "show st6sp1 phase",
+        "force wave ",
+        "force wave2",
+        "normal",
         "TH12 東方星蓮船　～ Undefined Fantastic Object.",
         "ベントラー方向",
         "ベントラー1",
@@ -4506,18 +4573,19 @@ const char* th_glossary_str[3][1857]
         "データディレクトリ##modal",
         "グローバルディレクトリ",
         "ローカルディレクトリ ",
-        "地霊殿～神霊廟: f10キーを無効化",
-        "これらのゲームではf10キーにフルスクリーン有効化機能が割り当てられています。",
-        "ジョイスティックの無効化",
-        "一部のゲームでは動作しますが、遅延を避けるためにジョイスティック機能を無効にします",
-        "ゲーム内の言語切替ホットキーを無効化",
-        "ホットキー: alt+1/2/3",
-        "master表記を自動的に無効化",
-        "ウィンドウの最大化ボタンを無効化する",
-        "thprac_JP.exeが動作している時にwinキーを無効化",
-        "winキーを無効にすると遅延の原因となる可能性があるため、推奨されません。",
-        "Dinputを使用してWinキーを無効にする",
-        "約に立たないかも、全部マイクソソフトのせい",
+        "disable alt+enter toggle full screen",
+        "disable f10 for th11-13",
+        "which is used for toggle fullscreen",
+        "disable joystick",
+        "works for some games, disables functions for joystick to avoid lags",
+        "disable in-game locale change hotkey",
+        "hotkey: alt+1/2/3",
+        "automatically disable master",
+        "disable maximizebox to toggle full screen",
+        "disable win key when thprac.exe launches",
+        "might cause delay, so it's not recommended to disable win key by software",
+        "use dinput to disable win key",
+        "seems useless, blame to Macrohard",
         "thpracを起動するときに進行中のゲームを検索しない",
         "設定でゲーム時間の記録を有効にして確認してください。（次回起動時に有効）",
         "タイマーロックを自動的に有効化",
@@ -4529,21 +4597,25 @@ const char* th_glossary_str[3][1857]
         "アクションの確認 ",
         "既存のグローバルデータ",
         "既存のローカルデータ",
-        "Practiceモードで被弾時に自動リトライ",
-        "「入力制御機能の有効化」と「dinput8/RawInputの使用を強制」が必要",
-        "shift+Fで切り替え",
+        "export custom CPU table",
+        "will export custom_bin.bin in path of th08.exe",
+        "fast retry for prac mode",
+        "need enable keyboard hook & force dinput8/RawInput",
+        "hotkey shift+F",
         "更新後のプログラムのファイル名:",
         "ダウンロードしたファイル名を保持\0以前のファイル名を使用\0「thprac_JP.exe」を使用\0\0",
         "フィルタのデフォルト状態",
         "「リンク」タブのフィルタのデフォルトの状態を設定します。",
         "前の状態\0開く\0閉じる\0\0",
         "終了",
-        "使用されているフォントのみを描画",
-        "VRAMがオーバーフローすると、テキストが白い四角形(または透明など)として表示されることがあります。この設定を使用することでこの症状を回避できます。",
-        "マウスカーソルを強制的に描画",
-        "常にIMGUIを使用してカーソルを描画",
-        "カスタムカーソル(cursor.png)に対応しました (cursor.pngはthprac_JP.exeのあるフォルダではなく「ゲームフォルダ」へ配置 / 詳細については変更履歴をご確認ください)",
-        "フルスクリーン表示でカーソルが見えない場合にこの設定を有効にしてください。ウィンドウモードではカーソルが2つ重なって表示されます。",
+        "Fix rep problem caused by CPU",
+        "asm code RSQRTSS have different effect in different CPU, which will cause problem",
+        "only render used font",
+        "if the VRAM is overflow, the text might shown as a white rectangle(or transparent and so on), use this setting to avoid it",
+        "force render cursor",
+        "always render cursor using IMGUI",
+        "Support for custom cursors using cursor.png (place the file in the 'game folder' (not the launcher folder)), see the changelog for details",
+        "set this setting to true when cannot see cursor fullscreen, it will made 2 overlapped cursor in window mode",
         "黄昏酒場",
         "いーにー、みーにー、まいにー、もー！",
         "",
@@ -4733,157 +4805,163 @@ const char* th_glossary_str[3][1857]
         "幽々子",
         "無視する##global_data",
         "無視する##local_data",
-        "「残基が減らない」オプションを「満身創痍にならない」オプションに置き換え",
-        "ゲーム内情報",
-        "取得(現在)",
-        "取得(累計)",
-        "キャラクター使用時間(全キャラ/難易度)",
-        "世紀",
-        "キャラクター使用時間(累計)",
-        "プレイ時間(現在)",
-        "日",
-        "時間",
-        "ﾏｲｸﾛ秒",
-        "ﾐﾘ秒",
-        "分",
-        "月",
-        "ﾅﾉ秒",
-        "秒",
-        "プレイ時間(累計)",
-        "年",
-        "ゲームの詳細",
-        "詳細",
-        "ゲームの詳細",
-        "スペルカード名",
-        "時間切れ(現在)",
-        "時間切れ(累計)",
-        "霊撃",
-        "桜点最大値",
-        "桜点",
-        "桜点+",
-        "ラストスペル",
-        "スペカ取得",
-        "UFO発動",
-        "ベントラー回収",
-        "ベントラー発生",
-        "星蓮船: UFOの情報をカラフルにする",
-        "トランス",
-        "リトライ",
-        "%d面 リトライ",
-        "季節解放",
-        "オオワシ",
-        "カワウソ",
-        "霊撃",
-        "ロアリング",
-        "レア動物霊",
-        "オオカミ",
-        "本番での取得率を表示",
-        "霊撃",
-        "異変攻撃",
-        "取得率(現在)",
-        "取得率(累計)",
-        "練習での取得率を表示",
-        "Δ 破壊",
-        "レベル",
-        "4面ピラミッド(通1)",
-        "4面ピラミッド(青)",
-        "4面ピラミッド(緑)",
-        "4面ピラミッド(赤)",
-        "4面ピラミッド(黄)",
-        "5面ピラミッド",
-        "Δ 出現",
-        "総取得率を表示",
-        "拡張igi",
-        "高度なオプションを自動で有効化",
-        "表示するには、ゲーム内情報（BackSpaceメニュー内）を有効にする必要があります。",
-        "【免責事項】不正行為とみなされる可能性があります。",
-        "ボム",
-        "ミス",
-        "ボーナス点",
-        "ランク",
-        "低速移動時に当たり判定を表示",
-        "紅魔郷: 低速移動時に当たり判定を表示",
-        "カスタムヒットボックス: hitbox.pngを東方紅魔郷.exeが存在するフォルダに配置",
-        "再読み込み",
-        "紅魔郷: ボーナス点を表示",
-        "ランクを表示",
-        "紅魔郷: ランクを表示",
-        "紅魔郷: 体力のしきい値を表示",
-        "ズルだと考える人もいるかもしれませんが、この境界線を表示することは、理論上はマウスを該当する位置に動かしたり、画面上に線を引いたりするのと同じことなので、通常のプレイでも機能する設定のままにしました。 (by RUEEE)",
-        "得点アイテム",
-        "風神録: 白/黄得点アイテムを表示",
-        "ヒントを表示",
-        "地霊殿: ヒントを表示",
-        "ヒット数",
-        "ヒット数を表示",
-        "神霊廟: ヒット数を表示",
-        "ヒットバーを表示",
-        "神霊廟: ヒットバーを表示",
-        "2.0ボーナス",
+        "import custom CPU table",
+        "place custom_bin.bin in path of th08.exe",
+        "map inf.lives to no continue",
+        "in game info",
+        "capture(current)",
+        "capture(total)",
+        "character game time(all char/diff)",
+        "Cen",
+        "character game time(total)",
+        "game time(current)",
+        "D",
+        "h",
+        "us",
+        "ms",
+        "min",
+        "M",
+        "ns",
+        "s",
+        "game time(total)",
+        "Y",
+        "Details",
+        "Details",
+        "Details",
+        "spell name",
+        "timeout(current)",
+        "timeout(total)",
+        "border:",
+        "Cherry:",
+        "CherryM:",
+        "CherryP:",
+        "LS:",
+        "SC:",
+        "UFO spawn",
+        "UFO item",
+        "UFO drop",
+        "chromatic UFO/Pyramid info",
+        "trance:",
+        "Retry:",
+        "stage %d Re:",
+        "release:",
+        "eagle:",
+        "otter:",
+        "roar break:",
+        "roar:",
+        "spec goast:",
+        "wolf:",
+        "view real combat capture rate",
+        "hyper break:",
+        "hyper:",
+        "passed(current)",
+        "passed(total)",
+        "view prac mode capture rate",
+        "Δ killed:",
+        "lv:",
+        "PRIMITIVE Pyramid",
+        "BLUE Pyramid",
+        "GREEN Pyramid",
+        "RED Pyramid",
+        "YELLOW Pyramid",
+        "GREAT Pyramid",
+        "Δ summoned:",
+        "view total capture rate",
+        "advanced igi",
+        "automatically use advanced opts",
+        "need to enable ingameinfo(in backspace menu) to show",
+        "disclaimer: might be considered as cheating",
+        "bomb:",
+        "miss:",
+        "Grey Item",
+        "rank",
+        "show hitbox when focused",
+        "EoSD show hitbox when focused",
+        "custom hitbox: put hitbox.png file in EoSD .exe folder",
+        "reload",
+        "EoSD Show grey item",
+        "show rank",
+        "EoSD show rank",
+        "Grey Item",
+        "Though some might consider it cheating, displaying this threshold is theoretically equivalent to moving the mouse to the corresponding position or drawing a line on the screen... so I kept the setting that makes it work in normal play.",
+        "Point",
+        "MoF show white/yellow point item",
+        "show hint",
+        "SA show hint",
+        "hits",
+        "show hits",
+        "TD show hits",
+        "show hit bar",
+        "TD show hit bar",
+        "2.0 bonus",
         "B",
         "L",
-        "次のボーナス",
-        "通常ボーナス",
-        "累計ボーナス",
-        "エクステンド数",
-        "アイテム",
-        "輝針城: 魔理沙のレーザーバグを修正",
-        "ボーナスを表示",
-        "輝針城: ボーナスを表示",
-        "ドロップバーを表示",
-        "輝針城: ドロップバーを表示",
-        "アイテム数を表示",
-        "輝針城: アイテム数を表示",
-        "ｸﾞﾚｲｽﾞx撃破率",
-        "撃破率",
-        "撃破率を表示",
-        "紺珠伝: 撃破率を表示",
-        "ウィンドウ位置の初期化",
-        "ゲームを開いた後にゲームウィンドウが見えなくなった場合はこのオプションを試してください。",
-        "キー入力の設定",
-        "APS(Action Per Second)を表示",
-        "キー入力表示を自動で起動",
-        "縁取りの色(押)",
-        "縁取りの色(離)",
-        "塗りつぶしの色(押)",
-        "塗りつぶしの色(離)",
-        "文字の色(押)",
-        "文字の色(離)",
-        "キー入力を表示",
-        "ゲームフォルダに出力",
-        "余白",
-        "APSを記録開始",
-        "記録終了",
-        "キー表示を分割",
-        "キー入力表示",
-        "スタイル",
-        "長方形\0角丸長方形\0面取り長方形\0ハート\0\0",
-        "打開支援ツール",
-        "難所を追加##adpp",
-        "課題を追加",
-        "課題を追加##akpp",
-        "日付",
-        "削除",
-        "削除しますか？##delpp",
-        "本当に削除しますか？",
-        "説明",
-        "詳細",
-        "この日付以降の記録のみを集計:",
-        "計算",
-        "期待値最大化法に基づく",
-        "n 個のレコードのうち m 回ミスがあった場合、p(ミス)=(m+1)/(n+2) となります。",
-        "累計ミス数",
-        "索引",
-        "名前",
-        "突破率",
-        "難所の詳細",
-        "達成に必要な試行回数",
-        "ほぼ無限",
-        "ミス数",
-        "達成確率",
-        "突破率詳細",
-        "詳細##dtpp",
-        "難所名称",
+        "next bonus",
+        "normal bonus",
+        "total bonus",
+        "extend count",
+        "items",
+        "DDC Marisa laser bug rep repair on (not recommended in fullscreen)",
+        "show bonuses",
+        "DDC show bonuses",
+        "show drop bar",
+        "DDC show drop bar",
+        "show items",
+        "DDC show items",
+        "product",
+        "shoot down",
+        "show shooting down",
+        "LoLK show shooting down",
+        "HSiFS try fix season release crash bug",
+        "not sure about if it able to use or replay support",
+        "HSiFS uncap score",
+        "WBaWC uncap score",
+        "init window pos",
+        "try this option when game is invisible after opened",
+        "key monitor setting",
+        "show APS(Action Per Second)",
+        "open key monitor automatically",
+        "border color(pressed)",
+        "border color(released)",
+        "fill color(pressed)",
+        "fill color(released)",
+        "text color(pressed)",
+        "text color(released)",
+        "open key monitor",
+        "output to game folder",
+        "padding",
+        "start to record APS",
+        "stop recording",
+        "separated keys",
+        "show key monitor",
+        "style",
+        "rect\0rounded rect\0chamfered rect\0heart\0\0",
+        "keng tools",
+        "add difficulty##adpp",
+        "add keng",
+        "add keng##akpp",
+        "date",
+        "delete",
+        "delete?##delpp",
+        "sure to delete?",
+        "description",
+        "details",
+        "only calculate records after:",
+        "calculate",
+        "based on exception maximization",
+        "miss m times in n records, then p(miss)=(m+1)/(n+2)",
+        "count",
+        "index",
+        "name",
+        "pass rate",
+        "diff details",
+        "exception num of games",
+        "almost inf",
+        "miss count",
+        "prob",
+        "pass details",
+        "details##dtpp",
+        "difficulty name",
         "[+]",
         "被弾箇所を選択",
         "[↓]",
@@ -4972,13 +5050,13 @@ const char* th_glossary_str[3][1857]
         "その他",
         "Clock in",
         "%d days",
-        "今日の運勢",
+        "TODAY LUCK",
         "§大吉§",
         "§中吉§",
-        "いいね",
-        "縁起良すぎ",
-        "ダメだね",
-        "何もかもダメ",
+        "BETTER",
+        "ALL BETTER",
+        "BETTER NOT",
+        "ALL BETTER NOT",
         "Play BM",
         "Play BM",
         "Play BM",
@@ -5031,6 +5109,8 @@ const char* th_glossary_str[3][1857]
         "Play POFV",
         "Play POFV",
         "Play POFV",
+        "§区§",
+        "§大区§",
         "Play SA",
         "Play SA",
         "Play SA",
@@ -5052,10 +5132,10 @@ const char* th_glossary_str[3][1857]
         "Play VD",
         "Play VD",
         "Play VD",
-        "Play WBABC",
-        "Play WBABC",
-        "Play WBABC",
-        "名前",
+        "Play WBaWC",
+        "Play WBaWC",
+        "Play WBaWC",
+        "name",
         "%d-%d-%d",
         "上書き",
         "紅魔郷: escキーを押した時にBGM再生を停止(wavのみ)",
@@ -5134,6 +5214,8 @@ const char* th_glossary_str[3][1857]
         "フォルダーを選択",
         "Steam",
         "thcrap（ショートカット）",
+        "Select CPU",
+        "Intel\0AMD\0Custom\0\0",
         "設定",
         "バージョン情報",
         "thprac - ホットキーを再割り当て",
@@ -5150,39 +5232,41 @@ const char* th_glossary_str[3][1857]
         "thpracに追加したいゲームにチェックを入れ、「適用する」をクリックします。",
         "Steamゲーム - 手動選択",
         "または",
-        "キーボード入力の遅延((入力から描画まで)をテスト",
-        "紅魔郷: 背景を修正",
-        "弾丸の影を無効化した際、レミリアが青くならないようにします。\n背景やUIに不具合が生じる場合があります。",
-        "紅魔郷: 開始時にシード値を固定",
-        "シード値",
-        "紅魔郷: ミス/ボム時のランク低下を無くす",
-        "現在のリプレイのシード値",
-        "紅魔郷: repマーカーを表示",
-        "妖々夢: スコア/スペル履歴を常に保存",
-        "例: Practiceモードでリトライした時など",
-        "永夜抄: ラストスペルを強制的に発動",
-        "被弾後の霊界突入を無効化",
-        "神霊廟: 被弾後の霊界突入を無効化",
-        "欲しいカード",
-        "stage1のカード",
-        "stage2のカード",
-        "stage3のカード",
-        "stage4のカード",
-        "stage5のカード",
-        "stageEXのカード",
-        "虹龍洞: 販売カード強制",
-        "1番目のカードを指定",
-        "作者は、「ゲームである以上、プレイヤーの技術力を純粋な運要素によって制限されるべきではない」と考えています。もしあなたがこれを「チートだ」と思うなら、その通りです。笑",
-        "虹龍洞: 使用したカード数を表示",
-        "錦上京: グレイズのエフェクトを減らす",
-        "錦上京: 未解放の異変石の使用",
-        "錦上京: 弾幕判定を修正",
-        "錦上京",
-        "錦上京: 被弾後の異変敵レベル低下を無効化",
-        "錦上京: PIVオーバーフロー修正",
-        "錦上京: PIV上限解放",
-        "錦上京: スコア上限解放",
-        "未解放の異変石をサブスロットに設定できるようになります。",
+        "test keyboard input latency(from Input to Present)",
+        "EoSD background fix",
+        "let Remilia not be blue when disables bullet shadow\nMight make bg or UI strange",
+        "fix EoSD rand seed when begin",
+        "rand seed",
+        "EoSD no rank drop after miss/bomb",
+        "rand seed for current rep",
+        "show rep marker in EoSD",
+        "always save score/spell history in PCB",
+        "e.g. retry in practice",
+        "force LS in IN",
+        "Disable trance after miss",
+        "TD Disable trance after miss",
+        "Force fix Marisa laser Bug in DDC",
+        "After enabling this option, the originally uninitialized variables will be treated as 0",
+        "cards you want",
+        "card for stage 1",
+        "card for stage 2",
+        "card for stage 3",
+        "card for stage 4",
+        "card for stage 5",
+        "card for stage EX",
+        "UM force card",
+        "force the first card in market",
+        "the author believes that as a game, it shouldn't rely on a purely random element to restrict players' ability to rate the game. If you think that's cheating, then you're right.jpg",
+        "UM show card activated count",
+        "FW decrease graze effect",
+        "FW 未解放ストーン使用",
+        "FW 弾幕判定を修復します",
+        "FW Game",
+        "FW no lv drop after miss/bomb",
+        "FW PIVオーバーフロー修正",
+        "FW PIVキャップ解放",
+        "FW スコアキャップ解放",
+        "未解放ストーンをサイドスロットに設定可能。",
         "thcrap",
         "thcrapコンフィグを追加...",
         "thcrapのコンフィグが見つかりませんでした！",
@@ -5292,15 +5376,17 @@ const char* th_glossary_str[3][1857]
         "相対パスを使う",
         "winキーの状態",
         "はい",
-        "標準スタート",
-        "第1波スタート(高速)",
-        "初期位置変更",
-        "暴走(P1)",
-        "暴走(P2)",
-        "暴走(P3)",
-        "暴走(P4)",
-        "第2波スタート",
-        "第2波スタート(高速)",
+        "default start",
+        "wave 1 start(fast)",
+        "init pos change",
+        "Rage(P1)",
+        "Rage(P2)",
+        "Rage(P3)",
+        "Rage(P4)",
+        "wave 2 start",
+        "wave 2 start(fast)",
+        "waves passed",
+        "Timing out mid NS 1:~%d;\n Timing out mid NS 1 2:~%d;\nTiming out mid NS 1, 1 wave cat walk:%d;\nTiming out mid NS 1 2, 1 wave cat walk:%d\n",
         "作者：Ack",
         "based on touhouworldcup/thprac, RUEEE/thprac",
         "ライセンス情報を非表示",
@@ -5403,8 +5489,9 @@ const char* th_glossary_str[3][1857]
         "ゲーム中に「,」キーを押すとデータを記録することができます。",
         "ディレイ",
         "難易度",
-        "スペルカード取得率を完全に表示",
-        "マスター0/99+などを表示しない",
+        "show complete spellcard capture rate",
+        "Due to code problem, cannot turn on/off Disable Master(\"99/99\") in MoF",
+        "no master, 0/99+, etc",
         "ダイアログ",
         "Pアイテム等を落とす",
         "永遠に続くBGM",
@@ -5428,6 +5515,7 @@ const char* th_glossary_str[3][1857]
         "ボス スペル8",
         "ボス スペル9",
         "ボス",
+        "敵無敵",
         "カスタム",
         "強化度",
         "半々",
@@ -5468,6 +5556,7 @@ const char* th_glossary_str[3][1857]
         "純子暴走",
         "左",
         "残機",
+        "Life controlled finale",
         "残機の欠片",
         "リリー",
         "オプション",
@@ -5626,7 +5715,7 @@ const th_glossary_t LUCK_DESC_1[14]
     THPRAC_OTHER_LUCK_DDC,
     THPRAC_OTHER_LUCK_LOLK,
     THPRAC_OTHER_LUCK_HSIFS,
-    THPRAC_OTHER_LUCK_WBABC,
+    THPRAC_OTHER_LUCK_WBaWC,
     THPRAC_OTHER_LUCK_UM,
     THPRAC_OTHER_LUCK_FW,
 };
@@ -5643,7 +5732,7 @@ const th_glossary_t LUCK_DESC_1A[14]
     THPRAC_OTHER_LUCK_DDCA,
     THPRAC_OTHER_LUCK_LOLKA,
     THPRAC_OTHER_LUCK_HSIFSA,
-    THPRAC_OTHER_LUCK_WBABCA,
+    THPRAC_OTHER_LUCK_WBaWCA,
     THPRAC_OTHER_LUCK_UMA,
     THPRAC_OTHER_LUCK_FWA,
 };
@@ -5660,7 +5749,7 @@ const th_glossary_t LUCK_DESC_1B[14]
     THPRAC_OTHER_LUCK_DDCB,
     THPRAC_OTHER_LUCK_LOLKB,
     THPRAC_OTHER_LUCK_HSIFSB,
-    THPRAC_OTHER_LUCK_WBABCB,
+    THPRAC_OTHER_LUCK_WBaWCB,
     THPRAC_OTHER_LUCK_UMB,
     THPRAC_OTHER_LUCK_FWB,
 };
@@ -6025,8 +6114,13 @@ const th_glossary_t TH_SPELL_PHASE_FINALE[3]
     TH_FINALE,
 };
 
-const th_glossary_t TH_SPELL_PHASE_RAGEFUL[4]
-{
+const th_glossary_t TH_SPELL_PHASE_LIFE_CONTROL_FINALE[4] {
+    TH_NORMAL,
+    TH_FINALE,
+    TH_LIFE_CONTROLLED_FINALE,
+};
+
+const th_glossary_t TH_SPELL_PHASE_RAGEFUL[4] {
     TH_NORMAL,
     TH_FULL,
     TH_RAGE,
@@ -10697,93 +10791,369 @@ const uint8_t th_sections_bgm[122]
     1,
 };
 
-const th_sections_t th_sections_cba[10][2][20]
-{
-    {
-        { TH08_ST1_MID1, TH08_ST1_MID2, },
-        { TH08_ST1_BOSS1, TH08_ST1_BOSS2, TH08_ST1_BOSS3, TH08_ST1_BOSS4, TH08_ST1_LS, },
-    },
-    {
-        { TH08_ST2_MID1, TH08_ST2_MID2, },
-        { TH08_ST2_BOSS1, TH08_ST2_BOSS2, TH08_ST2_BOSS3, TH08_ST2_BOSS4, TH08_ST2_BOSS5, TH08_ST2_LS, },
-    },
-    {
-        { TH08_ST3_MID1, TH08_ST3_MID2, },
-        { TH08_ST3_BOSS1, TH08_ST3_BOSS2, TH08_ST3_BOSS3, TH08_ST3_BOSS4, TH08_ST3_BOSS5, TH08_ST3_BOSS6, TH08_ST3_LS, },
-    },
-    {
-        { },
-        { TH08_ST4A_BOSS1, TH08_ST4A_BOSS2, TH08_ST4A_BOSS3, TH08_ST4A_BOSS4, TH08_ST4A_BOSS5, TH08_ST4A_BOSS6, TH08_ST4A_BOSS7, TH08_ST4A_BOSS8, TH08_ST4A_BOSS9, TH08_ST4A_LS, },
-    },
-    {
-        { },
-        { TH08_ST4B_BOSS1, TH08_ST4B_BOSS2, TH08_ST4B_BOSS3, TH08_ST4B_BOSS4, TH08_ST4B_BOSS5, TH08_ST4B_BOSS6, TH08_ST4B_BOSS7, TH08_ST4B_BOSS8, TH08_ST4B_BOSS9, TH08_ST4B_LS, },
-    },
-    {
-        { TH08_ST5_MID1, TH08_ST5_MID2, },
-        { TH08_ST5_BOSS1, TH08_ST5_BOSS2, TH08_ST5_BOSS3, TH08_ST5_BOSS4, TH08_ST5_BOSS5, TH08_ST5_BOSS6, TH08_ST5_BOSS7, TH08_ST5_LS, },
-    },
-    {
-        { TH08_ST6A_MID1, TH08_ST6A_MID2, },
-        { TH08_ST6A_BOSS1, TH08_ST6A_BOSS2, TH08_ST6A_BOSS3, TH08_ST6A_BOSS4, TH08_ST6A_BOSS5, TH08_ST6A_BOSS6, TH08_ST6A_BOSS7, TH08_ST6A_BOSS8, TH08_ST6A_BOSS9, TH08_ST6A_LS, },
-    },
-    {
-        { TH08_ST6B_MID1, TH08_ST6B_MID2, },
-        { TH08_ST6B_BOSS1, TH08_ST6B_BOSS2, TH08_ST6B_BOSS3, TH08_ST6B_BOSS4, TH08_ST6B_BOSS5, TH08_ST6B_BOSS6, TH08_ST6B_BOSS7, TH08_ST6B_BOSS8, TH08_ST6B_BOSS9, TH08_ST6B_LS1, TH08_ST6B_LS2, TH08_ST6B_LS3, TH08_ST6B_LS4, TH08_ST6B_LS5, },
-    },
-    {
-        { TH08_ST7_MID1, TH08_ST7_MID2, TH08_ST7_MID3, },
-        { TH08_ST7_END_NS1, TH08_ST7_END_S1, TH08_ST7_END_NS2, TH08_ST7_END_S2, TH08_ST7_END_NS3, TH08_ST7_END_S3, TH08_ST7_END_NS4, TH08_ST7_END_S4, TH08_ST7_END_NS5, TH08_ST7_END_S5, TH08_ST7_END_NS6, TH08_ST7_END_S6, TH08_ST7_END_NS7, TH08_ST7_END_S7, TH08_ST7_END_NS8, TH08_ST7_END_S8, TH08_ST7_END_S9, TH08_ST7_END_S10, TH08_ST7_END_LS, },
-    },
-    {
-        { },
-        { TH08_LW_1, TH08_LW_2, TH08_LW_3, TH08_LW_4, TH08_LW_5, TH08_LW_6, TH08_LW_7, TH08_LW_8, TH08_LW_9, TH08_LW_10, TH08_LW_11, TH08_LW_12, TH08_LW_13, TH08_LW_14, TH08_LW_15, TH08_LW_16, TH08_LW_17, },
-    },
-};
+    const th_sections_t th_sections_cba[10][2][20] {
+        {
+            {
+                TH08_ST1_MID1,
+                TH08_ST1_MID2,
+            },
+            {
+                TH08_ST1_BOSS1,
+                TH08_ST1_BOSS2,
+                TH08_ST1_BOSS3,
+                TH08_ST1_BOSS4,
+                TH08_ST1_LS,
+            },
+        },
+        {
+            {
+                TH08_ST2_MID1,
+                TH08_ST2_MID2,
+            },
+            {
+                TH08_ST2_BOSS1,
+                TH08_ST2_BOSS2,
+                TH08_ST2_BOSS3,
+                TH08_ST2_BOSS4,
+                TH08_ST2_BOSS5,
+                TH08_ST2_LS,
+            },
+        },
+        {
+            {
+                TH08_ST3_MID1,
+                TH08_ST3_MID2,
+            },
+            {
+                TH08_ST3_BOSS1,
+                TH08_ST3_BOSS2,
+                TH08_ST3_BOSS3,
+                TH08_ST3_BOSS4,
+                TH08_ST3_BOSS5,
+                TH08_ST3_BOSS6,
+                TH08_ST3_LS,
+            },
+        },
+        {
+            { },
+            {
+                TH08_ST4A_BOSS1,
+                TH08_ST4A_BOSS2,
+                TH08_ST4A_BOSS3,
+                TH08_ST4A_BOSS4,
+                TH08_ST4A_BOSS5,
+                TH08_ST4A_BOSS6,
+                TH08_ST4A_BOSS7,
+                TH08_ST4A_BOSS8,
+                TH08_ST4A_BOSS9,
+                TH08_ST4A_LS,
+            },
+        },
+        {
+            { },
+            {
+                TH08_ST4B_BOSS1,
+                TH08_ST4B_BOSS2,
+                TH08_ST4B_BOSS3,
+                TH08_ST4B_BOSS4,
+                TH08_ST4B_BOSS5,
+                TH08_ST4B_BOSS6,
+                TH08_ST4B_BOSS7,
+                TH08_ST4B_BOSS8,
+                TH08_ST4B_BOSS9,
+                TH08_ST4B_LS,
+            },
+        },
+        {
+            {
+                TH08_ST5_MID1,
+                TH08_ST5_MID2,
+            },
+            {
+                TH08_ST5_BOSS1,
+                TH08_ST5_BOSS2,
+                TH08_ST5_BOSS3,
+                TH08_ST5_BOSS4,
+                TH08_ST5_BOSS5,
+                TH08_ST5_BOSS6,
+                TH08_ST5_BOSS7,
+                TH08_ST5_LS,
+            },
+        },
+        {
+            {
+                TH08_ST6A_MID1,
+                TH08_ST6A_MID2,
+            },
+            {
+                TH08_ST6A_BOSS1,
+                TH08_ST6A_BOSS2,
+                TH08_ST6A_BOSS3,
+                TH08_ST6A_BOSS4,
+                TH08_ST6A_BOSS5,
+                TH08_ST6A_BOSS6,
+                TH08_ST6A_BOSS7,
+                TH08_ST6A_BOSS8,
+                TH08_ST6A_BOSS9,
+                TH08_ST6A_LS,
+            },
+        },
+        {
+            {
+                TH08_ST6B_MID1,
+                TH08_ST6B_MID2,
+            },
+            {
+                TH08_ST6B_BOSS1,
+                TH08_ST6B_BOSS2,
+                TH08_ST6B_BOSS3,
+                TH08_ST6B_BOSS4,
+                TH08_ST6B_BOSS5,
+                TH08_ST6B_BOSS6,
+                TH08_ST6B_BOSS7,
+                TH08_ST6B_BOSS8,
+                TH08_ST6B_BOSS9,
+                TH08_ST6B_LS1,
+                TH08_ST6B_LS2,
+                TH08_ST6B_LS3,
+                TH08_ST6B_LS4,
+                TH08_ST6B_LS5,
+            },
+        },
+        {
+            {
+                TH08_ST7_MID1,
+                TH08_ST7_MID2,
+                TH08_ST7_MID3,
+            },
+            {
+                TH08_ST7_END_NS1,
+                TH08_ST7_END_S1,
+                TH08_ST7_END_NS2,
+                TH08_ST7_END_S2,
+                TH08_ST7_END_NS3,
+                TH08_ST7_END_S3,
+                TH08_ST7_END_NS4,
+                TH08_ST7_END_S4,
+                TH08_ST7_END_NS5,
+                TH08_ST7_END_S5,
+                TH08_ST7_END_NS6,
+                TH08_ST7_END_S6,
+                TH08_ST7_END_NS7,
+                TH08_ST7_END_S7,
+                TH08_ST7_END_NS8,
+                TH08_ST7_END_S8,
+                TH08_ST7_END_S9,
+                TH08_ST7_END_S10,
+                TH08_ST7_END_LS,
+            },
+        },
+        {
+            { },
+            {
+                TH08_LW_1,
+                TH08_LW_2,
+                TH08_LW_3,
+                TH08_LW_4,
+                TH08_LW_5,
+                TH08_LW_6,
+                TH08_LW_7,
+                TH08_LW_8,
+                TH08_LW_9,
+                TH08_LW_10,
+                TH08_LW_11,
+                TH08_LW_12,
+                TH08_LW_13,
+                TH08_LW_14,
+                TH08_LW_15,
+                TH08_LW_16,
+                TH08_LW_17,
+            },
+        },
+    };
 
-const th_sections_t th_sections_cbt[10][2][18]
-{
-    {
-        { TH08_ST1_MID1, TH08_ST1_BOSS1, TH08_ST1_BOSS3, },
-        { TH08_ST1_MID2, TH08_ST1_BOSS2, TH08_ST1_BOSS4, TH08_ST1_LS, },
-    },
-    {
-        { TH08_ST2_MID1, TH08_ST2_BOSS1, TH08_ST2_BOSS3, },
-        { TH08_ST2_MID2, TH08_ST2_BOSS2, TH08_ST2_BOSS4, TH08_ST2_BOSS5, TH08_ST2_LS, },
-    },
-    {
-        { TH08_ST3_MID1, TH08_ST3_BOSS1, TH08_ST3_BOSS4, },
-        { TH08_ST3_MID2, TH08_ST3_BOSS2, TH08_ST3_BOSS3, TH08_ST3_BOSS5, TH08_ST3_BOSS6, TH08_ST3_LS, },
-    },
-    {
-        { TH08_ST4A_BOSS1, TH08_ST4A_BOSS3, TH08_ST4A_BOSS5, TH08_ST4A_BOSS7, },
-        { TH08_ST4A_BOSS2, TH08_ST4A_BOSS4, TH08_ST4A_BOSS6, TH08_ST4A_BOSS8, TH08_ST4A_BOSS9, TH08_ST4A_LS, },
-    },
-    {
-        { TH08_ST4B_BOSS1, TH08_ST4B_BOSS3, TH08_ST4B_BOSS5, TH08_ST4B_BOSS7, },
-        { TH08_ST4B_BOSS2, TH08_ST4B_BOSS4, TH08_ST4B_BOSS6, TH08_ST4B_BOSS8, TH08_ST4B_BOSS9, TH08_ST4B_LS, },
-    },
-    {
-        { TH08_ST5_MID1, TH08_ST5_MID2, TH08_ST5_BOSS1, TH08_ST5_BOSS3, TH08_ST5_BOSS5, },
-        { TH08_ST5_BOSS2, TH08_ST5_BOSS4, TH08_ST5_BOSS6, TH08_ST5_BOSS7, TH08_ST5_LS, },
-    },
-    {
-        { TH08_ST6A_MID1, TH08_ST6A_BOSS1, TH08_ST6A_BOSS3, TH08_ST6A_BOSS5, TH08_ST6A_BOSS7, },
-        { TH08_ST6A_MID2, TH08_ST6A_BOSS2, TH08_ST6A_BOSS4, TH08_ST6A_BOSS6, TH08_ST6A_BOSS8, TH08_ST6A_BOSS9, TH08_ST6A_LS, },
-    },
-    {
-        { TH08_ST6B_MID1, TH08_ST6B_BOSS1, TH08_ST6B_BOSS3, TH08_ST6B_BOSS5, TH08_ST6B_BOSS7, },
-        { TH08_ST6B_MID2, TH08_ST6B_BOSS2, TH08_ST6B_BOSS4, TH08_ST6B_BOSS6, TH08_ST6B_BOSS8, TH08_ST6B_BOSS9, TH08_ST6B_LS1, TH08_ST6B_LS2, TH08_ST6B_LS3, TH08_ST6B_LS4, TH08_ST6B_LS5, },
-    },
-    {
-        { TH08_ST7_END_NS1, TH08_ST7_END_NS2, TH08_ST7_END_NS3, TH08_ST7_END_NS4, TH08_ST7_END_NS5, TH08_ST7_END_NS6, TH08_ST7_END_NS7, TH08_ST7_END_NS8, },
-        { TH08_ST7_MID1, TH08_ST7_MID2, TH08_ST7_MID3, TH08_ST7_END_S1, TH08_ST7_END_S2, TH08_ST7_END_S3, TH08_ST7_END_S4, TH08_ST7_END_S5, TH08_ST7_END_S6, TH08_ST7_END_S7, TH08_ST7_END_S8, TH08_ST7_END_S9, TH08_ST7_END_S10, TH08_ST7_END_LS, },
-    },
-    {
-        { },
-        { TH08_LW_1, TH08_LW_2, TH08_LW_3, TH08_LW_4, TH08_LW_5, TH08_LW_6, TH08_LW_7, TH08_LW_8, TH08_LW_9, TH08_LW_10, TH08_LW_11, TH08_LW_12, TH08_LW_13, TH08_LW_14, TH08_LW_15, TH08_LW_16, TH08_LW_17, },
-    },
-};
+    const th_sections_t th_sections_cbt[10][2][18] {
+        {
+            {
+                TH08_ST1_MID1,
+                TH08_ST1_BOSS1,
+                TH08_ST1_BOSS3,
+            },
+            {
+                TH08_ST1_MID2,
+                TH08_ST1_BOSS2,
+                TH08_ST1_BOSS4,
+                TH08_ST1_LS,
+            },
+        },
+        {
+            {
+                TH08_ST2_MID1,
+                TH08_ST2_BOSS1,
+                TH08_ST2_BOSS3,
+            },
+            {
+                TH08_ST2_MID2,
+                TH08_ST2_BOSS2,
+                TH08_ST2_BOSS4,
+                TH08_ST2_BOSS5,
+                TH08_ST2_LS,
+            },
+        },
+        {
+            {
+                TH08_ST3_MID1,
+                TH08_ST3_BOSS1,
+                TH08_ST3_BOSS4,
+            },
+            {
+                TH08_ST3_MID2,
+                TH08_ST3_BOSS2,
+                TH08_ST3_BOSS3,
+                TH08_ST3_BOSS5,
+                TH08_ST3_BOSS6,
+                TH08_ST3_LS,
+            },
+        },
+        {
+            {
+                TH08_ST4A_BOSS1,
+                TH08_ST4A_BOSS3,
+                TH08_ST4A_BOSS5,
+                TH08_ST4A_BOSS7,
+            },
+            {
+                TH08_ST4A_BOSS2,
+                TH08_ST4A_BOSS4,
+                TH08_ST4A_BOSS6,
+                TH08_ST4A_BOSS8,
+                TH08_ST4A_BOSS9,
+                TH08_ST4A_LS,
+            },
+        },
+        {
+            {
+                TH08_ST4B_BOSS1,
+                TH08_ST4B_BOSS3,
+                TH08_ST4B_BOSS5,
+                TH08_ST4B_BOSS7,
+            },
+            {
+                TH08_ST4B_BOSS2,
+                TH08_ST4B_BOSS4,
+                TH08_ST4B_BOSS6,
+                TH08_ST4B_BOSS8,
+                TH08_ST4B_BOSS9,
+                TH08_ST4B_LS,
+            },
+        },
+        {
+            {
+                TH08_ST5_MID1,
+                TH08_ST5_MID2,
+                TH08_ST5_BOSS1,
+                TH08_ST5_BOSS3,
+                TH08_ST5_BOSS5,
+            },
+            {
+                TH08_ST5_BOSS2,
+                TH08_ST5_BOSS4,
+                TH08_ST5_BOSS6,
+                TH08_ST5_BOSS7,
+                TH08_ST5_LS,
+            },
+        },
+        {
+            {
+                TH08_ST6A_MID1,
+                TH08_ST6A_BOSS1,
+                TH08_ST6A_BOSS3,
+                TH08_ST6A_BOSS5,
+                TH08_ST6A_BOSS7,
+            },
+            {
+                TH08_ST6A_MID2,
+                TH08_ST6A_BOSS2,
+                TH08_ST6A_BOSS4,
+                TH08_ST6A_BOSS6,
+                TH08_ST6A_BOSS8,
+                TH08_ST6A_BOSS9,
+                TH08_ST6A_LS,
+            },
+        },
+        {
+            {
+                TH08_ST6B_MID1,
+                TH08_ST6B_BOSS1,
+                TH08_ST6B_BOSS3,
+                TH08_ST6B_BOSS5,
+                TH08_ST6B_BOSS7,
+            },
+            {
+                TH08_ST6B_MID2,
+                TH08_ST6B_BOSS2,
+                TH08_ST6B_BOSS4,
+                TH08_ST6B_BOSS6,
+                TH08_ST6B_BOSS8,
+                TH08_ST6B_BOSS9,
+                TH08_ST6B_LS1,
+                TH08_ST6B_LS2,
+                TH08_ST6B_LS3,
+                TH08_ST6B_LS4,
+                TH08_ST6B_LS5,
+            },
+        },
+        {
+            {
+                TH08_ST7_END_NS1,
+                TH08_ST7_END_NS2,
+                TH08_ST7_END_NS3,
+                TH08_ST7_END_NS4,
+                TH08_ST7_END_NS5,
+                TH08_ST7_END_NS6,
+                TH08_ST7_END_NS7,
+                TH08_ST7_END_NS8,
+            },
+            {
+                TH08_ST7_MID1,
+                TH08_ST7_MID2,
+                TH08_ST7_MID3,
+                TH08_ST7_END_S1,
+                TH08_ST7_END_S2,
+                TH08_ST7_END_S3,
+                TH08_ST7_END_S4,
+                TH08_ST7_END_S5,
+                TH08_ST7_END_S6,
+                TH08_ST7_END_S7,
+                TH08_ST7_END_S8,
+                TH08_ST7_END_S9,
+                TH08_ST7_END_S10,
+                TH08_ST7_END_LS,
+            },
+        },
+        {
+            { },
+            {
+                TH08_LW_1,
+                TH08_LW_2,
+                TH08_LW_3,
+                TH08_LW_4,
+                TH08_LW_5,
+                TH08_LW_6,
+                TH08_LW_7,
+                TH08_LW_8,
+                TH08_LW_9,
+                TH08_LW_10,
+                TH08_LW_11,
+                TH08_LW_12,
+                TH08_LW_13,
+                TH08_LW_14,
+                TH08_LW_15,
+                TH08_LW_16,
+                TH08_LW_17,
+            },
+        },
+    };
 
 const th_glossary_t TH08_STAGE_SELECT[11]
 {
@@ -10799,15 +11169,24 @@ const th_glossary_t TH08_STAGE_SELECT[11]
     TH08_STAGE_LW,
 };
 
-const th_glossary_t TH08_SPELL_5PHASE[7]
-{
-    TH_P1,
-    TH_P2,
-    TH_P3,
-    TH_P4,
-    TH_P5,
-    TH_RAGE,
-};
+    const th_glossary_t TH08_SPELL_5PHASE[7] {
+        TH_P1,
+        TH_P2,
+        TH_P3,
+        TH_P4,
+        TH_P5,
+        TH_RAGE,
+    };
+
+    const th_glossary_t TH08_SPELL_PHASE_IMPERISHABLE_SHOOTING[8] {
+        TH185_WAVE_1,
+        TH185_WAVE_2,
+        TH185_WAVE_3,
+        TH185_WAVE_4,
+        TH185_WAVE_5,
+        TH185_WAVE_6,
+        TH_FINALE,
+    };
 
 }
 
@@ -10864,20 +11243,18 @@ const uint8_t th_sections_bgm[1]
     0,
 };
 
-const th_sections_t th_sections_cba[1][1][2]
-{
-    {
-        { },
-    },
-};
+    const th_sections_t th_sections_cba[1][1][2] {
+        {
+            { },
+        },
+    };
 
-const th_sections_t th_sections_cbt[1][2][1]
-{
-    {
-        { },
-        { },
-    },
-};
+    const th_sections_t th_sections_cbt[1][2][1] {
+        {
+            { },
+            { },
+        },
+    };
 
 }
 
@@ -11818,37 +12195,117 @@ const uint8_t th_sections_bgm[69]
     1,
 };
 
-const th_sections_t th_sections_cba[7][2][19]
-{
-    {
-        { TH10_ST1_MID1, TH10_ST1_MID2_EN, TH10_ST1_MID2_HL, },
-        { TH10_ST1_BOSS1, TH10_ST1_BOSS2, TH10_ST1_BOSS3, TH10_ST1_BOSS4, },
-    },
-    {
-        { TH10_ST2_MID1, },
-        { TH10_ST2_BOSS1, TH10_ST2_BOSS2, TH10_ST2_BOSS3, TH10_ST2_BOSS4, TH10_ST2_BOSS5, },
-    },
-    {
-        { TH10_ST3_MID1, },
-        { TH10_ST3_BOSS1, TH10_ST3_BOSS2, TH10_ST3_BOSS3, TH10_ST3_BOSS4, TH10_ST3_BOSS5, TH10_ST3_BOSS6, },
-    },
-    {
-        { TH10_ST4_MID1, },
-        { TH10_ST4_BOSS1, TH10_ST4_BOSS2, TH10_ST4_BOSS3, TH10_ST4_BOSS4, TH10_ST4_BOSS5, TH10_ST4_BOSS6, TH10_ST4_BOSS7, },
-    },
-    {
-        { TH10_ST5_MID1, TH10_ST5_MID2, },
-        { TH10_ST5_BOSS1, TH10_ST5_BOSS2, TH10_ST5_BOSS3, TH10_ST5_BOSS4, TH10_ST5_BOSS5, TH10_ST5_BOSS6, TH10_ST5_BOSS7, },
-    },
-    {
-        { },
-        { TH10_ST6_BOSS1, TH10_ST6_BOSS2, TH10_ST6_BOSS3, TH10_ST6_BOSS4, TH10_ST6_BOSS5, TH10_ST6_BOSS6, TH10_ST6_BOSS7, TH10_ST6_BOSS8, TH10_ST6_BOSS9, },
-    },
-    {
-        { TH10_ST7_MID1, TH10_ST7_MID2, TH10_ST7_MID3, TH10_ST7_MID4, },
-        { TH10_ST7_END_NS1, TH10_ST7_END_S1, TH10_ST7_END_NS2, TH10_ST7_END_S2, TH10_ST7_END_NS3, TH10_ST7_END_S3, TH10_ST7_END_NS4, TH10_ST7_END_S4, TH10_ST7_END_NS5, TH10_ST7_END_S5, TH10_ST7_END_NS6, TH10_ST7_END_S6, TH10_ST7_END_NS7, TH10_ST7_END_S7, TH10_ST7_END_NS8, TH10_ST7_END_S8, TH10_ST7_END_S9, TH10_ST7_END_S10, },
-    },
-};
+    const th_sections_t th_sections_cba[7][2][19] {
+        {
+            {
+                TH10_ST1_MID1,
+                TH10_ST1_MID2_EN,
+                TH10_ST1_MID2_HL,
+            },
+            {
+                TH10_ST1_BOSS1,
+                TH10_ST1_BOSS2,
+                TH10_ST1_BOSS3,
+                TH10_ST1_BOSS4,
+            },
+        },
+        {
+            {
+                TH10_ST2_MID1,
+            },
+            {
+                TH10_ST2_BOSS1,
+                TH10_ST2_BOSS2,
+                TH10_ST2_BOSS3,
+                TH10_ST2_BOSS4,
+                TH10_ST2_BOSS5,
+            },
+        },
+        {
+            {
+                TH10_ST3_MID1,
+            },
+            {
+                TH10_ST3_BOSS1,
+                TH10_ST3_BOSS2,
+                TH10_ST3_BOSS3,
+                TH10_ST3_BOSS4,
+                TH10_ST3_BOSS5,
+                TH10_ST3_BOSS6,
+            },
+        },
+        {
+            {
+                TH10_ST4_MID1,
+            },
+            {
+                TH10_ST4_BOSS1,
+                TH10_ST4_BOSS2,
+                TH10_ST4_BOSS3,
+                TH10_ST4_BOSS4,
+                TH10_ST4_BOSS5,
+                TH10_ST4_BOSS6,
+                TH10_ST4_BOSS7,
+            },
+        },
+        {
+            {
+                TH10_ST5_MID1,
+                TH10_ST5_MID2,
+            },
+            {
+                TH10_ST5_BOSS1,
+                TH10_ST5_BOSS2,
+                TH10_ST5_BOSS3,
+                TH10_ST5_BOSS4,
+                TH10_ST5_BOSS5,
+                TH10_ST5_BOSS6,
+                TH10_ST5_BOSS7,
+            },
+        },
+        {
+            { },
+            {
+                TH10_ST6_BOSS1,
+                TH10_ST6_BOSS2,
+                TH10_ST6_BOSS3,
+                TH10_ST6_BOSS4,
+                TH10_ST6_BOSS5,
+                TH10_ST6_BOSS6,
+                TH10_ST6_BOSS7,
+                TH10_ST6_BOSS8,
+                TH10_ST6_BOSS9,
+            },
+        },
+        {
+            {
+                TH10_ST7_MID1,
+                TH10_ST7_MID2,
+                TH10_ST7_MID3,
+                TH10_ST7_MID4,
+            },
+            {
+                TH10_ST7_END_NS1,
+                TH10_ST7_END_S1,
+                TH10_ST7_END_NS2,
+                TH10_ST7_END_S2,
+                TH10_ST7_END_NS3,
+                TH10_ST7_END_S3,
+                TH10_ST7_END_NS4,
+                TH10_ST7_END_S4,
+                TH10_ST7_END_NS5,
+                TH10_ST7_END_S5,
+                TH10_ST7_END_NS6,
+                TH10_ST7_END_S6,
+                TH10_ST7_END_NS7,
+                TH10_ST7_END_S7,
+                TH10_ST7_END_NS8,
+                TH10_ST7_END_S8,
+                TH10_ST7_END_S9,
+                TH10_ST7_END_S10,
+            },
+        },
+    };
 
 const th_sections_t th_sections_cbt[7][2][14]
 {
@@ -12171,21 +12628,41 @@ const uint8_t th_sections_bgm[19]
     1,
 };
 
-const th_sections_t th_sections_cba[3][2][10]
-{
-    {
-        { },
-        { ALCOSTG_ST1_BOSS1, ALCOSTG_ST1_BOSS2, ALCOSTG_ST1_BOSS3, ALCOSTG_ST1_BOSS4, },
-    },
-    {
-        { },
-        { ALCOSTG_ST2_BOSS1, ALCOSTG_ST2_BOSS2, ALCOSTG_ST2_BOSS3, ALCOSTG_ST2_BOSS4, ALCOSTG_ST2_BOSS5, },
-    },
-    {
-        { },
-        { ALCOSTG_ST3_BOSS1, ALCOSTG_ST3_BOSS2, ALCOSTG_ST3_BOSS3, ALCOSTG_ST3_BOSS4, ALCOSTG_ST3_BOSS5, ALCOSTG_ST3_BOSS6, ALCOSTG_ST3_BOSS7, ALCOSTG_ST3_BOSS8, ALCOSTG_ST3_BOSS9, },
-    },
-};
+    const th_sections_t th_sections_cba[3][2][10] {
+        {
+            { },
+            {
+                ALCOSTG_ST1_BOSS1,
+                ALCOSTG_ST1_BOSS2,
+                ALCOSTG_ST1_BOSS3,
+                ALCOSTG_ST1_BOSS4,
+            },
+        },
+        {
+            { },
+            {
+                ALCOSTG_ST2_BOSS1,
+                ALCOSTG_ST2_BOSS2,
+                ALCOSTG_ST2_BOSS3,
+                ALCOSTG_ST2_BOSS4,
+                ALCOSTG_ST2_BOSS5,
+            },
+        },
+        {
+            { },
+            {
+                ALCOSTG_ST3_BOSS1,
+                ALCOSTG_ST3_BOSS2,
+                ALCOSTG_ST3_BOSS3,
+                ALCOSTG_ST3_BOSS4,
+                ALCOSTG_ST3_BOSS5,
+                ALCOSTG_ST3_BOSS6,
+                ALCOSTG_ST3_BOSS7,
+                ALCOSTG_ST3_BOSS8,
+                ALCOSTG_ST3_BOSS9,
+            },
+        },
+    };
 
 const th_sections_t th_sections_cbt[3][2][6]
 {
@@ -15239,13 +15716,18 @@ const th_sections_t th_sections_cbt[7][2][14]
     },
 };
 
-const th_glossary_t TH12_VENTRA_SELECT[5]
-{
-    TH12_VENTRA_NONE,
-    TH12_VENTRA_RED,
-    TH12_VENTRA_BLUE,
-    TH12_VENTRA_GREEN,
-};
+    const th_glossary_t TH12_VENTRA_SELECT[5] {
+        TH12_VENTRA_NONE,
+        TH12_VENTRA_RED,
+        TH12_VENTRA_BLUE,
+        TH12_VENTRA_GREEN,
+    };
+
+    const th_glossary_t TH12_ST5_SPELL4_PHASE[4] {
+        TH12_ST5_SPELL4_TYPE_NORMAL,
+        TH12_ST5_SPELL4_TYPE_FORCE_WAVE_1,
+        TH12_ST5_SPELL4_TYPE_FORCE_WAVE_2,
+    };
 
 const th_glossary_t TH12_SPELL_PHASE4_LOCK[8]
 {
@@ -15313,20 +15795,18 @@ const uint8_t th_sections_bgm[1]
     0,
 };
 
-const th_sections_t th_sections_cba[1][1][2]
-{
-    {
-        { },
-    },
-};
+    const th_sections_t th_sections_cba[1][1][2] {
+        {
+            { },
+        },
+    };
 
-const th_sections_t th_sections_cbt[1][2][1]
-{
-    {
-        { },
-        { },
-    },
-};
+    const th_sections_t th_sections_cbt[1][2][1] {
+        {
+            { },
+            { },
+        },
+    };
 
 }
 
@@ -18580,37 +19060,121 @@ const uint8_t th_sections_bgm[73]
     1,
 };
 
-const th_sections_t th_sections_cba[7][2][19]
-{
-    {
-        { TH13_ST1_MID1, },
-        { TH13_ST1_BOSS1, TH13_ST1_BOSS2, TH13_ST1_BOSS3, TH13_ST1_BOSS4, TH13_ST1_BOSS5, TH13_ST1_BOSS6, },
-    },
-    {
-        { TH13_ST2_MID1, TH13_ST2_MID2, },
-        { TH13_ST2_BOSS1, TH13_ST2_BOSS2, TH13_ST2_BOSS3, TH13_ST2_BOSS4, TH13_ST2_BOSS5, },
-    },
-    {
-        { TH13_ST3_MID1, TH13_ST3_MID2_EN, TH13_ST3_MID2_HL, },
-        { TH13_ST3_BOSS1, TH13_ST3_BOSS2, TH13_ST3_BOSS3, TH13_ST3_BOSS4, TH13_ST3_BOSS5, TH13_ST3_BOSS6, },
-    },
-    {
-        { TH13_ST4_MID1, TH13_ST4_MID2, },
-        { TH13_ST4_BOSS1, TH13_ST4_BOSS2, TH13_ST4_BOSS3, TH13_ST4_BOSS4, TH13_ST4_BOSS5, TH13_ST4_BOSS6, },
-    },
-    {
-        { TH13_ST5_MID1, TH13_ST5_MID2, },
-        { TH13_ST5_BOSS1, TH13_ST5_BOSS2, TH13_ST5_BOSS3, TH13_ST5_BOSS4, TH13_ST5_BOSS5, TH13_ST5_BOSS6, TH13_ST5_BOSS7, },
-    },
-    {
-        { },
-        { TH13_ST6_BOSS1, TH13_ST6_BOSS2, TH13_ST6_BOSS3, TH13_ST6_BOSS4, TH13_ST6_BOSS5, TH13_ST6_BOSS6, TH13_ST6_BOSS7, TH13_ST6_BOSS8, TH13_ST6_BOSS9, TH13_ST6_BOSS10, TH13_ST6_BOSS11, },
-    },
-    {
-        { TH13_ST7_MID1, TH13_ST7_MID2, TH13_ST7_MID3, },
-        { TH13_ST7_END_NS1, TH13_ST7_END_S1, TH13_ST7_END_NS2, TH13_ST7_END_S2, TH13_ST7_END_NS3, TH13_ST7_END_S3, TH13_ST7_END_NS4, TH13_ST7_END_S4, TH13_ST7_END_NS5, TH13_ST7_END_S5, TH13_ST7_END_NS6, TH13_ST7_END_S6, TH13_ST7_END_NS7, TH13_ST7_END_S7, TH13_ST7_END_NS8, TH13_ST7_END_S8, TH13_ST7_END_S9, TH13_ST7_END_S10, },
-    },
-};
+    const th_sections_t th_sections_cba[7][2][19] {
+        {
+            {
+                TH13_ST1_MID1,
+            },
+            {
+                TH13_ST1_BOSS1,
+                TH13_ST1_BOSS2,
+                TH13_ST1_BOSS3,
+                TH13_ST1_BOSS4,
+                TH13_ST1_BOSS5,
+                TH13_ST1_BOSS6,
+            },
+        },
+        {
+            {
+                TH13_ST2_MID1,
+                TH13_ST2_MID2,
+            },
+            {
+                TH13_ST2_BOSS1,
+                TH13_ST2_BOSS2,
+                TH13_ST2_BOSS3,
+                TH13_ST2_BOSS4,
+                TH13_ST2_BOSS5,
+            },
+        },
+        {
+            {
+                TH13_ST3_MID1,
+                TH13_ST3_MID2_EN,
+                TH13_ST3_MID2_HL,
+            },
+            {
+                TH13_ST3_BOSS1,
+                TH13_ST3_BOSS2,
+                TH13_ST3_BOSS3,
+                TH13_ST3_BOSS4,
+                TH13_ST3_BOSS5,
+                TH13_ST3_BOSS6,
+            },
+        },
+        {
+            {
+                TH13_ST4_MID1,
+                TH13_ST4_MID2,
+            },
+            {
+                TH13_ST4_BOSS1,
+                TH13_ST4_BOSS2,
+                TH13_ST4_BOSS3,
+                TH13_ST4_BOSS4,
+                TH13_ST4_BOSS5,
+                TH13_ST4_BOSS6,
+            },
+        },
+        {
+            {
+                TH13_ST5_MID1,
+                TH13_ST5_MID2,
+            },
+            {
+                TH13_ST5_BOSS1,
+                TH13_ST5_BOSS2,
+                TH13_ST5_BOSS3,
+                TH13_ST5_BOSS4,
+                TH13_ST5_BOSS5,
+                TH13_ST5_BOSS6,
+                TH13_ST5_BOSS7,
+            },
+        },
+        {
+            { },
+            {
+                TH13_ST6_BOSS1,
+                TH13_ST6_BOSS2,
+                TH13_ST6_BOSS3,
+                TH13_ST6_BOSS4,
+                TH13_ST6_BOSS5,
+                TH13_ST6_BOSS6,
+                TH13_ST6_BOSS7,
+                TH13_ST6_BOSS8,
+                TH13_ST6_BOSS9,
+                TH13_ST6_BOSS10,
+                TH13_ST6_BOSS11,
+            },
+        },
+        {
+            {
+                TH13_ST7_MID1,
+                TH13_ST7_MID2,
+                TH13_ST7_MID3,
+            },
+            {
+                TH13_ST7_END_NS1,
+                TH13_ST7_END_S1,
+                TH13_ST7_END_NS2,
+                TH13_ST7_END_S2,
+                TH13_ST7_END_NS3,
+                TH13_ST7_END_S3,
+                TH13_ST7_END_NS4,
+                TH13_ST7_END_S4,
+                TH13_ST7_END_NS5,
+                TH13_ST7_END_S5,
+                TH13_ST7_END_NS6,
+                TH13_ST7_END_S6,
+                TH13_ST7_END_NS7,
+                TH13_ST7_END_S7,
+                TH13_ST7_END_NS8,
+                TH13_ST7_END_S8,
+                TH13_ST7_END_S9,
+                TH13_ST7_END_S10,
+            },
+        },
+    };
 
 const th_sections_t th_sections_cbt[7][2][14]
 {
@@ -22114,37 +22678,121 @@ const uint8_t th_sections_bgm[73]
     1,
 };
 
-const th_sections_t th_sections_cba[7][2][19]
-{
-    {
-        { TH16_ST1_MID1, },
-        { TH16_ST1_BOSS1, TH16_ST1_BOSS2, TH16_ST1_BOSS3, TH16_ST1_BOSS4, },
-    },
-    {
-        { TH16_ST2_MID1, },
-        { TH16_ST2_BOSS1, TH16_ST2_BOSS2, TH16_ST2_BOSS3, TH16_ST2_BOSS4, TH16_ST2_BOSS5, },
-    },
-    {
-        { TH16_ST3_MID1, TH16_ST3_MID2, },
-        { TH16_ST3_BOSS1, TH16_ST3_BOSS2, TH16_ST3_BOSS3, TH16_ST3_BOSS4, TH16_ST3_BOSS5, TH16_ST3_BOSS6, },
-    },
-    {
-        { TH16_ST4_MID1, TH16_ST4_MID2, },
-        { TH16_ST4_BOSS1, TH16_ST4_BOSS2, TH16_ST4_BOSS3, TH16_ST4_BOSS4, TH16_ST4_BOSS5, TH16_ST4_BOSS6, },
-    },
-    {
-        { TH16_ST5_MID1, },
-        { TH16_ST5_BOSS1, TH16_ST5_BOSS2A, TH16_ST5_BOSS2B, TH16_ST5_BOSS3, TH16_ST5_BOSS4A, TH16_ST5_BOSS4B, TH16_ST5_BOSS5, TH16_ST5_BOSS6, TH16_ST5_BOSS7, },
-    },
-    {
-        { },
-        { TH16_ST6_BOSS1, TH16_ST6_BOSS2, TH16_ST6_BOSS3, TH16_ST6_BOSS4, TH16_ST6_BOSS5, TH16_ST6_BOSS6, TH16_ST6_BOSS7, TH16_ST6_BOSS8, TH16_ST6_BOSS9, TH16_ST6_BOSS10, TH16_ST6_SPRING_FINAL, TH16_ST6_SUMMER_FINAL, TH16_ST6_AUTUMN_FINAL, TH16_ST6_WINTER_FINAL, },
-    },
-    {
-        { TH16_ST7_MID1, TH16_ST7_MID2, TH16_ST7_MID3, },
-        { TH16_ST7_END_NS1, TH16_ST7_END_S1, TH16_ST7_END_NS2, TH16_ST7_END_S2, TH16_ST7_END_NS3, TH16_ST7_END_S3, TH16_ST7_END_NS4, TH16_ST7_END_S4, TH16_ST7_END_NS5, TH16_ST7_END_S5, TH16_ST7_END_NS6, TH16_ST7_END_S6, TH16_ST7_END_NS7, TH16_ST7_END_S7, TH16_ST7_END_NS8, TH16_ST7_END_S8, TH16_ST7_END_S9, TH16_ST7_END_S10, },
-    },
-};
+    const th_sections_t th_sections_cba[7][2][19] {
+        {
+            {
+                TH16_ST1_MID1,
+            },
+            {
+                TH16_ST1_BOSS1,
+                TH16_ST1_BOSS2,
+                TH16_ST1_BOSS3,
+                TH16_ST1_BOSS4,
+            },
+        },
+        {
+            {
+                TH16_ST2_MID1,
+            },
+            {
+                TH16_ST2_BOSS1,
+                TH16_ST2_BOSS2,
+                TH16_ST2_BOSS3,
+                TH16_ST2_BOSS4,
+                TH16_ST2_BOSS5,
+            },
+        },
+        {
+            {
+                TH16_ST3_MID1,
+                TH16_ST3_MID2,
+            },
+            {
+                TH16_ST3_BOSS1,
+                TH16_ST3_BOSS2,
+                TH16_ST3_BOSS3,
+                TH16_ST3_BOSS4,
+                TH16_ST3_BOSS5,
+                TH16_ST3_BOSS6,
+            },
+        },
+        {
+            {
+                TH16_ST4_MID1,
+                TH16_ST4_MID2,
+            },
+            {
+                TH16_ST4_BOSS1,
+                TH16_ST4_BOSS2,
+                TH16_ST4_BOSS3,
+                TH16_ST4_BOSS4,
+                TH16_ST4_BOSS5,
+                TH16_ST4_BOSS6,
+            },
+        },
+        {
+            {
+                TH16_ST5_MID1,
+            },
+            {
+                TH16_ST5_BOSS1,
+                TH16_ST5_BOSS2A,
+                TH16_ST5_BOSS2B,
+                TH16_ST5_BOSS3,
+                TH16_ST5_BOSS4A,
+                TH16_ST5_BOSS4B,
+                TH16_ST5_BOSS5,
+                TH16_ST5_BOSS6,
+                TH16_ST5_BOSS7,
+            },
+        },
+        {
+            { },
+            {
+                TH16_ST6_BOSS1,
+                TH16_ST6_BOSS2,
+                TH16_ST6_BOSS3,
+                TH16_ST6_BOSS4,
+                TH16_ST6_BOSS5,
+                TH16_ST6_BOSS6,
+                TH16_ST6_BOSS7,
+                TH16_ST6_BOSS8,
+                TH16_ST6_BOSS9,
+                TH16_ST6_BOSS10,
+                TH16_ST6_SPRING_FINAL,
+                TH16_ST6_SUMMER_FINAL,
+                TH16_ST6_AUTUMN_FINAL,
+                TH16_ST6_WINTER_FINAL,
+            },
+        },
+        {
+            {
+                TH16_ST7_MID1,
+                TH16_ST7_MID2,
+                TH16_ST7_MID3,
+            },
+            {
+                TH16_ST7_END_NS1,
+                TH16_ST7_END_S1,
+                TH16_ST7_END_NS2,
+                TH16_ST7_END_S2,
+                TH16_ST7_END_NS3,
+                TH16_ST7_END_S3,
+                TH16_ST7_END_NS4,
+                TH16_ST7_END_S4,
+                TH16_ST7_END_NS5,
+                TH16_ST7_END_S5,
+                TH16_ST7_END_NS6,
+                TH16_ST7_END_S6,
+                TH16_ST7_END_NS7,
+                TH16_ST7_END_S7,
+                TH16_ST7_END_NS8,
+                TH16_ST7_END_S8,
+                TH16_ST7_END_S9,
+                TH16_ST7_END_S10,
+            },
+        },
+    };
 
 const th_sections_t th_sections_cbt[7][2][14]
 {
@@ -24314,20 +24962,18 @@ const uint8_t th_sections_bgm[1]
     0,
 };
 
-const th_sections_t th_sections_cba[1][1][2]
-{
-    {
-        { },
-    },
-};
+    const th_sections_t th_sections_cba[1][1][2] {
+        {
+            { },
+        },
+    };
 
-const th_sections_t th_sections_cbt[1][2][1]
-{
-    {
-        { },
-        { },
-    },
-};
+    const th_sections_t th_sections_cbt[1][2][1] {
+        {
+            { },
+            { },
+        },
+    };
 
 const th_glossary_t TH185_CARD_LIST[87]
 {
@@ -24474,20 +25120,18 @@ const uint8_t th_sections_bgm[1]
     0,
 };
 
-const th_sections_t th_sections_cba[1][1][2]
-{
-    {
-        { },
-    },
-};
+    const th_sections_t th_sections_cba[1][1][2] {
+        {
+            { },
+        },
+    };
 
-const th_sections_t th_sections_cbt[1][2][1]
-{
-    {
-        { },
-        { },
-    },
-};
+    const th_sections_t th_sections_cbt[1][2][1] {
+        {
+            { },
+            { },
+        },
+    };
 
 }
 
@@ -25441,37 +26085,117 @@ const uint8_t th_sections_bgm[70]
     1,
 };
 
-const th_sections_t th_sections_cba[7][2][19]
-{
-    {
-        { TH20_ST1_MID1, },
-        { TH20_ST1_BOSS1, TH20_ST1_BOSS2, TH20_ST1_BOSS3, TH20_ST1_BOSS4, TH20_ST1_BOSS5, },
-    },
-    {
-        { TH20_ST2_MID1, },
-        { TH20_ST2_BOSS1, TH20_ST2_BOSS2, TH20_ST2_BOSS3, TH20_ST2_BOSS4, TH20_ST2_BOSS5, },
-    },
-    {
-        { },
-        { TH20_ST3_BOSS1, TH20_ST3_BOSS2, TH20_ST3_BOSS3, TH20_ST3_BOSS4, TH20_ST3_BOSS5, TH20_ST3_BOSS6, TH20_ST3_BOSS7, },
-    },
-    {
-        { TH20_ST4_MID1, TH20_ST4_MID2, },
-        { TH20_ST4_BOSS1, TH20_ST4_BOSS2, TH20_ST4_BOSS3, TH20_ST4_BOSS4, TH20_ST4_BOSS5, TH20_ST4_BOSS6, TH20_ST4_BOSS7, },
-    },
-    {
-        { TH20_ST5_MID1, },
-        { TH20_ST5_BOSS1, TH20_ST5_BOSS2, TH20_ST5_BOSS3, TH20_ST5_BOSS4, TH20_ST5_BOSS5, TH20_ST5_BOSS6, TH20_ST5_BOSS7, },
-    },
-    {
-        { },
-        { TH20_ST6_BOSS1, TH20_ST6_BOSS2, TH20_ST6_BOSS3, TH20_ST6_BOSS4, TH20_ST6_BOSS5, TH20_ST6_BOSS6, TH20_ST6_BOSS7, TH20_ST6_BOSS8, TH20_ST6_BOSS9, TH20_ST6_BOSS10, TH20_ST6_BOSS11, TH20_ST6_BOSS12, },
-    },
-    {
-        { TH20_ST7_MID1, TH20_ST7_MID2, TH20_ST7_MID3, },
-        { TH20_ST7_BOSS1, TH20_ST7_BOSS2, TH20_ST7_BOSS3, TH20_ST7_BOSS4, TH20_ST7_BOSS5, TH20_ST7_BOSS6, TH20_ST7_BOSS7, TH20_ST7_BOSS8, TH20_ST7_BOSS9, TH20_ST7_BOSS10, TH20_ST7_BOSS11, TH20_ST7_BOSS12, TH20_ST7_BOSS13, TH20_ST7_BOSS14, TH20_ST7_BOSS15, TH20_ST7_BOSS16, TH20_ST7_BOSS17, TH20_ST7_BOSS18, },
-    },
-};
+    const th_sections_t th_sections_cba[7][2][19] {
+        {
+            {
+                TH20_ST1_MID1,
+            },
+            {
+                TH20_ST1_BOSS1,
+                TH20_ST1_BOSS2,
+                TH20_ST1_BOSS3,
+                TH20_ST1_BOSS4,
+                TH20_ST1_BOSS5,
+            },
+        },
+        {
+            {
+                TH20_ST2_MID1,
+            },
+            {
+                TH20_ST2_BOSS1,
+                TH20_ST2_BOSS2,
+                TH20_ST2_BOSS3,
+                TH20_ST2_BOSS4,
+                TH20_ST2_BOSS5,
+            },
+        },
+        {
+            { },
+            {
+                TH20_ST3_BOSS1,
+                TH20_ST3_BOSS2,
+                TH20_ST3_BOSS3,
+                TH20_ST3_BOSS4,
+                TH20_ST3_BOSS5,
+                TH20_ST3_BOSS6,
+                TH20_ST3_BOSS7,
+            },
+        },
+        {
+            {
+                TH20_ST4_MID1,
+                TH20_ST4_MID2,
+            },
+            {
+                TH20_ST4_BOSS1,
+                TH20_ST4_BOSS2,
+                TH20_ST4_BOSS3,
+                TH20_ST4_BOSS4,
+                TH20_ST4_BOSS5,
+                TH20_ST4_BOSS6,
+                TH20_ST4_BOSS7,
+            },
+        },
+        {
+            {
+                TH20_ST5_MID1,
+            },
+            {
+                TH20_ST5_BOSS1,
+                TH20_ST5_BOSS2,
+                TH20_ST5_BOSS3,
+                TH20_ST5_BOSS4,
+                TH20_ST5_BOSS5,
+                TH20_ST5_BOSS6,
+                TH20_ST5_BOSS7,
+            },
+        },
+        {
+            { },
+            {
+                TH20_ST6_BOSS1,
+                TH20_ST6_BOSS2,
+                TH20_ST6_BOSS3,
+                TH20_ST6_BOSS4,
+                TH20_ST6_BOSS5,
+                TH20_ST6_BOSS6,
+                TH20_ST6_BOSS7,
+                TH20_ST6_BOSS8,
+                TH20_ST6_BOSS9,
+                TH20_ST6_BOSS10,
+                TH20_ST6_BOSS11,
+                TH20_ST6_BOSS12,
+            },
+        },
+        {
+            {
+                TH20_ST7_MID1,
+                TH20_ST7_MID2,
+                TH20_ST7_MID3,
+            },
+            {
+                TH20_ST7_BOSS1,
+                TH20_ST7_BOSS2,
+                TH20_ST7_BOSS3,
+                TH20_ST7_BOSS4,
+                TH20_ST7_BOSS5,
+                TH20_ST7_BOSS6,
+                TH20_ST7_BOSS7,
+                TH20_ST7_BOSS8,
+                TH20_ST7_BOSS9,
+                TH20_ST7_BOSS10,
+                TH20_ST7_BOSS11,
+                TH20_ST7_BOSS12,
+                TH20_ST7_BOSS13,
+                TH20_ST7_BOSS14,
+                TH20_ST7_BOSS15,
+                TH20_ST7_BOSS16,
+                TH20_ST7_BOSS17,
+                TH20_ST7_BOSS18,
+            },
+        },
+    };
 
 const th_sections_t th_sections_cbt[7][2][14]
 {
@@ -25537,7 +26261,7 @@ const th_glossary_t TH20_EXPIRED_PYRAMID_FIX_OPT[6]
 
 }
 
-const wchar_t __thprac_loc_range_zh[2951] {
+const wchar_t __thprac_loc_range_zh[3583] {
     0x0020, 0x00FF,
     0x394, 0x394,
     0x2014, 0x2014,
@@ -25723,6 +26447,7 @@ const wchar_t __thprac_loc_range_zh[2951] {
     0x52fe, 0x52fe,
     0x5305, 0x5305,
     0x5316, 0x5316,
+    0x533a, 0x533a,
     0x5341, 0x5341,
     0x5343, 0x5343,
     0x5347, 0x5348,
@@ -26330,6 +27055,7 @@ const wchar_t __thprac_loc_range_zh[2951] {
     0x6ed1, 0x6ed1,
     0x6ee1, 0x6ee1,
     0x6ee5, 0x6ee5,
+    0x6ef4, 0x6ef4,
     0x6f02, 0x6f02,
     0x6f0f, 0x6f0f,
     0x6f14, 0x6f14,
@@ -27016,7 +27742,7 @@ const wchar_t __thprac_loc_range_zh[2951] {
     0
 };
 
-const wchar_t __thprac_loc_range_en[57] {
+const wchar_t __thprac_loc_range_en[81] {
     0x0020, 0x00FF,
     0x11b, 0x11b,
     0x12b, 0x12b,
@@ -27030,9 +27756,17 @@ const wchar_t __thprac_loc_range_en[57] {
     0x2022, 0x2022,
     0x2191, 0x2193,
     0x306b, 0x306b,
-    0x308b, 0x308c,
+    0x308b, 0x308b,
+    0x308c, 0x308c,
+    0x4e2d, 0x4e2d,
+    0x51f6, 0x51f6,
     0x52d5, 0x52d5,
+    0x533a, 0x533a,
+    0x5409, 0x5409,
     0x56de, 0x56de,
+    0x5927, 0x5927,
+    0x5c0f, 0x5c0f,
+    0x5e73, 0x5e73,
     0x6642, 0x6642,
     0x673a, 0x673a,
     0x6bce, 0x6bce,
@@ -27048,7 +27782,7 @@ const wchar_t __thprac_loc_range_en[57] {
     0
 };
 
-const wchar_t __thprac_loc_range_ja[2399] {
+const wchar_t __thprac_loc_range_ja[2899] {
     0x0020, 0x00FF,
     0x394, 0x394,
     0x2026, 0x2026,
@@ -27211,6 +27945,7 @@ const wchar_t __thprac_loc_range_ja[2399] {
     0x5305, 0x5305,
     0x5316, 0x5316,
     0x5339, 0x5339,
+    0x533a, 0x533a,
     0x5341, 0x5341,
     0x5343, 0x5343,
     0x5348, 0x5348,

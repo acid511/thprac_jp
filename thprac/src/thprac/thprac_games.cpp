@@ -83,9 +83,61 @@ void FastRetry(int thprac_mode)
 
 LRESULT CALLBACK GameExternWndProc([[maybe_unused]] HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+    static bool dragging = false;
+    static POINT startMouse;
+    static RECT startRect;
+
     switch (uMsg) {
     default:
         break;
+
+    // rewrite window move to prevent game pause
+    case WM_NCLBUTTONDOWN: {
+        if (wParam == HTCAPTION) {
+            dragging = true;
+            SetCapture(hWnd);
+            GetCursorPos(&startMouse);
+            GetWindowRect(hWnd, &startRect);
+            return 1;
+        }
+    } break;
+    case WM_MOUSEMOVE:
+    case WM_NCMOUSEMOVE: 
+        if (dragging) {
+            POINT p;
+            GetCursorPos(&p);
+            SetWindowPos(hWnd, nullptr, startRect.left + p.x - startMouse.x, startRect.top + p.y - startMouse.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+            return 1;
+        }
+        break;
+    case WM_LBUTTONUP:
+    case WM_NCLBUTTONUP: 
+        if (dragging) {
+            ReleaseCapture();
+            dragging = false;
+            return 1;
+        }
+        break;
+    case WM_SIZE:
+        if (wParam == SIZE_MINIMIZED) {
+            ReleaseCapture();
+            dragging = false;
+        }
+    case WM_CAPTURECHANGED:
+        dragging = false;
+        break;
+
+    // disable alt pause
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xfff0) == SC_KEYMENU)
+            return 1;
+    // disable alt+enter toggle fullscreen
+    case WM_SYSKEYDOWN:
+        if (g_input_opt.disable_alt_enter){
+            if (wParam == VK_RETURN) {
+                return 1;
+            }
+        }
     case WM_ACTIVATEAPP:
     case WM_ACTIVATE:
         ClearInputData(LOWORD(wParam) == WA_INACTIVE);
@@ -368,11 +420,16 @@ void GameGuiInit(game_gui_impl impl, int device, int hwnd_addr,
         LauncherSettingGet("auto_th13_show_hits", g_adv_igi_options.th13_showHits);
         LauncherSettingGet("auto_th13_show_hitbar", g_adv_igi_options.th13_showHitBar);
         LauncherSettingGet("auto_th13_disable_miss_trance", g_adv_igi_options.th13_disable_miss_trance);
+        LauncherSettingGet("auto_th14_fix_marisa_bug_using_0", g_adv_igi_options.th14_fixMarisaBug);
         LauncherSettingGet("auto_th14_show_bonus", g_adv_igi_options.th14_showBonus);
         LauncherSettingGet("auto_th14_show_item_cnt", g_adv_igi_options.th14_showItemsCount);
         LauncherSettingGet("auto_th14_show_drop_bar", g_adv_igi_options.th14_showDropBar);
         LauncherSettingGet("auto_th14_laser_rep_repair", g_adv_igi_options.th14_laserRepRepair);
         LauncherSettingGet("auto_th15_show_rate", g_adv_igi_options.th15_showShootingDownRate);
+
+        LauncherSettingGet("auto_th16_uncap_score", g_adv_igi_options.th16_uncap_score);
+        LauncherSettingGet("auto_th17_uncap_score", g_adv_igi_options.th17_uncap_score);
+        LauncherSettingGet("auto_th16_crash_fix", g_adv_igi_options.th16_fix_crash);
 
         LauncherSettingGet("auto_keyboard_monitor", g_adv_igi_options.show_keyboard_monitor);
 
@@ -674,7 +731,7 @@ void InitHook(int ver,void* addr1, void* addr2)
         LauncherSettingGet("keyboard_SOCDv2", (int&)g_input_opt.g_socd_setting);
         LauncherSettingGet("keyboard_API", (int&)g_input_opt.g_keyboardAPI);
 
-        bool disable_f10 = false;
+        bool disable_f10 = false, disable_alt_enter = false;
         if (LauncherSettingGet("disable_F10_11_13", disable_f10) && disable_f10) {
             if (ver == 11 // 11
                 || ver == 12 // 12
@@ -687,6 +744,11 @@ void InitHook(int ver,void* addr1, void* addr2)
                 g_input_opt.disable_f10_11_13 = false;
             }
 
+        } else {
+            g_input_opt.disable_f10_11_13 = false;
+        }
+        if (LauncherSettingGet("disable_alt_enter", disable_alt_enter) && disable_alt_enter) {
+            g_input_opt.disable_alt_enter = true;
         } else {
             g_input_opt.disable_f10_11_13 = false;
         }
